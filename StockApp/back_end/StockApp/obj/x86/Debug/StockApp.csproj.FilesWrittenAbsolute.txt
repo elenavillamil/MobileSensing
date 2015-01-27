@@ -1,0 +1,14 @@
+/Users/jarret/Projects/StockApp/StockApp/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/jarret/Projects/StockApp/StockApp/bin/Debug/MongoDB.Bson.dll
+/Users/jarret/Projects/StockApp/StockApp/bin/Debug/MongoDB.Driver.dll
+/Users/jarret/Projects/StockApp/StockApp/bin/Debug/StockApp.exe.mdb
+/Users/jarret/Projects/StockApp/StockApp/bin/Debug/StockApp.exe
+/Users/jarret/Projects/StockApp/StockApp/obj/x86/Debug/StockApp.exe
+/Users/jarret/Projects/StockApp/StockApp/obj/x86/Debug/StockApp.exe.mdb
+/Users/jarret/Projects/MobileSensing/StockApp/back_end/StockApp/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/jarret/Projects/MobileSensing/StockApp/back_end/StockApp/bin/Debug/StockApp.exe.mdb
+/Users/jarret/Projects/MobileSensing/StockApp/back_end/StockApp/bin/Debug/StockApp.exe
+/Users/jarret/Projects/MobileSensing/StockApp/back_end/StockApp/obj/x86/Debug/StockApp.exe
+/Users/jarret/Projects/MobileSensing/StockApp/back_end/StockApp/obj/x86/Debug/StockApp.exe.mdb
+/Users/jarret/Projects/MobileSensing/StockApp/back_end/StockApp/bin/Debug/MongoDB.Bson.dll
+/Users/jarret/Projects/MobileSensing/StockApp/back_end/StockApp/bin/Debug/MongoDB.Driver.dll
