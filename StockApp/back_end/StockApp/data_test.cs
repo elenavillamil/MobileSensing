@@ -28,7 +28,8 @@ namespace StockApp
          string username = "jashook";
          string password = "ev9";
 
-         // Test that the SignIn is successful
+         // Test that the SignIn is successful. 
+         // An empty string is sign 
          if ("" == DatabaseManagment.SignIn (username, password))
          {
             throw new Exception("FAILED TEST: Unable to sign in with correct username and password");
@@ -61,6 +62,10 @@ namespace StockApp
          }
       }
 
+      private void TestUnsuccessfulSignUp()
+      {
+
+      }
       // Constructor
      
       public DataTest() : base(2)

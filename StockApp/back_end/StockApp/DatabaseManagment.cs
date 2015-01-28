@@ -42,9 +42,11 @@ namespace StockApp
          var query = Query.EQ("username", username);
          var cursor = accounts.Find(query);
 
-         if (cursor.Count > 0)
+         if (cursor.Count () > 0) 
+         {
             return 0;
-            
+         }
+
          BsonDocument account = new BsonDocument();
 
          account.Add("username", username);
