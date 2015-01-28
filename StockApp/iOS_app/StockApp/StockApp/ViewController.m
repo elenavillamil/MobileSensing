@@ -10,6 +10,7 @@
 #import "HistoryTableViewController.h"
 #import "FavStocksCollectionViewController.h"
 #import "PortfilioTableViewController.h"
+#import "UIColor+SAColor.h"
 
 @interface ViewController ()
 
@@ -20,13 +21,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:6/255.f green:122/255.f blue:181/255.f alpha:1]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor blue]];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
     // Create page view controller
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
-    
+
     FavStocksCollectionViewController *startingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavStocksCollectionViewController"];
     
     NSArray *viewControllers = @[startingViewController];
@@ -40,6 +40,7 @@
     [self.view addSubview:_pageViewController.view];
     [self.pageViewController didMoveToParentViewController:self];
     
+    self.navigationItem.title = @"Favorites";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -81,13 +82,16 @@
     NSUInteger index = NSNotFound;
     
     if ([viewController class] == [HistoryTableViewController class]) {
+        self.navigationItem.title = @"History";
         index = 2;
     } else if ([viewController class] == [PortfilioTableViewController class])
     {
+        self.navigationItem.title = @"Portfolio";
         index = 1;
     } else if ([viewController class] == [FavStocksCollectionViewController class])
     {
         index = 0;
+        self.navigationItem.title = @"Favorites";
     }
     
     return index;

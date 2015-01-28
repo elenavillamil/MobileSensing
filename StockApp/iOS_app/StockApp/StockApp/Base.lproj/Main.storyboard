@@ -70,6 +70,7 @@
                                 <connections>
                                     <outlet property="stockNameLabel" destination="400-yl-2Ri" id="axd-Bh-8pF"/>
                                     <outlet property="stockPriceLabel" destination="NmY-1B-YLz" id="qnC-Eq-3Fj"/>
+                                    <segue destination="ShH-WR-SWx" kind="show" id="Iis-C2-Bmv"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -232,10 +233,10 @@
             </objects>
             <point key="canvasLocation" x="1726.5" y="915.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Company Profile View Controller-->
         <scene sceneID="Sdg-0x-FdM">
             <objects>
-                <viewController storyboardIdentifier="CompanyViewController" id="ShH-WR-SWx" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CompanyViewController" id="ShH-WR-SWx" customClass="CompanyProfileViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Zgg-TX-TDE"/>
                         <viewControllerLayoutGuide type="bottom" id="eki-bR-AfS"/>
@@ -281,7 +282,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T6M-ca-sM2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2335.5" y="180.5"/>
+            <point key="canvasLocation" x="2411.5" y="60.5"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="A9V-gK-YHz">
@@ -357,7 +358,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="egd-U4-W5G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1265.5" y="-567.5"/>
+            <point key="canvasLocation" x="1281.5" y="-561.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oEd-3c-9RY">
@@ -390,4 +391,7 @@
             <point key="canvasLocation" x="1295.5" y="180.5"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="VdS-io-S45"/>
+    </inferredMetricsTieBreakers>
 </document>
