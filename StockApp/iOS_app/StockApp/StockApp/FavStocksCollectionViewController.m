@@ -9,7 +9,7 @@
 #import "FavStocksCollectionViewController.h"
 #import "HistoryTableViewController.h"
 #import "PortfilioTableViewController.h"
-
+#import "FavoriteCollectionViewCell.h"
 
 @interface FavStocksCollectionViewController ()
 
@@ -17,7 +17,7 @@
 
 @implementation FavStocksCollectionViewController
 
-static NSString * const reuseIdentifier = @"Cell";
+static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,10 +26,6 @@ static NSString * const reuseIdentifier = @"Cell";
     
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
-    
-    //Page View init
-    self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
-    self.pageViewController.dataSource = self;
     
     
     // Register cell classes
@@ -61,12 +57,11 @@ static NSString * const reuseIdentifier = @"Cell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 0;
+    return 2;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
+    FavoriteCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     // Configure the cell
     
     return cell;

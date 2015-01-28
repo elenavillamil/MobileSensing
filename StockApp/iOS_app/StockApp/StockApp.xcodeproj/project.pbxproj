@@ -15,7 +15,6 @@
 		EA4D24171A789302002C4201 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA4D24161A789302002C4201 /* Images.xcassets */; };
 		EA4D241A1A789302002C4201 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4D24181A789302002C4201 /* LaunchScreen.xib */; };
 		EA4D24261A789302002C4201 /* StockAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24251A789302002C4201 /* StockAppTests.m */; };
-		EA4D24321A78A39D002C4201 /* SAPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24311A78A39D002C4201 /* SAPageViewController.m */; };
 		EA4D24351A78A3E1002C4201 /* FavStocksCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24341A78A3E1002C4201 /* FavStocksCollectionViewController.m */; };
 		EA4D24381A78A41A002C4201 /* FavoriteCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24371A78A41A002C4201 /* FavoriteCollectionViewCell.m */; };
 		EA4D243B1A78A472002C4201 /* HistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D243A1A78A472002C4201 /* HistoryTableViewController.m */; };
@@ -54,8 +53,6 @@
 		EA4D241F1A789302002C4201 /* StockAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StockAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA4D24241A789302002C4201 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EA4D24251A789302002C4201 /* StockAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StockAppTests.m; sourceTree = "<group>"; };
-		EA4D24301A78A39D002C4201 /* SAPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAPageViewController.h; sourceTree = "<group>"; };
-		EA4D24311A78A39D002C4201 /* SAPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAPageViewController.m; sourceTree = "<group>"; };
 		EA4D24331A78A3E1002C4201 /* FavStocksCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavStocksCollectionViewController.h; sourceTree = "<group>"; };
 		EA4D24341A78A3E1002C4201 /* FavStocksCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavStocksCollectionViewController.m; sourceTree = "<group>"; };
 		EA4D24361A78A41A002C4201 /* FavoriteCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteCollectionViewCell.h; sourceTree = "<group>"; };
@@ -178,8 +175,6 @@
 			children = (
 				EA4D24101A789302002C4201 /* ViewController.h */,
 				EA4D24111A789302002C4201 /* ViewController.m */,
-				EA4D24301A78A39D002C4201 /* SAPageViewController.h */,
-				EA4D24311A78A39D002C4201 /* SAPageViewController.m */,
 				EA4D24331A78A3E1002C4201 /* FavStocksCollectionViewController.h */,
 				EA4D24341A78A3E1002C4201 /* FavStocksCollectionViewController.m */,
 				EA4D24391A78A472002C4201 /* HistoryTableViewController.h */,
@@ -350,7 +345,6 @@
 				EA4D24121A789302002C4201 /* ViewController.m in Sources */,
 				EA4D24411A78A4E8002C4201 /* SettingsViewController.m in Sources */,
 				EA4D243B1A78A472002C4201 /* HistoryTableViewController.m in Sources */,
-				EA4D24321A78A39D002C4201 /* SAPageViewController.m in Sources */,
 				EA4D24351A78A3E1002C4201 /* FavStocksCollectionViewController.m in Sources */,
 				EA4D240F1A789302002C4201 /* AppDelegate.m in Sources */,
 				EA4D24481A78BAFD002C4201 /* TransactionTableViewCell.m in Sources */,
