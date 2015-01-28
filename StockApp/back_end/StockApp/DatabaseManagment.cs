@@ -22,7 +22,8 @@ namespace StockApp
 
          lock(lock_object)
          {
-            //Console.WriteLine ("Connection to Mongo DB?");
+            if (server != null) return;
+
             const string connectionString = "mongodb://localhost";
             var client = new MongoClient(connectionString);
             server = client.GetServer();
@@ -33,25 +34,57 @@ namespace StockApp
       public static void SetupAccount(string username, string password)
       {
          if (db_management == null) {
-            db_management = new DatabaseManagment ();
+            db_management = new DatabaseManagment();
          }
-
-         BsonDocument account = new BsonDocument ();
-
-         account.Add ("username", username);
-         account.Add ("password", password);
 
          MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
 
-         try
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         bool found = false;
+
+         foreach (BsonDocument c in cursor)
          {
-            accounts.Insert (account);
-         }
-         catch 
-         {
+            try
+            {
+               BsonElement element;
+
+               c.TryGetElement("password", out element);
+
+               if (element.Value == password)
+               {
+                  found = true;
+               }
+
+               else
+               {
+                  found = false;
+               }
+            }
+
+            catch
+            {
+            }
 
          }
 
+         if (!found)
+         {
+            BsonDocument account = new BsonDocument();
+
+            account.Add("username", username);
+            account.Add("password", password);
+
+            try
+            {
+               accounts.Insert(account);
+            }
+            catch
+            {
+
+            }
+         }
 
       }
 
