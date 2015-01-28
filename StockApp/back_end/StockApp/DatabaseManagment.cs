@@ -70,9 +70,7 @@ namespace StockApp
          }
 
          MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
-
          var query = Query.EQ ("username", username);
-
          var cursor = accounts.Find(query);
 
          foreach (BsonDocument c in cursor) 
@@ -80,34 +78,41 @@ namespace StockApp
             try
             {
                BsonElement element;
-
                c.TryGetElement("password", out element);
 
                if (element.Value == password)
                {
                   c.TryGetElement("_id", out element);
-
                   ObjectId object_id = element.Value.AsObjectId;
-
+              
                   return object_id.ToString();
-               }
-
-               else
-               {
-                  return "";
                }
             }
 
             catch
             {
             }
-
          }
 
          return "";
-
       }
 
+      public static bool DeleteAccount(string username)
+      {
+         MongoCollection<BsonDocument> accounts_collection = database.GetCollection<BsonDocument> ("users");
+         var query = Query.EQ ("username", username);
+
+         try
+         {
+            accounts_collection.Remove(query);
+            return true;
+         }
+
+         catch
+         {
+            return false;
+         }
+      }
    }
 }
 
