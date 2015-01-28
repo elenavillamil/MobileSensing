@@ -22,7 +22,7 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    [self.tableView setContentInset:UIEdgeInsetsMake(50,0,0,0)];
+    [self.tableView setContentInset:UIEdgeInsetsMake(60,0,0,0)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,6 +51,11 @@
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    return header;
+}
 
 /*
 // Override to support conditional editing of the table view.
