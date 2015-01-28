@@ -61,7 +61,7 @@ namespace StockApp
          }
       }
 
-      public static bool SignIn(string username, string password)
+      public static string SignIn(string username, string password)
       {
          if (db_management == null) {
             db_management = new DatabaseManagment ();
@@ -83,12 +83,16 @@ namespace StockApp
 
                if (element.Value == password)
                {
-                  return true;
+                  c.TryGetElement("_id", out element);
+
+                  ObjectId object_id = element.Value.AsObjectId;
+
+                  return object_id.ToString();
                }
 
                else
                {
-                  return false;
+                  return "";
                }
             }
 
@@ -98,7 +102,7 @@ namespace StockApp
 
          }
 
-         return false;
+         return "";
 
       }
 

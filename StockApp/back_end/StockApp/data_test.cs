@@ -29,7 +29,7 @@ namespace StockApp
          string password = "ev9";
 
          // Test that the SignIn is successful
-         if (!DatabaseManagment.SignIn (username, password))
+         if ("" == DatabaseManagment.SignIn (username, password))
          {
             throw new Exception("FAILED TEST: Unable to sign in with correct username and password");
          }
@@ -40,7 +40,7 @@ namespace StockApp
          string username = "jashook";
          string password = "mmm";
 
-         if (DatabaseManagment.SignIn (username, password)) 
+         if ("" != DatabaseManagment.SignIn (username, password)) 
          {
             throw new Exception("FAILED TEST: granted access when username and password are incorrect");
          }
@@ -59,7 +59,6 @@ namespace StockApp
          {
 
          }
-
       }
 
       // Constructor
