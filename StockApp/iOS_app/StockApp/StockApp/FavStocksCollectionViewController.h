@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  FavStocksCollectionViewController.h
 //  StockApp
 //
 //  Created by Tyler Hargett on 1/27/15.
@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController <UIPageViewControllerDataSource>
+@interface FavStocksCollectionViewController : UICollectionViewController <UIPageViewControllerDataSource>
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 
-@end
 
+@end
