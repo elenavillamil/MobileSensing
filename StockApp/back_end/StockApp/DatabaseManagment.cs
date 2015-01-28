@@ -37,10 +37,10 @@ namespace StockApp
             db_management = new DatabaseManagment();
          }
 
-         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         MongoCollection<BsonDocument> users_collection = database.GetCollection<BsonDocument>("users");
 
          var query = Query.EQ("username", username);
-         var cursor = accounts.Find(query);
+         var cursor = users_collection.Find(query);
 
          if (cursor.Count () > 0) 
          {
@@ -51,10 +51,24 @@ namespace StockApp
 
          account.Add("username", username);
          account.Add("password", password);
+         account.Add("money", 10000); // 10,000
+
+         MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
 
          try
          {
-            accounts.Insert(account);
+            BsonDocument history_document = new BsonDocument();
+
+            history_collection.Insert(history_document);
+            
+            BsonElement element;
+            history_document.TryGetElement("_id", out element);
+
+            ObjectId object_id = element.Value.AsObjectId;
+            account.Add("history_id", object_id.ToString());
+
+            users_collection.Insert(account);
+
             return 1;
          }
          catch
