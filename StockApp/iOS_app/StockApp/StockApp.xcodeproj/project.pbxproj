@@ -22,6 +22,9 @@
 		EA4D243E1A78A49D002C4201 /* PortfilioTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D243D1A78A49D002C4201 /* PortfilioTableViewController.m */; };
 		EA4D24411A78A4E8002C4201 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24401A78A4E8002C4201 /* SettingsViewController.m */; };
 		EA4D24451A78A5F9002C4201 /* PortfolioTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24441A78A5F9002C4201 /* PortfolioTableViewCell.m */; };
+		EA4D24481A78BAFD002C4201 /* TransactionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24471A78BAFD002C4201 /* TransactionTableViewCell.m */; };
+		EA4D244B1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D244A1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m */; };
+		EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D244D1A78BB2B002C4201 /* HistoryStopTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +68,12 @@
 		EA4D24401A78A4E8002C4201 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		EA4D24431A78A5F9002C4201 /* PortfolioTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PortfolioTableViewCell.h; sourceTree = "<group>"; };
 		EA4D24441A78A5F9002C4201 /* PortfolioTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PortfolioTableViewCell.m; sourceTree = "<group>"; };
+		EA4D24461A78BAFD002C4201 /* TransactionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionTableViewCell.h; sourceTree = "<group>"; };
+		EA4D24471A78BAFD002C4201 /* TransactionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionTableViewCell.m; sourceTree = "<group>"; };
+		EA4D24491A78BB15002C4201 /* HistoryFavoriteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryFavoriteTableViewCell.h; sourceTree = "<group>"; };
+		EA4D244A1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryFavoriteTableViewCell.m; sourceTree = "<group>"; };
+		EA4D244C1A78BB2B002C4201 /* HistoryStopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryStopTableViewCell.h; sourceTree = "<group>"; };
+		EA4D244D1A78BB2B002C4201 /* HistoryStopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryStopTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +199,12 @@
 				EA4D24371A78A41A002C4201 /* FavoriteCollectionViewCell.m */,
 				EA4D24431A78A5F9002C4201 /* PortfolioTableViewCell.h */,
 				EA4D24441A78A5F9002C4201 /* PortfolioTableViewCell.m */,
+				EA4D24461A78BAFD002C4201 /* TransactionTableViewCell.h */,
+				EA4D24471A78BAFD002C4201 /* TransactionTableViewCell.m */,
+				EA4D24491A78BB15002C4201 /* HistoryFavoriteTableViewCell.h */,
+				EA4D244A1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m */,
+				EA4D244C1A78BB2B002C4201 /* HistoryStopTableViewCell.h */,
+				EA4D244D1A78BB2B002C4201 /* HistoryStopTableViewCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -329,6 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */,
 				EA4D243E1A78A49D002C4201 /* PortfilioTableViewController.m in Sources */,
 				EA4D24381A78A41A002C4201 /* FavoriteCollectionViewCell.m in Sources */,
 				EA4D24121A789302002C4201 /* ViewController.m in Sources */,
@@ -337,7 +353,9 @@
 				EA4D24321A78A39D002C4201 /* SAPageViewController.m in Sources */,
 				EA4D24351A78A3E1002C4201 /* FavStocksCollectionViewController.m in Sources */,
 				EA4D240F1A789302002C4201 /* AppDelegate.m in Sources */,
+				EA4D24481A78BAFD002C4201 /* TransactionTableViewCell.m in Sources */,
 				EA4D24451A78A5F9002C4201 /* PortfolioTableViewCell.m in Sources */,
+				EA4D244B1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m in Sources */,
 				EA4D240C1A789302002C4201 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

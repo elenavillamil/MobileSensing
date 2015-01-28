@@ -44,7 +44,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="an8-xU-FDc">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="FavoriteCollectionViewCell" id="an8-xU-FDc" customClass="FavoriteCollectionViewCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -103,7 +103,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="52" id="M7H-G7-ivQ">
+                            <tableViewCell contentMode="scaleToFill" restorationIdentifier="TransactionTableViewCell" selectionStyle="default" indentationWidth="10" rowHeight="52" id="M7H-G7-ivQ" customClass="TransactionTableViewCell">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M7H-G7-ivQ" id="hQb-4n-KX2">
@@ -130,7 +130,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="67" id="uo1-Pz-gc1">
+                            <tableViewCell contentMode="scaleToFill" restorationIdentifier="HistoryFavoriteTableViewCell" selectionStyle="default" indentationWidth="10" rowHeight="67" id="uo1-Pz-gc1" customClass="HistoryFavoriteTableViewCell">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uo1-Pz-gc1" id="3bx-5m-XNl">
@@ -154,7 +154,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="93" id="oVZ-LB-CAC">
+                            <tableViewCell contentMode="scaleToFill" restorationIdentifier="HistoryStopTableViewCell" selectionStyle="default" indentationWidth="10" rowHeight="93" id="oVZ-LB-CAC" customClass="HistoryStopTableViewCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oVZ-LB-CAC" id="4Sd-NH-3h4">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -207,7 +207,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="59" id="1pZ-o8-Onn">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="59" id="1pZ-o8-Onn" customClass="PortfolioTableViewCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1pZ-o8-Onn" id="MNK-0B-Xd8">
                                     <autoresizingMask key="autoresizingMask"/>
