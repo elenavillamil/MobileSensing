@@ -58,22 +58,49 @@ namespace StockApp
          }
          else
          {
-
+            // this line of code has its own unittes aswell.
+            DatabaseManagment.DeleteAccount (username);
          }
       }
 
       private void TestUnsuccessfulSignUp()
       {
+         string username = "jashook";
+         string password = "ev9";
 
+         if (DatabaseManagment.SetupAccount (username, password) == 1) 
+         {
+            throw new Exception("FAILED TEST: sign up allows duplicated accounts");
+         }
       }
+
+      private void TestRemoveAccount()
+      {
+         string username = "ele";
+         string password = "villa";
+
+         int result = DatabaseManagment.SetupAccount (username, password);
+
+         if (result != 1) 
+         {
+            throw new Exception ("FAILED TEST: failed to add account in TestRemoveAccount");
+         }
+         else if (!DatabaseManagment.DeleteAccount (username)) 
+         {
+            throw new Exception ("FAILED TEST: failed to removed account");
+         }
+      }
+
       // Constructor
      
       public DataTest() : base(2)
       {
          // Test with Two Threads
-
+ 
          Run (TestProperLogin);
          Run (TestFailedLogin);
+         Run (TestSuccessfulSignUp);
+         Run (TestUnsuccessfulSignUp);
       }
    }
 }
