@@ -25,10 +25,11 @@ namespace StockApp
    {
       public static void Main ()
       {
-         new DataTest();
+         //new DataTest();
 
-         ev9.Tester.RunTests();
+         //ev9.Tester.RunTests();
 
+         new Router();
         
       }
    }

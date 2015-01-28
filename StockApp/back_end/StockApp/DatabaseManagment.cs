@@ -37,43 +37,48 @@ namespace StockApp
             db_management = new DatabaseManagment();
          }
 
-         MongoCollection<BsonDocument> users_collection = database.GetCollection<BsonDocument>("users");
+         object lock_object = new object();
 
-         var query = Query.EQ("username", username);
-         var cursor = users_collection.Find(query);
-
-         if (cursor.Count () > 0) 
+         lock(lock_object)
          {
-            return 0;
-         }
+            MongoCollection<BsonDocument> users_collection = database.GetCollection<BsonDocument>("users");
 
-         BsonDocument account = new BsonDocument();
+            var query = Query.EQ("username", username);
+            var cursor = users_collection.Find(query);
 
-         account.Add("username", username);
-         account.Add("password", password);
-         account.Add("money", 10000); // 10,000
+            if (cursor.Count () > 0) 
+            {
+               return 0;
+            }
 
-         MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
+            BsonDocument account = new BsonDocument();
 
-         try
-         {
-            BsonDocument history_document = new BsonDocument();
+            account.Add("username", username);
+            account.Add("password", password);
+            account.Add("money", 10000); // 10,000
 
-            history_collection.Insert(history_document);
+            MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
+
+            try
+            {
+               BsonDocument history_document = new BsonDocument();
+
+               history_collection.Insert(history_document);
             
-            BsonElement element;
-            history_document.TryGetElement("_id", out element);
+               BsonElement element;
+               history_document.TryGetElement("_id", out element);
 
-            ObjectId object_id = element.Value.AsObjectId;
-            account.Add("history_id", object_id.ToString());
+               ObjectId object_id = element.Value.AsObjectId;
+               account.Add("history_id", object_id.ToString());
 
-            users_collection.Insert(account);
+               users_collection.Insert(account);
 
-            return 1;
-         }
-         catch
-         {
-            return 2;
+               return 1;
+            }
+            catch
+            {
+               return 2;
+            }
          }
       }
 
