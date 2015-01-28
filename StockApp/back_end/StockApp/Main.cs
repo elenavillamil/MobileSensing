@@ -29,6 +29,7 @@ namespace StockApp
 
          ev9.Tester.RunTests();
 
+         //new Router();
         
       }
    }
