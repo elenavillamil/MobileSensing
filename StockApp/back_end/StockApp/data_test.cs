@@ -30,9 +30,9 @@ namespace StockApp
 
          DatabaseManagment.SetupAccount (username, password);
 
-         bool signIn = DatabaseManagment.SignIn (username, password);
+         string sign_in = DatabaseManagment.SignIn (username, password);
 
-         if (!signIn)
+         if (sign_in == "")
          {
             throw new Exception("[StockApp::TestSignIn]" + " Unable to sign in");
          }
