@@ -1,0 +1,8 @@
+Only use the .xcworkspace
+
+Also install cocoapods. 
+instructions: 
+open terminal
+$ sudo gem install cocoapods
+
+allows for adding open source projects easily and update files automatically. most info at http://cocoapods.org/ if need be.
