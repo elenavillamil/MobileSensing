@@ -88,9 +88,9 @@ namespace StockApp
                   return object_id.ToString();
                }
             }
-
             catch
             {
+
             }
          }
 
@@ -107,7 +107,6 @@ namespace StockApp
             accounts_collection.Remove(query);
             return true;
          }
-
          catch
          {
             return false;
