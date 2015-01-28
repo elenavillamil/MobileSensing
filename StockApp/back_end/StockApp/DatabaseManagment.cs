@@ -31,7 +31,7 @@ namespace StockApp
          }
       }
 
-      public static void SetupAccount(string username, string password)
+      public static int SetupAccount(string username, string password)
       {
          if (db_management == null) {
             db_management = new DatabaseManagment();
@@ -42,50 +42,23 @@ namespace StockApp
          var query = Query.EQ("username", username);
          var cursor = accounts.Find(query);
 
-         bool found = false;
+         if (cursor.Count > 0)
+            return 0;
+            
+         BsonDocument account = new BsonDocument();
 
-         foreach (BsonDocument c in cursor)
+         account.Add("username", username);
+         account.Add("password", password);
+
+         try
          {
-            try
-            {
-               BsonElement element;
-
-               c.TryGetElement("password", out element);
-
-               if (element.Value == password)
-               {
-                  found = true;
-               }
-
-               else
-               {
-                  found = false;
-               }
-            }
-
-            catch
-            {
-            }
-
+            accounts.Insert(account);
+            return 1;
          }
-
-         if (!found)
+         catch
          {
-            BsonDocument account = new BsonDocument();
-
-            account.Add("username", username);
-            account.Add("password", password);
-
-            try
-            {
-               accounts.Insert(account);
-            }
-            catch
-            {
-
-            }
+            return 2;
          }
-
       }
 
       public static bool SignIn(string username, string password)

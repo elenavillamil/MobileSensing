@@ -23,18 +23,41 @@ namespace StockApp
    public class DataTest : Tester
    {
 
-      private void TestSignIn()
+      private void TestProperLogin()
       {
          string username = "jashook";
          string password = "ev9";
 
-         DatabaseManagment.SetupAccount (username, password);
-
-         bool signIn = DatabaseManagment.SignIn (username, password);
-
-         if (!signIn)
+         // Test that the SignIn is successful
+         if (!DatabaseManagment.SignIn (username, password))
          {
-            throw new Exception("[StockApp::TestSignIn]" + " Unable to sign in");
+            throw new Exception("FAILED TEST: Unable to sign in with correct username and password");
+         }
+      }
+
+      private void TestFailedLogin()
+      {
+         string username = "jashook";
+         string password = "mmm";
+
+         if (DatabaseManagment.SignIn (username, password)) 
+         {
+            throw new Exception("FAILED TEST: granted access when username and password are incorrect");
+         }
+      }
+
+      private void TestSuccessfulSignUp()
+      {
+         string username = "elena";
+         string password = "villamil";
+
+         if (DatabaseManagment.SetupAccount (username, password) != 1)
+         {
+            throw new Exception("FAILED TEST: cannot add a valid account");
+         }
+         else
+         {
+
          }
 
       }
@@ -45,7 +68,8 @@ namespace StockApp
       {
          // Test with Two Threads
 
-         Run (TestSignIn);
+         Run (TestProperLogin);
+         Run (TestFailedLogin);
       }
    }
 }
