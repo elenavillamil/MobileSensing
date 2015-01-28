@@ -31,7 +31,7 @@ namespace StockApp
          }
       }
 
-      public static int SetupAccount(string username, string password)
+      public static string SetupAccount(string username, string password)
       {
          if (db_management == null) {
             db_management = new DatabaseManagment();
@@ -44,7 +44,7 @@ namespace StockApp
 
          if (cursor.Count () > 0) 
          {
-            return 0;
+            return "Username already exists";
          }
 
          BsonDocument account = new BsonDocument();
@@ -69,11 +69,11 @@ namespace StockApp
 
             users_collection.Insert(account);
 
-            return 1;
+            return object_id.ToString();
          }
          catch
          {
-            return 2;
+            return "DB problem";
          }
       }
 
@@ -114,11 +114,25 @@ namespace StockApp
       public static bool DeleteAccount(string username)
       {
          MongoCollection<BsonDocument> accounts_collection = database.GetCollection<BsonDocument> ("users");
-         var query = Query.EQ ("username", username);
+         MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument> ("history");
+
+         var query_username = Query.EQ ("username", username);
 
          try
          {
-            accounts_collection.Remove(query);
+            BsonDocument account_document; 
+            account_document = accounts_collection.FindOne(query_username).AsBsonDocument;
+
+            BsonElement account_id;
+            account_document.TryGetElement("history_id", out account_id);
+
+            string string_id = account_id.Value.AsString;
+            ObjectId object_id = new ObjectId(string_id);
+            var query_remove_history_by_id = Query.EQ("_id", object_id);
+
+            accounts_collection.Remove(query_username);
+            history_collection.Remove(query_remove_history_by_id);
+
             return true;
          }
          catch
