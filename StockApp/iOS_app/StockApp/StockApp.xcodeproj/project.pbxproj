@@ -24,6 +24,7 @@
 		EA4D24481A78BAFD002C4201 /* TransactionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24471A78BAFD002C4201 /* TransactionTableViewCell.m */; };
 		EA4D244B1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D244A1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m */; };
 		EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D244D1A78BB2B002C4201 /* HistoryStopTableViewCell.m */; };
+		EA77DE121A79694F00B7BD08 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA77DE111A79694F00B7BD08 /* LoginViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,8 @@
 		EA4D244A1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryFavoriteTableViewCell.m; sourceTree = "<group>"; };
 		EA4D244C1A78BB2B002C4201 /* HistoryStopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryStopTableViewCell.h; sourceTree = "<group>"; };
 		EA4D244D1A78BB2B002C4201 /* HistoryStopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryStopTableViewCell.m; sourceTree = "<group>"; };
+		EA77DE101A79694F00B7BD08 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		EA77DE111A79694F00B7BD08 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +186,8 @@
 				EA4D243D1A78A49D002C4201 /* PortfilioTableViewController.m */,
 				EA4D243F1A78A4E8002C4201 /* SettingsViewController.h */,
 				EA4D24401A78A4E8002C4201 /* SettingsViewController.m */,
+				EA77DE101A79694F00B7BD08 /* LoginViewController.h */,
+				EA77DE111A79694F00B7BD08 /* LoginViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -341,6 +346,7 @@
 			files = (
 				EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */,
 				EA4D243E1A78A49D002C4201 /* PortfilioTableViewController.m in Sources */,
+				EA77DE121A79694F00B7BD08 /* LoginViewController.m in Sources */,
 				EA4D24381A78A41A002C4201 /* FavoriteCollectionViewCell.m in Sources */,
 				EA4D24121A789302002C4201 /* ViewController.m in Sources */,
 				EA4D24411A78A4E8002C4201 /* SettingsViewController.m in Sources */,

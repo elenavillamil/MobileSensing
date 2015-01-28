@@ -10,4 +10,9 @@
 
 @interface FavoriteCollectionViewCell : UICollectionViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *stockNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stockPriceLabel;
+
+- (void)setStockName:(NSString *)name withPrice:(double)price withPositive:(BOOL)positive;
+
 @end

@@ -24,14 +24,31 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     
     self.view.backgroundColor = [UIColor blueColor];
     
+    [self setupCellInsets];
+    
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
     
+//    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
-    // Register cell classes
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+}
+
+- (void)setupCellInsets
+{
+    CGFloat screenWidth = self.view.frame.size.width;
     
-    // Do any additional setup after loading the view.
+    UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
+    
+    if (screenWidth < 330.f) {
+        collectionViewLayout.sectionInset = UIEdgeInsetsMake(75.f, 5.f, 20.f, 5.f);
+    } else if (screenWidth >= 410.f)
+    {
+        collectionViewLayout.sectionInset = UIEdgeInsetsMake(75.f, 35.f, 20.f, 35.f);
+    } else
+    {
+        collectionViewLayout.sectionInset = UIEdgeInsetsMake(75.f, 20.f, 20.f, 20.f);
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,12 +74,21 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 2;
+    return 7;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    FavoriteCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    FavoriteCollectionViewCell *cell = (FavoriteCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     // Configure the cell
+    NSInteger random = arc4random() % 10;
+//    [cell setStockName:@"GOOG" withPrice:201.2 withPositive:0];
+    if (random > 5) {
+        cell.backgroundColor = [UIColor redColor];
+    } else
+    {
+        cell.backgroundColor = [UIColor greenColor];
+    }
+    cell.stockPriceLabel.text = @"Success";
     
     return cell;
 }
