@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		585E1916C681CBA91C505E93 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4414EA3B204A4E63575A042E /* libPods.a */; };
+		EA0DCCD51A79812C00D7DF4C /* UIColor+SAColor.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCD41A79812C00D7DF4C /* UIColor+SAColor.m */; };
+		EA0DCCD81A79873700D7DF4C /* CompanyProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCD71A79873700D7DF4C /* CompanyProfileViewController.m */; };
+		EA0DCCDC1A79A60400D7DF4C /* Stock.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCDB1A79A60400D7DF4C /* Stock.m */; };
 		EA4D240C1A789302002C4201 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D240B1A789302002C4201 /* main.m */; };
 		EA4D240F1A789302002C4201 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D240E1A789302002C4201 /* AppDelegate.m */; };
 		EA4D24121A789302002C4201 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24111A789302002C4201 /* ViewController.m */; };
@@ -41,6 +44,12 @@
 		1019C9A1602AD493ABE5DC1F /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		4414EA3B204A4E63575A042E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		725C5361AF17D94F905EBF76 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		EA0DCCD31A79812C00D7DF4C /* UIColor+SAColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SAColor.h"; sourceTree = "<group>"; };
+		EA0DCCD41A79812C00D7DF4C /* UIColor+SAColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+SAColor.m"; sourceTree = "<group>"; };
+		EA0DCCD61A79873700D7DF4C /* CompanyProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyProfileViewController.h; sourceTree = "<group>"; };
+		EA0DCCD71A79873700D7DF4C /* CompanyProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyProfileViewController.m; sourceTree = "<group>"; };
+		EA0DCCDA1A79A60400D7DF4C /* Stock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stock.h; sourceTree = "<group>"; };
+		EA0DCCDB1A79A60400D7DF4C /* Stock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stock.m; sourceTree = "<group>"; };
 		EA4D24061A789302002C4201 /* StockApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StockApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA4D240A1A789302002C4201 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EA4D240B1A789302002C4201 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -112,6 +121,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EA0DCCD21A7980C100D7DF4C /* Catagories */ = {
+			isa = PBXGroup;
+			children = (
+				EA0DCCD31A79812C00D7DF4C /* UIColor+SAColor.h */,
+				EA0DCCD41A79812C00D7DF4C /* UIColor+SAColor.m */,
+			);
+			name = Catagories;
+			sourceTree = "<group>";
+		};
+		EA0DCCD91A79A58D00D7DF4C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EA0DCCDA1A79A60400D7DF4C /* Stock.h */,
+				EA0DCCDB1A79A60400D7DF4C /* Stock.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		EA4D23FD1A789302002C4201 = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +162,8 @@
 		EA4D24081A789302002C4201 /* StockApp */ = {
 			isa = PBXGroup;
 			children = (
+				EA0DCCD91A79A58D00D7DF4C /* Model */,
+				EA0DCCD21A7980C100D7DF4C /* Catagories */,
 				EA4D24421A78A5C0002C4201 /* Cells */,
 				EA4D242F1A78A279002C4201 /* View Controllers */,
 				EA4D240D1A789302002C4201 /* AppDelegate.h */,
@@ -180,6 +209,8 @@
 				EA4D24111A789302002C4201 /* ViewController.m */,
 				EA4D24331A78A3E1002C4201 /* FavStocksCollectionViewController.h */,
 				EA4D24341A78A3E1002C4201 /* FavStocksCollectionViewController.m */,
+				EA0DCCD61A79873700D7DF4C /* CompanyProfileViewController.h */,
+				EA0DCCD71A79873700D7DF4C /* CompanyProfileViewController.m */,
 				EA4D24391A78A472002C4201 /* HistoryTableViewController.h */,
 				EA4D243A1A78A472002C4201 /* HistoryTableViewController.m */,
 				EA4D243C1A78A49D002C4201 /* PortfilioTableViewController.h */,
@@ -344,10 +375,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA0DCCD81A79873700D7DF4C /* CompanyProfileViewController.m in Sources */,
 				EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */,
+				EA0DCCD51A79812C00D7DF4C /* UIColor+SAColor.m in Sources */,
 				EA4D243E1A78A49D002C4201 /* PortfilioTableViewController.m in Sources */,
 				EA77DE121A79694F00B7BD08 /* LoginViewController.m in Sources */,
 				EA4D24381A78A41A002C4201 /* FavoriteCollectionViewCell.m in Sources */,
+				EA0DCCDC1A79A60400D7DF4C /* Stock.m in Sources */,
 				EA4D24121A789302002C4201 /* ViewController.m in Sources */,
 				EA4D24411A78A4E8002C4201 /* SettingsViewController.m in Sources */,
 				EA4D243B1A78A472002C4201 /* HistoryTableViewController.m in Sources */,

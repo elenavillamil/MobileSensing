@@ -10,6 +10,7 @@
 #import "HistoryTableViewController.h"
 #import "PortfilioTableViewController.h"
 #import "FavoriteCollectionViewCell.h"
+#import "UIColor+SAColor.h"
 
 @interface FavStocksCollectionViewController ()
 
@@ -25,12 +26,11 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     self.view.backgroundColor = [UIColor blueColor];
     
     [self setupCellInsets];
+    self.title = @"Favorites";
     
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
-    
-//    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
+        
 }
 
 - (void)setupCellInsets
@@ -86,7 +86,7 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
         cell.backgroundColor = [UIColor redColor];
     } else
     {
-        cell.backgroundColor = [UIColor greenColor];
+        cell.backgroundColor = [UIColor green];
     }
     cell.stockPriceLabel.text = @"Success";
     
