@@ -22,6 +22,7 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self.tableView setContentInset:UIEdgeInsetsMake(60,0,0,0)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,18 +39,35 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 0;
+    return 3;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    
+    UITableViewCell *cell = nil;
+    
+    if (indexPath.row == 0) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TransactionTableViewCell" forIndexPath:indexPath];
+    } else if (indexPath.row == 1)
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryStopTableViewCell" forIndexPath:indexPath];
+        
+    } else if (indexPath.row == 2)
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryFavoriteTableViewCell" forIndexPath:indexPath];
+
+    }
     
     // Configure the cell...
     
     return cell;
 }
-*/
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewAutomaticDimension;
+}
 
 /*
 // Override to support conditional editing of the table view.
