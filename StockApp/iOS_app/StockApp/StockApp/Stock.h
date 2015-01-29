@@ -10,6 +10,12 @@
 
 @interface Stock : NSObject
 
+@property (nonatomic, strong) NSString *stockName;
+@property (nonatomic, strong) NSString *stockTicker;
+@property (nonatomic) double stockPrice;
+@property (nonatomic) double percentChange;
+@property (nonatomic) BOOL positive;
 
+@property (nonatomic, strong) NSMutableArray *previousPrices;
 
 @end

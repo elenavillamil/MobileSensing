@@ -14,6 +14,8 @@
 
 @interface FavStocksCollectionViewController ()
 
+@property (nonatomic, strong) NSMutableArray *favoriteStocks;
+
 @end
 
 @implementation FavStocksCollectionViewController
@@ -31,6 +33,16 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
         
+}
+
+#pragma mark - Inits
+- (NSMutableArray *)favoriteStocks
+{
+    if (!_favoriteStocks) {
+        _favoriteStocks = [[NSMutableArray alloc] init];
+    }
+    
+    return _favoriteStocks;
 }
 
 - (void)setupCellInsets

@@ -11,6 +11,7 @@
 		EA0DCCD51A79812C00D7DF4C /* UIColor+SAColor.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCD41A79812C00D7DF4C /* UIColor+SAColor.m */; };
 		EA0DCCD81A79873700D7DF4C /* CompanyProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCD71A79873700D7DF4C /* CompanyProfileViewController.m */; };
 		EA0DCCDC1A79A60400D7DF4C /* Stock.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCDB1A79A60400D7DF4C /* Stock.m */; };
+		EA0DCCDF1A79AAF900D7DF4C /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCDE1A79AAF900D7DF4C /* User.m */; };
 		EA4D240C1A789302002C4201 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D240B1A789302002C4201 /* main.m */; };
 		EA4D240F1A789302002C4201 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D240E1A789302002C4201 /* AppDelegate.m */; };
 		EA4D24121A789302002C4201 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D24111A789302002C4201 /* ViewController.m */; };
@@ -50,6 +51,8 @@
 		EA0DCCD71A79873700D7DF4C /* CompanyProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyProfileViewController.m; sourceTree = "<group>"; };
 		EA0DCCDA1A79A60400D7DF4C /* Stock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stock.h; sourceTree = "<group>"; };
 		EA0DCCDB1A79A60400D7DF4C /* Stock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stock.m; sourceTree = "<group>"; };
+		EA0DCCDD1A79AAF900D7DF4C /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		EA0DCCDE1A79AAF900D7DF4C /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		EA4D24061A789302002C4201 /* StockApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StockApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA4D240A1A789302002C4201 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EA4D240B1A789302002C4201 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -135,6 +138,8 @@
 			children = (
 				EA0DCCDA1A79A60400D7DF4C /* Stock.h */,
 				EA0DCCDB1A79A60400D7DF4C /* Stock.m */,
+				EA0DCCDD1A79AAF900D7DF4C /* User.h */,
+				EA0DCCDE1A79AAF900D7DF4C /* User.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -379,6 +384,7 @@
 				EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */,
 				EA0DCCD51A79812C00D7DF4C /* UIColor+SAColor.m in Sources */,
 				EA4D243E1A78A49D002C4201 /* PortfilioTableViewController.m in Sources */,
+				EA0DCCDF1A79AAF900D7DF4C /* User.m in Sources */,
 				EA77DE121A79694F00B7BD08 /* LoginViewController.m in Sources */,
 				EA4D24381A78A41A002C4201 /* FavoriteCollectionViewCell.m in Sources */,
 				EA0DCCDC1A79A60400D7DF4C /* Stock.m in Sources */,

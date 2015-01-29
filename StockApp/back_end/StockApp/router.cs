@@ -14,6 +14,8 @@ using System.Web;
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
+using System;
+using System.IO;
 
 public class Router
 {
@@ -24,7 +26,7 @@ public class Router
 		IPEndPoint endpoint = new IPEndPoint (IPAddress.Loopback, 8080);
 		_socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-		_socket.Bind ();
+		_socket.Bind (endpoint);
 		_socket.Listen (1024);
 
 		while (true) 
@@ -215,7 +217,7 @@ public class Router
 			int stock_size = message [start];
 
 			if (message.Length > start + stock_size + 1) {
-				throw Exception ("Incorrectly Formatting String");
+				throw new Exception ("Incorrectly Formatting String");
 			}
 
 			string stock_name = message.Substring (start, stock_size);
@@ -226,6 +228,36 @@ public class Router
 		}
 
 		// Here there is a list of strings to query the API for
+
+
+		string sURL = "http://finance.google.com/finance/info?client=ig&q=NASDAQ:";
+
+		for (int index = 0; index < stock_name_list.Count - 1; ++index) {
+			sURL += stock_name_list [index];
+			if (index < stock_name_list.Count - 2) {
+				sURL += ",";
+			}
+		}
+
+		WebRequest wrGETURL;
+		wrGETURL = WebRequest.Create(sURL);
+
+		Stream objStream;
+		objStream = wrGETURL.GetResponse().GetResponseStream();
+
+		StreamReader objReader = new StreamReader(objStream);
+
+		string sLine = "";
+		int i = 0;
+
+		while (sLine!=null)
+		{
+			i++;
+			sLine = objReader.ReadLine();
+			if (sLine!=null)
+				Console.WriteLine("{0}:{1}",i,sLine);
+		}
+		Console.ReadLine();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
