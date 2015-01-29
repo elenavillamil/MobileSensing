@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface TransactionTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *stockPriceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *amountOfSharesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stockStickerLabel;
 
 @end
