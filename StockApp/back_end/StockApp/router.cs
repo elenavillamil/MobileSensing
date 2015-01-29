@@ -229,9 +229,11 @@ public class Router
 
 		// Here there is a list of strings to query the API for
 
-
+		//base URL
 		string sURL = "http://finance.google.com/finance/info?client=ig&q=NASDAQ:";
 
+
+		// adds stock tickers to url with comma between them
 		for (int index = 0; index < stock_name_list.Count - 1; ++index) {
 			sURL += stock_name_list [index];
 			if (index < stock_name_list.Count - 2) {
@@ -239,6 +241,7 @@ public class Router
 			}
 		}
 
+		// create web request
 		WebRequest wrGETURL;
 		wrGETURL = WebRequest.Create(sURL);
 
