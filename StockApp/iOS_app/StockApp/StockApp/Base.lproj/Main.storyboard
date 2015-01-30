@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h4b-ss-Ek1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="h4b-ss-Ek1">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -20,9 +20,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="4QQ-rB-Hcw">
-                        <barButtonItem key="rightBarButtonItem" title="Settings" id="khO-Mr-Q49">
+                        <barButtonItem key="rightBarButtonItem" title="Settings" id="PRo-jh-vhm">
                             <connections>
-                                <segue destination="JSB-EG-CJA" kind="presentation" id="abt-yq-cer"/>
+                                <action selector="settingButtonPressed:" destination="EuY-Hm-204" id="Tka-YO-3u8"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -30,7 +30,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mRx-pR-8i7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="743.5" y="188.5"/>
+            <point key="canvasLocation" x="264.5" y="197.5"/>
         </scene>
         <!--Fav Stocks Collection View Controller-->
         <scene sceneID="5U8-bn-Szb">
@@ -84,7 +84,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qMt-hf-f7S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1726.5" y="-567.5"/>
+            <point key="canvasLocation" x="920.79999999999995" y="-537.23333333333335"/>
         </scene>
         <!--History Table View Controller-->
         <scene sceneID="LF8-2T-7Sa">
@@ -127,41 +127,17 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="D21-VN-gDF" firstAttribute="top" secondItem="hQb-4n-KX2" secondAttribute="topMargin" constant="3" id="3GD-Zd-QAX"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="jiI-Tf-lWr" secondAttribute="bottom" constant="2.5" id="7rO-Jv-TH1"/>
                                         <constraint firstItem="Gxp-u0-29Y" firstAttribute="top" secondItem="hQb-4n-KX2" secondAttribute="topMargin" constant="3" id="8oL-Dt-Y5M"/>
-                                        <constraint firstItem="D21-VN-gDF" firstAttribute="leading" secondItem="Gxp-u0-29Y" secondAttribute="trailing" constant="40" id="AQl-io-51Y"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="jiI-Tf-lWr" secondAttribute="trailing" constant="15" id="GAe-hz-ajF"/>
                                         <constraint firstItem="jiI-Tf-lWr" firstAttribute="leading" secondItem="D21-VN-gDF" secondAttribute="trailing" constant="50" id="HXB-tC-VBx"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="Gxp-u0-29Y" secondAttribute="bottom" constant="2.5" id="JX2-CM-uI1"/>
                                         <constraint firstItem="D21-VN-gDF" firstAttribute="leading" secondItem="Gxp-u0-29Y" secondAttribute="trailing" constant="22" id="K7g-qv-5WO"/>
-                                        <constraint firstItem="Gxp-u0-29Y" firstAttribute="top" secondItem="hQb-4n-KX2" secondAttribute="topMargin" constant="3" id="Kh5-Qx-PEo"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Gxp-u0-29Y" secondAttribute="bottom" constant="2.5" id="M1X-yc-CAa"/>
                                         <constraint firstItem="Gxp-u0-29Y" firstAttribute="baseline" secondItem="D21-VN-gDF" secondAttribute="baseline" id="Mnm-O1-Blc"/>
                                         <constraint firstItem="Gxp-u0-29Y" firstAttribute="leading" secondItem="hQb-4n-KX2" secondAttribute="leadingMargin" constant="12" id="SwZ-Tw-3LA"/>
-                                        <constraint firstItem="Gxp-u0-29Y" firstAttribute="leading" secondItem="hQb-4n-KX2" secondAttribute="leadingMargin" constant="10" id="Tcb-VL-EQI"/>
-                                        <constraint firstItem="D21-VN-gDF" firstAttribute="leading" secondItem="Gxp-u0-29Y" secondAttribute="trailing" constant="40" id="Ux1-vW-LPI"/>
-                                        <constraint firstItem="Gxp-u0-29Y" firstAttribute="leading" secondItem="hQb-4n-KX2" secondAttribute="leadingMargin" constant="10" id="X3Z-77-V6f"/>
                                         <constraint firstItem="jiI-Tf-lWr" firstAttribute="firstBaseline" secondItem="D21-VN-gDF" secondAttribute="firstBaseline" id="gRR-Ly-ig2"/>
                                         <constraint firstItem="Gxp-u0-29Y" firstAttribute="firstBaseline" secondItem="D21-VN-gDF" secondAttribute="firstBaseline" id="h9y-v1-H5Y"/>
                                         <constraint firstItem="jiI-Tf-lWr" firstAttribute="baseline" secondItem="D21-VN-gDF" secondAttribute="baseline" id="hHv-nf-b2Y"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="D21-VN-gDF" secondAttribute="bottom" constant="2.5" id="pY9-fF-q3f"/>
-                                        <constraint firstItem="jiI-Tf-lWr" firstAttribute="top" secondItem="hQb-4n-KX2" secondAttribute="topMargin" constant="3" id="vap-Hq-2eM"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="JX2-CM-uI1"/>
-                                            <exclude reference="Kh5-Qx-PEo"/>
-                                            <exclude reference="Tcb-VL-EQI"/>
-                                            <exclude reference="X3Z-77-V6f"/>
-                                            <exclude reference="3GD-Zd-QAX"/>
-                                            <exclude reference="AQl-io-51Y"/>
-                                            <exclude reference="Ux1-vW-LPI"/>
-                                            <exclude reference="pY9-fF-q3f"/>
-                                            <exclude reference="7rO-Jv-TH1"/>
-                                            <exclude reference="vap-Hq-2eM"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="amountOfSharesLabel" destination="D21-VN-gDF" id="9MZ-jj-HXN"/>
@@ -201,8 +177,6 @@
                                     <constraints>
                                         <constraint firstItem="582-5R-CDN" firstAttribute="leading" secondItem="3bx-5m-XNl" secondAttribute="leading" constant="142" id="7HO-DG-3lM"/>
                                         <constraint firstItem="582-5R-CDN" firstAttribute="leading" secondItem="6aU-ec-lQb" secondAttribute="trailing" constant="47" id="N7P-n8-BSk"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="6aU-ec-lQb" secondAttribute="bottom" constant="5.5" id="U83-X7-NtH"/>
-                                        <constraint firstItem="6aU-ec-lQb" firstAttribute="top" secondItem="3bx-5m-XNl" secondAttribute="topMargin" constant="6" id="Ujd-mq-2Ky"/>
                                         <constraint firstItem="M4c-Gf-bfk" firstAttribute="top" secondItem="3bx-5m-XNl" secondAttribute="topMargin" constant="11" id="VWB-dA-2Qx"/>
                                         <constraint firstItem="6aU-ec-lQb" firstAttribute="centerY" secondItem="582-5R-CDN" secondAttribute="centerY" id="X3K-2y-thO"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="M4c-Gf-bfk" secondAttribute="bottom" constant="10.5" id="Zhs-Gw-yRQ"/>
@@ -213,12 +187,6 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="M4c-Gf-bfk" secondAttribute="trailing" constant="15" id="oeF-sw-Juu"/>
                                         <constraint firstItem="M4c-Gf-bfk" firstAttribute="firstBaseline" secondItem="582-5R-CDN" secondAttribute="firstBaseline" id="sqt-vx-Xek"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="U83-X7-NtH"/>
-                                            <exclude reference="Ujd-mq-2Ky"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="dateLabel" destination="M4c-Gf-bfk" id="NjB-73-H5f"/>
@@ -274,7 +242,6 @@
                                         <constraint firstItem="1uZ-Bu-Acj" firstAttribute="leading" secondItem="09t-vm-rjJ" secondAttribute="trailing" constant="50" id="Psf-Ms-vdp"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="1uZ-Bu-Acj" secondAttribute="trailing" constant="15" id="aYV-P4-ueA"/>
                                         <constraint firstItem="09t-vm-rjJ" firstAttribute="leading" secondItem="1zp-3b-5M0" secondAttribute="trailing" constant="22" id="brv-ml-lnZ"/>
-                                        <constraint firstItem="1uZ-Bu-Acj" firstAttribute="top" secondItem="4Sd-NH-3h4" secondAttribute="topMargin" id="dIg-S6-GSr"/>
                                         <constraint firstItem="1zp-3b-5M0" firstAttribute="top" secondItem="4Sd-NH-3h4" secondAttribute="topMargin" constant="13" id="dj3-3I-ZHi"/>
                                         <constraint firstItem="1zp-3b-5M0" firstAttribute="leading" secondItem="4Sd-NH-3h4" secondAttribute="leadingMargin" constant="12" id="eFa-P6-6Uh"/>
                                         <constraint firstItem="09t-vm-rjJ" firstAttribute="leading" secondItem="4Sd-NH-3h4" secondAttribute="leading" constant="142" id="jta-J9-Xdh"/>
@@ -285,11 +252,6 @@
                                         <constraint firstItem="Ujy-Rt-goY" firstAttribute="top" secondItem="4Sd-NH-3h4" secondAttribute="topMargin" constant="25" id="uVh-UJ-FYa"/>
                                         <constraint firstItem="Ujy-Rt-goY" firstAttribute="leading" secondItem="09t-vm-rjJ" secondAttribute="trailing" constant="50" id="zfR-mB-gk8"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="dIg-S6-GSr"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="dateLabel" destination="1uZ-Bu-Acj" id="Xah-sU-kPX"/>
@@ -307,7 +269,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0qd-pT-tWt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1726.5" y="180.5"/>
+            <point key="canvasLocation" x="920.79999999999995" y="170.87333333333333"/>
         </scene>
         <!--Portfilio Table View Controller-->
         <scene sceneID="48y-Za-ukt">
@@ -338,7 +300,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="ShH-WR-SWx" kind="show" id="VdS-io-S45"/>
+                                    <segue destination="ShH-WR-SWx" kind="modal" id="VdS-io-S45"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -351,7 +313,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x1k-4Y-DNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1726.5" y="915.5"/>
+            <point key="canvasLocation" x="920.79999999999995" y="866.67333333333329"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Sdg-0x-FdM">
@@ -429,7 +391,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T6M-ca-sM2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2335.5" y="180.5"/>
+            <point key="canvasLocation" x="1245.5999999999999" y="170.87333333333333"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="A9V-gK-YHz">
@@ -526,12 +488,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ORt-ac-280" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="233.5" y="-561.5"/>
+            <point key="canvasLocation" x="-363.5" y="-548.5"/>
         </scene>
-        <!--Title-->
+        <!--Settings-->
         <scene sceneID="Rap-fa-vfS">
             <objects>
-                <viewController id="JSB-EG-CJA" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsViewController" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="JSB-EG-CJA" customClass="SettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7EN-65-5rO"/>
                         <viewControllerLayoutGuide type="bottom" id="rLx-SW-nI4"/>
@@ -541,7 +503,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simulation" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GF1-wO-doO">
-                                <rect key="frame" x="49" y="151" width="160" height="30"/>
+                                <rect key="frame" x="49" y="107" width="160" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="160" id="D1S-fp-Pzt"/>
                                     <constraint firstAttribute="height" constant="30" id="DWb-2O-5cs"/>
@@ -551,7 +513,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Refresh Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JDo-db-GvX">
-                                <rect key="frame" x="49" y="231" width="160" height="30"/>
+                                <rect key="frame" x="49" y="187" width="160" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="JWY-yx-bYF"/>
                                     <constraint firstAttribute="width" constant="160" id="tLT-ml-4lb"/>
@@ -561,7 +523,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NVP-9n-CMU">
-                                <rect key="frame" x="254" y="232" width="89" height="29"/>
+                                <rect key="frame" x="254" y="188" width="89" height="29"/>
                                 <segments>
                                     <segment title="5"/>
                                     <segment title="10"/>
@@ -569,19 +531,19 @@
                                 </segments>
                             </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nVC-29-Vhg">
-                                <rect key="frame" x="112" y="360" width="150" height="30"/>
+                                <rect key="frame" x="112" y="316" width="150" height="30"/>
                                 <state key="normal" title="Reset">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kiy-EX-bFf">
-                                <rect key="frame" x="112" y="446" width="150" height="30"/>
+                                <rect key="frame" x="112" y="402" width="150" height="30"/>
                                 <state key="normal" title="Sign Out">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1JM-KB-0Fj">
-                                <rect key="frame" x="274" y="151" width="51" height="31"/>
+                                <rect key="frame" x="274" y="107" width="51" height="31"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </switch>
                         </subviews>
@@ -611,12 +573,16 @@
                             <constraint firstItem="JDo-db-GvX" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="33" id="vN3-3e-bdm"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="nRq-a8-GT5"/>
+                    <toolbarItems>
+                        <barButtonItem title="Item" id="oES-wV-p0R"/>
+                    </toolbarItems>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="egd-U4-W5G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1267.5" y="-593.5"/>
+            <point key="canvasLocation" x="387.5" y="-838.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oEd-3c-9RY">
@@ -633,7 +599,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XTt-RK-A78" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="233.5" y="188.5"/>
+            <point key="canvasLocation" x="-179.5" y="203.5"/>
         </scene>
         <!--Title-->
         <scene sceneID="Q3g-f0-rRG">
@@ -646,7 +612,12 @@
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IaW-kq-hAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1295.5" y="180.5"/>
+            <point key="canvasLocation" x="690.93333333333328" y="170.87333333333333"/>
         </scene>
     </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

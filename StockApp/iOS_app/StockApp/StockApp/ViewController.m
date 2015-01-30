@@ -11,6 +11,7 @@
 #import "FavStocksCollectionViewController.h"
 #import "PortfilioTableViewController.h"
 #import "UIColor+SAColor.h"
+#import "SettingsViewController.h"
 
 @interface ViewController ()
 
@@ -96,6 +97,15 @@
     
     return index;
 }
+
+- (IBAction)settingButtonPressed:(id)sender {
+    SettingsViewController *settingsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"];
+    UINavigationController *settingNav = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    
+    [self.navigationController presentViewController:settingNav animated:YES completion:nil];
+    
+}
+
 
 #pragma mark - Page View Controller Data Source
 
