@@ -7,8 +7,20 @@
 //
 
 #import "CompanyProfileViewController.h"
+#import <JBChartView/JBLineChartView.h>
+#import <JBLineChartView.h>
 
-@interface CompanyProfileViewController ()
+@interface CompanyProfileViewController () <UIScrollViewDelegate>
+@property (weak, nonatomic) IBOutlet UIImageView *companyIconImageView;
+@property (weak, nonatomic) IBOutlet UILabel *percentChangeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *priceLabel;
+@property (weak, nonatomic) IBOutlet JBLineChartView *graphView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *buySellSegmentedControl;
+@property (weak, nonatomic) IBOutlet UIScrollView *companyScrollView;
+@property (weak, nonatomic) IBOutlet UISlider *stockAmountSlider;
+@property (weak, nonatomic) IBOutlet UILabel *stopLabel;
+@property (weak, nonatomic) IBOutlet UIDatePicker *stopDatePicker;
+@property (weak, nonatomic) IBOutlet UIButton *confirmButton;
 
 @end
 
@@ -19,11 +31,20 @@
     // Do any additional setup after loading the view.
     
     self.title = @"Company";
+    [self setupScrollView];
+}
+
+- (void)setupScrollView
+{
+    self.companyScrollView.delegate = self;
+    self.companyScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 700.f);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (IBAction)confirmButtonPressed:(id)sender {
 }
 
 /*
@@ -35,5 +56,6 @@
     // Pass the selected object to the new view controller.
 }
 */
+
 
 @end

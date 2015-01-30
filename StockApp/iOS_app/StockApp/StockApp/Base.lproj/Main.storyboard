@@ -72,6 +72,7 @@
                                 <connections>
                                     <outlet property="stockNameLabel" destination="400-yl-2Ri" id="axd-Bh-8pF"/>
                                     <outlet property="stockPriceLabel" destination="NmY-1B-YLz" id="qnC-Eq-3Fj"/>
+                                    <segue destination="ShH-WR-SWx" kind="push" id="whB-mK-FP2"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -84,7 +85,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qMt-hf-f7S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="920.79999999999995" y="-537.23333333333335"/>
+            <point key="canvasLocation" x="1172.5" y="197.5"/>
         </scene>
         <!--History Table View Controller-->
         <scene sceneID="LF8-2T-7Sa">
@@ -269,7 +270,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0qd-pT-tWt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="920.79999999999995" y="170.87333333333333"/>
+            <point key="canvasLocation" x="1180.5" y="-548.5"/>
         </scene>
         <!--Portfilio Table View Controller-->
         <scene sceneID="48y-Za-ukt">
@@ -313,12 +314,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x1k-4Y-DNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="920.79999999999995" y="866.67333333333329"/>
+            <point key="canvasLocation" x="1172.5" y="978.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Company Profile View Controller-->
         <scene sceneID="Sdg-0x-FdM">
             <objects>
-                <viewController storyboardIdentifier="CompanyViewController" id="ShH-WR-SWx" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CompanyViewController" id="ShH-WR-SWx" customClass="CompanyProfileViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Zgg-TX-TDE"/>
                         <viewControllerLayoutGuide type="bottom" id="eki-bR-AfS"/>
@@ -327,14 +328,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ksc-29-i2p">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ksc-29-i2p">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7a4-0N-h6L">
                                         <rect key="frame" x="8" y="8" width="146" height="136"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bL9-LK-GjA">
-                                        <rect key="frame" x="214" y="36" width="119" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Percent Change" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bL9-LK-GjA">
+                                        <rect key="frame" x="214" y="36" width="124" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -345,7 +347,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Xx-Cf-2cm">
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Xx-Cf-2cm" customClass="JBLineChartView">
                                         <rect key="frame" x="8" y="152" width="359" height="120"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
@@ -382,16 +384,36 @@
                                         <state key="normal" title="Confirm">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="confirmButtonPressed:" destination="ShH-WR-SWx" eventType="touchUpInside" id="Hef-zp-kWr"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ksc-29-i2p" firstAttribute="height" secondItem="ZKn-So-8c4" secondAttribute="height" id="6NC-fB-T1e"/>
+                            <constraint firstItem="Ksc-29-i2p" firstAttribute="width" secondItem="ZKn-So-8c4" secondAttribute="width" id="I4w-yi-pEE"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="SVM-4M-tPO"/>
+                    <connections>
+                        <outlet property="buySellSegmentedControl" destination="4dJ-W3-77R" id="vqI-ir-ZZC"/>
+                        <outlet property="companyIconImageView" destination="7a4-0N-h6L" id="Jbd-lr-ymd"/>
+                        <outlet property="companyScrollView" destination="Ksc-29-i2p" id="hZr-zL-Dod"/>
+                        <outlet property="confirmButton" destination="nII-48-XVm" id="MGe-G6-PgK"/>
+                        <outlet property="graphView" destination="9Xx-Cf-2cm" id="X43-cT-P2K"/>
+                        <outlet property="percentChangeLabel" destination="bL9-LK-GjA" id="STP-cM-l0o"/>
+                        <outlet property="priceLabel" destination="mR3-9n-AQc" id="qiq-sj-CTm"/>
+                        <outlet property="stockAmountSlider" destination="gtw-jX-KOq" id="CvE-z1-lbT"/>
+                        <outlet property="stopDatePicker" destination="cWi-MP-xY8" id="AJp-d1-tz4"/>
+                        <outlet property="stopLabel" destination="f4N-91-9TD" id="Oio-wF-oBy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T6M-ca-sM2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1245.5999999999999" y="170.87333333333333"/>
+            <point key="canvasLocation" x="1609.5" y="556.5"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="A9V-gK-YHz">
@@ -488,7 +510,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ORt-ac-280" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-363.5" y="-548.5"/>
+            <point key="canvasLocation" x="-179.5" y="-548.5"/>
         </scene>
         <!--Settings-->
         <scene sceneID="Rap-fa-vfS">
@@ -582,7 +604,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="egd-U4-W5G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="387.5" y="-838.5"/>
+            <point key="canvasLocation" x="264.5" y="-548.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oEd-3c-9RY">
@@ -612,7 +634,7 @@
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IaW-kq-hAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="690.93333333333328" y="170.87333333333333"/>
+            <point key="canvasLocation" x="690.5" y="197.5"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -620,4 +642,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="whB-mK-FP2"/>
+    </inferredMetricsTieBreakers>
 </document>
