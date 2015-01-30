@@ -12,5 +12,6 @@
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 
+-(void) resetFavorites;
 
 @end
