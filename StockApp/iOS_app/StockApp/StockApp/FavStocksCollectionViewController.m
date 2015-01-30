@@ -15,6 +15,7 @@
 @interface FavStocksCollectionViewController ()
 
 @property (nonatomic, strong) NSMutableArray *favoriteStocks;
+@property NSInteger favoriteCount;
 
 @end
 
@@ -29,6 +30,7 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     
     [self setupCellInsets];
     self.title = @"Favorites";
+    self.favoriteCount = 7;
     
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -86,7 +88,7 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 7;
+    return self.favoriteCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -209,6 +211,13 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
 {
     return 0;
+}
+
+// One of the methods called when the user presses the reset button in settings.
+-(void)resetFavorites
+{
+    [self.favoriteStocks removeAllObjects ];
+    self.favoriteCount = 0;
 }
 
 @end
