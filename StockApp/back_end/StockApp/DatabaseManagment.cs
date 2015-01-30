@@ -16,11 +16,12 @@ namespace StockApp
       private static MongoServer server;
       private static MongoDatabase database;
 
+      private object db_lock = new Object();
+      private static object account_lock = new Object();
+
       private DatabaseManagment ()
       {
-         Object lock_object = new ObjectId();
-
-         lock(lock_object)
+         lock(db_lock)
          {
             if (server != null) return;
 
@@ -37,9 +38,7 @@ namespace StockApp
             db_management = new DatabaseManagment();
          }
 
-         object lock_object = new object();
-
-         lock(lock_object)
+         lock(account_lock)
          {
             MongoCollection<BsonDocument> users_collection = database.GetCollection<BsonDocument>("users");
 
@@ -123,28 +122,225 @@ namespace StockApp
 
          var query_username = Query.EQ ("username", username);
 
-         try
+         lock (account_lock)
          {
-            BsonDocument account_document; 
-            account_document = accounts_collection.FindOne(query_username).AsBsonDocument;
 
-            BsonElement account_id;
-            account_document.TryGetElement("history_id", out account_id);
+            try
+            {
+               BsonDocument account_document;
+               account_document = accounts_collection.FindOne(query_username).AsBsonDocument;
 
-            string string_id = account_id.Value.AsString;
-            ObjectId object_id = new ObjectId(string_id);
-            var query_remove_history_by_id = Query.EQ("_id", object_id);
+               BsonElement account_id;
+               account_document.TryGetElement("history_id", out account_id);
 
-            accounts_collection.Remove(query_username);
-            history_collection.Remove(query_remove_history_by_id);
+               string string_id = account_id.Value.AsString;
+               ObjectId object_id = new ObjectId(string_id);
+               var query_remove_history_by_id = Query.EQ("_id", object_id);
 
-            return true;
-         }
-         catch
-         {
-            return false;
+               accounts_collection.Remove(query_username);
+               history_collection.Remove(query_remove_history_by_id);
+
+               return true;
+            }
+            catch
+            {
+               return false;
+            }
          }
       }
+
+      public static double BuyOrder(string username, string name, double amount, double value)
+      {
+         if (db_management == null)
+         {
+            db_management = new DatabaseManagment();
+         }
+
+         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         foreach (BsonDocument c in cursor)
+         {
+            try
+            {
+               double current_money = c.GetValue("money").AsDouble;
+
+               BsonElement account_id;
+               c.TryGetElement("history_id", out account_id);
+
+               string string_id = account_id.Value.AsString;
+               ObjectId object_id = new ObjectId(string_id);
+               var query_history_collection = Query.EQ("_id", object_id);
+
+               current_money = current_money - value;
+
+               var update_document = new UpdateDocument {
+                  { "$set", new BsonDocument("money", current_money) }
+               };
+
+               accounts.Update(query, update_document);
+
+               Dictionary<string, object> elements = new Dictionary<string,object>();
+               
+               elements.Add("type", "buy");
+               elements.Add("sell_amount", amount);
+               elements.Add("sell_value", value);
+               elements.Add("current_money", current_money);
+
+               var history_update_document = new UpdateDocument {
+                  { "$push", new BsonDocument("history_list", new BsonArray().Add(new BsonDocument(elements))) }
+               };
+
+               history_collection.Update(query_history_collection, history_update_document);
+
+               return current_money;
+
+            }
+            catch
+            {
+
+            }
+         }
+
+         return -1;
+      }
+
+      public static double SellOrder(string username, string name, double amount, double value)
+      {
+         if (db_management == null)
+         {
+            db_management = new DatabaseManagment();
+         }
+
+         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         foreach (BsonDocument c in cursor)
+         {
+            try
+            {
+               double current_money = c.GetValue("money").AsDouble;
+
+               BsonElement account_id;
+               c.TryGetElement("history_id", out account_id);
+
+               string string_id = account_id.Value.AsString;
+               ObjectId object_id = new ObjectId(string_id);
+               var query_history_collection = Query.EQ("_id", object_id);
+
+               current_money = current_money + value;
+
+               var update_document = new UpdateDocument {
+                  { "$set", new BsonDocument("money", current_money) }
+               };
+
+               accounts.Update(query, update_document);
+
+               Dictionary<string, object> elements = new Dictionary<string, object>();
+
+               elements.Add("type", "sell");
+               elements.Add("sell_amount", amount);
+               elements.Add("sell_value", value);
+               elements.Add("current_money", current_money);
+
+               var history_update_document = new UpdateDocument {
+                  { "$push", new BsonDocument("history_list", new BsonArray().Add(new BsonDocument(elements))) }
+               };
+
+              history_collection.Update(query_history_collection, history_update_document);
+
+               return current_money;
+
+            }
+            catch
+            {
+
+            }
+         }
+
+         return -1;
+      }
+
+      public static double GetMoney(string username)
+      {
+         if (db_management == null)
+         {
+            db_management = new DatabaseManagment();
+         }
+
+         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         foreach (BsonDocument c in cursor)
+         {
+            try
+            {
+               double current_money = c.GetValue("money").AsDouble;
+
+               return current_money;
+
+            }
+            catch
+            {
+
+            }
+         }
+
+         return -1;
+      }
+
+      public static double ResetOrder(string username, double amount)
+      {
+         if (db_management == null)
+         {
+            db_management = new DatabaseManagment();
+         }
+
+         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         foreach (BsonDocument c in cursor)
+         {
+            try
+            {
+               var update_document = new UpdateDocument {
+                  { "$set", new BsonDocument("money", amount) }
+               };
+
+               BsonElement account_id;
+               c.TryGetElement("history_id", out account_id);
+
+               string string_id = account_id.Value.AsString;
+               ObjectId object_id = new ObjectId(string_id);
+               var query_history_collection = Query.EQ("_id", object_id);
+
+               accounts.Update(query, update_document);
+
+               var history_update_document = new UpdateDocument {
+                  { "$unset", new BsonDocument("history_list", "") }
+               };
+
+               history_collection.Update(query_history_collection, history_update_document);
+
+               return amount;
+
+            }
+            catch
+            {
+
+            }
+         }
+
+         return 0;
+      }
+
    }
 }
 

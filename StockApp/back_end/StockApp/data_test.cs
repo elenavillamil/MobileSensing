@@ -32,7 +32,7 @@ namespace StockApp
 
          // Test that the SignIn is successful. 
          // An empty string is returned when login fails
-         if ("" == DatabaseManagment.SignIn (username, password))
+         if (DatabaseManagment.SignIn (username, password) == "")
          {
             throw new Exception("FAILED TEST: Unable to sign in with correct username and password");
          }
@@ -107,9 +107,64 @@ namespace StockApp
          // Check that it also remove the user's history
       }
 
+      private void TestBuyOrder()
+      {
+         string username = "jashook";
+         double amount = 10500; // 10,500
+
+         double amount_result = DatabaseManagment.ResetOrder(username, amount);
+
+         amount = 500;
+
+         amount_result = DatabaseManagment.BuyOrder (username, "", 10, amount);
+
+         // Test that the BuyOrder is successful. 
+         // Zero if failed
+         if (amount_result != 10000.0)
+         {
+            throw new Exception("FAILED TEST: Incorrect amount expected");
+         }
+      }
+
+      private void TestSellOrder()
+      {
+         string username = "jashook";
+         double amount = 9500; // 10,000
+
+         double amount_result = DatabaseManagment.ResetOrder(username, amount);
+
+         amount = 500;
+
+         amount_result = DatabaseManagment.SellOrder(username, "", 10, amount);
+
+         // Test that the SellOrder is successful. 
+         // Zero if failed
+         if (amount_result != 10000.0)
+         {
+            throw new Exception("FAILED TEST: Incorrect amount expected");
+         }
+      }
+
+      private void TestResetOrder()
+      {
+         string username = "jashook";
+         double amount = 9500; // 10,000
+
+         double amount_result = DatabaseManagment.ResetOrder(username, amount);
+
+         // Test that the SellOrder is successful. 
+         // Zero if failed
+         if (amount_result != 9500.0)
+         {
+            throw new Exception("FAILED TEST: Incorrect amount expected");
+         }
+
+         amount_result = DatabaseManagment.ResetOrder(username, 10000);
+      }
+
       // Constructor
      
-      public DataTest() : base(1)
+      public DataTest() : base(2)
       {
          // Test with Two Threads
  
@@ -118,6 +173,9 @@ namespace StockApp
          Run (TestSuccessfulSignUp);
          Run (TestUnsuccessfulSignUp);
          Run (TestRemoveAccount);
+         Run (TestResetOrder);
+         Run (TestBuyOrder);
+         Run (TestSellOrder);
       }
    }
 }
