@@ -164,7 +164,7 @@ namespace StockApp
 
       // Constructor
      
-      public DataTest() : base(2)
+      public DataTest() : base(1)
       {
          // Test with Two Threads
  
