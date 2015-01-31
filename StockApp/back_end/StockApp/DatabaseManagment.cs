@@ -1,4 +1,5 @@
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.GridFS;
@@ -189,8 +190,10 @@ namespace StockApp
                elements.Add("sell_value", value);
                elements.Add("current_money", current_money);
 
+               BsonDocument to_be_inserted = new BsonDocument(elements);
+
                var history_update_document = new UpdateDocument {
-                  { "$push", new BsonDocument("history_list", new BsonArray().Add(new BsonDocument(elements))) }
+                  { "$push", new BsonDocument("history_list", to_be_inserted) }
                };
 
                history_collection.Update(query_history_collection, history_update_document);
@@ -247,11 +250,13 @@ namespace StockApp
                elements.Add("sell_value", value);
                elements.Add("current_money", current_money);
 
+               BsonDocument to_be_inserted = new BsonDocument(elements);
+
                var history_update_document = new UpdateDocument {
-                  { "$push", new BsonDocument("history_list", new BsonArray().Add(new BsonDocument(elements))) }
+                  { "$push", new BsonDocument("history_list", to_be_inserted) }
                };
 
-              history_collection.Update(query_history_collection, history_update_document);
+               history_collection.Update(query_history_collection, history_update_document);
 
                return current_money;
 
@@ -339,6 +344,52 @@ namespace StockApp
          }
 
          return 0;
+      }
+
+      public static List<Tuple<string, string, double, double>> GetHistory(string username)
+      {
+         if (db_management == null)
+         {
+            db_management = new DatabaseManagment();
+         }
+
+         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         foreach (BsonDocument c in cursor)
+         {
+            try
+            {
+               BsonElement account_id;
+               c.TryGetElement("history_id", out account_id);
+
+               string string_id = account_id.Value.AsString;
+               ObjectId object_id = new ObjectId(string_id);
+               var query_history_collection = Query.EQ("_id", object_id);
+
+               var returned_document = history_collection.FindOne(query_history_collection);
+
+               BsonValue value;
+               returned_document.TryGetValue("history_list", out value);
+
+               BsonArray bson_arr = value.AsBsonArray;
+               var element_arr = bson_arr.ToArray();
+
+               foreach (BsonValue val in element_arr)
+               {
+                  
+
+               }
+            }
+            catch
+            {
+
+            }
+         }
+
+         return null;
       }
 
    }

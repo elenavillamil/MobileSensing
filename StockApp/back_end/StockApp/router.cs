@@ -273,12 +273,37 @@ public class Router
 	//  <character with the size of the first string>
 	//  "stock"
 	//  <character with the size of the second string>
-	//  "size of order"]
+	//  "size of order"
+   //  <character with the size of the third string>
+   //  "price of order" ]
 	//
 	////////////////////////////////////////////////////////////////////////////////
 	private void handle_buy_order(Socket socket, string message)
 	{
+      int first_str_size = message[1];
 
+      if (message.Length > first_str_size + 1)
+      {
+         return;
+      }
+
+      int second_string_size = message[1 + first_str_size + 1];
+
+      if (message.Length > first_str_size + second_string_size + 3)
+      {
+         return;
+      }
+
+      int third_string_size = message[1 + first_str_size + 1 + second_string_size + 1];
+
+      if (message.Length > first_str_size + second_string_size + third_string_size + 3)
+      {
+         return;
+      }
+
+      string stock_name = message.Substring(2, first_str_size);
+      string order_size = message.Substring(1 + first_str_size + 1, second_string_size);
+      string sell_value = message.Substring(1 + first_str_size + 1 + second_string_size + 1, third_string_size);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -287,16 +312,41 @@ public class Router
 	//
 	// Expected format:
 	//
-	// [<character representing the function to call>
-	//  <character with the size of the first string>
-	//  "stock"
-	//  <character with the size of the second string>
-	//  "size of order"]
+   // [<character representing the function to call>
+   //  <character with the size of the first string>
+   //  "stock"
+   //  <character with the size of the second string>
+   //  "size of order"
+   //  <character with the size of the third string>
+   //  "price of order" ]
 	//
 	////////////////////////////////////////////////////////////////////////////////
 	private void handle_sell_order(Socket socket, string message)
 	{
+      int first_str_size = message[1];
 
+      if (message.Length > first_str_size + 1)
+      {
+         return;
+      }
+
+      int second_string_size = message[1 + first_str_size + 1];
+
+      if (message.Length > first_str_size + second_string_size + 3)
+      {
+         return;
+      }
+
+      int third_string_size = message[1 + first_str_size + 1 + second_string_size + 1];
+
+      if (message.Length > first_str_size + second_string_size + third_string_size + 3)
+      {
+         return;
+      }
+
+      string stock_name = message.Substring(2, first_str_size);
+      string order_size = message.Substring(1 + first_str_size + 1, second_string_size);
+      string sell_value = message.Substring(1 + first_str_size + 1 + second_string_size + 1, third_string_size);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -328,6 +378,28 @@ public class Router
 	////////////////////////////////////////////////////////////////////////////////
 	private void handle_get_amount_of_money(Socket socket, string message)
 	{
+      int username_size = message[1];
 
+      if (message.Length > username_size + 1)
+      {
+         return;
+      }
+
+      string username = message.Substring(2, username_size);
+
+      double returned_money = StockApp.DatabaseManagment.GetMoney(username);
+
+      if (returned_money == -1)
+      {
+         string return_message = "-1";
+
+         socket.Send(Encoding.ASCII.GetBytes(return_message));
+      }
+      else
+      {
+         string return_message = returned_money.ToString();
+
+         socket.Send(Encoding.ASCII.GetBytes(return_message));
+      }
 	}
 }
