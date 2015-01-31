@@ -551,22 +551,34 @@
                                     <segment title="10"/>
                                     <segment title="30"/>
                                 </segments>
+                                <connections>
+                                    <action selector="onTimerSegmentedControlValueChange:" destination="JSB-EG-CJA" eventType="valueChanged" id="DT5-Jn-b4v"/>
+                                </connections>
                             </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nVC-29-Vhg">
                                 <rect key="frame" x="112" y="316" width="150" height="30"/>
                                 <state key="normal" title="Reset">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="onResetButtonTouchUpInside:" destination="JSB-EG-CJA" eventType="touchUpInside" id="wky-1s-beS"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kiy-EX-bFf">
                                 <rect key="frame" x="112" y="402" width="150" height="30"/>
                                 <state key="normal" title="Sign Out">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="onSignOutButtonTouchUpInside:" destination="JSB-EG-CJA" eventType="touchUpInside" id="CIJ-Kg-6Vp"/>
+                                </connections>
                             </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1JM-KB-0Fj">
                                 <rect key="frame" x="274" y="107" width="51" height="31"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="onSimulationSwitchValueChange:" destination="JSB-EG-CJA" eventType="valueChanged" id="efw-87-WXe"/>
+                                </connections>
                             </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -601,10 +613,14 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="simulationSwitch" destination="1JM-KB-0Fj" id="Y8S-kA-GlI"/>
+                        <outlet property="timerSegmentedControl" destination="NVP-9n-CMU" id="Vav-6Z-8NM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="egd-U4-W5G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="264.5" y="-548.5"/>
+            <point key="canvasLocation" x="256.5" y="-548.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oEd-3c-9RY">

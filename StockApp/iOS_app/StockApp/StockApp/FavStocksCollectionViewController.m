@@ -11,11 +11,11 @@
 #import "PortfilioTableViewController.h"
 #import "FavoriteCollectionViewCell.h"
 #import "UIColor+SAColor.h"
+#import "User.h"
 
 @interface FavStocksCollectionViewController ()
 
-@property (nonatomic, strong) NSMutableArray *favoriteStocks;
-@property NSInteger favoriteCount;
+@property (strong, nonatomic) User* user;
 
 @end
 
@@ -30,7 +30,6 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     
     [self setupCellInsets];
     self.title = @"Favorites";
-    self.favoriteCount = 7;
     
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -38,13 +37,13 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 }
 
 #pragma mark - Inits
-- (NSMutableArray *)favoriteStocks
+- (User *)user
 {
-    if (!_favoriteStocks) {
-        _favoriteStocks = [[NSMutableArray alloc] init];
+    if (!_user) {
+        _user = [User sharedInstance];
     }
     
-    return _favoriteStocks;
+    return _user;
 }
 
 - (void)setupCellInsets
@@ -88,7 +87,7 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.favoriteCount;
+    return 7;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -211,13 +210,6 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
 {
     return 0;
-}
-
-// One of the methods called when the user presses the reset button in settings.
--(void)resetFavorites
-{
-    [self.favoriteStocks removeAllObjects ];
-    self.favoriteCount = 0;
 }
 
 @end

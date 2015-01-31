@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSMutableArray *favorites;
 @property (nonatomic, strong) NSMutableArray *history;
 @property (nonatomic, strong) NSMutableArray *portfolio;
+@property (nonatomic, strong) NSTimer *timer;
 
 @end
 
@@ -53,6 +54,16 @@
     return _portfolio;
 }
 
+-(NSTimer*)timer
+{
+    if(!_timer) {
+        _timer = [[NSTimer alloc] init];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(refresh) userInfo:nil repeats:YES];
+
+    }
+    return _timer;
+}
+
 - (void)addFavorite:(Stock *)stock
 {
     [self.favorites addObject:stock];
@@ -83,5 +94,23 @@
     return self.history;
 }
 
+-(void)reset
+{
+    [self.history removeAllObjects];
+    [self.portfolio removeAllObjects];
+    [self.favorites removeAllObjects];
+}
+
+-(void)newTimerWith:(NSInteger)time
+{
+    [self.timer invalidate];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(refresh) userInfo:nil repeats:YES];
+}
+
+-(void)refresh
+{
+    NSLog(@"Hola");
+    //Get updated info from backend
+}
 
 @end

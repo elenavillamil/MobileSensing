@@ -21,4 +21,8 @@
 - (NSMutableArray *)getPortfolio;
 - (NSMutableArray *)getHistory;
 
+-(void)reset;
+-(void)newTimerWith:(NSInteger)time;
+-(void)refresh;
+
 @end

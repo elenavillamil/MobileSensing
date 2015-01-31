@@ -10,4 +10,16 @@
 
 @interface SettingsViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UISwitch *simulationSwitch;
+
+@property (weak, nonatomic) IBOutlet UISegmentedControl *timerSegmentedControl;
+
+- (IBAction)onSimulationSwitchValueChange:(id)sender;
+
+- (IBAction)onTimerSegmentedControlValueChange:(id)sender;
+
+- (IBAction)onResetButtonTouchUpInside:(id)sender;
+
+- (IBAction)onSignOutButtonTouchUpInside:(id)sender;
+
 @end
