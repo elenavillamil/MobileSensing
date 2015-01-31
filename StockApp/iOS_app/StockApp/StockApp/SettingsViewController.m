@@ -8,8 +8,11 @@
 
 #import "SettingsViewController.h"
 #import "UIColor+SAColor.h"
+#import "User.h"
 
 @interface SettingsViewController ()
+
+@property(strong,nonatomic)User* user;
 
 @end
 
@@ -24,6 +27,15 @@
     self.navigationController.navigationBar.barTintColor = [UIColor blue];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
+}
+
+- (User *)user
+{
+    if (!_user) {
+        _user = [User sharedInstance];
+    }
+    
+    return _user;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -45,4 +57,30 @@
 }
 */
 
+- (IBAction)onSimulationSwitchValueChange:(id)sender {
+    if ([self.simulationSwitch isOn])
+    {
+        // Hide all views except the stock info
+        // In company view hide the lower part
+        
+    }
+    else
+    {
+        
+    }
+}
+
+-(IBAction)onTimerSegmentedControlValueChange:(id)sender{
+    NSString* newTime = [sender titleForSegmentAtIndex:self.timerSegmentedControl.selectedSegmentIndex];
+    // Set NSTimer to this number
+    [self.user newTimerWith:newTime.integerValue];
+}
+
+- (IBAction)onResetButtonTouchUpInside:(id)sender {
+    // Call reset on db
+    [self.user reset];
+}
+
+- (IBAction)onSignOutButtonTouchUpInside:(id)sender {
+}
 @end
