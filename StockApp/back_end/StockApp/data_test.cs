@@ -15,6 +15,10 @@ using System.Collections.Generic;
 using ev9;
 using JS;
 using StockApp;
+using System.Threading;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -162,20 +166,303 @@ namespace StockApp
          amount_result = DatabaseManagment.ResetOrder(username, 10000);
       }
 
+      private void RunServer()
+      {
+         Thread thread = new Thread(new ThreadStart(Router.router_start));
+
+         thread.Start();
+      }
+
+      private void TestHandleSettingUpAccount()
+      {
+         string username = "jashook";
+         string password = "ev9";
+
+         char function = (char)0;
+         char username_size = (char)username.Length;
+         char password_size = (char)password.Length;
+
+         string message = "";
+
+         message += function;
+         message += username_size;
+         message += username;
+         message += password_size;
+         message += password;
+
+         IPEndPoint endpoint = new IPEndPoint (IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break; 
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+
+         if (returned_message != "Username already exists")
+         {
+            throw new Exception("Incorrect response, unexpectedly set up account.");
+         }
+      }
+
+      private void TestHandleSigningIn()
+      {
+         string username = "jashook";
+         string password = "ev9";
+
+         char function = (char)1;
+         char username_size = (char)username.Length;
+         char password_size = (char)password.Length;
+
+         string message = "";
+
+         message += function;
+         message += username_size;
+         message += username;
+         message += password_size;
+         message += password;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break;
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+
+         if (returned_message == "Login failed")
+         {
+            throw new Exception("Incorrect response, unable to sign in.");
+         }
+      }
+
+      private void TestHandleRemoveAccount()
+      {
+         string username = "jashook";
+
+         char function = (char)2;
+         char username_size = (char)username.Length;
+
+         string message = "";
+
+         message += function;
+         message += username_size;
+         message += username;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[1];
+         connecting_socket.Receive(buffer);
+
+         string returned_message = Encoding.ASCII.GetString(buffer);
+
+         if (returned_message == "0")
+         {
+            throw new Exception("Incorrect response, unable to delete account.");
+         }
+      }
+
+      private void TestHandleBuyOrder()
+      {
+         string username = "jashook";
+         string stock_name = "amzn";
+         string value = "1000.0";
+         string amount = "100";
+
+         char function = (char)4;
+         char username_size = (char)username.Length;
+         char stock_name_size = (char)stock_name.Length;
+         char value_size = (char)value.Length;
+         char amount_size = (char)amount.Length;
+
+         string message = "";
+
+         message += function;
+         message += username_size;
+         message += username;
+         message += stock_name_size;
+         message += stock_name;
+         message += amount_size;
+         message += amount;
+         message += value_size;
+         message += value;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break;
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+
+         if (returned_message == "Buy failed")
+         {
+            throw new Exception("Incorrect response, unable to buy.");
+         }
+      }
+
+      private void TestHandleSellOrder()
+      {
+         string username = "jashook";
+         string stock_name = "amzn";
+         string value = "1000.0";
+         string amount = "100";
+
+         char function = (char)5;
+         char username_size = (char)username.Length;
+         char stock_name_size = (char)stock_name.Length;
+         char value_size = (char)value.Length;
+         char amount_size = (char)amount.Length;
+
+         string message = "";
+
+         message += function;
+         message += username_size;
+         message += username;
+         message += stock_name_size;
+         message += stock_name;
+         message += amount_size;
+         message += amount;
+         message += value_size;
+         message += value;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break;
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+
+         if (returned_message == "Sell failed")
+         {
+            throw new Exception("Incorrect response, unable to sell.");
+         }
+      }
+
+      private void TestHandleGetMoney()
+      {
+         string username = "jashook";
+
+         char function = (char)7;
+         char username_size = (char)username.Length;
+
+         string message = "";
+
+         message += function;
+         message += username_size;
+         message += username;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break;
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+
+         if (returned_message == "-1")
+         {
+            throw new Exception("Incorrect response, unable to get money.");
+         }
+      }
+
       // Constructor
      
       public DataTest() : base(1)
       {
          // Test with Two Threads
- 
-         Run (TestProperLogin);
+
+         RunServer();
+         Run(TestHandleSettingUpAccount);
+         Run(TestHandleSigningIn);
+         //Run(TestHandleRemoveAccount);
+         Run(TestHandleBuyOrder);
+         Run(TestHandleSellOrder);
+         Run(TestHandleGetMoney);
+
+         /*Run (TestProperLogin);
          Run (TestFailedLogin);
          Run (TestSuccessfulSignUp);
          Run (TestUnsuccessfulSignUp);
          Run (TestRemoveAccount);
          Run (TestResetOrder);
          Run (TestBuyOrder);
-         Run (TestSellOrder);
+         Run (TestSellOrder); */
       }
    }
 }

@@ -19,9 +19,11 @@ using System.IO;
 
 public class Router
 {
-	private Socket _socket;
+	private static Socket _socket;
 
-	public Router()
+   public Router() { }
+
+	public static void router_start()
 	{
 		IPEndPoint endpoint = new IPEndPoint (IPAddress.Loopback, 8080);
 		_socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -50,10 +52,12 @@ public class Router
 			} while (bytes_transfered == ARR_SIZE);
 
 			Thread starting_thread = new Thread (() => handler_start (accepting_socket, message));
+
+         starting_thread.Start();
 		}
 	}
 
-	private void handler_start(Socket socket, string message)
+	private static void handler_start(Socket socket, string message)
 	{
 		if (message.Length < 4) 
 		{
@@ -95,22 +99,22 @@ public class Router
 	//  "password"]
 	//
 	////////////////////////////////////////////////////////////////////////////////
-	private void handle_setting_up_account(Socket socket, string message)
+	private static void handle_setting_up_account(Socket socket, string message)
 	{
 		int username_size = message [1];
 
-		if (message.Length > username_size + 1) {
+		if (username_size + 1 > message.Length) {
 			return;
 		}
 
-		int password_size = message [1 + username_size + 1];
+		int password_size = message [username_size + 2];
 
-		if (message.Length > username_size + password_size + 3) {
+		if (username_size + password_size + 3 > message.Length) {
 			return;
 		}
 
 		string username = message.Substring (2, username_size);
-		string password = message.Substring (1 + username_size + 1, password_size);
+		string password = message.Substring (username_size + 3, password_size);
 
 		string returned_message = StockApp.DatabaseManagment.SetupAccount (username, password);
 
@@ -130,26 +134,33 @@ public class Router
 	//  "password"]
 	//
 	////////////////////////////////////////////////////////////////////////////////
-	private void handle_signing_in(Socket socket, string message)
+	private static void handle_signing_in(Socket socket, string message)
 	{
-		int username_size = message [1];
+      int username_size = message[1];
 
-		if (message.Length > username_size + 1) {
-			return;
-		}
+      if (username_size + 1 > message.Length)
+      {
+         return;
+      }
 
-		int password_size = message [1 + username_size + 1];
+      int password_size = message[username_size + 2];
 
-		if (message.Length > username_size + password_size + 3) {
-			return;
-		}
+      if (username_size + password_size + 3 > message.Length)
+      {
+         return;
+      }
 
-		string username = message.Substring (2, username_size);
-		string password = message.Substring (1 + username_size + 1, password_size);
+      string username = message.Substring(2, username_size);
+      string password = message.Substring(username_size + 3, password_size);
 
-		string returned_message = StockApp.DatabaseManagment.SignIn (username, password);
+      string returned_message = StockApp.DatabaseManagment.SignIn(username, password);
 
-		socket.Send(Encoding.ASCII.GetBytes(returned_message));
+      if (returned_message == "")
+      {
+         returned_message = "Login failed";
+      }
+
+      socket.Send(Encoding.ASCII.GetBytes(returned_message));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -163,27 +174,30 @@ public class Router
 	//  "username"]
 	//
 	////////////////////////////////////////////////////////////////////////////////
-	private void handle_remove_account(Socket socket, string message)
+	private static void handle_remove_account(Socket socket, string message)
 	{
-		int username_size = message [1];
+      int username_size = message[1];
 
-		if (message.Length > username_size + 1) {
-			return;
-		}
+      if (username_size + 1 > message.Length)
+      {
+         return;
+      }
 
-		string username = message.Substring (2, username_size);
+      string username = message.Substring(2, username_size);
+      bool deleted = StockApp.DatabaseManagment.DeleteAccount(username);
 
-		bool returned_message = StockApp.DatabaseManagment.DeleteAccount (username);
+      string return_message = "";
+      if (deleted == false)
+      {
+         return_message = "0";
+      }
 
-		if (returned_message == false) {
-			string return_message = "0";
+      else
+      {
+         return_message = "1";
+      }
 
-			socket.Send(Encoding.ASCII.GetBytes(return_message));
-		} else {
-			string return_message = "1";
-
-			socket.Send(Encoding.ASCII.GetBytes(return_message));
-		}
+      socket.Send(Encoding.ASCII.GetBytes(return_message));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +213,7 @@ public class Router
 	//  "stockname"]]
 	//
 	////////////////////////////////////////////////////////////////////////////////
-	private void handle_get_stock_information(Socket socket, string message)
+	private static void handle_get_stock_information(Socket socket, string message)
 	{
 		int size_of_string_size = message [1];
 
@@ -278,32 +292,58 @@ public class Router
    //  "price of order" ]
 	//
 	////////////////////////////////////////////////////////////////////////////////
-	private void handle_buy_order(Socket socket, string message)
+	private static void handle_buy_order(Socket socket, string message)
 	{
       int first_str_size = message[1];
 
-      if (message.Length > first_str_size + 1)
+      if (first_str_size + 1 > message.Length)
       {
          return;
       }
 
-      int second_string_size = message[1 + first_str_size + 1];
+      int second_string_size = message[first_str_size + 2];
 
-      if (message.Length > first_str_size + second_string_size + 3)
+      if (first_str_size + second_string_size + 3 > message.Length)
       {
          return;
       }
 
-      int third_string_size = message[1 + first_str_size + 1 + second_string_size + 1];
+      int third_string_size = message[first_str_size + second_string_size+ 3];
 
-      if (message.Length > first_str_size + second_string_size + third_string_size + 3)
+      if (first_str_size + second_string_size + third_string_size + 4 > message.Length)
       {
          return;
       }
 
-      string stock_name = message.Substring(2, first_str_size);
-      string order_size = message.Substring(1 + first_str_size + 1, second_string_size);
-      string sell_value = message.Substring(1 + first_str_size + 1 + second_string_size + 1, third_string_size);
+      int fourth_string_size = message[first_str_size + second_string_size + third_string_size + 4];
+
+      if (first_str_size + second_string_size + third_string_size + fourth_string_size + 5 > message.Length)
+      {
+         return;
+      }
+
+      string username = message.Substring(2, first_str_size);
+      string stock_name = message.Substring(first_str_size + 3, second_string_size);
+      string order_size = message.Substring(first_str_size + second_string_size + 4, third_string_size);
+      string sell_value = message.Substring(first_str_size + second_string_size + third_string_size + 5, fourth_string_size);
+
+      double amount = double.Parse(order_size);
+      double value = double.Parse(sell_value);
+
+      double return_value = StockApp.DatabaseManagment.BuyOrder(username, stock_name, amount, value);
+
+      string return_message = "";
+      if (return_value == -1)
+      {
+         return_message = "Buy failed";
+      }
+
+      else
+      {
+         return_message = return_value.ToString();
+      }
+
+      socket.Send(Encoding.ASCII.GetBytes(return_message));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -321,32 +361,58 @@ public class Router
    //  "price of order" ]
 	//
 	////////////////////////////////////////////////////////////////////////////////
-	private void handle_sell_order(Socket socket, string message)
+	private static void handle_sell_order(Socket socket, string message)
 	{
       int first_str_size = message[1];
 
-      if (message.Length > first_str_size + 1)
+      if (first_str_size + 1 > message.Length)
       {
          return;
       }
 
-      int second_string_size = message[1 + first_str_size + 1];
+      int second_string_size = message[first_str_size + 2];
 
-      if (message.Length > first_str_size + second_string_size + 3)
+      if (first_str_size + second_string_size + 3 > message.Length)
       {
          return;
       }
 
-      int third_string_size = message[1 + first_str_size + 1 + second_string_size + 1];
+      int third_string_size = message[first_str_size + second_string_size + 3];
 
-      if (message.Length > first_str_size + second_string_size + third_string_size + 3)
+      if (first_str_size + second_string_size + third_string_size + 4 > message.Length)
       {
          return;
       }
 
-      string stock_name = message.Substring(2, first_str_size);
-      string order_size = message.Substring(1 + first_str_size + 1, second_string_size);
-      string sell_value = message.Substring(1 + first_str_size + 1 + second_string_size + 1, third_string_size);
+      int fourth_string_size = message[first_str_size + second_string_size + third_string_size + 4];
+
+      if (first_str_size + second_string_size + third_string_size + fourth_string_size + 5 > message.Length)
+      {
+         return;
+      }
+
+      string username = message.Substring(2, first_str_size);
+      string stock_name = message.Substring(first_str_size + 3, second_string_size);
+      string order_size = message.Substring(first_str_size + second_string_size + 4, third_string_size);
+      string sell_value = message.Substring(first_str_size + second_string_size + third_string_size + 5, fourth_string_size);
+
+      double amount = double.Parse(order_size);
+      double value = double.Parse(sell_value);
+
+      double return_value = StockApp.DatabaseManagment.SellOrder(username, stock_name, amount, value);
+
+      string return_message = "";
+      if (return_value == -1)
+      {
+         return_message = "Sell failed";
+      }
+
+      else
+      {
+         return_message = return_value.ToString();
+      }
+
+      socket.Send(Encoding.ASCII.GetBytes(return_message));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -360,7 +426,7 @@ public class Router
 	//  "username"]
 	//
 	////////////////////////////////////////////////////////////////////////////////
-	private void handle_get_history(Socket socket, string message)
+	private static void handle_get_history(Socket socket, string message)
 	{
 
 	}
@@ -376,11 +442,11 @@ public class Router
 	//  "username"]
 	//
 	////////////////////////////////////////////////////////////////////////////////
-	private void handle_get_amount_of_money(Socket socket, string message)
+	private static void handle_get_amount_of_money(Socket socket, string message)
 	{
       int username_size = message[1];
 
-      if (message.Length > username_size + 1)
+      if (username_size + 1 > message.Length)
       {
          return;
       }

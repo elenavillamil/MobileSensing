@@ -55,7 +55,7 @@ namespace StockApp
 
             account.Add("username", username);
             account.Add("password", password);
-            account.Add("money", 10000); // 10,000
+            account.Add("money", 10000.0); // 10,000
 
             MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
 
@@ -201,9 +201,9 @@ namespace StockApp
                return current_money;
 
             }
-            catch
+            catch (Exception e)
             {
-
+               Console.WriteLine(e.ToString());
             }
          }
 
