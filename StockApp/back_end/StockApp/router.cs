@@ -25,15 +25,17 @@ public class Router
 
 	public static void router_start()
 	{
-		IPEndPoint endpoint = new IPEndPoint (IPAddress.Loopback, 8080);
-		_socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+      TcpListener tcpListener = new TcpListener(IPAddress.Any, 8080);
+      tcpListener.Start();
 
-		_socket.Bind (endpoint);
-		_socket.Listen (1024);
+		//_socket.Bind (endpoint);
+		//_socket.Listen (1024);
 
 		while (true) 
 		{
-			Socket accepting_socket = _socket.Accept ();
+         Socket accepting_socket = tcpListener.AcceptSocket();
+
+         Console.WriteLine("Connection!");
 
 			const int ARR_SIZE = 256;
 			int bytes_transfered = 0;

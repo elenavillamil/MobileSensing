@@ -36,6 +36,7 @@
     <Compile Include="tester.cs" />
     <Compile Include="DatabaseManagment.cs" />
     <Compile Include="JSON.cs" />
+    <Compile Include="router.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
@@ -46,6 +47,22 @@
       <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="Microsoft.Build, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Engine, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.Build.Engine" />
+    <Reference Include="Microsoft.Build.Framework, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mono.CSharp" />
+    <Reference Include="Mono.Http" />
+    <Reference Include="Mono.Messaging" />
+    <Reference Include="Mono.Posix" />
+    <Reference Include="Mono.WebServer2, Version=0.2.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
