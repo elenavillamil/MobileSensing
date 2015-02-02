@@ -58,9 +58,11 @@ namespace StockApp
             account.Add("money", 10000.0); // 10,000
 
             MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
+            MongoCollection<BsonDocument> favorite_collection = database.GetCollection<BsonDocument>("favorite");
 
             try
             {
+               // Create history entry for the user and add the id to the user account.
                BsonDocument history_document = new BsonDocument();
 
                history_collection.Insert(history_document);
@@ -70,6 +72,16 @@ namespace StockApp
 
                ObjectId object_id = element.Value.AsObjectId;
                account.Add("history_id", object_id.ToString());
+
+               // Create favorite entry for the user and add the id to the user account.
+               BsonDocument favorite_document = new BsonDocument();
+               favorite_collection.Insert(favorite_document);
+
+               BsonElement fav_element;
+               favorite_document.TryGetElement("_id", out fav_element);
+
+               object_id = fav_element.Value.AsObjectId;
+               account.Add("favorite_id", object_id.ToString());
 
                users_collection.Insert(account);
 
@@ -120,6 +132,7 @@ namespace StockApp
       {
          MongoCollection<BsonDocument> accounts_collection = database.GetCollection<BsonDocument> ("users");
          MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument> ("history");
+         MongoCollection<BsonDocument> favorite_collection = database.GetCollection<BsonDocument> ("favorite");
 
          var query_username = Query.EQ ("username", username);
 
@@ -128,18 +141,31 @@ namespace StockApp
 
             try
             {
+               // Get the user account.
                BsonDocument account_document;
                account_document = accounts_collection.FindOne(query_username).AsBsonDocument;
 
+               // Get history id, and delete entry from the history collection.
                BsonElement account_id;
                account_document.TryGetElement("history_id", out account_id);
 
                string string_id = account_id.Value.AsString;
                ObjectId object_id = new ObjectId(string_id);
                var query_remove_history_by_id = Query.EQ("_id", object_id);
-
-               accounts_collection.Remove(query_username);
+       
                history_collection.Remove(query_remove_history_by_id);
+
+               // Get favorite id, and remove entry from the favorite collection.
+               account_document.TryGetElement("favorite_id", out account_id);
+
+               string_id = account_id.Value.AsString;
+               object_id = new ObjectId(string_id);
+               var query_remove_favorite_by_id = Query.EQ("_id", object_id);
+
+               favorite_collection.Remove(query_remove_favorite_by_id);
+
+               // Remove the user account.
+               accounts_collection.Remove(query_username);
 
                return true;
             }
@@ -390,6 +416,88 @@ namespace StockApp
          }
 
          return null;
+      }
+
+      public static void AddFavorite(string username, string name)
+      {
+         if (db_management == null)
+         {
+            db_management = new DatabaseManagment();
+         }
+
+         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         MongoCollection<BsonDocument> favorite_collection = database.GetCollection<BsonDocument>("favorite");
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         foreach (BsonDocument c in cursor) 
+         {
+            BsonElement account_id;
+            c.TryGetElement("favorite_id", out account_id);
+
+            string string_id = account_id.Value.AsString;
+            ObjectId object_id = new ObjectId(string_id);
+            var query_favorite_collection = Query.EQ("_id", object_id);
+
+            Dictionary<string, string> element = new Dictionary<string, string>();
+
+            element.Add("name", name);
+            BsonDocument to_be_inserted = new BsonDocument(element);
+
+            var favorite_update_document = new UpdateDocument {
+               { "$push", new BsonDocument("favorite_list", to_be_inserted) }
+            };
+
+            favorite_collection.Update(query_favorite_collection, favorite_update_document);
+
+         }
+
+      }
+
+      public static List<string> GetFavorites(string username)
+      {
+         if (db_management == null)
+         {
+            db_management = new DatabaseManagment();
+         }
+
+         List<string> favorite_list = new List<string> ();
+
+         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         MongoCollection<BsonDocument> favorite_collection = database.GetCollection<BsonDocument>("favorite");
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         foreach (BsonDocument c in cursor)
+         {
+            try
+            {
+               BsonElement account_id;
+               c.TryGetElement("favorite_id", out account_id);
+
+               string string_id = account_id.Value.AsString;
+               ObjectId object_id = new ObjectId(string_id);
+               var query_favorite_collection = Query.EQ("_id", object_id);
+
+               var returned_document = favorite_collection.FindOne(query_favorite_collection);
+
+               BsonValue value;
+               returned_document.TryGetValue("favorite_list", out value);
+
+               BsonArray bson_arr = value.AsBsonArray;
+
+               foreach (BsonValue val in bson_arr)
+               {
+                  favorite_list.Add(val[0].ToString());
+               }
+            }
+            catch
+            {
+
+            }
+         }
+
+         return favorite_list;
       }
 
    }
