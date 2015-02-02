@@ -130,6 +130,29 @@ namespace StockApp
          }
       }
 
+      // TEST IS NOT COMPLITED, BUT ADDFAVORITE WORKS
+      private void TestAddFavoriteAndGetFavorites()
+      {
+         string username = "elena";
+         string password = "passowrd";
+
+         string signup_result = DatabaseManagment.SetupAccount (username, password);
+
+         if (signup_result != "Username already exists" && signup_result != "DB problem") 
+         {
+            DatabaseManagment.AddFavorite ("elena", "microsoft");
+            DatabaseManagment.AddFavorite ("elena", "amazon");
+         }
+
+         var result = DatabaseManagment.GetFavorites (username);
+         Console.WriteLine ("Printing Results");
+         if (result.Count == 0)
+            throw new Exception("FAILED TEST: Eitther add favorite or get favorite does not work");
+
+         foreach (string s in result)
+            Console.WriteLine (s);
+      }
+         
       private void TestSellOrder()
       {
          string username = "jashook";
@@ -448,12 +471,14 @@ namespace StockApp
          // Test with Two Threads
 
          RunServer();
-         Run(TestHandleSettingUpAccount);
-         Run(TestHandleSigningIn);
+         //Run(TestHandleSettingUpAccount);
+         //Run(TestHandleSigningIn);
          //Run(TestHandleRemoveAccount);
-         Run(TestHandleBuyOrder);
-         Run(TestHandleSellOrder);
-         Run(TestHandleGetMoney);
+         //Run(TestHandleBuyOrder);
+         //Run(TestHandleSellOrder);
+         //Run(TestHandleGetMoney);
+
+         Run (TestAddFavoriteAndGetFavorites);
 
          /*Run (TestProperLogin);
          Run (TestFailedLogin);
