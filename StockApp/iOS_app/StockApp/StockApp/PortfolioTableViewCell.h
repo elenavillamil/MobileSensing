@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Stock.h"
 
 @interface PortfolioTableViewCell : UITableViewCell
+
+@property (nonatomic, strong) Stock *companyStock;
 
 @end

@@ -20,4 +20,12 @@
     // Configure the view for the selected state
 }
 
+- (Stock *)companyStock
+{
+    if (!_companyStock) {
+        _companyStock = [[Stock alloc] init];
+    }
+    return _companyStock;
+}
+
 @end
