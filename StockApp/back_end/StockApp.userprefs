@@ -1,12 +1,20 @@
 ﻿<Properties StartupItem="StockApp/StockApp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workbench ActiveDocument="StockApp/DatabaseManagment.cs">
     <Files>
       <File FileName="StockApp/Main.cs" Line="1" Column="1" />
       <File FileName="StockApp/data_test.cs" Line="97" Column="97" />
+=======
+  <MonoDevelop.Ide.Workbench ActiveDocument="StockApp/router.cs">
+    <Files>
+      <File FileName="StockApp/Main.cs" Line="12" Column="12" />
+      <File FileName="StockApp/data_test.cs" Line="1" Column="1" />
+>>>>>>> f27415b78a7863cb96708578e816d38159f77918
       <File FileName="StockApp/JSON.cs" Line="1" Column="1" />
       <File FileName="StockApp/DatabaseManagment.cs" Line="16" Column="16" />
       <File FileName="StockApp/tester.cs" Line="1" Column="1" />
+      <File FileName="StockApp/router.cs" Line="7" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
