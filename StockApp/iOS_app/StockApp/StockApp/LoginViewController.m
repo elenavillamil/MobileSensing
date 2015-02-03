@@ -7,10 +7,13 @@
 //
 
 #import "LoginViewController.h"
+#import "FavStocksCollectionViewController.h"
+#import "User.h"
 
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (strong, nonatomic) User *user;
 
 @end
 
@@ -25,11 +28,35 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-- (IBAction)signUp:(id)sender {
+- (IBAction)signUp:(id)sender{
+    bool connection = true;
     // connect to back end;
     
+    if (connection)
+    {        
+        // saving an NSString
+        [self.user setUsernameWith:self.usernameTextField.text];
+        [self.user setPasswordWith:self.passwordTextField.text];
+    }
 }
+
 - (IBAction)login:(id)sender {
+    bool connection = true;
+    // connect to back end;
+    
+    if (connection)
+    {
+        // saving an NSString
+        [self.user setUsernameWith:self.usernameTextField.text];
+        [self.user setPasswordWith:self.passwordTextField.text];
+        
+        UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
+        
+        [self.view.window setRootViewController:nav];
+        
+        //Change root navigation to favorite
+//        [self performSegueWithIdentifier:@"NavigationController" sender:self];
+    }
 }
 
 /*

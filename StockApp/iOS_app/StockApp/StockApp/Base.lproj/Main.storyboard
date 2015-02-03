@@ -574,7 +574,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ORt-ac-280" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-179.5" y="-548.5"/>
+            <point key="canvasLocation" x="-647.5" y="-256.5"/>
         </scene>
         <!--Settings-->
         <scene sceneID="Rap-fa-vfS">
@@ -689,7 +689,8 @@
         <!--Navigation Controller-->
         <scene sceneID="oEd-3c-9RY">
             <objects>
-                <navigationController id="h4b-ss-Ek1" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NavigationViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="h4b-ss-Ek1" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="oi8-ZQ-woP"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="XOk-ls-ilb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
