@@ -52,7 +52,7 @@
         
         UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
         
-        [self.view.window setRootViewController:nav];
+        [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
         
         //Change root navigation to favorite
 //        [self performSegueWithIdentifier:@"NavigationController" sender:self];

@@ -56,8 +56,6 @@
         _companyStock = [[Stock alloc] init];
     }
     
-    self.navigationController pushViewController:<#(UIViewController *)#> animated:<#(BOOL)#>
-    
     return _companyStock;
 }
 
@@ -79,7 +77,7 @@
 
 - (void)getGraphData
 {
-    UIStoryboard *story = [UIStoryboard storyboardWithName:<#(NSString *)#> bundle:<#(NSBundle *)#>];
+//    UIStoryboard *story = [UIStoryboard storyboardWithName:(NSString *) bundle:<#(NSBundle *)#>];
 }
 /*
 #pragma mark - Navigation
