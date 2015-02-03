@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "User.h"
+#import "LoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,20 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    User* user;
+    bool login = false;
+    
+    // Try to log in to the database
+    
+    if (!login)
+    {
+        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        // Showing the sign in/ sing up options
+        LoginViewController* loginViewController = (LoginViewController*)[storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        
+        self.window.rootViewController = loginViewController;
+    }
+    
     return YES;
 }
 
