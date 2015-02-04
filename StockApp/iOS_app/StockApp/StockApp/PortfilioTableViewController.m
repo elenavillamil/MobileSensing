@@ -7,6 +7,8 @@
 //
 
 #import "PortfilioTableViewController.h"
+#import "CompanyProfileViewController.h"
+#import "PortfolioTableViewCell.h"
 
 @interface PortfilioTableViewController ()
 
@@ -44,7 +46,7 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PortfolioTableViewCell" forIndexPath:indexPath];
+    PortfolioTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PortfolioTableViewCell" forIndexPath:indexPath];
     
 //     Configure the cell...
     
@@ -91,14 +93,20 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
+    CompanyProfileViewController *companyProfile = (CompanyProfileViewController *)[segue destinationViewController];
+    
+    PortfolioTableViewCell *cell = (PortfolioTableViewCell *)sender;
+    [companyProfile setStock:cell.companyStock];
+    
 }
-*/
+ 
 
 @end

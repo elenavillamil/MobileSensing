@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Stock.h"
 
 @interface CompanyProfileViewController : UIViewController
+
+- (void)setStock:(Stock *)stock;
 
 @end

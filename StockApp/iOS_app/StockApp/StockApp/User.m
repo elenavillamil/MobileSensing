@@ -10,11 +10,12 @@
 
 @interface User ()
 
-@property (nonatomic, strong) NSString *username;
 @property (nonatomic, strong) NSMutableArray *favorites;
 @property (nonatomic, strong) NSMutableArray *history;
 @property (nonatomic, strong) NSMutableArray *portfolio;
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) NSUserDefaults *loginInformation;
+
 
 @end
 
@@ -28,6 +29,16 @@
         sharedUser = [[self alloc] init];
     });
     return sharedUser;
+}
+
+-(NSUserDefaults*)loginInformation
+{
+    if (!_loginInformation)
+    {
+        _loginInformation = [NSUserDefaults standardUserDefaults];
+    }
+    
+    return _loginInformation;
 }
 
 - (NSMutableArray *)favorites
@@ -94,8 +105,30 @@
     return self.history;
 }
 
+- (NSString*)getUsername
+{
+    return [self.loginInformation objectForKey:@"username"];
+}
+
+-(NSString*)getPassword
+{
+    return [self.loginInformation objectForKey:@"password"];
+}
+
+-(void)setUsernameWith:(NSString *)username
+{
+    [self.loginInformation setObject:username forKey:@"username"];
+}
+
+-(void)setPasswordWith:(NSString*) password
+{
+    [self.loginInformation setObject:password forKey:@"password"];
+}
+
 -(void)reset
 {
+    // the call to reset on the backend too
+    
     [self.history removeAllObjects];
     [self.portfolio removeAllObjects];
     [self.favorites removeAllObjects];
@@ -105,6 +138,8 @@
 {
     [self.timer invalidate];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(refresh) userInfo:nil repeats:YES];
+    
+    // Send new timer/refresh information to the backend
 }
 
 -(void)refresh

@@ -24,5 +24,9 @@
 -(void)reset;
 -(void)newTimerWith:(NSInteger)time;
 -(void)refresh;
+-(void)setUsernameWith:(NSString *)username;
+-(void)setPasswordWith:(NSString *)password;
+-(NSString*)getUsername;
+-(NSString*)getPassword;
 
 @end
