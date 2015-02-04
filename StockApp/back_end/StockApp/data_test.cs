@@ -130,7 +130,18 @@ namespace StockApp
          }
       }
 
-      // TEST IS NOT COMPLITED, BUT ADDFAVORITE WORKS
+
+      private void TestGetHistory()
+      {
+         string username = "jashook";
+         double amount = 10500; // 10,500
+
+         List<Tuple<string, string, double, double>> amount_result = DatabaseManagment.GetHistory(username);
+
+         foreach (var t in amount_result)
+            Console.WriteLine(t);
+      }
+
       private void TestAddFavoriteAndGetFavorites()
       {
          string username = "elena";
@@ -146,11 +157,23 @@ namespace StockApp
 
          var result = DatabaseManagment.GetFavorites (username);
          Console.WriteLine ("Printing Results");
-         if (result.Count == 0)
-            throw new Exception("FAILED TEST: Eitther add favorite or get favorite does not work");
+         if (result.Count > 1)
+         {
+            if (result[0] != "microsoft")
+            {
+               throw new Exception("FAILED TEST: first favorite is not correct");
+            }
 
-         foreach (string s in result)
-            Console.WriteLine (s);
+            if (result[1] != "amazon")
+            {
+               throw new Exception("FAILED TEST: second favorite is not correct");
+            }
+
+         }
+         else
+         {
+            throw new Exception("FAILED TEST: Either add favorite or get favorite does not work");
+         }
       }
          
       private void TestSellOrder()
@@ -201,7 +224,7 @@ namespace StockApp
          string username = "jashook";
          string password = "ev9";
 
-         char function = (char)0;
+         char function = (char)1;
          char username_size = (char)username.Length;
          char password_size = (char)password.Length;
 
@@ -246,7 +269,7 @@ namespace StockApp
          string username = "jashook";
          string password = "ev9";
 
-         char function = (char)1;
+         char function = (char)2;
          char username_size = (char)username.Length;
          char password_size = (char)password.Length;
 
@@ -290,7 +313,7 @@ namespace StockApp
       {
          string username = "jashook";
 
-         char function = (char)2;
+         char function = (char)3;
          char username_size = (char)username.Length;
 
          string message = "";
@@ -324,7 +347,7 @@ namespace StockApp
          string value = "1000.0";
          string amount = "100";
 
-         char function = (char)4;
+         char function = (char)5;
          char username_size = (char)username.Length;
          char stock_name_size = (char)stock_name.Length;
          char value_size = (char)value.Length;
@@ -377,7 +400,7 @@ namespace StockApp
          string value = "1000.0";
          string amount = "100";
 
-         char function = (char)5;
+         char function = (char)6;
          char username_size = (char)username.Length;
          char stock_name_size = (char)stock_name.Length;
          char value_size = (char)value.Length;
@@ -427,7 +450,7 @@ namespace StockApp
       {
          string username = "jashook";
 
-         char function = (char)7;
+         char function = (char)8;
          char username_size = (char)username.Length;
 
          string message = "";
@@ -478,7 +501,8 @@ namespace StockApp
          //Run(TestHandleSellOrder);
          //Run(TestHandleGetMoney);
 
-         Run (TestAddFavoriteAndGetFavorites);
+         Run (TestGetHistory);
+         //Run (TestAddFavoriteAndGetFavorites);
 
          /*Run (TestProperLogin);
          Run (TestFailedLogin);

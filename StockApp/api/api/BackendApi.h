@@ -11,6 +11,7 @@
 @interface BackendApi : NSObject <NSStreamDelegate>
 
 + (void)initNetworkConnection;
-+ signIn:(NSString*) username withPassword:(NSString*) password;
++ (NSString *)signIn:(NSString*) username withPassword:(NSString*) password;
++ (BOOL)setUpAccount:(NSString *) username withPassword:(NSString *) password;
 
 @end

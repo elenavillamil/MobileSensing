@@ -69,28 +69,28 @@ public class Router
 		// Get the switching number from the first character sent
 		int switch_number = message [0];
 
-		if (switch_number == 0) {
+		if (switch_number == 1) {
 			handle_setting_up_account (socket, message);
-		} else if (switch_number == 1) {
-			handle_signing_in (socket, message);
 		} else if (switch_number == 2) {
-			handle_remove_account (socket, message);
+			handle_signing_in (socket, message);
 		} else if (switch_number == 3) {
-			handle_get_stock_information (socket, message);
+			handle_remove_account (socket, message);
 		} else if (switch_number == 4) {
-			handle_buy_order (socket, message);
+			handle_get_stock_information (socket, message);
 		} else if (switch_number == 5) {
-			handle_sell_order (socket, message);
+			handle_buy_order (socket, message);
 		} else if (switch_number == 6) {
-			handle_get_history (socket, message);
+			handle_sell_order (socket, message);
 		} else if (switch_number == 7) {
+			handle_get_history (socket, message);
+		} else if (switch_number == 8) {
 			handle_get_amount_of_money (socket, message);
 		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 0 -> setup_account
+	// Function Mapping: 1 -> setup_account
 	//
 	// Expected format:
 	//
@@ -125,7 +125,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 1 -> sign_in
+	// Function Mapping: 2 -> sign_in
 	//
 	// Expected format:
 	//
@@ -167,7 +167,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 2 -> remove_account
+	// Function Mapping: 3 -> remove_account
 	//
 	// Expected format:
 	//
@@ -204,7 +204,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 3 -> get_stock_information
+	// Function Mapping: 4 -> get_stock_information
 	//
 	// Expected format:
 	//
@@ -281,7 +281,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 4 -> buy_order
+	// Function Mapping: 5 -> buy_order
 	//
 	// Expected format:
 	//
@@ -350,7 +350,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 5 -> sell_order
+	// Function Mapping: 6 -> sell_order
 	//
 	// Expected format:
 	//
@@ -419,7 +419,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 6 -> get_history
+	// Function Mapping: 7 -> get_history
 	//
 	// Expected format:
 	//
@@ -435,7 +435,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 7 -> get_amount_of_money
+	// Function Mapping: 8 -> get_amount_of_money
 	//
 	// Expected format:
 	//
