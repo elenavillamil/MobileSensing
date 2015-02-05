@@ -15,11 +15,13 @@ NSMutableData *data;
 NSInputStream *inputStream;
 NSOutputStream *outputStream;
 
+#define DEBUG 0
+
 + (void)initNetworkConnection{
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"169.254.57.8", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
         
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -33,13 +35,21 @@ NSOutputStream *outputStream;
 }
 
 + (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
-    NSLog(@"stream event %u", streamEvent);
+   
+    #if DEBUG
     
-    int byteIndex = 0;
+        NSLog(@"stream event %lu", streamEvent);
+    
+    #endif
     
     switch (streamEvent) {
         case NSStreamEventOpenCompleted:
-            NSLog(@"Stream opened");
+            #if DEBUG
+            
+                NSLog(@"Stream opened");
+            
+            #endif
+            
             break;
             
         case NSStreamEventHasSpaceAvailable: {
@@ -54,12 +64,15 @@ NSOutputStream *outputStream;
                 int len;
                 
                 while ([inputStream hasBytesAvailable]) {
-                    len = [inputStream read:buffer maxLength:sizeof(buffer)];
+                    len = (int)[inputStream read:buffer maxLength:sizeof(buffer)];
                     if (len > 0) {
                         NSString *output = [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding];
                         
                         if (nil != output) {
-                            NSLog(@"server said: %@", output);
+                            #if DEBUG
+                            
+                                NSLog(@"server said: %@", output);
+                            #endif
                         }
                     }
                 }
@@ -69,18 +82,33 @@ NSOutputStream *outputStream;
             break;
             
         case NSStreamEventErrorOccurred:
+            #if DEBUG
+            
             NSLog(@"Can not connect to the host!");
+         
+            #endif
+            
             break;
             
         case NSStreamEventEndEncountered:
+            #if DEBUG
+            
             NSLog(@"Closing stream...");
+            
+            #endif
+            
             [theStream close];
             [theStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
             theStream = nil;
             break;
             
-        default:
+        default: {
+            #if DEBUG
+            
             NSLog(@"Unknown event");
+    
+            #endif
+        }
     }
 }
 
@@ -92,7 +120,7 @@ NSOutputStream *outputStream;
     
     [data appendData:dataHere];
     
-    NSInteger amount_sent = [outputStream write:[dataHere bytes] maxLength:[data length]];
+    [outputStream write:[dataHere bytes] maxLength:[data length]];
 }
 
 + (NSString *)readString{
@@ -139,18 +167,18 @@ NSOutputStream *outputStream;
     return returnValue;
 }
 
-+ (BOOL)buyOrder:(NSString *) username withStockName:(NSString *) stockName withValue:(size_t) value withAmount:(size_t) amount {
++ (BOOL)buyOrder:(NSString *) username withStockName:(NSString *) stockName withValue:(double) value withAmount:(size_t) amount {
     char function = (char)5;
     char username_size = (char)[username length];
     char stock_name_size = (char)[stockName length];
     
-    NSString *valueStr = [[NSString alloc] initWithFormat:@"%u", amount];
-    NSString *amountStr = [[NSString alloc] initWithFormat:@"%u", value];
+    NSString *valueStr = [[NSString alloc] initWithFormat:@"%f", value];
+    NSString *amountStr = [[NSString alloc] initWithFormat:@"%zu", amount];
     
     char value_size = (char)[valueStr length];
     char amount_size = (char)[amountStr length];
     
-    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@%c%@%c%@", function, username_size, username, stock_name_size, stock_name, value_size, value, amount_size, amount];
+    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@%c%zu%c%f", function, username_size, username, stock_name_size, stockName, amount_size, amount, value_size, value];
 
     [self sendString:messageToSend];
 
@@ -165,18 +193,18 @@ NSOutputStream *outputStream;
     return true;
 }
 
-+ (BOOL)sellOrder:(NSString *) username withStockName(NSString *) stockName withValue:(size_t) value withAmount:(size_t) amount {
-    char function = (char)5;
++ (BOOL)sellOrder:(NSString *) username withStockName:(NSString *) stockName withValue:(double) value withAmount:(size_t) amount {
+    char function = (char)6;
     char username_size = (char)[username length];
     char stock_name_size = (char)[stockName length];
     
-    NSString *valueStr = [[NSString alloc] initWithFormat:@"%u", amount];
-    NSString *amountStr = [[NSString alloc] initWithFormat:@"%u", value];
-    
+    NSString *valueStr = [[NSString alloc] initWithFormat:@"%f", value];
+    NSString *amountStr = [[NSString alloc] initWithFormat:@"%zu", amount];
+   
     char value_size = (char)[valueStr length];
     char amount_size = (char)[amountStr length];
     
-    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@%c%@%c%@", function, username_size, username, stock_name_size, stock_name, value_size, value, amount_size, amount];
+    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@%c%zu%c%f", function, username_size, username, stock_name_size, stockName, amount_size, amount, value_size, value];
 
     [self sendString:messageToSend];
 
@@ -192,15 +220,20 @@ NSOutputStream *outputStream;
 }
 
 + (NSInteger)currentAmountOfMoney:(NSString *) username {
-   char function = (char)8;
+    char function = (char)8;
+    char username_size = (char)[username length];
 
-   NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@", function, username_size, username];
+    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@", function, username_size, username];
 
-   if ([readString isEqual:@"-1"]) {
-      return nil;
-   }
+    [self sendString:messageToSend];
+   
+    NSString * readString = [self readString];
+   
+    if ([readString isEqual:@"-1"]) {
+        return -1;
+    }
 
-   return [NSString toInt:readString];
+    return [readString intValue];
 }
 
 @end

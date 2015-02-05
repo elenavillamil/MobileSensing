@@ -176,7 +176,7 @@ namespace StockApp
          }
       }
 
-      public static double BuyOrder(string username, string name, double amount, double value)
+      public static double BuyOrder(string username, string name, int amount, double value)
       {
          if (db_management == null)
          {
@@ -236,7 +236,7 @@ namespace StockApp
          return -1;
       }
 
-      public static double SellOrder(string username, string name, double amount, double value)
+      public static double SellOrder(string username, string name, int amount, double value)
       {
          if (db_management == null)
          {
@@ -403,7 +403,6 @@ namespace StockApp
 
                BsonArray bson_arr = value.AsBsonArray;
                Tuple<string, double, double, double> temp;
-
                for (int i = 0; i < bson_arr.Count; i++)
                {
                   temp = new Tuple<string, double, double, double>(bson_arr[i][0].AsString, bson_arr[i][1].AsDouble, bson_arr[i][2].AsDouble, bson_arr[i][3].AsDouble);
