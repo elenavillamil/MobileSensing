@@ -338,7 +338,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" directionalLockEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ksc-29-i2p">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7a4-0N-h6L">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7a4-0N-h6L">
                                         <rect key="frame" x="8" y="48" width="146" height="136"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </imageView>
@@ -361,10 +361,6 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Xx-Cf-2cm" customClass="JBLineChartView">
-                                        <rect key="frame" x="8" y="192" width="359" height="272"/>
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Owned: " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Su-lT-DQu">
                                         <rect key="frame" x="61" y="508" width="200" height="25"/>
                                         <constraints>
@@ -408,7 +404,19 @@
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="gtw-jX-KOq">
                                         <rect key="frame" x="59" y="541" width="256" height="31"/>
+                                        <connections>
+                                            <action selector="changeSliderValue:" destination="ShH-WR-SWx" eventType="valueChanged" id="5sG-k4-3Q1"/>
+                                        </connections>
                                     </slider>
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" bounces="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNJ-60-iUQ">
+                                        <rect key="frame" x="8" y="192" width="359" height="272"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Xx-Cf-2cm" customClass="JBLineChartView">
+                                                <rect key="frame" x="0.0" y="0.0" width="500" height="272"/>
+                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                    </scrollView>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4dJ-W3-77R">
                                         <rect key="frame" x="8" y="472" width="359" height="29"/>
                                         <segments>
@@ -419,33 +427,31 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="6Su-lT-DQu" firstAttribute="leading" secondItem="Ksc-29-i2p" secondAttribute="leading" constant="37" id="1Ga-1D-CKU"/>
-                                    <constraint firstItem="9Xx-Cf-2cm" firstAttribute="leading" secondItem="7a4-0N-h6L" secondAttribute="leading" id="4QY-mg-0gg"/>
-                                    <constraint firstItem="9Xx-Cf-2cm" firstAttribute="top" secondItem="mR3-9n-AQc" secondAttribute="bottom" constant="47" id="5c8-jz-pmM"/>
                                     <constraint firstItem="nII-48-XVm" firstAttribute="top" secondItem="gtw-jX-KOq" secondAttribute="bottom" constant="95" id="6Kl-DZ-ZQ5"/>
                                     <constraint firstAttribute="bottom" secondItem="nII-48-XVm" secondAttribute="bottom" constant="60" id="6d5-Hp-Ucp"/>
                                     <constraint firstItem="mR3-9n-AQc" firstAttribute="centerX" secondItem="bL9-LK-GjA" secondAttribute="centerX" id="7tb-z2-OXh"/>
                                     <constraint firstItem="7a4-0N-h6L" firstAttribute="top" secondItem="Ksc-29-i2p" secondAttribute="top" constant="48" id="7xq-gJ-hJt"/>
                                     <constraint firstItem="bL9-LK-GjA" firstAttribute="top" secondItem="Ksc-29-i2p" secondAttribute="top" constant="78" id="980-lX-L6e"/>
+                                    <constraint firstAttribute="centerX" secondItem="uNJ-60-iUQ" secondAttribute="centerX" id="9Ll-zj-38b"/>
                                     <constraint firstItem="gtw-jX-KOq" firstAttribute="centerX" secondItem="nII-48-XVm" secondAttribute="centerX" id="DGW-40-x9U"/>
-                                    <constraint firstItem="9Xx-Cf-2cm" firstAttribute="trailing" secondItem="Ksc-29-i2p" secondAttribute="trailingMargin" id="EEQ-d2-Uok"/>
                                     <constraint firstItem="mR3-9n-AQc" firstAttribute="leading" secondItem="7a4-0N-h6L" secondAttribute="trailing" constant="60" id="F0z-j8-N26"/>
                                     <constraint firstItem="6Su-lT-DQu" firstAttribute="trailing" secondItem="nII-48-XVm" secondAttribute="trailing" id="ITR-zm-Ap3"/>
-                                    <constraint firstItem="9Xx-Cf-2cm" firstAttribute="top" secondItem="7a4-0N-h6L" secondAttribute="bottom" constant="8" symbolic="YES" id="KYV-JK-2SI"/>
-                                    <constraint firstItem="4dJ-W3-77R" firstAttribute="trailing" secondItem="9Xx-Cf-2cm" secondAttribute="trailing" id="TY4-BG-O4L"/>
-                                    <constraint firstItem="9Xx-Cf-2cm" firstAttribute="leading" secondItem="4dJ-W3-77R" secondAttribute="leading" id="TxC-ue-HNv"/>
+                                    <constraint firstItem="uNJ-60-iUQ" firstAttribute="leading" secondItem="Ksc-29-i2p" secondAttribute="leading" constant="8" id="Jr1-oG-Vde"/>
+                                    <constraint firstItem="uNJ-60-iUQ" firstAttribute="top" secondItem="mR3-9n-AQc" secondAttribute="bottom" constant="47" id="MXR-TD-VHe"/>
                                     <constraint firstAttribute="trailing" secondItem="YXQ-zc-L7r" secondAttribute="trailing" constant="20" id="XZK-Xy-CrH"/>
                                     <constraint firstItem="bL9-LK-GjA" firstAttribute="leading" secondItem="7a4-0N-h6L" secondAttribute="trailing" constant="50" id="ZR1-mu-C2x"/>
                                     <constraint firstAttribute="trailing" secondItem="bL9-LK-GjA" secondAttribute="trailing" constant="31" id="aM6-hx-xLN"/>
                                     <constraint firstItem="7a4-0N-h6L" firstAttribute="leading" secondItem="Ksc-29-i2p" secondAttribute="leadingMargin" id="ahz-tl-y2U"/>
                                     <constraint firstItem="gtw-jX-KOq" firstAttribute="centerX" secondItem="4dJ-W3-77R" secondAttribute="centerX" id="b24-s4-AXa"/>
                                     <constraint firstItem="6Su-lT-DQu" firstAttribute="top" secondItem="4dJ-W3-77R" secondAttribute="bottom" constant="30" id="dNC-it-m5w"/>
+                                    <constraint firstItem="4dJ-W3-77R" firstAttribute="top" secondItem="uNJ-60-iUQ" secondAttribute="bottom" constant="8" id="hhJ-WJ-xch"/>
                                     <constraint firstItem="kbu-Pf-y4S" firstAttribute="firstBaseline" secondItem="YXQ-zc-L7r" secondAttribute="firstBaseline" id="iwO-fD-EFA"/>
                                     <constraint firstItem="gtw-jX-KOq" firstAttribute="top" secondItem="6Su-lT-DQu" secondAttribute="bottom" constant="44" id="l0X-KG-Zh5"/>
                                     <constraint firstItem="mR3-9n-AQc" firstAttribute="top" secondItem="bL9-LK-GjA" secondAttribute="bottom" constant="25" id="lJ5-er-w0G"/>
                                     <constraint firstItem="kbu-Pf-y4S" firstAttribute="leading" secondItem="Ksc-29-i2p" secondAttribute="leading" constant="20" id="sQ5-aJ-8Nq"/>
                                     <constraint firstItem="gtw-jX-KOq" firstAttribute="centerX" secondItem="Ksc-29-i2p" secondAttribute="centerX" id="sY6-XF-IhK"/>
-                                    <constraint firstItem="4dJ-W3-77R" firstAttribute="top" secondItem="9Xx-Cf-2cm" secondAttribute="bottom" constant="8" symbolic="YES" id="uV6-hS-5mq"/>
                                     <constraint firstItem="gtw-jX-KOq" firstAttribute="leading" secondItem="Ksc-29-i2p" secondAttribute="leading" constant="61" id="uZM-o6-qqO"/>
+                                    <constraint firstAttribute="trailing" secondItem="uNJ-60-iUQ" secondAttribute="trailing" constant="8" id="wTE-pP-ZY4"/>
                                     <constraint firstItem="kbu-Pf-y4S" firstAttribute="top" secondItem="gtw-jX-KOq" secondAttribute="bottom" constant="14" id="yii-d4-qwr"/>
                                     <constraint firstItem="kbu-Pf-y4S" firstAttribute="baseline" secondItem="YXQ-zc-L7r" secondAttribute="baseline" id="yyM-Kv-TNG"/>
                                 </constraints>
@@ -466,10 +472,14 @@
                         <outlet property="companyIconImageView" destination="7a4-0N-h6L" id="Jbd-lr-ymd"/>
                         <outlet property="companyScrollView" destination="Ksc-29-i2p" id="hZr-zL-Dod"/>
                         <outlet property="confirmButton" destination="nII-48-XVm" id="MGe-G6-PgK"/>
-                        <outlet property="graphView" destination="9Xx-Cf-2cm" id="X43-cT-P2K"/>
+                        <outlet property="graphScrollView" destination="uNJ-60-iUQ" id="AtC-YC-lTc"/>
+                        <outlet property="graphView" destination="9Xx-Cf-2cm" id="c7J-G2-2iu"/>
+                        <outlet property="maxValueLabel" destination="YXQ-zc-L7r" id="2d2-4S-WmR"/>
+                        <outlet property="minValueLabel" destination="kbu-Pf-y4S" id="uys-Uh-hLY"/>
                         <outlet property="percentChangeLabel" destination="bL9-LK-GjA" id="STP-cM-l0o"/>
                         <outlet property="priceLabel" destination="mR3-9n-AQc" id="qiq-sj-CTm"/>
-                        <outlet property="stockAmountSlider" destination="gtw-jX-KOq" id="CvE-z1-lbT"/>
+                        <outlet property="stockAmountSelectedLabel" destination="6Su-lT-DQu" id="zSF-Ew-RKX"/>
+                        <outlet property="stockAmountSlider" destination="gtw-jX-KOq" id="3O5-1o-q8K"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T6M-ca-sM2" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -11,6 +11,7 @@
 #import <JBChartView/JBLineChartView.h>
 #import <JBLineChartView.h>
 #import "Graph.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface CompanyProfileViewController () <UIScrollViewDelegate, GraphDelegate, JBLineChartViewDataSource, JBLineChartViewDelegate>
 
@@ -24,7 +25,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *stopLabel;
 @property (weak, nonatomic) IBOutlet UIDatePicker *stopDatePicker;
 @property (weak, nonatomic) IBOutlet UIButton *confirmButton;
+@property (weak, nonatomic) IBOutlet UIScrollView *graphScrollView;
+@property (weak, nonatomic) IBOutlet UILabel *stockAmountSelectedLabel;
+@property (weak, nonatomic) IBOutlet UILabel *minValueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *maxValueLabel;
 
+
+@property (strong,nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) Stock *companyStock;
 @property (strong,nonatomic) Graph *graphData;
 
@@ -48,6 +55,48 @@
 {
     self.companyScrollView.delegate = self;
     self.companyScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 700.f);
+    
+    self.graphScrollView.delegate = self;
+    self.graphScrollView.contentSize = CGSizeMake(500.f, 272.f);
+    
+    UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewTwoFingerTapped:)];
+    twoFingerTapRecognizer.numberOfTapsRequired = 1;
+    twoFingerTapRecognizer.numberOfTouchesRequired = 2;
+    [self.companyScrollView addGestureRecognizer:twoFingerTapRecognizer];
+    [self centerScrollViewContents];
+    [self setZoom];
+}
+
+- (void)setZoom
+{
+    CGRect scrollViewFrame = self.graphScrollView.frame;
+    CGFloat scaleWidth = scrollViewFrame.size.width / self.graphScrollView.contentSize.width;
+    CGFloat scaleHeight = scrollViewFrame.size.height / self.graphScrollView.contentSize.height;
+    CGFloat minScale = MIN(scaleWidth, scaleHeight);
+    self.graphScrollView.minimumZoomScale = minScale;
+    
+    self.graphScrollView.maximumZoomScale = 1.0f;
+    self.graphScrollView.zoomScale = minScale;
+    
+}
+
+- (void)centerScrollViewContents {
+    CGSize boundsSize = self.graphScrollView.bounds.size;
+    CGRect contentsFrame = self.graphView.frame;
+    
+    if (contentsFrame.size.width < boundsSize.width) {
+        contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0f;
+    } else {
+        contentsFrame.origin.x = 0.0f;
+    }
+    
+    if (contentsFrame.size.height < boundsSize.height) {
+        contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0f;
+    } else {
+        contentsFrame.origin.y = 0.0f;
+    }
+    
+    self.graphView.frame = contentsFrame;
 }
 
 - (void)setStock:(Stock *)stock
@@ -104,7 +153,97 @@
     
     self.graphView.dataSource = self;
     self.graphView.delegate = self;
+    
+    [self setGraphViewFooter];
+    
+    
     [self.graphView reloadData];
+    
+//    UIImage *graphImage = [self imageWithView:self.graphView];
+//    
+//    self.imageView = [[UIImageView alloc] initWithImage:graphImage];
+//    [self.graphScrollView addSubview:self.imageView];
+//    self.graphView.hidden = YES;
+}
+
+- (UIImage *) imageWithView:(UIView *)view
+{
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return img;
+}
+
+- (void)failedToLoad
+{
+    //failed to get CSV file.... hate alert view
+    
+}
+
+- (void)setGraphViewFooter
+{
+    
+}
+
+#pragma mark - Buy/Sell
+
+- (IBAction)changeSliderValue:(id)sender {
+    NSInteger min = [self.minValueLabel.text integerValue];
+    NSInteger max = [self.maxValueLabel.text integerValue];
+    NSInteger change = (max - min) * self.stockAmountSlider.value;
+    
+    self.stockAmountSelectedLabel.text = [NSString stringWithFormat:@"Sell: %ld", (long)change];
+    
+}
+
+
+
+- (void)flipShown:(BOOL)buy
+{
+    if (buy) {
+        
+    } else
+    {
+        
+    }
+}
+
+#pragma mark - Zoom methods
+
+- (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer {
+    // Zoom out slightly, capping at the minimum zoom scale specified by the scroll view
+    CGFloat newZoomScale = self.graphScrollView.zoomScale / 1.5f;
+    newZoomScale = MAX(newZoomScale, self.graphScrollView.minimumZoomScale);
+    [self.graphScrollView setZoomScale:newZoomScale animated:YES];
+}
+
+- (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer {
+    CGPoint pointInView = [recognizer locationInView:self.imageView];
+    CGFloat newZoomScale = self.graphScrollView.zoomScale * 1.5f;
+    newZoomScale = MIN(newZoomScale, self.graphScrollView.maximumZoomScale);
+    CGSize scrollViewSize = self.graphScrollView.bounds.size;
+    
+    CGFloat w = scrollViewSize.width / newZoomScale;
+    CGFloat h = scrollViewSize.height / newZoomScale;
+    CGFloat x = pointInView.x - (w / 2.0f);
+    CGFloat y = pointInView.y - (h / 2.0f);
+    
+    CGRect rectToZoomTo = CGRectMake(x, y, w, h);
+    
+    // 4
+    [self.graphScrollView zoomToRect:rectToZoomTo animated:YES];
+}
+
+- (UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    // Return the view that you want to zoom
+    if ([scrollView isEqual:self.graphScrollView]) {
+        return self.graphView;
+    }
+    return nil;
 }
 
 #pragma mark - JBGraphDelegate
