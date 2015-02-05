@@ -90,6 +90,26 @@ namespace StockApp
    		} else if (switch_number == 8) {
    			handle_get_amount_of_money (socket, message);
    		}
+
+         while (socket.Connected) {
+            const int ARR_SIZE = 256;
+            int bytes_transfered = 0;
+
+            //Socket Buffer
+            byte[] buffer = new byte[ARR_SIZE];
+
+            string new_message = "";
+
+            do
+            {
+               bytes_transfered = socket.Receive(buffer, buffer.Length, 0);
+
+               new_message = new_message + Encoding.ASCII.GetString(buffer, 0, bytes_transfered);
+
+            } while (bytes_transfered == ARR_SIZE);
+
+            handler_start(socket, new_message);
+         }
    	}
 
    	////////////////////////////////////////////////////////////////////////////////
@@ -214,8 +234,8 @@ namespace StockApp
    	//
    	// [<character representing the function to call>
    	//  <character representing amount of stocks as strings>
-   	//  [<character with the size of the first string>
-   	//  "stockname"]]
+   	//  <character with the size of the first string>
+   	//  "stockname"]
    	//
    	////////////////////////////////////////////////////////////////////////////////
    	private static void handle_get_stock_information(Socket socket, string message)

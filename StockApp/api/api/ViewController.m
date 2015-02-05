@@ -21,10 +21,14 @@
     
     [BackendApi initNetworkConnection];
     
-    NSInteger response = [BackendApi currentAmountOfMoney:@"jashook"];
-    
-    NSLog(@"%li", (long)response);
-    
+    if (![BackendApi setUpAccount:@"elena2" withPassword:@"elenavillamil"])
+    {
+        NSInteger response = [BackendApi currentAmountOfMoney:@"elena2"];
+        NSLog(@"%li", (long)response);
+        NSArray* stocks = @[@"msft", @"amzn"];
+        NSString* resp = [BackendApi getStockInfo:stocks];
+        NSLog(@"%@", resp);
+    }
 }
 - (IBAction)onClick:(UIButton *)sender {
     //[BackendApi signIn:@"jashook" withPassword:@"ev9"];

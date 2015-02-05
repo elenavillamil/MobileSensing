@@ -21,7 +21,7 @@ NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.116.175", 8080, &readStream, &writeStream);
         
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -221,9 +221,9 @@ NSOutputStream *outputStream;
 
 + (NSInteger)currentAmountOfMoney:(NSString *) username {
     char function = (char)8;
-    char username_size = (char)[username length];
+    char usernameSize = (char)[username length];
 
-    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@", function, username_size, username];
+    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@", function, usernameSize, username];
 
     [self sendString:messageToSend];
    
@@ -234,6 +234,25 @@ NSOutputStream *outputStream;
     }
 
     return [readString intValue];
+}
+
++ (NSString*) getStockInfo:(NSArray *)stocks{
+    char function = (char)4;
+    char numberOfStocs = (char)stocks.count;
+    NSString* stocksString = @"";
+    
+    for (int i = 0; i < stocks.count; i++)
+    {
+        stocksString = [NSString stringWithFormat:@"%@%c%@", stocksString, (char)[stocks[i] length], stocks[i]];
+    }
+    
+    NSString* message = [NSString stringWithFormat:@"%c%c%@", function, numberOfStocs, stocksString];
+
+    [self sendString:message];
+    
+    NSString* toBeReturned = [self readString];
+
+    return toBeReturned;
 }
 
 @end
