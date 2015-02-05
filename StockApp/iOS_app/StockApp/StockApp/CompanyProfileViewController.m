@@ -10,8 +10,9 @@
 #import "Stock.h"
 #import <JBChartView/JBLineChartView.h>
 #import <JBLineChartView.h>
+#import "Graph.h"
 
-@interface CompanyProfileViewController () <UIScrollViewDelegate, NSURLConnectionDelegate>
+@interface CompanyProfileViewController () <UIScrollViewDelegate, GraphDelegate, JBLineChartViewDataSource, JBLineChartViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *companyIconImageView;
 @property (weak, nonatomic) IBOutlet UILabel *percentChangeLabel;
@@ -25,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *confirmButton;
 
 @property (strong, nonatomic) Stock *companyStock;
+@property (strong,nonatomic) Graph *graphData;
 
 @end
 
@@ -36,6 +38,10 @@
     
     self.title = @"Company";
     [self setupScrollView];
+    
+    self.graphData = [[Graph alloc] init];
+    self.graphData.delegate = self;
+    [self.graphData getStockGraphData];
 }
 
 - (void)setupScrollView
@@ -88,6 +94,48 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - GraphDelegate
+- (void)finishedLoading
+{
+    
+    NSString *change = [self.graphData getCurrentPrice];
+    self.percentChangeLabel.text = change;
+    
+    self.graphView.dataSource = self;
+    self.graphView.delegate = self;
+    [self.graphView reloadData];
+}
+
+#pragma mark - JBGraphDelegate
+
+- (NSUInteger)numberOfLinesInLineChartView:(JBLineChartView *)lineChartView
+{
+    return 1; // number of lines in chart
+}
+
+- (NSUInteger)lineChartView:(JBLineChartView *)lineChartView numberOfVerticalValuesAtLineIndex:(NSUInteger)lineIndex
+{
+    return 99; // number of values for a line
+}
+
+- (CGFloat)lineChartView:(JBLineChartView *)lineChartView verticalValueForHorizontalIndex:(NSUInteger)horizontalIndex atLineIndex:(NSUInteger)lineIndex
+{
+    return [self.graphData getValueAt:(99-horizontalIndex-1)]; // y-position (y-axis) of point at horizontalIndex (x-axis)
+}
+
+- (void)lineChartView:(JBLineChartView *)lineChartView didSelectLineAtIndex:(NSUInteger)lineIndex horizontalIndex:(NSUInteger)horizontalIndex touchPoint:(CGPoint)touchPoint
+{
+    // Update view
+    self.percentChangeLabel.text = [NSString stringWithFormat:@"%.02f",[self.graphData getValueAt:horizontalIndex]];
+}
+
+- (void)didDeselectLineInLineChartView:(JBLineChartView *)lineChartView
+{
+    // Update view
+    NSString *change = [self.graphData getCurrentPrice];
+    self.percentChangeLabel.text = change;
+}
 
 
 @end
