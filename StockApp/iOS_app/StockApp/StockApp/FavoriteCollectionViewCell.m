@@ -6,16 +6,19 @@
 //  Copyright (c) 2015 teamE1. All rights reserved.
 //
 
-#import "FavStocksCollectionViewController.h"
 #import "FavoriteCollectionViewCell.h"
+#import "UIColor+SAColor.h"
 
 @implementation FavoriteCollectionViewCell
 
-
-- (void)setStockName:(NSString *)name withPrice:(double)price withPositive:(BOOL)positive
+- (void)setPositiveChange:(BOOL)positiveChange
 {
-    self.stockNameLabel.text = name;
-    self.stockPriceLabel.text = [NSString stringWithFormat:@"$%f",price];
+    if (positiveChange) {
+        self.backgroundColor = [UIColor green];
+    } else {
+        self.backgroundColor = [UIColor redColor];
+    }
+    _positiveChange = positiveChange;
 }
 
 @end

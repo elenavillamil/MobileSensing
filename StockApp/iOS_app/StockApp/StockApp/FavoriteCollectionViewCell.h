@@ -12,7 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *stockNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *stockPriceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stockPercentChange;
+@property (nonatomic) BOOL positiveChange;
 
-- (void)setStockName:(NSString *)name withPrice:(double)price withPositive:(BOOL)positive;
 
 @end

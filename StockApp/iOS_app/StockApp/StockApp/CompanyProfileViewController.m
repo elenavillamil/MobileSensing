@@ -12,6 +12,7 @@
 #import <JBLineChartView.h>
 #import "Graph.h"
 #import <QuartzCore/QuartzCore.h>
+#import "User.h"
 
 @interface CompanyProfileViewController () <UIScrollViewDelegate, UIAlertViewDelegate, GraphDelegate, JBLineChartViewDataSource, JBLineChartViewDelegate>
 
@@ -35,6 +36,8 @@
 @property (strong, nonatomic) Stock *companyStock;
 @property (strong,nonatomic) Graph *graphData;
 @property (strong,nonatomic) NSString *amaountSelectedBase;
+@property (nonatomic) NSInteger amountToBuySell;
+@property (nonatomic,strong) User *user;
 
 @end
 
@@ -49,10 +52,10 @@
     
     self.graphData = [[Graph alloc] init];
     self.graphData.delegate = self;
-    [self.graphData getStockGraphData];
+//    [self.graphData getStockGraphData];
     
     self.amaountSelectedBase = @"Buy: %dl";
-    
+    self.amountToBuySell = 0;
 }
 
 - (void)setupScrollView
@@ -68,7 +71,7 @@
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
     [self.companyScrollView addGestureRecognizer:twoFingerTapRecognizer];
     [self centerScrollViewContents];
-    [self setZoom];
+//    [self setZoom];
 }
 
 - (void)setZoom
@@ -130,8 +133,16 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 - (IBAction)confirmButtonPressed:(id)sender {
+    if (self.buySellSegmentedControl.selectedSegmentIndex == 0) {
+        [self buyStock];
+    } else {
+        [self sellStock];
+    }
 }
+
 
 
 - (void)getGraphData
@@ -212,33 +223,47 @@
 - (IBAction)changeSliderValue:(id)sender {
     NSInteger min = [self.minValueLabel.text integerValue];
     NSInteger max = [self.maxValueLabel.text integerValue];
-    NSInteger change = (max - min) * self.stockAmountSlider.value;
+    self.amountToBuySell = (max - min) * self.stockAmountSlider.value;
     
-    self.stockAmountSelectedLabel.text = [NSString stringWithFormat:self.amaountSelectedBase, (long)change];
+    self.stockAmountSelectedLabel.text = [NSString stringWithFormat:self.amaountSelectedBase, (long)self.amountToBuySell];
 }
 
 - (IBAction)indexChanged:(UISegmentedControl *)sender {
     switch (self.buySellSegmentedControl.selectedSegmentIndex)
     {
         case 0:
-            self.amaountSelectedBase = @"Buy: %dl";
+            [self setToBuy];
             break;
         case 1:
-            self.amaountSelectedBase = @"Sell: %dl";
+            [self setToSell];
         default: 
             break; 
     }
 }
 
-
-- (void)flipShown:(BOOL)buy
+- (void)setToBuy
 {
-    if (buy) {
-        
-    } else
-    {
-        
-    }
+    self.amaountSelectedBase = @"Buy: %d";
+    self.stockAmountSelectedLabel.text = @"Buy: ";
+    
+}
+
+- (void)setToSell
+{
+    self.amaountSelectedBase = @"Sell: %d";
+    self.stockAmountSelectedLabel.text = @"Sell: ";
+    
+//    self.maxValueLabel.text = [self.user getAmountOwnForStock:(self.companyStock)];
+}
+
+- (void)buyStock
+{
+    // connect to api and backend
+}
+
+- (void)sellStock
+{
+    // connect to api and backend
 }
 
 #pragma mark - Zoom methods
