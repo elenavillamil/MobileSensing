@@ -423,6 +423,9 @@
                                             <segment title="Buy"/>
                                             <segment title="Sell"/>
                                         </segments>
+                                        <connections>
+                                            <action selector="indexChanged:" destination="ShH-WR-SWx" eventType="valueChanged" id="maO-Oa-WVG"/>
+                                        </connections>
                                     </segmentedControl>
                                 </subviews>
                                 <constraints>

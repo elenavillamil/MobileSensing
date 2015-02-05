@@ -107,6 +107,11 @@ static NSString * const baseURL = @"https://www.quandl.com/api/v1/datasets/WIKI/
 {
     NSArray* allLinedStrings =[contents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
+    if ([contents containsString:@"html"]) {
+        [self.delegate failedToLoad];
+        return;
+    }
+    
     int count = 0;
     for (NSString *line in allLinedStrings)
     {

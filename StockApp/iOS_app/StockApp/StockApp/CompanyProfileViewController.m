@@ -13,7 +13,7 @@
 #import "Graph.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface CompanyProfileViewController () <UIScrollViewDelegate, GraphDelegate, JBLineChartViewDataSource, JBLineChartViewDelegate>
+@interface CompanyProfileViewController () <UIScrollViewDelegate, UIAlertViewDelegate, GraphDelegate, JBLineChartViewDataSource, JBLineChartViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *companyIconImageView;
 @property (weak, nonatomic) IBOutlet UILabel *percentChangeLabel;
@@ -34,6 +34,7 @@
 @property (strong,nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) Stock *companyStock;
 @property (strong,nonatomic) Graph *graphData;
+@property (strong,nonatomic) NSString *amaountSelectedBase;
 
 @end
 
@@ -49,6 +50,9 @@
     self.graphData = [[Graph alloc] init];
     self.graphData.delegate = self;
     [self.graphData getStockGraphData];
+    
+    self.amaountSelectedBase = @"Buy: %dl";
+    
 }
 
 - (void)setupScrollView
@@ -180,8 +184,22 @@
 
 - (void)failedToLoad
 {
-    //failed to get CSV file.... hate alert view
+    //failed to get CSV file.... show alert view
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Loading Stock" message:@"Quandl is having issues try again?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [alertView show];
     
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            [self.graphData getStockGraphData];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)setGraphViewFooter
@@ -196,10 +214,21 @@
     NSInteger max = [self.maxValueLabel.text integerValue];
     NSInteger change = (max - min) * self.stockAmountSlider.value;
     
-    self.stockAmountSelectedLabel.text = [NSString stringWithFormat:@"Sell: %ld", (long)change];
-    
+    self.stockAmountSelectedLabel.text = [NSString stringWithFormat:self.amaountSelectedBase, (long)change];
 }
 
+- (IBAction)indexChanged:(UISegmentedControl *)sender {
+    switch (self.buySellSegmentedControl.selectedSegmentIndex)
+    {
+        case 0:
+            self.amaountSelectedBase = @"Buy: %dl";
+            break;
+        case 1:
+            self.amaountSelectedBase = @"Sell: %dl";
+        default: 
+            break; 
+    }
+}
 
 
 - (void)flipShown:(BOOL)buy
