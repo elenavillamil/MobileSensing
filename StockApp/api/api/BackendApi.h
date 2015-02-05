@@ -15,5 +15,6 @@
 + (BOOL)setUpAccount:(NSString *) username withPassword:(NSString *) password;
 + (BOOL)buyOrder(NSString *) username withStockName:(NSString *)stockName withValue:(size_t) value withAmount:(size_t) amount;
 + (BOOL)sellOrder(NSString *) username withStockName:(NSString *)stockName withValue:(size_t) value withAmount:(size_t) amount;
++ (NSInteger)currentAmountOfMoney(NSString *) username;
 
 @end

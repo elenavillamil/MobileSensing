@@ -191,4 +191,16 @@ NSOutputStream *outputStream;
     return true;
 }
 
++ (NSInteger)currentAmountOfMoney:(NSString *) username {
+   char function = (char)8;
+
+   NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@", function, username_size, username];
+
+   if ([readString isEqual:@"-1"]) {
+      return nil;
+   }
+
+   return [NSString toInt:readString];
+}
+
 @end
