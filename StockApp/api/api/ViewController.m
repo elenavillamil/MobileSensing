@@ -21,9 +21,9 @@
     
     [BackendApi initNetworkConnection];
     
-    BOOL response = [BackendApi setUpAccount:@"jashook" withPassword:@"ev9"];
+    NSInteger response = [BackendApi currentAmountOfMoney:@"jashook"];
     
-    NSLog(@"%i", response);
+    NSLog(@"%li", (long)response);
     
 }
 - (IBAction)onClick:(UIButton *)sender {

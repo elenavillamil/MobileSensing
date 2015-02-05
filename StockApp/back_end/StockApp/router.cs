@@ -341,7 +341,7 @@ namespace StockApp
          string order_size = message.Substring(first_str_size + second_string_size + 4, third_string_size);
          string sell_value = message.Substring(first_str_size + second_string_size + third_string_size + 5, fourth_string_size);
 
-         double amount = double.Parse(order_size);
+         int amount = int.Parse(order_size);
          double value = double.Parse(sell_value);
 
          double return_value = DatabaseManagment.BuyOrder(username, stock_name, amount, value);
@@ -410,7 +410,7 @@ namespace StockApp
          string order_size = message.Substring(first_str_size + second_string_size + 4, third_string_size);
          string sell_value = message.Substring(first_str_size + second_string_size + third_string_size + 5, fourth_string_size);
 
-         double amount = double.Parse(order_size);
+         int amount = int.Parse(order_size);
          double value = double.Parse(sell_value);
 
          double return_value = DatabaseManagment.SellOrder(username, stock_name, amount, value);

@@ -42,7 +42,7 @@
 		A3B1A7BC1A7D5E3C00E82547 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A3B1A7BD1A7D5E3C00E82547 /* apiTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = apiTests.m; sourceTree = "<group>"; };
 		A3B1A7C71A7D5E7600E82547 /* BackendApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackendApi.h; sourceTree = "<group>"; };
-		A3B1A7C81A7D5E7600E82547 /* BackendApi.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.c.objc; path = BackendApi.m; sourceTree = "<group>"; tabWidth = 3; };
+		A3B1A7C81A7D5E7600E82547 /* BackendApi.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = BackendApi.m; sourceTree = "<group>"; tabWidth = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
