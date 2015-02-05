@@ -130,7 +130,23 @@ namespace StockApp
          }
       }
 
-      // TEST IS NOT COMPLITED, BUT ADDFAVORITE WORKS
+      // Test is not complited
+      private void TestGetHistory()
+      {
+         string username = "jashook";
+
+         List<Tuple<string, double, double, double>> amount_result = DatabaseManagment.GetHistory(username);
+
+         foreach (var t in amount_result)
+         {
+            Console.WriteLine(t.Item1);
+            Console.WriteLine(t.Item2);
+            Console.WriteLine(t.Item3);
+            Console.WriteLine(t.Item4);
+
+         }
+      }
+
       private void TestAddFavoriteAndGetFavorites()
       {
          string username = "elena";
@@ -146,11 +162,23 @@ namespace StockApp
 
          var result = DatabaseManagment.GetFavorites (username);
          Console.WriteLine ("Printing Results");
-         if (result.Count == 0)
-            throw new Exception("FAILED TEST: Eitther add favorite or get favorite does not work");
+         if (result.Count > 1)
+         {
+            if (result[0] != "microsoft")
+            {
+               throw new Exception("FAILED TEST: first favorite is not correct");
+            }
 
-         foreach (string s in result)
-            Console.WriteLine (s);
+            if (result[1] != "amazon")
+            {
+               throw new Exception("FAILED TEST: second favorite is not correct");
+            }
+
+         }
+         else
+         {
+            throw new Exception("FAILED TEST: Either add favorite or get favorite does not work");
+         }
       }
          
       private void TestSellOrder()
@@ -201,7 +229,7 @@ namespace StockApp
          string username = "jashook";
          string password = "ev9";
 
-         char function = (char)0;
+         char function = (char)1;
          char username_size = (char)username.Length;
          char password_size = (char)password.Length;
 
@@ -246,7 +274,7 @@ namespace StockApp
          string username = "jashook";
          string password = "ev9";
 
-         char function = (char)1;
+         char function = (char)2;
          char username_size = (char)username.Length;
          char password_size = (char)password.Length;
 
@@ -290,7 +318,7 @@ namespace StockApp
       {
          string username = "jashook";
 
-         char function = (char)2;
+         char function = (char)3;
          char username_size = (char)username.Length;
 
          string message = "";
@@ -324,7 +352,7 @@ namespace StockApp
          string value = "1000.0";
          string amount = "100";
 
-         char function = (char)4;
+         char function = (char)5;
          char username_size = (char)username.Length;
          char stock_name_size = (char)stock_name.Length;
          char value_size = (char)value.Length;
@@ -377,7 +405,7 @@ namespace StockApp
          string value = "1000.0";
          string amount = "100";
 
-         char function = (char)5;
+         char function = (char)6;
          char username_size = (char)username.Length;
          char stock_name_size = (char)stock_name.Length;
          char value_size = (char)value.Length;
@@ -423,11 +451,50 @@ namespace StockApp
          }
       }
 
+      private void TestHandleGetStockInformation()
+      {
+         char function = (char)4;
+         string message = "";
+         char size = (char)2;
+         string stock1 = "msft";
+         string stock2 = "amzn";
+
+         message += function;
+         message += size;
+         message += (char)stock1.Length;
+         message += stock1;
+         message += (char)stock2.Length;
+         message += stock2;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break;
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+         Console.Write(returned_message);
+      }
+
       private void TestHandleGetMoney()
       {
          string username = "jashook";
 
-         char function = (char)7;
+         char function = (char)8;
          char username_size = (char)username.Length;
 
          string message = "";
@@ -477,8 +544,10 @@ namespace StockApp
          //Run(TestHandleBuyOrder);
          //Run(TestHandleSellOrder);
          //Run(TestHandleGetMoney);
+         Run(TestHandleGetStockInformation);
 
-         Run (TestAddFavoriteAndGetFavorites);
+         //Run (TestGetHistory);
+         //Run (TestAddFavoriteAndGetFavorites);
 
          /*Run (TestProperLogin);
          Run (TestFailedLogin);

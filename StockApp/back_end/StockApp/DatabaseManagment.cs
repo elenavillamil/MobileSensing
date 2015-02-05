@@ -372,7 +372,7 @@ namespace StockApp
          return 0;
       }
 
-      public static List<Tuple<string, string, double, double>> GetHistory(string username)
+      public static List<Tuple<string, double, double, double>> GetHistory(string username)
       {
          if (db_management == null)
          {
@@ -384,6 +384,7 @@ namespace StockApp
          var query = Query.EQ("username", username);
          var cursor = accounts.Find(query);
 
+         List<Tuple<string,double,double,double>> to_be_return = new List<Tuple<string, double, double, double>>();
          foreach (BsonDocument c in cursor)
          {
             try
@@ -401,13 +402,14 @@ namespace StockApp
                returned_document.TryGetValue("history_list", out value);
 
                BsonArray bson_arr = value.AsBsonArray;
-               var element_arr = bson_arr.ToArray();
+               Tuple<string, double, double, double> temp;
 
-               foreach (BsonValue val in element_arr)
+               for (int i = 0; i < bson_arr.Count; i++)
                {
-                  
-
+                  temp = new Tuple<string, double, double, double>(bson_arr[i][0].AsString, bson_arr[i][1].AsDouble, bson_arr[i][2].AsDouble, bson_arr[i][3].AsDouble);
+                  to_be_return.Add(temp);
                }
+
             }
             catch
             {
@@ -415,7 +417,7 @@ namespace StockApp
             }
          }
 
-         return null;
+         return to_be_return;
       }
 
       public static void AddFavorite(string username, string name)

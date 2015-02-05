@@ -21,7 +21,9 @@
     
     [BackendApi initNetworkConnection];
     
-    [BackendApi signIn:@"jashook" withPassword:@"ev9"];
+    BOOL response = [BackendApi setUpAccount:@"jashook" withPassword:@"ev9"];
+    
+    NSLog(@"%i", response);
     
 }
 - (IBAction)onClick:(UIButton *)sender {

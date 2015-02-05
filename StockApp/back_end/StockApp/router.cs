@@ -16,6 +16,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using JS;
 
 public class Router
 {
@@ -69,28 +70,28 @@ public class Router
 		// Get the switching number from the first character sent
 		int switch_number = message [0];
 
-		if (switch_number == 0) {
+		if (switch_number == 1) {
 			handle_setting_up_account (socket, message);
-		} else if (switch_number == 1) {
-			handle_signing_in (socket, message);
 		} else if (switch_number == 2) {
-			handle_remove_account (socket, message);
+			handle_signing_in (socket, message);
 		} else if (switch_number == 3) {
-			handle_get_stock_information (socket, message);
+			handle_remove_account (socket, message);
 		} else if (switch_number == 4) {
-			handle_buy_order (socket, message);
+			handle_get_stock_information (socket, message);
 		} else if (switch_number == 5) {
-			handle_sell_order (socket, message);
+			handle_buy_order (socket, message);
 		} else if (switch_number == 6) {
-			handle_get_history (socket, message);
+			handle_sell_order (socket, message);
 		} else if (switch_number == 7) {
+			handle_get_history (socket, message);
+		} else if (switch_number == 8) {
 			handle_get_amount_of_money (socket, message);
 		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 0 -> setup_account
+	// Function Mapping: 1 -> setup_account
 	//
 	// Expected format:
 	//
@@ -125,7 +126,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 1 -> sign_in
+	// Function Mapping: 2 -> sign_in
 	//
 	// Expected format:
 	//
@@ -167,7 +168,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 2 -> remove_account
+	// Function Mapping: 3 -> remove_account
 	//
 	// Expected format:
 	//
@@ -204,37 +205,41 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 3 -> get_stock_information
+	// Function Mapping: 4 -> get_stock_information
 	//
 	// Expected format:
 	//
 	// [<character representing the function to call>
-	//  <character representing size of size string>
-	//  "size of stock names"
+	//  <character representing amount of stocks as strings>
 	//  [<character with the size of the first string>
 	//  "stockname"]]
 	//
 	////////////////////////////////////////////////////////////////////////////////
 	private static void handle_get_stock_information(Socket socket, string message)
 	{
-		int size_of_string_size = message [1];
-
-		if (message.Length > size_of_string_size + 1) {
-			return;
-		}
-
-		string size_as_string = message.Substring (2, size_of_string_size);
-		int amount_of_stock_names = int.Parse (size_as_string);
+		int amount_of_stock_names = message [1];
 
 		List<string> stock_name_list = new List<string> ();
 
-		int start = 2 + size_of_string_size;
-		for (int index = 0; index < amount_of_stock_names; ++index) {
-			int stock_size = message [start];
+      bool last_string = false;
 
-			if (message.Length > start + stock_size + 1) {
-				throw new Exception ("Incorrectly Formatting String");
-			}
+      int start = 2;
+		for (int index = 0; index < amount_of_stock_names; ++index) {
+         if (index == amount_of_stock_names - 1)
+         {
+            last_string = true;
+         }
+
+			int stock_size = message [start++];
+
+         if (last_string == false)
+         {
+            if (start + stock_size + 1 > message.Length) {
+               Console.WriteLine("Incorrectly formatted string");
+
+               return;
+            }
+         }
 
 			string stock_name = message.Substring (start, stock_size);
 
@@ -248,15 +253,14 @@ public class Router
 		//base URL
 		string sURL = "http://finance.google.com/finance/info?client=ig&q=NASDAQ:";
 
-
 		// adds stock tickers to url with comma between them
-		for (int index = 0; index < stock_name_list.Count - 1; ++index) {
+		for (int index = 0; index < stock_name_list.Count; ++index) {
 			sURL += stock_name_list [index];
-			if (index < stock_name_list.Count - 2) {
+			if (index < stock_name_list.Count - 1) {
 				sURL += ",";
 			}
 		}
-
+      Console.WriteLine(sURL);
 		// create web request
 		WebRequest wrGETURL;
 		wrGETURL = WebRequest.Create(sURL);
@@ -268,7 +272,10 @@ public class Router
 
 		string sLine = "";
 		int i = 0;
+      Console.WriteLine(objReader.ReadToEnd());
 
+      // TYPE json_object = JSON<TYPE>.Parse(string)
+      /*
 		while (sLine!=null)
 		{
 			i++;
@@ -276,12 +283,14 @@ public class Router
 			if (sLine!=null)
 				Console.WriteLine("{0}:{1}",i,sLine);
 		}
-		Console.ReadLine();
+      */   
+      socket.Send(Encoding.ASCII.GetBytes("ok"));
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 4 -> buy_order
+	// Function Mapping: 5 -> buy_order
 	//
 	// Expected format:
 	//
@@ -350,7 +359,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 5 -> sell_order
+	// Function Mapping: 6 -> sell_order
 	//
 	// Expected format:
 	//
@@ -419,7 +428,7 @@ public class Router
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 6 -> get_history
+	// Function Mapping: 7 -> get_history
 	//
 	// Expected format:
 	//
@@ -430,12 +439,68 @@ public class Router
 	////////////////////////////////////////////////////////////////////////////////
 	private static void handle_get_history(Socket socket, string message)
 	{
+      int username_size = message[1];
 
+      if (username_size + 1 > message.Length)
+      {
+         return;
+      }
+
+      string username = message.Substring(2, username_size);
+      var result = StockApp.DatabaseManagement.GetHistory(username);
+
+      // <character representing the size of the list's size as a string>
+      // "the list's size as a string"
+      // <character representing the size of the first string>
+      // "first string (buy or sell)"
+      // <character representing the size of the second string>
+      // "String representation of a double (
+      // <character representing the size of the third string>
+      // "String representation of a double (
+      // <character representing the size of the third string>
+      // "String representation of a double (
+
+      string list_size = result.Count.ToString();
+      char list_size = list_size.Count;
+
+      StringBuilder string_builder = new StringBuilder();
+
+      foreach (var tuple in result)
+      {
+         char first_string_size = tuple.Item1.Length;
+         string first_string = tuple.Item1;
+         
+         string second_string = tuple.Item2.ToString();
+         char second_string_size = second_string.Length;
+
+         string third_string = tuple.Item3.ToString();
+         char third_string_size = third_string.Length;
+
+         string fourth_string = tuple.Item4.ToString();
+         char fourth_string_size = fourth_string.Length;
+
+         
+
+      }
+
+
+      string return_message = "";
+      if (deleted == false)
+      {
+         return_message = "0";
+      }
+
+      else
+      {
+         return_message = "1";
+      }
+
+      socket.Send(Encoding.ASCII.GetBytes(return_message));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	// Function Mapping: 7 -> get_amount_of_money
+	// Function Mapping: 8 -> get_amount_of_money
 	//
 	// Expected format:
 	//
