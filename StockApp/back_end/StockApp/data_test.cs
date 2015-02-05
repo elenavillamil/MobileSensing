@@ -130,11 +130,10 @@ namespace StockApp
          }
       }
 
-
+      // Test is not complited
       private void TestGetHistory()
       {
          string username = "jashook";
-         double amount = 10500; // 10,500
 
          List<Tuple<string, double, double, double>> amount_result = DatabaseManagment.GetHistory(username);
 
@@ -452,6 +451,45 @@ namespace StockApp
          }
       }
 
+      private void TestHandleGetStockInformation()
+      {
+         char function = (char)4;
+         string message = "";
+         char size = (char)2;
+         string stock1 = "msft";
+         string stock2 = "amzn";
+
+         message += function;
+         message += size;
+         message += (char)stock1.Length;
+         message += stock1;
+         message += (char)stock2.Length;
+         message += stock2;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break;
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+         Console.Write(returned_message);
+      }
+
       private void TestHandleGetMoney()
       {
          string username = "jashook";
@@ -506,8 +544,9 @@ namespace StockApp
          //Run(TestHandleBuyOrder);
          //Run(TestHandleSellOrder);
          //Run(TestHandleGetMoney);
+         Run(TestHandleGetStockInformation);
 
-         Run (TestGetHistory);
+         //Run (TestGetHistory);
          //Run (TestAddFavoriteAndGetFavorites);
 
          /*Run (TestProperLogin);

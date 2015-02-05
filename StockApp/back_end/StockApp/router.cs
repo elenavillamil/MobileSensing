@@ -16,6 +16,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using JS;
 
 public class Router
 {
@@ -209,32 +210,36 @@ public class Router
 	// Expected format:
 	//
 	// [<character representing the function to call>
-	//  <character representing size of size string>
-	//  "size of stock names"
+	//  <character representing amount of stocks as strings>
 	//  [<character with the size of the first string>
 	//  "stockname"]]
 	//
 	////////////////////////////////////////////////////////////////////////////////
 	private static void handle_get_stock_information(Socket socket, string message)
 	{
-		int size_of_string_size = message [1];
-
-		if (message.Length > size_of_string_size + 1) {
-			return;
-		}
-
-		string size_as_string = message.Substring (2, size_of_string_size);
-		int amount_of_stock_names = int.Parse (size_as_string);
+		int amount_of_stock_names = message [1];
 
 		List<string> stock_name_list = new List<string> ();
 
-		int start = 2 + size_of_string_size;
-		for (int index = 0; index < amount_of_stock_names; ++index) {
-			int stock_size = message [start];
+      bool last_string = false;
 
-			if (message.Length > start + stock_size + 1) {
-				throw new Exception ("Incorrectly Formatting String");
-			}
+      int start = 2;
+		for (int index = 0; index < amount_of_stock_names; ++index) {
+         if (index == amount_of_stock_names - 1)
+         {
+            last_string = true;
+         }
+
+			int stock_size = message [start++];
+
+         if (last_string == false)
+         {
+            if (start + stock_size + 1 > message.Length) {
+               Console.WriteLine("Incorrectly formatted string");
+
+               return;
+            }
+         }
 
 			string stock_name = message.Substring (start, stock_size);
 
@@ -248,15 +253,14 @@ public class Router
 		//base URL
 		string sURL = "http://finance.google.com/finance/info?client=ig&q=NASDAQ:";
 
-
 		// adds stock tickers to url with comma between them
-		for (int index = 0; index < stock_name_list.Count - 1; ++index) {
+		for (int index = 0; index < stock_name_list.Count; ++index) {
 			sURL += stock_name_list [index];
-			if (index < stock_name_list.Count - 2) {
+			if (index < stock_name_list.Count - 1) {
 				sURL += ",";
 			}
 		}
-
+      Console.WriteLine(sURL);
 		// create web request
 		WebRequest wrGETURL;
 		wrGETURL = WebRequest.Create(sURL);
@@ -268,7 +272,10 @@ public class Router
 
 		string sLine = "";
 		int i = 0;
+      Console.WriteLine(objReader.ReadToEnd());
 
+      // TYPE json_object = JSON<TYPE>.Parse(string)
+      /*
 		while (sLine!=null)
 		{
 			i++;
@@ -276,7 +283,9 @@ public class Router
 			if (sLine!=null)
 				Console.WriteLine("{0}:{1}",i,sLine);
 		}
-		Console.ReadLine();
+      */   
+      socket.Send(Encoding.ASCII.GetBytes("ok"));
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
