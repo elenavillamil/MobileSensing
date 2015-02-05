@@ -220,6 +220,7 @@ namespace StockApp
    	////////////////////////////////////////////////////////////////////////////////
    	private static void handle_get_stock_information(Socket socket, string message)
    	{
+         // Getting the list of stock names from the message string.
    		int amount_of_stock_names = message [1];
 
    		List<string> stock_name_list = new List<string> ();
@@ -227,7 +228,8 @@ namespace StockApp
          bool last_string = false;
 
          int start = 2;
-   		for (int index = 0; index < amount_of_stock_names; ++index) {
+   		for (int index = 0; index < amount_of_stock_names; ++index) 
+         {
             if (index == amount_of_stock_names - 1)
             {
                last_string = true;
@@ -251,9 +253,8 @@ namespace StockApp
    			start += stock_size;
    		}
 
-   		// Here there is a list of strings to query the API for
+         // Query Google Stock API for the information for each stock
 
-   		//base URL
    		string sURL = "http://finance.google.com/finance/info?client=ig&q=NASDAQ:";
 
    		// adds stock tickers to url with comma between them
@@ -263,7 +264,7 @@ namespace StockApp
    				sURL += ",";
    			}
    		}
-         Console.WriteLine(sURL);
+
    		// create web request
    		WebRequest wrGETURL;
    		wrGETURL = WebRequest.Create(sURL);
@@ -273,21 +274,22 @@ namespace StockApp
 
    		StreamReader objReader = new StreamReader(objStream);
 
-   		string sLine = "";
-   		int i = 0;
-         Console.WriteLine(objReader.ReadToEnd());
+   		string  response = objReader.ReadToEnd();
+         response = response.Substring (4);
 
-         // TYPE json_object = JSON<TYPE>.Parse(string)
-         /*
-   		while (sLine!=null)
-   		{
-   			i++;
-   			sLine = objReader.ReadLine();
-   			if (sLine!=null)
-   				Console.WriteLine("{0}:{1}",i,sLine);
-   		}
-         */   
-         socket.Send(Encoding.ASCII.GetBytes("ok"));
+         Console.WriteLine (response);
+
+         StockInfo[] stock_info_from_json = JSON<StockInfo[]>.Parse (response);
+
+         string to_be_send = "";
+         to_be_send += (char)stock_info_from_json.Length;
+
+         for (int i = 0; i < stock_info_from_json.Length; i++) 
+         {
+            to_be_send += stock_info_from_json [i].EncodeToSend ();
+         }
+
+         socket.Send(Encoding.ASCII.GetBytes(to_be_send));
 
    	}
 
