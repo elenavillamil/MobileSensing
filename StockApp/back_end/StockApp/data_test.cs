@@ -531,6 +531,47 @@ namespace StockApp
          }
       }
 
+      private void TestHandleGetHistory()
+      {
+         string username = "jashook";
+
+         char function = (char)7;
+         char username_size = (char)username.Length;
+
+         string message = "";
+
+         message += function;
+         message += username_size;
+         message += username;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break;
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+
+         if (returned_message == "Empty")
+         {
+            throw new Exception("Incorrect response, unable to get money.");
+         }
+      }
+
       // Constructor
      
       public DataTest() : base(1)
@@ -544,11 +585,9 @@ namespace StockApp
          //Run(TestHandleBuyOrder);
          //Run(TestHandleSellOrder);
          //Run(TestHandleGetMoney);
-         Run(TestHandleGetStockInformation);
-
+         Run(TestHandleGetHistory);
          //Run (TestGetHistory);
          //Run (TestAddFavoriteAndGetFavorites);
-
          /*Run (TestProperLogin);
          Run (TestFailedLogin);
          Run (TestSuccessfulSignUp);
