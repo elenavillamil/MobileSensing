@@ -93,16 +93,18 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     FavoriteCollectionViewCell *cell = (FavoriteCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     // Configure the cell
-    NSInteger random = arc4random() % 10;
-//    [cell setStockName:@"GOOG" withPrice:201.2 withPositive:0];
-    if (random > 5) {
-        cell.backgroundColor = [UIColor redColor];
-    } else
-    {
-        cell.backgroundColor = [UIColor green];
-    }
-    cell.stockPriceLabel.text = @"Success";
+    Stock *cellStock = nil;//(Stock *)[[self.user getFavorites] objectAtIndex:indexPath.row];
     
+    if (cellStock == nil) {
+        cellStock = [[Stock alloc] init];
+        cellStock.percentChange = -1.2;
+        cellStock.stockPrice = 100.0;
+        cellStock.stockTicker = @"Fake";
+    }
+    cell.stockNameLabel.text = cellStock.stockTicker;
+    cell.stockPercentChange.text = [NSString stringWithFormat:@"%f", cellStock.percentChange];
+    cell.stockPriceLabel.text = [NSString stringWithFormat:@"%f", cellStock.stockPrice];
+    cell.positiveChange = (cellStock.percentChange > 0);
     return cell;
 }
 
