@@ -236,7 +236,7 @@ NSOutputStream *outputStream;
     return [readString intValue];
 }
 
-+ (NSString*) getStockInfo:(NSArray *)stocks{
++ (NSMutableArray*) getStockInfo:(NSArray *)stocks{
     char function = (char)4;
     char numberOfStocs = (char)stocks.count;
     NSString* stocksString = @"";
@@ -250,9 +250,29 @@ NSOutputStream *outputStream;
 
     [self sendString:message];
     
-    NSString* toBeReturned = [self readString];
+    NSString* response = [self readString];
 
-    return toBeReturned;
+    int numberStocks = [response characterAtIndex:0];
+    int position = 1;
+    NSMutableArray* words = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < numberStocks; i ++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            int wordLength = [response characterAtIndex:position++];
+            NSRange range = {position, wordLength};
+            [words addObject:[response substringWithRange:range]];
+            position += wordLength;
+        }
+    }
+    
+    for(int i =0; i < words.count; i++)
+    {
+        NSLog(@"%@", [words objectAtIndex:i]);
+    }
+    
+    return words;
 }
 
 + (NSMutableArray*) getHistory:(NSString *) username {
