@@ -90,6 +90,26 @@ namespace StockApp
    		} else if (switch_number == 8) {
    			handle_get_amount_of_money (socket, message);
    		}
+
+         while (socket.Connected) {
+            const int ARR_SIZE = 256;
+            int bytes_transfered = 0;
+
+            //Socket Buffer
+            byte[] buffer = new byte[ARR_SIZE];
+
+            string new_message = "";
+
+            do
+            {
+               bytes_transfered = socket.Receive(buffer, buffer.Length, 0);
+
+               new_message = new_message + Encoding.ASCII.GetString(buffer, 0, bytes_transfered);
+
+            } while (bytes_transfered == ARR_SIZE);
+
+            handler_start(socket, new_message);
+         }
    	}
 
    	////////////////////////////////////////////////////////////////////////////////
@@ -214,8 +234,8 @@ namespace StockApp
    	//
    	// [<character representing the function to call>
    	//  <character representing amount of stocks as strings>
-   	//  [<character with the size of the first string>
-   	//  "stockname"]]
+   	//  <character with the size of the first string>
+   	//  "stockname"]
    	//
    	////////////////////////////////////////////////////////////////////////////////
    	private static void handle_get_stock_information(Socket socket, string message)
@@ -465,42 +485,49 @@ namespace StockApp
          // <character representing the size of the third string>
          // "String representation of a double (
 
-         string list_size = result.Count.ToString();
-         //char list_size = list_size.Count;
+         string list_size_as_string = result.Count.ToString();
+         char list_size = (char)list_size_as_string.Length;
 
-         /*StringBuilder string_builder = new StringBuilder();
+         StringBuilder string_builder = new StringBuilder();
+
+         string_builder.Append(list_size);
+         string_builder.Append(list_size_as_string);
 
          foreach (var tuple in result)
          {
-            char first_string_size = tuple.Item1.Length;
+            char first_string_size = (char)tuple.Item1.Length;
             string first_string = tuple.Item1;
             
             string second_string = tuple.Item2.ToString();
-            char second_string_size = second_string.Length;
+            char second_string_size = (char)second_string.Length;
 
             string third_string = tuple.Item3.ToString();
-            char third_string_size = third_string.Length;
+            char third_string_size = (char)third_string.Length;
 
             string fourth_string = tuple.Item4.ToString();
-            char fourth_string_size = fourth_string.Length;
+            char fourth_string_size = (char)fourth_string.Length;
+         
+            string_builder.Append(first_string_size);
+            string_builder.Append(first_string);
 
+            string_builder.Append(second_string_size);
+            string_builder.Append(second_string);
+
+            string_builder.Append(third_string_size);
+            string_builder.Append(third_string);
+
+            string_builder.Append(fourth_string_size);
+            string_builder.Append(fourth_string);
+         }
             
+         string return_message = string_builder.ToString();
 
-         }*/
-
-
-         /*string return_message = "";
-         if (deleted == false)
+         if (result.Count == 0)
          {
-            return_message = "0";
+            return_message = "Empty";
          }
 
-         else
-         {
-            return_message = "1";
-         }
-
-         socket.Send(Encoding.ASCII.GetBytes(return_message));*/
+         socket.Send(Encoding.ASCII.GetBytes(return_message));
    	}
 
    	////////////////////////////////////////////////////////////////////////////////
