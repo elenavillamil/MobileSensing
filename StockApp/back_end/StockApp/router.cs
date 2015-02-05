@@ -439,7 +439,63 @@ public class Router
 	////////////////////////////////////////////////////////////////////////////////
 	private static void handle_get_history(Socket socket, string message)
 	{
+      int username_size = message[1];
 
+      if (username_size + 1 > message.Length)
+      {
+         return;
+      }
+
+      string username = message.Substring(2, username_size);
+      var result = StockApp.DatabaseManagement.GetHistory(username);
+
+      // <character representing the size of the list's size as a string>
+      // "the list's size as a string"
+      // <character representing the size of the first string>
+      // "first string (buy or sell)"
+      // <character representing the size of the second string>
+      // "String representation of a double (
+      // <character representing the size of the third string>
+      // "String representation of a double (
+      // <character representing the size of the third string>
+      // "String representation of a double (
+
+      string list_size = result.Count.ToString();
+      char list_size = list_size.Count;
+
+      StringBuilder string_builder = new StringBuilder();
+
+      foreach (var tuple in result)
+      {
+         char first_string_size = tuple.Item1.Length;
+         string first_string = tuple.Item1;
+         
+         string second_string = tuple.Item2.ToString();
+         char second_string_size = second_string.Length;
+
+         string third_string = tuple.Item3.ToString();
+         char third_string_size = third_string.Length;
+
+         string fourth_string = tuple.Item4.ToString();
+         char fourth_string_size = fourth_string.Length;
+
+         
+
+      }
+
+
+      string return_message = "";
+      if (deleted == false)
+      {
+         return_message = "0";
+      }
+
+      else
+      {
+         return_message = "1";
+      }
+
+      socket.Send(Encoding.ASCII.GetBytes(return_message));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
