@@ -38,7 +38,7 @@ static NSString * const baseURL = @"https://www.quandl.com/api/v1/datasets/WIKI/
 
 - (void)getStockGraphData
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:baseURL, @"AAPL"]]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:baseURL, @"GOOGL"]]];
     
     // Create url connection and fire request
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -107,6 +107,11 @@ static NSString * const baseURL = @"https://www.quandl.com/api/v1/datasets/WIKI/
 {
     NSArray* allLinedStrings =[contents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
+    if ([contents containsString:@"html"]) {
+        [self.delegate failedToLoad];
+        return;
+    }
+    
     int count = 0;
     for (NSString *line in allLinedStrings)
     {
@@ -115,6 +120,11 @@ static NSString * const baseURL = @"https://www.quandl.com/api/v1/datasets/WIKI/
         if ([line containsString:@"Close"] || count > 100) {
             
         } else {
+            
+            if ([line containsString:@"error"]) {
+                [self.delegate failedToLoad];
+                return;
+            }
             GraphPoint* point = [GraphPoint pointFromDictionary:[self seperateLine:line]];
             [self.stockPricePoints addObject:point];
         }

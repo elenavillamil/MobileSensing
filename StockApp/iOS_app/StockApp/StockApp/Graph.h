@@ -12,6 +12,7 @@
 @protocol GraphDelegate <NSObject>
 
 - (void)finishedLoading;
+- (void)failedToLoad;
 
 @end
 
