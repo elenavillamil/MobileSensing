@@ -150,7 +150,45 @@ NSOutputStream *outputStream;
     char value_size = (char)[valueStr length];
     char amount_size = (char)[amountStr length];
     
+    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@%c%@%c%@", function, username_size, username, stock_name_size, stock_name, value_size, value, amount_size, amount];
+
+    [self sendString:messageToSend];
+
+    NSString* readString = [self readString];
+
+    BOOL returnValue = true;
+
+    if ([readString isEqual:@"Buy failed"]) {
+        returnValue = false;
+    }   
+
+    return true;
+}
+
++ (BOOL)sellOrder:(NSString *) username withStockName(NSString *) stockName withValue:(size_t) value withAmount:(size_t) amount {
+    char function = (char)5;
+    char username_size = (char)[username length];
+    char stock_name_size = (char)[stockName length];
     
+    NSString *valueStr = [[NSString alloc] initWithFormat:@"%u", amount];
+    NSString *amountStr = [[NSString alloc] initWithFormat:@"%u", value];
+    
+    char value_size = (char)[valueStr length];
+    char amount_size = (char)[amountStr length];
+    
+    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@%c%@%c%@", function, username_size, username, stock_name_size, stock_name, value_size, value, amount_size, amount];
+
+    [self sendString:messageToSend];
+
+    NSString* readString = [self readString];
+
+    BOOL returnValue = true;
+
+    if ([readString isEqual:@"Sell failed"]) {
+        returnValue = false;
+    }   
+
+    return true;
 }
 
 @end
