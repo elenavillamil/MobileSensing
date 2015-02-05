@@ -136,10 +136,16 @@ namespace StockApp
          string username = "jashook";
          double amount = 10500; // 10,500
 
-         List<Tuple<string, string, double, double>> amount_result = DatabaseManagment.GetHistory(username);
+         List<Tuple<string, double, double, double>> amount_result = DatabaseManagment.GetHistory(username);
 
          foreach (var t in amount_result)
-            Console.WriteLine(t);
+         {
+            Console.WriteLine(t.Item1);
+            Console.WriteLine(t.Item2);
+            Console.WriteLine(t.Item3);
+            Console.WriteLine(t.Item4);
+
+         }
       }
 
       private void TestAddFavoriteAndGetFavorites()
