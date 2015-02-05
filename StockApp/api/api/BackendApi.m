@@ -139,13 +139,13 @@ NSOutputStream *outputStream;
     return returnValue;
 }
 
-+ (BOOL)buyOrder:(NSString *) username withStockName:(NSString *) stockName withValue:(size_t) value withAmount:(size_t) amount {
++ (BOOL)buyOrder:(NSString *) username withStockName:(NSString *) stockName withValue:(double) value withAmount:(size_t) amount {
     char function = (char)5;
     char username_size = (char)[username length];
     char stock_name_size = (char)[stockName length];
     
     NSString *valueStr = [[NSString alloc] initWithFormat:@"%u", amount];
-    NSString *amountStr = [[NSString alloc] initWithFormat:@"%u", value];
+    NSString *amountStr = [[NSString alloc] initWithFormat:@"%d", value];
     
     char value_size = (char)[valueStr length];
     char amount_size = (char)[amountStr length];
