@@ -255,4 +255,50 @@ NSOutputStream *outputStream;
     return toBeReturned;
 }
 
++ (NSMutableArray*) getHistory:(NSString *) username {
+    char function = (char)7;
+    char usernameSize = (char)[username length];
+    
+    NSString * messageToSend = [NSString stringWithFormat:@"%c%c%@", function, usernameSize, username];
+
+    [self sendString:messageToSend];
+    NSString* returnedString = [self readString];
+    
+    char amountOfTuplesAsStringLength = [returnedString characterAtIndex:0];
+    
+    NSInteger amountOfTuples = [[returnedString substringWithRange:NSMakeRange(1, amountOfTuplesAsStringLength)] integerValue];
+    
+    size_t start = 2;
+    
+    NSMutableArray * arrayToReturn = [NSMutableArray new];
+    
+    for (size_t index = 0; index < amountOfTuples; ++index) {
+        char first_string_size = [returnedString characterAtIndex:start];
+        NSString* first_string =[returnedString substringWithRange:NSMakeRange(start, first_string_size)];
+        
+        // extra one to skip the length prefix
+        start += first_string_size + 1;
+        
+        char second_string_size = [returnedString characterAtIndex:start];
+        NSString* second_string =[returnedString substringWithRange:NSMakeRange(start, second_string_size)];
+        
+        start += second_string_size + 1;
+        
+        char third_string_size = [returnedString characterAtIndex:start];
+        NSString* third_string =[returnedString substringWithRange:NSMakeRange(start, third_string_size)];
+        
+        start += third_string_size + 1;
+        
+        char fourth_string_size = [returnedString characterAtIndex:start];
+        NSString* fourth_string =[returnedString substringWithRange:NSMakeRange(start, fourth_string_size)];
+        
+        [arrayToReturn addObject:first_string];
+        [arrayToReturn addObject:second_string];
+        [arrayToReturn addObject:third_string];
+        [arrayToReturn addObject:fourth_string];
+    }
+    
+    return arrayToReturn;
+}
+
 @end
