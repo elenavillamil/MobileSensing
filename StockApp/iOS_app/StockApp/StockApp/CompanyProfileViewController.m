@@ -286,6 +286,8 @@
 }
 
 - (IBAction)saveToFavorites:(id)sender {
+    //add api
+    
 }
 
 #pragma mark - Zoom methods
