@@ -175,15 +175,16 @@
 - (void)setupCompanyData
 {
     self.title = self.companyStock.stockName;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%@", self.companyStock.stockPrice];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%f", [self.graphData getValueAt:0]];
     self.percentChangeLabel.text = [NSString stringWithFormat:@"%@", self.companyStock.percentChange];
     NSInteger moneyAvaliable = [self.user getCash];
     
     
-    if ([self.companyStock.stockPrice intValue] == 0) {
+    if ([self.graphData getValueAt:0]  == 0.0) {
         return;
     }
-    NSInteger max = moneyAvaliable / [self.companyStock.stockPrice intValue];
+    
+    NSInteger max = moneyAvaliable / [self.graphData getValueAt:0];
     self.maxValueLabel.text = [NSString stringWithFormat:@"%d",max];
 }
 
@@ -232,6 +233,8 @@
     [self setupGraphScrollView];
     self.graphView.hidden = NO;
     [self.graphView reloadData];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%f",[self.graphData getValueAt:0]];
+    
     [self setupCompanyData];
 //    UIImage *graphImage = [self imageWithView:self.graphView];
 //    
@@ -347,6 +350,8 @@
     }
     
     [self.user addStockToPortfolio:s];
+    
+    [self setToBuy];
 }
 
 - (void)sellStock
@@ -363,6 +368,7 @@
     }
     
     [self.user sellStockFromPortfolio:s];
+    [self setToSell];
 }
 
 - (IBAction)saveToFavorites:(id)sender {
