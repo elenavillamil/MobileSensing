@@ -31,18 +31,24 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     [self setupCellInsets];
     self.title = @"Favorites";
     
-    if ([self.user getFavorites].count < 1)
+    if ([self.user getFavorites].count == 0)
     {
-        self.emptyView.hidden = true;
+        self.emptyView.hidden = NO;
     }
     else
     {
-        self.emptyView.hidden = false;
+        self.emptyView.hidden = YES;
     }
     
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
         
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
 }
 
 #pragma mark - Inits

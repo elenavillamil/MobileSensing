@@ -57,12 +57,20 @@
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add favorites" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lGZ-nd-B6s">
                                     <rect key="frame" x="87" y="323" width="200" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="Erc-cb-48I"/>
+                                        <constraint firstAttribute="width" constant="200" id="Wn2-gm-VTt"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="lGZ-nd-B6s" firstAttribute="leading" secondItem="ndZ-B2-lKK" secondAttribute="leading" constant="87" id="M7H-pr-LPe"/>
+                                <constraint firstItem="lGZ-nd-B6s" firstAttribute="top" secondItem="ndZ-B2-lKK" secondAttribute="top" constant="323" id="lL4-pl-Q7B"/>
+                            </constraints>
                         </view>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="favoritecollectionviewcell" reuseIdentifier="FavoriteCollectionViewCell" id="an8-xU-FDc" customClass="FavoriteCollectionViewCell">
@@ -886,6 +894,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="hpl-jI-slV"/>
+        <segue reference="whB-mK-FP2"/>
     </inferredMetricsTieBreakers>
 </document>
