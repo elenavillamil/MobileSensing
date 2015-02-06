@@ -15,7 +15,7 @@ NSMutableData *data;
 NSInputStream *inputStream;
 NSOutputStream *outputStream;
 
-#define DEBUG 1
+#define DEBUG 0
 
 + (void)initNetworkConnection{
     CFReadStreamRef readStream;
@@ -54,6 +54,8 @@ NSOutputStream *outputStream;
             
         case NSStreamEventHasSpaceAvailable: {
 
+            NSLog(@"Available space");
+            
             break;
             
         }

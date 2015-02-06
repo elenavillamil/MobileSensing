@@ -108,10 +108,10 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     
     NSArray *visiblePaths = [self.collectionView indexPathsForVisibleItems];
     
-    //for (size_t index = 0; index < [visiblePaths count]; ++index)
-    //{
+    for (size_t index = 0; index < [visiblePaths count]; ++index)
+    {
         
-    //}
+    }
 }
 
 #pragma mark <UICollectionViewDataSource>
