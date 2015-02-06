@@ -18,5 +18,7 @@
 + (NSInteger)currentAmountOfMoney:(NSString *) username;
 + (NSMutableArray*) getStockInfo:(NSArray *)stocks;
 + (NSMutableArray*) getHistory:(NSString *) username;
++ (BOOL) addFavorite:(NSString *) username withStockName:(NSString *) stockName;
++ (NSMutableArray *) getFavorites:(NSString *) username;
 
 @end
