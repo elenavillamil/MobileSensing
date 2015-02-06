@@ -58,19 +58,30 @@
     
     UITableViewCell *cell = nil;
     
-    if (indexPath.row == 0) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"TransactionTableViewCell" forIndexPath:indexPath];
-    } else if (indexPath.row == 1)
+    NSMutableArray* array = [self.user getHistory];
+    NSMutableArray* newArray = [NSMutableArray new];
+    
+    if ([array count] == 0)
     {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryStopTableViewCell" forIndexPath:indexPath];
+        return nil;
+    }
+    
+    for (size_t index = 0; index < [array count]; index += 4)
+    {
+        [newArray addObject:[array objectAtIndex:index]];
+    }
+    
+    if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"buy" ]) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TransactionTableViewCell" forIndexPath:indexPath];
+    } else if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"sell"])
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TransactionTableViewCell" forIndexPath:indexPath];
         
-    } else if (indexPath.row == 2)
+    } else if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"favorite"])
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryFavoriteTableViewCell" forIndexPath:indexPath];
 
     }
-    
-    // Configure the cell...
     
     return cell;
 }
