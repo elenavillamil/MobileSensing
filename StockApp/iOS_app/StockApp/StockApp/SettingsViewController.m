@@ -9,6 +9,7 @@
 #import "SettingsViewController.h"
 #import "UIColor+SAColor.h"
 #import "User.h"
+#import "BackendApi.h"
 
 @interface SettingsViewController ()
 
@@ -79,6 +80,7 @@
 - (IBAction)onResetButtonTouchUpInside:(id)sender {
     // Call reset on db
     [self.user reset];
+    [BackendApi resetAccount:[self.user getUsername]];
 }
 
 - (IBAction)onSignOutButtonTouchUpInside:(id)sender {
