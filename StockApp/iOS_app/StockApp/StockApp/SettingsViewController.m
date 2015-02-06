@@ -58,16 +58,15 @@
 }
 */
 
-- (IBAction)onSimulationSwitchValueChange:(id)sender {
-    if ([self.simulationSwitch isOn])
-    {
-        // Hide all views except the stock info
-        // In company view hide the lower part
-        
+- (IBAction)onGreenBackgroundSwitchValueChange:(id)sender {
+    if ([self.greenBackgroundSwitch isOn])
+    {        
+        self.view.backgroundColor = [UIColor colorWithRed:158.0/255.0 green:233.0/255.0
+                                                     blue:127.0/255.0 alpha:1];
     }
     else
     {
-        
+        self.view.backgroundColor = [UIColor whiteColor];
     }
 }
 

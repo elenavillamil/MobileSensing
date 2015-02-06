@@ -10,7 +10,7 @@
 
 @interface SettingsViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UISwitch *simulationSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *greenBackgroundSwitch;
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *timerSegmentedControl;
 

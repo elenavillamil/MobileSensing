@@ -55,7 +55,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add favorites" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lGZ-nd-B6s">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search &amp; Add favorites" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lGZ-nd-B6s">
                                     <rect key="frame" x="87" y="323" width="200" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -620,18 +620,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simulation" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GF1-wO-doO">
-                                <rect key="frame" x="49" y="107" width="160" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Green Background" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GF1-wO-doO">
+                                <rect key="frame" x="29" y="108" width="160" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="160" id="D1S-fp-Pzt"/>
-                                    <constraint firstAttribute="height" constant="30" id="DWb-2O-5cs"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="kMe-Dy-N6g"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160" id="kcp-oo-7FH"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Refresh Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JDo-db-GvX">
-                                <rect key="frame" x="49" y="187" width="160" height="30"/>
+                                <rect key="frame" x="29" y="187" width="160" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="JWY-yx-bYF"/>
                                     <constraint firstAttribute="width" constant="160" id="tLT-ml-4lb"/>
@@ -641,7 +641,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NVP-9n-CMU">
-                                <rect key="frame" x="254" y="188" width="89" height="29"/>
+                                <rect key="frame" x="225" y="188" width="118" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="118" id="Z1d-So-Eru"/>
+                                    <constraint firstAttribute="height" constant="28" id="hIV-Fg-3yg"/>
+                                </constraints>
                                 <segments>
                                     <segment title="5"/>
                                     <segment title="10"/>
@@ -651,17 +655,12 @@
                                     <action selector="onTimerSegmentedControlValueChange:" destination="JSB-EG-CJA" eventType="valueChanged" id="DT5-Jn-b4v"/>
                                 </connections>
                             </segmentedControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nVC-29-Vhg">
-                                <rect key="frame" x="112" y="316" width="150" height="30"/>
-                                <state key="normal" title="Reset">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onResetButtonTouchUpInside:" destination="JSB-EG-CJA" eventType="touchUpInside" id="wky-1s-beS"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kiy-EX-bFf">
-                                <rect key="frame" x="112" y="402" width="150" height="30"/>
+                                <rect key="frame" x="112" y="319" width="150" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="amz-Nf-FrY"/>
+                                    <constraint firstAttribute="height" constant="30" id="pY4-zZ-L5q"/>
+                                </constraints>
                                 <state key="normal" title="Sign Out">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -669,39 +668,50 @@
                                     <action selector="onSignOutButtonTouchUpInside:" destination="JSB-EG-CJA" eventType="touchUpInside" id="CIJ-Kg-6Vp"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1JM-KB-0Fj">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1JM-KB-0Fj">
                                 <rect key="frame" x="274" y="107" width="51" height="31"/>
+                                <color key="backgroundColor" red="0.7390309343" green="0.7390309343" blue="0.7390309343" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="pAu-hZ-N1J"/>
+                                    <constraint firstAttribute="width" constant="49" id="udr-5j-Dzl"/>
+                                </constraints>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="onTintColor" red="0.53038533610000005" green="0.79588857319999995" blue="0.42577134750000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <action selector="onSimulationSwitchValueChange:" destination="JSB-EG-CJA" eventType="valueChanged" id="efw-87-WXe"/>
+                                    <action selector="onGreenBackgroundSwitchValueChange:" destination="JSB-EG-CJA" eventType="valueChanged" id="GR2-m6-Poj"/>
                                 </connections>
                             </switch>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nVC-29-Vhg">
+                                <rect key="frame" x="112" y="266" width="150" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="BuZ-aB-3KS"/>
+                                    <constraint firstAttribute="height" constant="30" id="hbz-LA-tnO"/>
+                                </constraints>
+                                <state key="normal" title="Reset">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onResetButtonTouchUpInside:" destination="JSB-EG-CJA" eventType="touchUpInside" id="wky-1s-beS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="NVP-9n-CMU" firstAttribute="leading" secondItem="JDo-db-GvX" secondAttribute="trailing" constant="45" id="2EG-iP-jNM"/>
-                            <constraint firstItem="GF1-wO-doO" firstAttribute="top" secondItem="7EN-65-5rO" secondAttribute="bottom" constant="43" id="591-ag-4k3"/>
-                            <constraint firstItem="Kiy-EX-bFf" firstAttribute="top" secondItem="nVC-29-Vhg" secondAttribute="bottom" constant="56" id="5wZ-JI-hQa"/>
-                            <constraint firstItem="JDo-db-GvX" firstAttribute="top" secondItem="GF1-wO-doO" secondAttribute="bottom" constant="50" id="9Me-ve-a6s"/>
-                            <constraint firstItem="JDo-db-GvX" firstAttribute="top" secondItem="GF1-wO-doO" secondAttribute="bottom" constant="50" id="B00-Es-zxA"/>
-                            <constraint firstItem="nVC-29-Vhg" firstAttribute="top" secondItem="NVP-9n-CMU" secondAttribute="bottom" constant="100" id="B0g-w8-VN7"/>
-                            <constraint firstItem="NVP-9n-CMU" firstAttribute="top" secondItem="1JM-KB-0Fj" secondAttribute="bottom" constant="50" id="H9U-FM-uNr"/>
-                            <constraint firstItem="1JM-KB-0Fj" firstAttribute="leading" secondItem="GF1-wO-doO" secondAttribute="trailing" constant="65" id="MIm-Sb-osC"/>
-                            <constraint firstItem="NVP-9n-CMU" firstAttribute="leading" secondItem="JDo-db-GvX" secondAttribute="trailing" constant="45" id="PwB-8h-tit"/>
-                            <constraint firstItem="NVP-9n-CMU" firstAttribute="top" secondItem="1JM-KB-0Fj" secondAttribute="bottom" constant="50" id="T6D-nQ-BM9"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="NVP-9n-CMU" secondAttribute="trailing" constant="16" id="TA9-T1-cnK"/>
+                            <constraint firstItem="nVC-29-Vhg" firstAttribute="top" secondItem="JDo-db-GvX" secondAttribute="bottom" constant="49" id="7Lk-6S-RFl"/>
+                            <constraint firstItem="JDo-db-GvX" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="13" id="DfG-nE-tTb"/>
+                            <constraint firstItem="NVP-9n-CMU" firstAttribute="centerY" secondItem="JDo-db-GvX" secondAttribute="centerY" id="Lu9-jw-YhF"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="NVP-9n-CMU" secondAttribute="trailing" constant="16" id="ar6-UL-4kJ"/>
+                            <constraint firstItem="GF1-wO-doO" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="13" id="eqf-1D-hmC"/>
+                            <constraint firstItem="GF1-wO-doO" firstAttribute="top" secondItem="7EN-65-5rO" secondAttribute="bottom" constant="44" id="fHh-eR-KEK"/>
                             <constraint firstAttribute="trailingMargin" secondItem="1JM-KB-0Fj" secondAttribute="trailing" constant="36" id="fwa-7V-5kX"/>
-                            <constraint firstItem="Kiy-EX-bFf" firstAttribute="top" secondItem="nVC-29-Vhg" secondAttribute="bottom" constant="56" id="gWQ-T5-wei"/>
                             <constraint firstAttribute="trailingMargin" secondItem="nVC-29-Vhg" secondAttribute="trailing" constant="97" id="isB-OV-Ebv"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Kiy-EX-bFf" secondAttribute="trailing" constant="97" id="jnu-Yl-cU3"/>
-                            <constraint firstItem="rLx-SW-nI4" firstAttribute="top" secondItem="Kiy-EX-bFf" secondAttribute="bottom" constant="191" id="ncV-Bf-87d"/>
+                            <constraint firstItem="NVP-9n-CMU" firstAttribute="top" secondItem="1JM-KB-0Fj" secondAttribute="bottom" constant="50" id="kEG-Qk-hYu"/>
+                            <constraint firstItem="JDo-db-GvX" firstAttribute="top" secondItem="GF1-wO-doO" secondAttribute="bottom" constant="49" id="kxb-Lr-rsa"/>
+                            <constraint firstItem="Kiy-EX-bFf" firstAttribute="top" secondItem="nVC-29-Vhg" secondAttribute="bottom" constant="23" id="lUf-LU-8Z1"/>
                             <constraint firstItem="Kiy-EX-bFf" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="96" id="nhU-A5-bAd"/>
-                            <constraint firstItem="nVC-29-Vhg" firstAttribute="top" secondItem="JDo-db-GvX" secondAttribute="bottom" constant="99" id="rCu-yq-6ex"/>
-                            <constraint firstItem="1JM-KB-0Fj" firstAttribute="leading" secondItem="GF1-wO-doO" secondAttribute="trailing" constant="65" id="sG0-s6-E13"/>
-                            <constraint firstItem="GF1-wO-doO" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="33" id="suj-5v-dcs"/>
-                            <constraint firstItem="nVC-29-Vhg" firstAttribute="top" secondItem="JDo-db-GvX" secondAttribute="bottom" constant="99" id="tEF-Od-aVU"/>
                             <constraint firstItem="nVC-29-Vhg" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="96" id="tgg-Wi-LXB"/>
-                            <constraint firstItem="JDo-db-GvX" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="33" id="vN3-3e-bdm"/>
                         </constraints>
                     </view>
                     <toolbarItems>
@@ -711,7 +721,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="simulationSwitch" destination="1JM-KB-0Fj" id="Y8S-kA-GlI"/>
+                        <outlet property="greenBackgroundSwitch" destination="1JM-KB-0Fj" id="aw9-Yn-beM"/>
                         <outlet property="timerSegmentedControl" destination="NVP-9n-CMU" id="Vav-6Z-8NM"/>
                     </connections>
                 </viewController>
