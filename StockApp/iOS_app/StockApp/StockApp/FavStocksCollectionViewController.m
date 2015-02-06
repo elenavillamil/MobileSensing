@@ -34,13 +34,15 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     self.title = @"Favorites";
     self.user.delegate = self;
     
-    if ([self.user getFavorites].count == 0)
+    if ([self.user getFavorites].count > 0)
     {
-        self.emptyView.hidden = NO;
+        self.emptyView.hidden = YES;
+        self.addFavoritesLabel.hidden = YES;
     }
     else
     {
-        self.emptyView.hidden = YES;
+        self.emptyView.hidden = NO;
+        self.addFavoritesLabel.hidden = NO;
     }
     
     // Uncomment the following line to preserve selection between presentations
@@ -51,7 +53,20 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if ([self.user getFavorites].count > 0)
+    {
+        self.emptyView.hidden = YES;
+        self.addFavoritesLabel.hidden = YES;
+
+    }
+    else
+    {
+        self.emptyView.hidden = NO;
+        self.addFavoritesLabel.hidden = NO;
+
+    }
     
+    [self.collectionView reloadData];
 }
 
 #pragma mark - Inits
