@@ -304,6 +304,11 @@ NSOutputStream *outputStream;
     
     char amountOfTuplesAsStringLength = [returnedString characterAtIndex:0];
     
+    if ([returnedString isEqualToString:@"Empty"])
+    {
+        return nil;
+    }
+    
     NSInteger amountOfTuples = [[returnedString substringWithRange:NSMakeRange(1, amountOfTuplesAsStringLength)] integerValue];
     
     size_t start = 1 + (int)amountOfTuplesAsStringLength;
