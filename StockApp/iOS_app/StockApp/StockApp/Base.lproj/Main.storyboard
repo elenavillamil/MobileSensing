@@ -228,14 +228,21 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oVZ-LB-CAC" id="4Sd-NH-3h4">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stop" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1zp-3b-5M0">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sell" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1zp-3b-5M0">
                                             <rect key="frame" x="20" y="25" width="36.5" height="20.5"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="36.5" id="C1s-YV-jfh"/>
+                                                <constraint firstAttribute="height" constant="20.5" id="QeM-pR-mjZ"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1uZ-Bu-Acj">
-                                            <rect key="frame" x="316" y="8" width="36" height="20.5"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1uZ-Bu-Acj">
+                                            <rect key="frame" x="275" y="8" width="90" height="20.5"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="90" id="i4E-O9-pTa"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
@@ -247,7 +254,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ujy-Rt-goY">
-                                            <rect key="frame" x="312.5" y="36.5" width="39.5" height="20.5"/>
+                                            <rect key="frame" x="301" y="36" width="39.5" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
@@ -259,12 +266,13 @@
                                         <constraint firstItem="1zp-3b-5M0" firstAttribute="leading" secondItem="4Sd-NH-3h4" secondAttribute="leadingMargin" constant="12" id="HpE-fh-S3o"/>
                                         <constraint firstItem="1uZ-Bu-Acj" firstAttribute="top" secondItem="4Sd-NH-3h4" secondAttribute="topMargin" id="S9v-Ex-2p3"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Ujy-Rt-goY" secondAttribute="bottom" constant="6.5" id="U3O-yf-Qj7"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="1uZ-Bu-Acj" secondAttribute="trailing" constant="15" id="UOC-E8-Adl"/>
+                                        <constraint firstItem="Ujy-Rt-goY" firstAttribute="top" secondItem="1uZ-Bu-Acj" secondAttribute="bottom" constant="7.5" id="V2z-o0-V7U"/>
                                         <constraint firstItem="1zp-3b-5M0" firstAttribute="top" secondItem="4Sd-NH-3h4" secondAttribute="topMargin" constant="17" id="YSr-AT-24e"/>
                                         <constraint firstItem="Ujy-Rt-goY" firstAttribute="top" secondItem="1uZ-Bu-Acj" secondAttribute="bottom" constant="7.5" id="bbg-Ym-CvM"/>
                                         <constraint firstAttribute="centerX" secondItem="09t-vm-rjJ" secondAttribute="centerX" constant="0.5" id="dU5-oI-1vV"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Ujy-Rt-goY" secondAttribute="trailing" constant="15" id="lnt-Nh-wKa"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="1zp-3b-5M0" secondAttribute="bottom" constant="18" id="r95-z3-aNJ"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="1uZ-Bu-Acj" secondAttribute="trailing" constant="2" id="tPW-zU-Ql8"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Ujy-Rt-goY" secondAttribute="trailing" constant="26.5" id="z0H-C7-diG"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
