@@ -63,8 +63,9 @@ static NSString * const test = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc
 
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
     // Tells the table data source to reload when text changes
-    [self searchForStock:searchString];
     // Return YES to cause the search result table view to be reloaded.
+    [self searchForStock:searchString];
+
     return YES;
 }
 
@@ -75,7 +76,13 @@ static NSString * const test = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc
     return YES;
 }
 
+
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [self.tableView reloadData];
+}
+
+- (void)searchBarResultsListButtonClicked:(UISearchBar *)searchBar
 {
     [self.tableView reloadData];
 }
@@ -84,11 +91,8 @@ static NSString * const test = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc
 {
     NSString *urlString = [[baseURL stringByAppendingString:name] stringByAppendingString:endURL];
     NSURL *url = [NSURL URLWithString:urlString];
-    if (self.connection != nil) {
-        self.connection = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:url] delegate:self startImmediately:YES];
-    } else {
-        self.connection = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:url] delegate:self startImmediately:YES];
-    }
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:url] delegate:self];
+    [connection start];
 }
 
 #pragma mark - URL connection
@@ -126,6 +130,7 @@ static NSString * const test = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc
     else {
         [self parseJSON:jsonArray];
     }
+    self.responseData = [[NSMutableData alloc] init];
 }
 
 - (void)parseJSON:(NSDictionary *)jsonResponse
@@ -170,6 +175,10 @@ static NSString * const test = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SearchTableViewCell *cell = (SearchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"SearchTableViewCell"];
+    
+    if (!cell) {
+        return [[UITableViewCell alloc] init];
+    }
     
     NSDictionary *cellStock = (NSDictionary *)[self.searchResults objectAtIndex:indexPath.row];
     cell.companyNameLabel.text = [cellStock objectForKey:@"name"];
