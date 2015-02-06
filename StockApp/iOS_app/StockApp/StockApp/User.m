@@ -63,6 +63,7 @@
 {
     if (!_portfolio) {
         _portfolio = [[NSMutableArray alloc] init];
+        [self readPortfolioFromFile];
     }
     return _portfolio;
 }
@@ -82,9 +83,105 @@
     [self.favorites addObject:stock];
 }
 
-- (void)addStockToPortfolio:(Stock *)stock
+- (void)addStockToPortfolio:(OwnedStock *)stock
 {
+    
+    for (OwnedStock *s in self.portfolio) {
+        if ([s.stockTicker isEqualToString:stock.stockTicker]) {
+            s.amount += stock.amount;
+            [self writePortfolioToFile];
+            
+            [BackendApi buyOrder:[self getUsername] withStockName:s.stockTicker withValue:[stock.stockPrice integerValue]  withAmount:stock.amount];
+            return;
+        }
+    }
     [self.portfolio addObject:stock];
+    
+    [self writePortfolioToFile];
+}
+
+- (BOOL)sellStockFromPortfolio:(OwnedStock *)stock
+{
+    for (OwnedStock *owenedStock in self.portfolio) {
+        if ([stock.stockTicker isEqualToString:owenedStock.stockTicker]) {
+            if (stock.amount > owenedStock.amount) {
+                //selling more then owned
+                return NO;
+            } else if (stock.amount == owenedStock.amount) {
+                [self.portfolio removeObject:owenedStock];
+                [self writePortfolioToFile];
+                [BackendApi sellOrder:[self getUsername] withStockName:stock.stockTicker withValue:[stock.stockPrice integerValue] withAmount:stock.amount];
+                
+                return YES;
+            } else {
+                owenedStock.amount -= stock.amount;
+                [self writePortfolioToFile];
+                [BackendApi sellOrder:[self getUsername] withStockName:stock.stockTicker withValue:[stock.stockPrice integerValue] withAmount:stock.amount];
+                return YES;
+            }
+        }
+    }
+    
+    //doesnt own stock
+    return NO;
+}
+
+- (void)writePortfolioToFile
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[self dataFilePath]]) {
+        [[NSFileManager defaultManager] createFileAtPath: [self dataFilePath] contents:nil attributes:nil];
+    }
+    //ticker, buyprice, amount
+    NSString *writeString = @"";
+    for (OwnedStock *stock in self.portfolio) {
+       writeString = [writeString stringByAppendingString:[NSString stringWithFormat:@"%@,%f,%d, \n", stock.stockTicker, stock.purchasePrice,stock.amount]];
+    }
+
+    //Moved this stuff out of the loop so that you write the complete string once and only once.
+
+    NSFileHandle *handle;
+    handle = [NSFileHandle fileHandleForWritingAtPath: [self dataFilePath] ];
+    [handle writeData:[writeString dataUsingEncoding:NSUTF8StringEncoding]];
+    
+}
+
+-(NSString *)dataFilePath {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return [documentsDirectory stringByAppendingPathComponent:@"portfolio.csv"];
+}
+
+- (NSMutableArray *)readPortfolioFromFile
+{
+    NSMutableArray *array = nil;
+    
+    int column = 0;
+    NSArray  *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* savePath = [paths objectAtIndex:0];
+    savePath = [savePath stringByAppendingPathComponent:@"portfolio.csv"];
+    
+    NSString *fullPath = savePath;
+    
+    NSMutableArray *titleArray=[[NSMutableArray alloc]init];
+    
+    NSString *fileDataString=[NSString stringWithContentsOfFile:fullPath encoding:NSUTF8StringEncoding error:nil];
+    NSArray *linesArray=[fileDataString componentsSeparatedByString:@"\n"];
+    
+    
+    int k=0;
+    for (id string in linesArray)
+        if(k<[linesArray count]-1){
+            
+            NSString *lineString=[linesArray objectAtIndex:k];
+            NSArray *columnArray=[lineString componentsSeparatedByString:@","];
+            [titleArray addObject:[columnArray objectAtIndex:column]];
+            k++;
+            
+        }
+    
+    NSLog(@"%@",titleArray);
+    
+    return titleArray;
 }
 
 - (void)addHistoryItem: (id)object
@@ -175,6 +272,11 @@
 -(void)removeFavorite:(Stock *)stock
 {
     [self.favorites removeObject:stock];
+}
+
+- (NSInteger)getCash
+{
+    return [BackendApi currentAmountOfMoney:[self getUsername]];
 }
 
 @end

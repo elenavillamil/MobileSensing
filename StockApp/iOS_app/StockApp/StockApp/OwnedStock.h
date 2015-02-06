@@ -8,8 +8,9 @@
 
 #import "Stock.h"
 
-@interface OwnedStock : Stock {
-    NSInteger amount;
-}
+@interface OwnedStock : Stock
+
+@property (nonatomic) NSInteger amount;
+@property (nonatomic) double purchasePrice;
 
 @end

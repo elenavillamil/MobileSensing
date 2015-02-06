@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Stock.h"
+#import "OwnedStock.h"
 
 @protocol UserDelegate <NSObject>
 
@@ -22,7 +23,8 @@
 + (User *)sharedInstance;
 
 - (void)addFavorite:(Stock *)stock;
-- (void)addStockToPortfolio:(Stock *)stock;
+- (void)addStockToPortfolio:(OwnedStock *)stock;
+- (BOOL)sellStockFromPortfolio:(OwnedStock *)stock;
 - (void)addHistoryItem: (id)object;
 
 - (NSMutableArray *)getFavorites;
@@ -38,5 +40,7 @@
 -(NSString*)getPassword;
 -(void)downloadHistory;
 -(void)removeFavorite:(Stock*)stock;
+- (NSInteger)getCash;
+
 
 @end
