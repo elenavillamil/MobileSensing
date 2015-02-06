@@ -91,6 +91,8 @@ namespace StockApp
             handle_get_favorites (socket, message);
          } else if (switch_number == 10) {
             handle_add_favorite (socket, message);
+         } else if (switch_number == 11) {
+            handle_reset (socket, message);
          }
 
          while (socket.Connected) {
@@ -629,11 +631,36 @@ namespace StockApp
 
          string stock_name = message.Substring (2 + username_size + 1, stock_size);
 
-         Console.WriteLine (username);
-
          DatabaseManagment.AddFavorite (username, stock_name);
 
-         socket.Send(Encoding.ASCII.GetBytes("0"));
+         socket.Send(Encoding.ASCII.GetBytes("1"));
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////
+      //
+      // Function Mapping: 11 -> add_favorite
+      //
+      // Expected format:
+      //
+      // [<character representing the function to call>
+      //  <character with the size of the username>
+      //  "username"
+      //
+      ////////////////////////////////////////////////////////////////////////////////
+      private static void handle_reset (Socket socket, string message)
+      {
+         int username_size = message[1];
+
+         if (username_size + 1 > message.Length)
+         {
+            return;
+         }
+
+         string username = message.Substring(2, username_size);
+
+         double result = DatabaseManagment.ResetOrder (username, 10000);
+
+         socket.Send(Encoding.ASCII.GetBytes("1"));
       }
    }
 }  

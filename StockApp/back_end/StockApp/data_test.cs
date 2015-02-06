@@ -451,6 +451,26 @@ namespace StockApp
          }
       }
 
+      private void TestHandleResetOrder()
+      {
+         char function = (char)11;
+         string message = "";
+         message += function;
+         string username = "elena2";
+         message += (char)username.Length;
+         message += username;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+      }
+
       private void TestHandleAddAndGetFavorites()
       {
          char function = (char)10;
@@ -638,7 +658,8 @@ namespace StockApp
          //Run(TestHandleSellOrder);
          //Run(TestHandleGetMoney);
          //Run(TestHandleGetHistory);
-         Run (TestHandleAddAndGetFavorites);
+         //Run (TestHandleAddAndGetFavorites);
+         Run (TestHandleResetOrder);
          //Run (TestGetHistory);
          //Run (TestAddFavoriteAndGetFavorites);
          /*Run (TestProperLogin);
