@@ -10,6 +10,8 @@
 		585E1916C681CBA91C505E93 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4414EA3B204A4E63575A042E /* libPods.a */; };
 		EA03704F1A82E87E00956A6F /* Graph.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03704E1A82E87E00956A6F /* Graph.m */; };
 		EA0370521A82F18700956A6F /* GraphPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0370511A82F18700956A6F /* GraphPoint.m */; };
+		EA0370591A844D8C00956A6F /* SearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0370581A844D8C00956A6F /* SearchTableViewCell.m */; };
+		EA03705C1A84503F00956A6F /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA03705B1A84503F00956A6F /* SearchTableViewController.m */; };
 		EA0DCCD51A79812C00D7DF4C /* UIColor+SAColor.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCD41A79812C00D7DF4C /* UIColor+SAColor.m */; };
 		EA0DCCD81A79873700D7DF4C /* CompanyProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCD71A79873700D7DF4C /* CompanyProfileViewController.m */; };
 		EA0DCCDC1A79A60400D7DF4C /* Stock.m in Sources */ = {isa = PBXBuildFile; fileRef = EA0DCCDB1A79A60400D7DF4C /* Stock.m */; };
@@ -52,6 +54,10 @@
 		EA03704E1A82E87E00956A6F /* Graph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Graph.m; sourceTree = "<group>"; };
 		EA0370501A82F18700956A6F /* GraphPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphPoint.h; sourceTree = "<group>"; };
 		EA0370511A82F18700956A6F /* GraphPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphPoint.m; sourceTree = "<group>"; };
+		EA0370571A844D8C00956A6F /* SearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewCell.h; sourceTree = "<group>"; };
+		EA0370581A844D8C00956A6F /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
+		EA03705A1A84503F00956A6F /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
+		EA03705B1A84503F00956A6F /* SearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewController.m; sourceTree = "<group>"; };
 		EA0DCCD31A79812C00D7DF4C /* UIColor+SAColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SAColor.h"; sourceTree = "<group>"; };
 		EA0DCCD41A79812C00D7DF4C /* UIColor+SAColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+SAColor.m"; sourceTree = "<group>"; };
 		EA0DCCD61A79873700D7DF4C /* CompanyProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyProfileViewController.h; sourceTree = "<group>"; };
@@ -239,6 +245,8 @@
 				EA4D24401A78A4E8002C4201 /* SettingsViewController.m */,
 				EA77DE101A79694F00B7BD08 /* LoginViewController.h */,
 				EA77DE111A79694F00B7BD08 /* LoginViewController.m */,
+				EA03705A1A84503F00956A6F /* SearchTableViewController.h */,
+				EA03705B1A84503F00956A6F /* SearchTableViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -256,6 +264,8 @@
 				EA4D244A1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m */,
 				EA4D244C1A78BB2B002C4201 /* HistoryStopTableViewCell.h */,
 				EA4D244D1A78BB2B002C4201 /* HistoryStopTableViewCell.m */,
+				EA0370571A844D8C00956A6F /* SearchTableViewCell.h */,
+				EA0370581A844D8C00956A6F /* SearchTableViewCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -400,6 +410,7 @@
 				EA0DCCD81A79873700D7DF4C /* CompanyProfileViewController.m in Sources */,
 				EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */,
 				EA0DCCD51A79812C00D7DF4C /* UIColor+SAColor.m in Sources */,
+				EA0370591A844D8C00956A6F /* SearchTableViewCell.m in Sources */,
 				EA4D243E1A78A49D002C4201 /* PortfilioTableViewController.m in Sources */,
 				EA0DCCDF1A79AAF900D7DF4C /* User.m in Sources */,
 				EA77DE121A79694F00B7BD08 /* LoginViewController.m in Sources */,
@@ -415,6 +426,7 @@
 				EA4D24451A78A5F9002C4201 /* PortfolioTableViewCell.m in Sources */,
 				EA4D244B1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m in Sources */,
 				EA4D240C1A789302002C4201 /* main.m in Sources */,
+				EA03705C1A84503F00956A6F /* SearchTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

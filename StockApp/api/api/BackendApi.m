@@ -21,8 +21,8 @@ NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.116.175", 8080, &readStream, &writeStream);
-        
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.43.161.14", 8080, &readStream, &writeStream);
+    
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
     [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];

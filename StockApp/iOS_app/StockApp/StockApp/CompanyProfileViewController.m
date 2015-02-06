@@ -55,15 +55,10 @@
     self.graphData.delegate = self;
     [self.graphData getStockGraphData];
     self.graphView.hidden = YES;
-    self.amaountSelectedBase = @"Buy: %dl";
+    self.amaountSelectedBase = @"Buy: %d";
     self.amountToBuySell = 0;
     
     [self showLoading];
-}
-
-- (void)addRightNavigationButton
-{
-    
 }
 
 - (void)showLoading
