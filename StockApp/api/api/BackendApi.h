@@ -20,6 +20,6 @@
 + (NSMutableArray*) getHistory:(NSString *) username;
 + (BOOL) addFavorite:(NSString *) username withStockName:(NSString *) stockName;
 + (NSMutableArray *) getFavorites:(NSString *) username;
-+ (BOOL) resetAccount:(NSString *)username
++ (BOOL) resetAccount:(NSString *)username;
 
 @end

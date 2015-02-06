@@ -21,7 +21,7 @@ NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.43.161.14", 8080, &readStream, &writeStream);
         
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -380,6 +380,24 @@ NSOutputStream *outputStream;
     }
     
     return returnArray;
+}
+
++ (BOOL) resetAccount:(NSString *)username {
+    char function = (char)11;
+    char usernameSize = (char)[username length];
+    
+    NSString * messageToSend = [NSString stringWithFormat:@"%c%c%@", function, usernameSize, username];
+    
+    [self sendString:messageToSend];
+    NSString* returnedString = [self readString];
+    
+    if ([returnedString isEqualToString:@"0"])
+    {
+        return false;
+    }
+    
+    return true;
+    
 }
 
 @end
