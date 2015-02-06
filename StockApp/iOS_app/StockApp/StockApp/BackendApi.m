@@ -161,6 +161,7 @@ NSOutputStream *outputStream;
     
     NSString* readString = [self readString];
     
+    
     return readString;
 }
 
@@ -402,6 +403,25 @@ NSOutputStream *outputStream;
     }
     
     return false;
+}
+
++ (BOOL) removeFavorite:(NSString *)username withStockName:(NSString *)stockName {
+    char routine = (char) 12; // remove_favorite code
+    char usernameSize = (char)[username length];
+    char stockNamesize = (char)[stockName length];
+    
+    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@", routine, usernameSize, username, stockNamesize, stockName];
+    
+    [self sendString:messageToSend];
+    
+    NSString* readString = [self readString];
+    
+    if ([readString isEqualToString:@"Remove Failed"])
+    {
+        return false;
+    }
+    
+    return true;
 }
 
 @end

@@ -145,6 +145,8 @@ namespace StockApp
             handle_add_favorite (socket, message);
          } else if (switch_number == 11) {
             handle_reset (socket, message);
+         } else if (switch_number == 12) {
+            handle_remove_favorite (socket, message);
          }
       }
 
@@ -693,6 +695,52 @@ namespace StockApp
          double result = DatabaseManagment.ResetOrder (username, 10000);
 
          socket.Send(Encoding.ASCII.GetBytes("1"));
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////
+      //
+      // Function Mapping: 12 -> remove_favorite
+      //
+      // Expected format:
+      //
+      // [<character representing the function to call>
+      //  <character with the size of the username>
+      //  "username"
+      //  <size of stock>
+      //  "stock name
+      //
+      ////////////////////////////////////////////////////////////////////////////////
+      private static void handle_remove_favorite (Socket socket, string message)
+      {
+         int username_size = message[1];
+
+         if (username_size + 1 > message.Length)
+         {
+            return;
+         }
+
+         int stock_name_size = message[username_size + 2];
+
+         if (username_size + stock_name_size + 3 > message.Length)
+         {
+            return;
+         }
+
+         string username = message.Substring(2, username_size);
+         string stock_name = message.Substring(username_size + 3, stock_name_size);
+
+         bool removed = DatabaseManagment.RemoveFavorite(username, stock_name);
+
+         string returned_message = "";
+
+         if (removed == false)
+         {
+            returned_message = "Remove Failed";
+         }
+
+         returned_message = "1";
+
+         socket.Send(Encoding.ASCII.GetBytes(returned_message));
       }
    }
 }  

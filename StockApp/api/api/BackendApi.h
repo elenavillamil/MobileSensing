@@ -21,5 +21,6 @@
 + (BOOL) addFavorite:(NSString *) username withStockName:(NSString *) stockName;
 + (NSMutableArray *) getFavorites:(NSString *) username;
 + (BOOL) resetAccount:(NSString *)username;
++ (BOOL) removeFavorite:(NSString *)username withStockName:(NSString *) stockName;
 
 @end
