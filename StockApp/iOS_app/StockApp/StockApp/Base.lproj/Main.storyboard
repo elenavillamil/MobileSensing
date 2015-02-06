@@ -329,7 +329,8 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="ShH-WR-SWx" kind="modal" id="VdS-io-S45"/>
+                                    <outlet property="amountLabel" destination="XcT-qn-Jrq" id="ybu-7v-GPE"/>
+                                    <outlet property="stockTickerLabel" destination="cKt-Lx-Mtd" id="Hyf-fO-miK"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -342,7 +343,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x1k-4Y-DNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1172.5" y="978.5"/>
+            <point key="canvasLocation" x="1106.5" y="998.5"/>
         </scene>
         <!--Company Profile View Controller-->
         <scene sceneID="Sdg-0x-FdM">
