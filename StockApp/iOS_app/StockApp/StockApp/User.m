@@ -128,12 +128,19 @@
 
 - (NSString *)filePath
 {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults valueForKey:@"filePath"]) {
+        return [self.loginInformation valueForKey:@"filePath"];
+    }
+    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     NSString *filePath = [documentsPath stringByAppendingPathComponent:@"portfolio.csv"];
     if ([fileManager fileExistsAtPath:filePath]) {
         return filePath;
     }
+    
+    [defaults setObject:filePath forKey:@"filePath"];
     return nil;
 }
 
