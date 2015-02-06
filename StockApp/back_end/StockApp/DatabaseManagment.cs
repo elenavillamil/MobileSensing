@@ -212,9 +212,9 @@ namespace StockApp
                Dictionary<string, object> elements = new Dictionary<string,object>();
                
                elements.Add("type", "buy");
-               elements.Add("sell_amount", amount);
-               elements.Add("sell_value", value);
-               elements.Add("current_money", current_money);
+               elements.Add("sell_amount", (double)amount);
+               elements.Add("sell_value", (double)value);
+               elements.Add("current_money", (double)current_money);
                elements.Add("name", name);
 
                BsonDocument to_be_inserted = new BsonDocument(elements);
@@ -273,9 +273,9 @@ namespace StockApp
                Dictionary<string, object> elements = new Dictionary<string, object>();
 
                elements.Add("type", "sell");
-               elements.Add("sell_amount", amount);
-               elements.Add("sell_value", value);
-               elements.Add("current_money", current_money);
+               elements.Add("sell_amount", (double)amount);
+               elements.Add("sell_value", (double)value);
+               elements.Add("current_money", (double)current_money);
                elements.Add("name", name);
 
                BsonDocument to_be_inserted = new BsonDocument(elements);

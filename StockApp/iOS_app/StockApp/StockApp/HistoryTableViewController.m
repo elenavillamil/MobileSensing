@@ -52,8 +52,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    [self.user downloadHistory];
-    
     return ([self.user getHistory].count / 5);
 }
 
