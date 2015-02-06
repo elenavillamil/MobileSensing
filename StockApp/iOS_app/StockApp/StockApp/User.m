@@ -152,6 +152,8 @@
     
     self.favorites = [BackendApi getFavorites:[self getUsername]];
     
+    [[self delegate] refreshData];
+    
 }
 
 -(void)refreshData {

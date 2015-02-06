@@ -17,6 +17,7 @@
 
 @interface FavStocksCollectionViewController () <UserDelegate>
 
+@property (strong, nonatomic) NSMutableArray * arrayOfCells;
 @property (strong, nonatomic) User* user;
 
 @end
@@ -64,6 +65,15 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     return _user;
 }
 
+- (NSMutableArray *) arrayOfCells
+{
+    if (!_arrayOfCells) {
+        _arrayOfCells = [NSMutableArray new];
+    }
+    
+    return _arrayOfCells;
+}
+
 - (void)setupCellInsets
 {
     CGFloat screenWidth = self.view.frame.size.width;
@@ -106,12 +116,20 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 - (void) refreshData {
     NSMutableArray* favorites = [self.user getFavorites];
     
-    NSArray *visiblePaths = [self.collectionView indexPathsForVisibleItems];
-    
-    for (size_t index = 0; index < [visiblePaths count]; ++index)
+    /*for (size_t index = 0; index < [self.arrayOfCells count]; ++index)
     {
+        FavoriteCollectionViewCell * cell = (FavoriteCollectionViewCell*)[self.arrayOfCells objectAtIndex:index];
         
-    }
+        UILabel * favoriteName = [cell stockNameLabel];
+        
+        for (size_t innerIndex = 0; innerIndex < [favorites count]; ++innerIndex)
+        {
+            if ([favoriteName.text isEqualToString:(NSString*)[favorites objectAtIndex:innerIndex]])
+            {
+                [cell stockPriceLabel].text = (NSString*)[favorites objectAtIndex:innerIndex + 3];
+            }
+        }
+    }*/
 }
 
 #pragma mark <UICollectionViewDataSource>
@@ -140,6 +158,9 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     cell.stockPercentChange.text = cellStock.percentChange;
     cell.stockPriceLabel.text = cellStock.stockPrice;
     cell.positiveChange = (cellStock.percentChange > 0);
+    
+    [self.arrayOfCells addObject:cell];
+    
     return cell;
 }
 
