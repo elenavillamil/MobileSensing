@@ -11,7 +11,7 @@
 
 @interface User ()
 
-@property (nonatomic, strong) NSMutableArray *favorites;
+@property (atomic, strong) NSMutableArray *favorites;
 @property (atomic, strong) NSMutableArray *history;
 @property (nonatomic, strong) NSMutableArray *portfolio;
 @property (nonatomic, strong) NSTimer *timer;
@@ -150,8 +150,20 @@
 -(void)refresh {
     //Get updated info from backend
     
-    self.favorites = [BackendApi getFavorites:[self getUsername]];
+    NSMutableArray* favoriteNames = [BackendApi getFavorites:[self getUsername]];
+    [self.favorites removeAllObjects];
     
+    if (favoriteNames.count > 0)
+    {
+        NSMutableArray* stocksInfo = [BackendApi getStockInfo:favoriteNames];
+        
+        for (int i = 0; i < stocksInfo.count; i+=4)
+        {
+            Stock* tempStock = [[Stock alloc] initWithTicker:stocksInfo[i] withPrice:stocksInfo[i+1] withPercentage:stocksInfo[i+3]];
+            
+            [self.favorites addObject:tempStock];
+        }
+    }
 }
 
 -(void)refreshData {

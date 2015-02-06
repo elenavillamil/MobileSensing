@@ -56,6 +56,19 @@
     
     [self setupScrollView];
     
+    self.favorite = false;
+    
+    NSMutableArray* favoriteStocks = [self.user getFavorites];
+    for (int i = 0; i < favoriteStocks.count; i++)
+    {
+        Stock* stock = favoriteStocks[i];
+        if ([stock.stockTicker isEqualToString:self.companyStock.stockTicker])
+        {
+            self.favorite = true;
+            self.favoriteButton.title = @"Remove Favorite";
+        }
+    }
+    
     self.graphData = [Graph sharedInstance];
     self.graphData.delegate = self;
     [self.graphData getStockGraphData:self.companyStock.stockTicker];
@@ -319,8 +332,8 @@
     else
     {
         // remove fav
-        // TODO: Call remove on db
-        self.favoriteButton.title = @"Remove Favorite";
+        [BackendApi removeFavorite:[self.user getUsername] withStockName:self.companyStock.stockTicker];
+        self.favoriteButton.title = @"Favorite";
         self.favorite = false;
         [self.user removeFavorite:self.companyStock];
     }
