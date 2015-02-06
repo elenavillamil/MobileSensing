@@ -17,5 +17,6 @@
 + (BOOL)sellOrder:(NSString *) username withStockName:(NSString *)stockName withValue:(double) value withAmount:(size_t) amount;
 + (NSInteger)currentAmountOfMoney:(NSString *) username;
 + (NSMutableArray*) getStockInfo:(NSArray *)stocks;
++ (NSMutableArray*) getHistory:(NSString *) username;
 
 @end

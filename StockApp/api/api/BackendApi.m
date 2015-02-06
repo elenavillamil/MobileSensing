@@ -21,7 +21,7 @@ NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.116.175", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
         
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -124,13 +124,25 @@ NSOutputStream *outputStream;
 }
 
 + (NSString *)readString{
-    static const size_t BUFFER_SIZE = 1024;
+    static const size_t BUFFER_SIZE = 1024; // 1,024
     
     static uint8_t buffer[BUFFER_SIZE]; // avoid reallocation
     
-    size_t amount_read = [inputStream read:buffer maxLength:BUFFER_SIZE];
+    size_t amountRead = 0;
     
-    return [[NSString alloc] initWithBytes:buffer length:amount_read encoding:NSASCIIStringEncoding];
+    NSMutableString * entireMessage = [NSMutableString new];
+    
+    do
+    {
+        amountRead = [inputStream read:buffer maxLength:BUFFER_SIZE];
+        
+        NSString * string = [[NSString alloc] initWithBytes:buffer length:amountRead encoding:NSASCIIStringEncoding];
+        
+        [entireMessage appendString:string];
+        
+    } while (amountRead == BUFFER_SIZE);
+    
+    return [NSString stringWithString:entireMessage];
 }
 
 + (NSString *)signIn:(NSString*) username withPassword:(NSString*) password {
@@ -288,29 +300,31 @@ NSOutputStream *outputStream;
     
     NSInteger amountOfTuples = [[returnedString substringWithRange:NSMakeRange(1, amountOfTuplesAsStringLength)] integerValue];
     
-    size_t start = 2;
+    size_t start = 1 + (int)amountOfTuplesAsStringLength;
     
     NSMutableArray * arrayToReturn = [NSMutableArray new];
     
     for (size_t index = 0; index < amountOfTuples; ++index) {
         char first_string_size = [returnedString characterAtIndex:start];
-        NSString* first_string =[returnedString substringWithRange:NSMakeRange(start, first_string_size)];
+        NSString* first_string =[returnedString substringWithRange:NSMakeRange(start + 1, first_string_size)];
         
         // extra one to skip the length prefix
         start += first_string_size + 1;
         
         char second_string_size = [returnedString characterAtIndex:start];
-        NSString* second_string =[returnedString substringWithRange:NSMakeRange(start, second_string_size)];
+        NSString* second_string =[returnedString substringWithRange:NSMakeRange(start + 1, second_string_size)];
         
         start += second_string_size + 1;
         
         char third_string_size = [returnedString characterAtIndex:start];
-        NSString* third_string =[returnedString substringWithRange:NSMakeRange(start, third_string_size)];
+        NSString* third_string =[returnedString substringWithRange:NSMakeRange(start + 1, third_string_size)];
         
         start += third_string_size + 1;
         
         char fourth_string_size = [returnedString characterAtIndex:start];
-        NSString* fourth_string =[returnedString substringWithRange:NSMakeRange(start, fourth_string_size)];
+        NSString* fourth_string =[returnedString substringWithRange:NSMakeRange(start + 1, fourth_string_size)];
+        
+        start += fourth_string_size + 1;
         
         [arrayToReturn addObject:first_string];
         [arrayToReturn addObject:second_string];
