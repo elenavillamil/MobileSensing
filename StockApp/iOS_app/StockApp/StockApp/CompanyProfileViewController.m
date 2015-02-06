@@ -38,6 +38,7 @@
 @property (strong,nonatomic) NSString *amaountSelectedBase;
 @property (nonatomic) NSInteger amountToBuySell;
 @property (nonatomic,strong) User *user;
+@property (nonatomic, strong) UIActivityIndicatorView *loading;
 
 @end
 
@@ -50,19 +51,40 @@
     self.title = @"Company";
     [self setupScrollView];
     
-    self.graphData = [[Graph alloc] init];
+    self.graphData = [Graph sharedInstance];
     self.graphData.delegate = self;
-//    [self.graphData getStockGraphData];
-    
+    [self.graphData getStockGraphData];
+    self.graphView.hidden = YES;
     self.amaountSelectedBase = @"Buy: %dl";
     self.amountToBuySell = 0;
+    
+    [self showLoading];
+}
+
+- (void)addRightNavigationButton
+{
+    
+}
+
+- (void)showLoading
+{
+    self.loading =[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    
+    self.loading.center = self.view.center;
+    
+    [self.loading startAnimating];
+    
+    [self.view addSubview:self.loading];
 }
 
 - (void)setupScrollView
 {
     self.companyScrollView.delegate = self;
     self.companyScrollView.contentSize = CGSizeMake(self.view.frame.size.width, 700.f);
-    
+}
+
+- (void)setupGraphScrollView
+{
     self.graphScrollView.delegate = self;
     self.graphScrollView.contentSize = CGSizeMake(500.f, 272.f);
     
@@ -71,7 +93,7 @@
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
     [self.companyScrollView addGestureRecognizer:twoFingerTapRecognizer];
     [self centerScrollViewContents];
-//    [self setZoom];
+    [self setZoom];
 }
 
 - (void)setZoom
@@ -168,10 +190,11 @@
     
     self.graphView.dataSource = self;
     self.graphView.delegate = self;
-    
+    [self.loading stopAnimating];
+
     [self setGraphViewFooter];
-    
-    
+    [self setupGraphScrollView];
+    self.graphView.hidden = NO;
     [self.graphView reloadData];
     
 //    UIImage *graphImage = [self imageWithView:self.graphView];
@@ -198,6 +221,7 @@
     //failed to get CSV file.... show alert view
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Loading Stock" message:@"Quandl is having issues try again?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     [alertView show];
+    [self.loading stopAnimating];
     
 }
 
@@ -264,6 +288,9 @@
 - (void)sellStock
 {
     // connect to api and backend
+}
+
+- (IBAction)saveToFavorites:(id)sender {
 }
 
 #pragma mark - Zoom methods

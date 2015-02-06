@@ -410,7 +410,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="gtw-jX-KOq">
+                                    <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="gtw-jX-KOq">
                                         <rect key="frame" x="59" y="541" width="256" height="31"/>
                                         <connections>
                                             <action selector="changeSliderValue:" destination="ShH-WR-SWx" eventType="valueChanged" id="5sG-k4-3Q1"/>
@@ -476,7 +476,13 @@
                             <constraint firstAttribute="trailing" secondItem="Ksc-29-i2p" secondAttribute="trailing" id="fdC-7m-Ual"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="SVM-4M-tPO"/>
+                    <navigationItem key="navigationItem" id="SVM-4M-tPO">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Hfy-qr-ecN">
+                            <connections>
+                                <action selector="saveToFavorites:" destination="ShH-WR-SWx" id="w3G-QA-6jn"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="buySellSegmentedControl" destination="4dJ-W3-77R" id="vqI-ir-ZZC"/>
