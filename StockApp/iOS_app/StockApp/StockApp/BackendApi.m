@@ -253,7 +253,7 @@ NSOutputStream *outputStream;
     return [readString intValue];
 }
 
-+ (NSMutableArray*) getStockInfo:(NSArray *)stocks{
++ (NSMutableArray*) getStockInfo:(NSMutableArray *)stocks{
     char function = (char)4;
     char numberOfStocs = (char)stocks.count;
     NSString* stocksString = @"";
