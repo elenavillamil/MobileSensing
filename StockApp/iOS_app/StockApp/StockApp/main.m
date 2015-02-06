@@ -1,9 +1,9 @@
 //
-//  main.m
-//  StockApp
-//
-//  Created by Tyler Hargett on 1/27/15.
-//  Copyright (c) 2015 teamE1. All rights reserved.
+//  Team E.
+//  Members:
+//      Tyler Hargett
+//      Jarret Shook
+//      Elena Villamil
 //
 
 #import <UIKit/UIKit.h>
