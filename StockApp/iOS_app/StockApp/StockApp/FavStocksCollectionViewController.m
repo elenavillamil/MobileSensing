@@ -87,23 +87,23 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 7;
+    return [self.user getFavorites].count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     FavoriteCollectionViewCell *cell = (FavoriteCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     // Configure the cell
-    Stock *cellStock = nil;//(Stock *)[[self.user getFavorites] objectAtIndex:indexPath.row];
+    Stock *cellStock = [self.user getFavorites][indexPath.row];//(Stock *)[[self.user getFavorites] objectAtIndex:indexPath.row];
     
     if (cellStock == nil) {
         cellStock = [[Stock alloc] init];
-        cellStock.percentChange = -1.2;
-        cellStock.stockPrice = 100.0;
+        cellStock.percentChange = @"-1.2";
+        cellStock.stockPrice = @"100.0";
         cellStock.stockTicker = @"Fake";
     }
     cell.stockNameLabel.text = cellStock.stockTicker;
-    cell.stockPercentChange.text = [NSString stringWithFormat:@"%f", cellStock.percentChange];
-    cell.stockPriceLabel.text = [NSString stringWithFormat:@"%f", cellStock.stockPrice];
+    cell.stockPercentChange.text = cellStock.percentChange;
+    cell.stockPriceLabel.text = cellStock.stockPrice;
     cell.positiveChange = (cellStock.percentChange > 0);
     return cell;
 }

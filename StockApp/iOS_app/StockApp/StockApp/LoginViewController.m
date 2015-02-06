@@ -9,6 +9,8 @@
 #import "LoginViewController.h"
 #import "FavStocksCollectionViewController.h"
 #import "User.h"
+#import "BackendApi.h"
+#import "Stock.h"
 
 @interface LoginViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
@@ -41,33 +43,136 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)signUp:(id)sender{
-    bool connection = true;
     // connect to back end;
     
-    if (connection)
-    {        
-        // saving an NSString
-        [self.user setUsernameWith:self.usernameTextField.text];
-        [self.user setPasswordWith:self.passwordTextField.text];
+    NSString * username = self.usernameTextField.text;
+    NSString * password = self.passwordTextField.text;
+    
+    bool areValidString = true;
+    
+    for (size_t index = 0; index < [username length]; ++index)
+    {
+        char usernameChar = [username characterAtIndex:index];
+        char lowerUsernameChar = tolower(usernameChar);
+
+        if (lowerUsernameChar < 'a' || lowerUsernameChar > 'z')
+        {
+            areValidString = false;
+            
+            // Making and showing pop up to let the user know that the account could not be created
+            UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The username contains invalid characters" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert_view show];
+            self.usernameTextField.text = @"";
+            self.passwordTextField.text = @"";
+        }
+    }
+    
+    for (size_t index = 0; index < [password length]; ++index)
+    {
+        char passwordChar = [password characterAtIndex:index];
+        char lowerPasswordChar = tolower(passwordChar);
+        
+        if (lowerPasswordChar < ' ')
+        {
+            areValidString = false;
+            
+            // Making and showing pop up to let the user know that the account could not be created
+            UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The password cannot contain spaces" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert_view show];
+            self.usernameTextField.text = @"";
+            self.passwordTextField.text = @"";
+        }
+    }
+    
+    if (areValidString)
+    {
+        if ([BackendApi setUpAccount:self.usernameTextField.text withPassword:self.passwordTextField.text])
+        {
+            // saving an NSString
+            [self.user setUsernameWith:self.usernameTextField.text];
+            [self.user setPasswordWith:self.passwordTextField.text];
+            
+            // Getting the users favorite stocks information
+            [self getFavoriteStocksInfo:self.usernameTextField.text];
+            
+            UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
+            
+            [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
+        }
+        else
+        {
+            // Making and showing pop up to let the user know that the account could not be created
+            UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The username already exists, please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert_view show];
+            self.usernameTextField.text = @"";
+            self.passwordTextField.text = @"";
+        }
     }
 }
 
 - (IBAction)login:(id)sender {
-    bool connection = true;
     // connect to back end;
     
-    if (connection)
+    NSString * username = self.usernameTextField.text;
+    NSString * password = self.passwordTextField.text;
+    
+    bool areValidString = true;
+    
+    for (size_t index = 0; index < [username length]; ++index)
     {
-        // saving an NSString
-        [self.user setUsernameWith:self.usernameTextField.text];
-        [self.user setPasswordWith:self.passwordTextField.text];
+        char usernameChar = [username characterAtIndex:index];
+        char lowerUsernameChar = tolower(usernameChar);
         
-        UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
+        if (lowerUsernameChar < 'a' || lowerUsernameChar > 'z')
+        {
+            areValidString = false;
+            
+            // Making and showing pop up to let the user know that the account could not be created
+            UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The username contains invalid characters" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert_view show];
+            self.usernameTextField.text = @"";
+            self.passwordTextField.text = @"";
+        }
+    }
+    
+    for (size_t index = 0; index < [password length]; ++index)
+    {
+        char passwordChar = [password characterAtIndex:index];
+        char lowerPasswordChar = tolower(passwordChar);
         
-        [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
-        
-        //Change root navigation to favorite
-//        [self performSegueWithIdentifier:@"NavigationController" sender:self];
+        if (lowerPasswordChar < ' ')
+        {
+            areValidString = false;
+            
+            // Making and showing pop up to let the user know that the account could not be created
+            UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The password cannot contain spaces" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert_view show];
+            self.usernameTextField.text = @"";
+            self.passwordTextField.text = @"";
+        }
+    }
+    
+    if (areValidString)
+    {
+        if (![[BackendApi signIn:self.usernameTextField.text withPassword:self.passwordTextField.text] isEqualToString:@"Login failed"])
+        {
+            // saving an NSString
+            [self.user setUsernameWith:self.usernameTextField.text];
+            [self.user setPasswordWith:self.passwordTextField.text];
+            
+            // Get user favorite stocks and the stocks information.
+            [self getFavoriteStocksInfo:self.usernameTextField.text];
+            
+            UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
+            
+            [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
+        }
+        else
+        {
+            // Making and showing pop up to let the user know that the account could not be created
+            UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The username or the password are incorrect, please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert_view show];
+        }
     }
 }
 
@@ -82,6 +187,18 @@
     return YES;
 }
 
+-(void) getFavoriteStocksInfo:(NSString*) username
+{
+    NSMutableArray* stocksInfo = [BackendApi getStockInfo:[BackendApi getFavorites:username]];
+    
+    for (int i = 0; i < stocksInfo.count; i+=4)
+    {
+        Stock* tempStock = [[Stock alloc] initWithTicker:stocksInfo[i] withPrice:stocksInfo[i+1] withPercentage:stocksInfo[i+3]];
+
+        [self.user addFavorite:tempStock];
+    }
+
+}
 /*
 #pragma mark - Navigation
 

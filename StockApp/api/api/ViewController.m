@@ -26,7 +26,8 @@
         NSInteger response = [BackendApi currentAmountOfMoney:@"elena2"];
         NSLog(@"%li", (long)response);
         NSArray* stocks = @[@"msft", @"amzn"];
-        [BackendApi getFavorites:@"elena2"];
+        [BackendApi resetAccount:@"elena2"];
+        
     }
     
 }

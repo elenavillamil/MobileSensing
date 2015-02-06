@@ -12,10 +12,12 @@
 
 @property (nonatomic, strong) NSString *stockName;
 @property (nonatomic, strong) NSString *stockTicker;
-@property (nonatomic) double stockPrice;
-@property (nonatomic) double percentChange;
+@property (nonatomic, strong) NSString* stockPrice;
+@property (nonatomic) NSString* percentChange;
 @property (nonatomic) BOOL positive;
 
 @property (nonatomic, strong) NSMutableArray *previousPrices;
+
+- (instancetype)initWithTicker:(NSString*) ticker withPrice:(NSString*) price withPercentage:(NSString*) percentage;
 
 @end

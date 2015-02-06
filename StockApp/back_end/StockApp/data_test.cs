@@ -32,7 +32,7 @@ namespace StockApp
          string username = "jashook";
          string password = "ev9";
 
-         string signup_result = DatabaseManagment.SetupAccount (username, password);
+         DatabaseManagment.SetupAccount (username, password);
 
          // Test that the SignIn is successful. 
          // An empty string is returned when login fails
