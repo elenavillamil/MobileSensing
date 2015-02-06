@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SearchTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *companyNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *tickerLabel;
 
 @end

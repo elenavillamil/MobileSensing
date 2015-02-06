@@ -7,15 +7,23 @@
 //
 
 #import "SearchTableViewController.h"
+#import "SearchTableViewCell.h"
+#import "CompanyProfileViewController.h"
+#import "Stock.h"
 
-@interface SearchTableViewController () <NSURLConnectionDelegate, UISearchBarDelegate>
+@interface SearchTableViewController () <NSURLConnectionDelegate, UISearchBarDelegate, UISearchDisplayDelegate>
 
 @property (nonatomic, retain) NSMutableData *responseData;
-
+@property (nonatomic, strong) NSMutableArray *searchResults;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong) NSURLConnection *connection;
 
 @end
 
-static NSString * const baseURL = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=%@&callback=YAHOO.Finance.SymbolSuggest.ssCallback";
+static NSString * const baseURL = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=";
+static NSString * const endURL = @"&callback=YAHOO.Finance.SymbolSuggest.ssCallback";
+
+static NSString * const test = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=app&callback=YAHOO.Finance.SymbolSuggest.ssCallback";
 
 @implementation SearchTableViewController
 
@@ -27,6 +35,14 @@ static NSString * const baseURL = @"http://d.yimg.com/autoc.finance.yahoo.com/au
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.responseData = [[NSMutableData alloc] init];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.searchResults removeAllObjects];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,6 +52,43 @@ static NSString * const baseURL = @"http://d.yimg.com/autoc.finance.yahoo.com/au
 
 - (IBAction)donePressed:(id)sender {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Search Bar
+
+-(void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
+    
+    
+}
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
+    // Tells the table data source to reload when text changes
+    [self searchForStock:searchString];
+    // Return YES to cause the search result table view to be reloaded.
+    return YES;
+}
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
+    // Tells the table data source to reload when scope bar selection changes
+    
+    // Return YES to cause the search result table view to be reloaded.
+    return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [self.tableView reloadData];
+}
+
+- (void)searchForStock:(NSString *)name
+{
+    NSString *urlString = [[baseURL stringByAppendingString:name] stringByAppendingString:endURL];
+    NSURL *url = [NSURL URLWithString:urlString];
+    if (self.connection != nil) {
+        self.connection = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:url] delegate:self startImmediately:YES];
+    } else {
+        self.connection = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:url] delegate:self startImmediately:YES];
+    }
 }
 
 #pragma mark - URL connection
@@ -60,7 +113,12 @@ static NSString * const baseURL = @"http://d.yimg.com/autoc.finance.yahoo.com/au
     // The request is complete and data has been received
     // You can parse the stuff in your instance variable now
     NSError *error = nil;
-    NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:self.responseData options:kNilOptions error:&error];
+    NSString* stringJSON = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
+    NSString * remove = [stringJSON stringByReplacingOccurrencesOfString:@"YAHOO.Finance.SymbolSuggest.ssCallback(" withString:@""];
+    NSString * json =[remove stringByReplacingOccurrencesOfString:@")" withString:@""];
+    
+    NSData *jsonData = [json dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&error];
     
     if (error != nil) {
         NSLog(@"Error parsing JSON.");
@@ -70,34 +128,57 @@ static NSString * const baseURL = @"http://d.yimg.com/autoc.finance.yahoo.com/au
     }
 }
 
-- (void)parseJSON:(NSArray *)jsonResponse
+- (void)parseJSON:(NSDictionary *)jsonResponse
 {
+    NSDictionary* responses = (NSDictionary *)[jsonResponse objectForKey:@"ResultSet"];
+    NSArray *results = [responses objectForKey:@"Result"];
     
+   [self.searchResults removeAllObjects];
+    
+    for (NSDictionary  *company in results)
+    {
+        NSString *tradePlace = [company objectForKey:@"exchDisp"];
+        if ([tradePlace isEqualToString:@"NASDAQ"]) {
+            [self.searchResults addObject:company];
+        }
+    }
+
+    //reload results
+    [self.tableView reloadData];
+}
+
+- (NSMutableArray *)searchResults
+{
+    if (!_searchResults) {
+        _searchResults = [[NSMutableArray alloc] init];
+    }
+    return _searchResults;
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [self.searchResults count];
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    SearchTableViewCell *cell = (SearchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"SearchTableViewCell"];
     
+    NSDictionary *cellStock = (NSDictionary *)[self.searchResults objectAtIndex:indexPath.row];
+    cell.companyNameLabel.text = [cellStock objectForKey:@"name"];
+    cell.tickerLabel.text = [cellStock objectForKey:@"symbol"];
     // Configure the cell...
     
     return cell;
 }
-*/
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -133,14 +214,18 @@ static NSString * const baseURL = @"http://d.yimg.com/autoc.finance.yahoo.com/au
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    SearchTableViewCell *searchCell = (SearchTableViewCell *)sender;
+    CompanyProfileViewController *profile = (CompanyProfileViewController *)[segue destinationViewController];
+    Stock *stock = [[Stock alloc] init];
+    [profile setStock:stock];
 }
-*/
+
 
 @end
