@@ -67,6 +67,7 @@
 {
     self.companyStock = [[Stock alloc] initWithTicker:ticker withPrice:@" " withPercentage:@" "];
     self.title = name;
+    self.user = [User sharedInstance];
 }
 
 - (void)showLoading
