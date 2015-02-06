@@ -7,11 +7,12 @@
 //
 
 #import "User.h"
+#import "BackendApi.h"
 
 @interface User ()
 
 @property (nonatomic, strong) NSMutableArray *favorites;
-@property (nonatomic, strong) NSMutableArray *history;
+@property (atomic, strong) NSMutableArray *history;
 @property (nonatomic, strong) NSMutableArray *portfolio;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) NSUserDefaults *loginInformation;
@@ -49,13 +50,13 @@
     return _favorites;
 }
 
-- (NSMutableArray *)history
+/*- (NSMutableArray *)history
 {
     if (_history) {
         _history = [[NSMutableArray alloc] init];
     }
     return _history;
-}
+}*/
 
 - (NSMutableArray *)portfolio
 {
@@ -125,8 +126,11 @@
     [self.loginInformation setObject:password forKey:@"password"];
 }
 
--(void)reset
-{
+-(void)downloadHistory {
+    self.history = [BackendApi getHistory:[self getUsername]];
+}
+
+-(void)reset {
     // the call to reset on the backend too
     
     [self.history removeAllObjects];
@@ -134,18 +138,23 @@
     [self.favorites removeAllObjects];
 }
 
--(void)newTimerWith:(NSInteger)time
-{
+-(void)newTimerWith:(NSInteger)time {
     [self.timer invalidate];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(refresh) userInfo:nil repeats:YES];
     
     // Send new timer/refresh information to the backend
 }
 
--(void)refresh
-{
-    NSLog(@"Hola");
+-(void)refresh {
     //Get updated info from backend
+    
+    self.favorites = [BackendApi getFavorites:[self getUsername]];
+    
 }
+
+-(void)refreshData {
+    
+}
+
 
 @end

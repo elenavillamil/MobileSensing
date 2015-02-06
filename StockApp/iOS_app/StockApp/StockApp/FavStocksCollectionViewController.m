@@ -13,7 +13,7 @@
 #import "UIColor+SAColor.h"
 #import "User.h"
 
-@interface FavStocksCollectionViewController ()
+@interface FavStocksCollectionViewController () <UserDelegate>
 
 @property (strong, nonatomic) User* user;
 
@@ -30,6 +30,7 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     
     [self setupCellInsets];
     self.title = @"Favorites";
+    self.user.delegate = self;
     
     if ([self.user getFavorites].count < 1)
     {
@@ -87,6 +88,18 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     // Pass the selected object to the new view controller.
 }
 */
+#pragma mark - User delegate
+
+- (void) refreshData {
+    NSMutableArray* favorites = [self.user getFavorites];
+    
+    NSArray *visiblePaths = [self.collectionView indexPathsForVisibleItems];
+    
+    //for (size_t index = 0; index < [visiblePaths count]; ++index)
+    //{
+        
+    //}
+}
 
 #pragma mark <UICollectionViewDataSource>
 

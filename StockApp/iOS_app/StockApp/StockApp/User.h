@@ -9,7 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "Stock.h"
 
-@interface User : NSObject
+@protocol UserDelegate <NSObject>
+
+- (void)refreshData;
+
+@end
+
+@interface User : NSObject <UserDelegate>
+
+@property (nonatomic, strong) id <UserDelegate> delegate;
 
 + (User *)sharedInstance;
 
@@ -28,5 +36,6 @@
 -(void)setPasswordWith:(NSString *)password;
 -(NSString*)getUsername;
 -(NSString*)getPassword;
+-(void)downloadHistory;
 
 @end
