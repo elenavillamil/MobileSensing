@@ -23,8 +23,6 @@ namespace StockApp
 
    public class Router
    {
-   	private static Socket _socket;
-
       public Router() { }
 
    	public static void router_start()
@@ -73,23 +71,29 @@ namespace StockApp
    		// Get the switching number from the first character sent
    		int switch_number = message [0];
 
-   		if (switch_number == 1) {
-   			handle_setting_up_account (socket, message);
-   		} else if (switch_number == 2) {
-   			handle_signing_in (socket, message);
-   		} else if (switch_number == 3) {
-   			handle_remove_account (socket, message);
-   		} else if (switch_number == 4) {
-   			handle_get_stock_information (socket, message);
-   		} else if (switch_number == 5) {
-   			handle_buy_order (socket, message);
-   		} else if (switch_number == 6) {
-   			handle_sell_order (socket, message);
-   		} else if (switch_number == 7) {
-   			handle_get_history (socket, message);
-   		} else if (switch_number == 8) {
-   			handle_get_amount_of_money (socket, message);
-   		}
+         if (switch_number == 1) {
+            handle_setting_up_account (socket, message);
+         } else if (switch_number == 2) {
+            handle_signing_in (socket, message);
+         } else if (switch_number == 3) {
+            handle_remove_account (socket, message);
+         } else if (switch_number == 4) {
+            handle_get_stock_information (socket, message);
+         } else if (switch_number == 5) {
+            handle_buy_order (socket, message);
+         } else if (switch_number == 6) {
+            handle_sell_order (socket, message);
+         } else if (switch_number == 7) {
+            handle_get_history (socket, message);
+         } else if (switch_number == 8) {
+            handle_get_amount_of_money (socket, message);
+         } else if (switch_number == 9) {
+            handle_get_favorites (socket, message);
+         } else if (switch_number == 10) {
+            handle_add_favorite (socket, message);
+         } else if (switch_number == 11) {
+            handle_reset (socket, message);
+         }
 
          while (socket.Connected) {
             const int ARR_SIZE = 256;
@@ -567,5 +571,96 @@ namespace StockApp
             socket.Send(Encoding.ASCII.GetBytes(return_message));
          }
    	}
+
+      ////////////////////////////////////////////////////////////////////////////////
+      //
+      // Function Mapping: 9 -> get_favorites
+      //
+      // Expected format:
+      //
+      // [<character representing the function to call>
+      //  <character with the size of the username>
+      //  "username"]
+      //
+      ////////////////////////////////////////////////////////////////////////////////
+      private static void handle_get_favorites(Socket socket, string message)
+      {
+         int username_size = message[1];
+
+         if (username_size + 1 > message.Length)
+         {
+            return;
+         }
+
+         string username = message.Substring(2, username_size);
+
+         List<string> result = DatabaseManagment.GetFavorites (username);
+
+         string response = "";
+         response += (char)result.Count;
+
+         foreach (string s in result)
+         {
+            response += (char)s.Length;
+            response += s;
+         }
+            
+         socket.Send(Encoding.ASCII.GetBytes(response));
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////
+      //
+      // Function Mapping: 10 -> add_favorite
+      //
+      // Expected format:
+      //
+      // [<character representing the function to call>
+      //  <character with the size of the username>
+      //  "username"
+      //  <character with the size of the stock tiker>
+      //  "sticker"]
+      //
+      ////////////////////////////////////////////////////////////////////////////////
+      private static void handle_add_favorite(Socket socket, string message)
+      {
+         int username_size = message[1];
+
+         string username = message.Substring(2, username_size);
+
+         int stock_size = message[2+username_size];
+
+         string stock_name = message.Substring (2 + username_size + 1, stock_size);
+
+         DatabaseManagment.AddFavorite (username, stock_name);
+
+         socket.Send(Encoding.ASCII.GetBytes("1"));
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////
+      //
+      // Function Mapping: 11 -> add_favorite
+      //
+      // Expected format:
+      //
+      // [<character representing the function to call>
+      //  <character with the size of the username>
+      //  "username"
+      //
+      ////////////////////////////////////////////////////////////////////////////////
+      private static void handle_reset (Socket socket, string message)
+      {
+         int username_size = message[1];
+
+         if (username_size + 1 > message.Length)
+         {
+            return;
+         }
+
+         string username = message.Substring(2, username_size);
+
+         double result = DatabaseManagment.ResetOrder (username, 10000);
+
+         socket.Send(Encoding.ASCII.GetBytes("1"));
+      }
    }
-}
+}  

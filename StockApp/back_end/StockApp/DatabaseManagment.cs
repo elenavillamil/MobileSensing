@@ -334,6 +334,8 @@ namespace StockApp
 
          MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
          MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
+         MongoCollection<BsonDocument> favorite_collection = database.GetCollection<BsonDocument>("favorite");
+
          var query = Query.EQ("username", username);
          var cursor = accounts.Find(query);
 
@@ -345,14 +347,14 @@ namespace StockApp
                   { "$set", new BsonDocument("money", amount) }
                };
 
-               BsonElement account_id;
-               c.TryGetElement("history_id", out account_id);
+               accounts.Update(query, update_document);
 
-               string string_id = account_id.Value.AsString;
+               BsonElement history_id;
+               c.TryGetElement("history_id", out history_id);
+
+               string string_id = history_id.Value.AsString;
                ObjectId object_id = new ObjectId(string_id);
                var query_history_collection = Query.EQ("_id", object_id);
-
-               accounts.Update(query, update_document);
 
                var history_update_document = new UpdateDocument {
                   { "$unset", new BsonDocument("history_list", "") }
@@ -360,7 +362,20 @@ namespace StockApp
 
                history_collection.Update(query_history_collection, history_update_document);
 
-               return amount;
+               BsonElement favorite_id;
+               c.TryGetElement("favorite_id", out favorite_id);
+
+               string_id = favorite_id.Value.AsString;
+               object_id = new ObjectId(string_id);
+               var query_favorite_collection = Query.EQ("_id", object_id);
+
+               var favorite_update_document = new UpdateDocument {
+                  { "$unset", new BsonDocument("favorite_list", "") }
+               };
+
+               favorite_collection.Update(query_favorite_collection, favorite_update_document);
+
+               return 1;
 
             }
             catch

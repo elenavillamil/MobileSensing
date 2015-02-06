@@ -451,6 +451,78 @@ namespace StockApp
          }
       }
 
+      private void TestHandleResetOrder()
+      {
+         char function = (char)11;
+         string message = "";
+         message += function;
+         string username = "elena2";
+         message += (char)username.Length;
+         message += username;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+      }
+
+      private void TestHandleAddAndGetFavorites()
+      {
+         char function = (char)10;
+         string message = "";
+         message += function;
+         string username = "elena2";
+         message += (char)username.Length;
+         message += username;
+         string stock_name = "msft";
+         message += (char)stock_name.Length;
+         message += stock_name;
+
+         IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+         Socket connecting_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+         connecting_socket.Connect(endpoint);
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(message));
+
+         byte[] buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         //connecting_socket.Disconnect (true);
+
+         //connecting_socket.Connect(endpoint);
+
+         string new_message = "";
+
+         function = (char)9;
+         new_message += function;
+         new_message += (char)username.Length;
+         new_message += username;
+
+         connecting_socket.Send(Encoding.ASCII.GetBytes(new_message));
+
+         buffer = new byte[256];
+         connecting_socket.Receive(buffer);
+
+         int index = 0;
+
+         for (index = 0; index < buffer.Length; ++index)
+         {
+            if (buffer[index] == 0)
+            {
+               break;
+            }
+         }
+
+         string returned_message = Encoding.ASCII.GetString(buffer, 0, index);
+         Console.Write(returned_message);
+      }
+
       private void TestHandleGetStockInformation()
       {
          char function = (char)4;
@@ -585,7 +657,9 @@ namespace StockApp
          //Run(TestHandleBuyOrder);
          //Run(TestHandleSellOrder);
          //Run(TestHandleGetMoney);
-         Run(TestHandleGetHistory);
+         //Run(TestHandleGetHistory);
+         //Run (TestHandleAddAndGetFavorites);
+         Run (TestHandleResetOrder);
          //Run (TestGetHistory);
          //Run (TestAddFavoriteAndGetFavorites);
          /*Run (TestProperLogin);
