@@ -15,6 +15,7 @@
 @interface SettingsViewController ()
 
 @property(strong,nonatomic)User* user;
+@property (strong, nonatomic)NSArray* timesForPicker;
 
 @end
 
@@ -25,10 +26,32 @@
     // Do any additional setup after loading the view.
     self.title = @"Settings";
     
+    self.timesForPicker = @[@"5", @"30", @"60"];
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonPressed:)];
     self.navigationController.navigationBar.barTintColor = [UIColor blue];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
+}
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.timesForPicker.count;
+}
+
+-(void)onSimulationSwitchValueChange:(id)sender
+{
+    [sender timesForPicker
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return self.timesForPicker[row];
 }
 
 - (User *)user
