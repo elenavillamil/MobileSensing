@@ -47,14 +47,13 @@ static NSString * const baseURL = @"https://www.quandl.com/api/v1/datasets/WIKI/
     return _stockPricePoints;
 }
 
-- (void)getStockGraphData
+- (void)getStockGraphData:(NSString *)ticker
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:baseURL, @"GOOGL"]]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:baseURL, ticker]]];
     
     // Create url connection and fire request
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [conn start];
-
 }
 
 - (NSString *)getCurrentPrice

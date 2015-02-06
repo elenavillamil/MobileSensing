@@ -53,12 +53,18 @@
     
     self.graphData = [Graph sharedInstance];
     self.graphData.delegate = self;
-    [self.graphData getStockGraphData];
+    [self.graphData getStockGraphData:self.companyStock.stockTicker];
     self.graphView.hidden = YES;
     self.amaountSelectedBase = @"Buy: %d";
     self.amountToBuySell = 0;
     
     [self showLoading];
+}
+
+- (void)setInfo:(NSString *)ticker withCompanyName:(NSString *)name
+{
+    self.companyStock = [[Stock alloc] initWithTicker:ticker withPrice:@"" withPercentage:@""];
+    
 }
 
 - (void)showLoading
@@ -141,8 +147,8 @@
 - (void)setupCompanyData
 {
     self.title = self.companyStock.stockName;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%.2f", self.companyStock.stockPrice];
-    self.percentChangeLabel.text = [NSString stringWithFormat:@"%f%%", self.companyStock.percentChange];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%@", self.companyStock.stockPrice];
+    self.percentChangeLabel.text = [NSString stringWithFormat:@"%@", self.companyStock.percentChange];
     
 }
 
@@ -224,7 +230,7 @@
 {
     switch (buttonIndex) {
         case 0:
-            [self.graphData getStockGraphData];
+            [self.graphData getStockGraphData:self.companyStock.stockTicker];
             break;
             
         default:
