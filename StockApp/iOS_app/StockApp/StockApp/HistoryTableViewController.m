@@ -80,9 +80,11 @@
         
         TransactionTableViewCell* newCell = (TransactionTableViewCell*)cell;
         
-        newCell.stockStickerLabel.text = [array objectAtIndex:indexPath.row + 4];
-        newCell.stockPriceLabel.text = [array objectAtIndex:indexPath.row + 2];
-        newCell.amountOfSharesLabel.text = [array objectAtIndex:indexPath.row + 1];
+        size_t index = 5 * indexPath.row;
+        
+        newCell.stockStickerLabel.text = [array objectAtIndex:index + 4];
+        newCell.stockPriceLabel.text = [array objectAtIndex:index + 2];
+        newCell.amountOfSharesLabel.text = [array objectAtIndex:index + 1];
         
     } else if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"sell"])
     {
@@ -90,9 +92,11 @@
         
         TransactionTableViewCell* newCell = (TransactionTableViewCell*)cell;
         
-        newCell.stockStickerLabel.text = [array objectAtIndex:indexPath.row + 4];
-        newCell.stockPriceLabel.text = [array objectAtIndex:indexPath.row + 2];
-        newCell.amountOfSharesLabel.text = [array objectAtIndex:indexPath.row + 1];
+        size_t index = 5 * indexPath.row;
+        
+        newCell.stockStickerLabel.text = [array objectAtIndex:index + 4];
+        newCell.stockPriceLabel.text = [array objectAtIndex:index + 2];
+        newCell.amountOfSharesLabel.text = [array objectAtIndex:index + 1];
         
     } else if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"favorite"])
     {
@@ -100,7 +104,9 @@
 
         HistoryFavoriteTableViewCell* newCell = (HistoryFavoriteTableViewCell*)cell;
         
-        newCell.stockStickerLabel.text = [array objectAtIndex:indexPath.row + 4];
+        size_t index = 5 * indexPath.row;
+        
+        newCell.stockStickerLabel.text = [array objectAtIndex:index + 4];
     }
     
     return cell;
