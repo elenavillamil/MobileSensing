@@ -9,8 +9,13 @@
 #import "PortfilioTableViewController.h"
 #import "CompanyProfileViewController.h"
 #import "PortfolioTableViewCell.h"
+#import "User.h"
+#import "Stock.h"
+#import "OwnedStock.h"
 
 @interface PortfilioTableViewController ()
+
+@property (nonatomic, strong) User *user;
 
 @end
 
@@ -32,6 +37,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (User *)user
+{
+    if (!_user) {
+        _user = [User sharedInstance];
+    }
+    return _user;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -41,7 +54,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 1;
+    return [[self.user getPortfolio] count];
 }
 
 
@@ -49,6 +62,8 @@
     PortfolioTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PortfolioTableViewCell" forIndexPath:indexPath];
     
 //     Configure the cell...
+    OwnedStock *stock = (OwnedStock *)[[self.user getPortfolio] objectAtIndex:indexPath.row];
+    cell.
     
     return cell;
 }

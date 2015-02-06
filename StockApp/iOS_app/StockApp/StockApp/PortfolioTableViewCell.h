@@ -11,6 +11,5 @@
 
 @interface PortfolioTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) Stock *companyStock;
 
 @end
