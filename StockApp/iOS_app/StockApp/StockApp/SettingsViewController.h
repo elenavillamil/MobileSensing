@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingsViewController : UIViewController
+@interface SettingsViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>
+
+@property (weak, nonatomic) IBOutlet UIPickerView *customPicker;
 
 @property (weak, nonatomic) IBOutlet UISwitch *greenBackgroundSwitch;
 
