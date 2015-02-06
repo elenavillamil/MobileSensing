@@ -12,6 +12,5 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *favoriteImageView;
 @property (weak, nonatomic) IBOutlet UILabel *stockStickerLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
 @end

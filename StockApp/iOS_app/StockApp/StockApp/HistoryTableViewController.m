@@ -8,6 +8,8 @@
 
 #import "HistoryTableViewController.h"
 #import "User.h"
+#import "HistoryFavoriteTableViewCell.h"
+#import "TransactionTableViewCell.h"
 
 @interface HistoryTableViewController ()
 
@@ -50,7 +52,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return ([self.user getHistory].count / 4);
+    [self.user downloadHistory];
+    
+    return ([self.user getHistory].count / 5);
 }
 
 
@@ -66,21 +70,43 @@
         return nil;
     }
     
-    for (size_t index = 0; index < [array count]; index += 4)
+    for (size_t index = 0; index < [array count]; index += 5)
     {
         [newArray addObject:[array objectAtIndex:index]];
     }
     
     if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"buy" ]) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"TransactionTableViewCell" forIndexPath:indexPath];
+        
+        TransactionTableViewCell* newCell = (TransactionTableViewCell*)cell;
+        
+        size_t index = 5 * indexPath.row;
+        
+        newCell.stockStickerLabel.text = [array objectAtIndex:index + 4];
+        newCell.stockPriceLabel.text = [array objectAtIndex:index + 2];
+        newCell.amountOfSharesLabel.text = [array objectAtIndex:index + 1];
+        
     } else if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"sell"])
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"TransactionTableViewCell" forIndexPath:indexPath];
+        
+        TransactionTableViewCell* newCell = (TransactionTableViewCell*)cell;
+        
+        size_t index = 5 * indexPath.row;
+        
+        newCell.stockStickerLabel.text = [array objectAtIndex:index + 4];
+        newCell.stockPriceLabel.text = [array objectAtIndex:index + 2];
+        newCell.amountOfSharesLabel.text = [array objectAtIndex:index + 1];
         
     } else if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"favorite"])
     {
         cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryFavoriteTableViewCell" forIndexPath:indexPath];
 
+        HistoryFavoriteTableViewCell* newCell = (HistoryFavoriteTableViewCell*)cell;
+        
+        size_t index = 5 * indexPath.row;
+        
+        newCell.stockStickerLabel.text = [array objectAtIndex:index + 4];
     }
     
     return cell;
