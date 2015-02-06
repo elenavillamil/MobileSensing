@@ -116,7 +116,7 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
 - (void) refreshData {
     NSMutableArray* favorites = [self.user getFavorites];
     
-    /*for (size_t index = 0; index < [self.arrayOfCells count]; ++index)
+    for (size_t index = 0; index < [self.arrayOfCells count]; ++index)
     {
         FavoriteCollectionViewCell * cell = (FavoriteCollectionViewCell*)[self.arrayOfCells objectAtIndex:index];
         
@@ -124,12 +124,15 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
         
         for (size_t innerIndex = 0; innerIndex < [favorites count]; ++innerIndex)
         {
-            if ([favoriteName.text isEqualToString:(NSString*)[favorites objectAtIndex:innerIndex]])
+            Stock * stock = (Stock*)[favorites objectAtIndex:innerIndex];
+            
+            if ([favoriteName.text isEqualToString: stock.stockTicker])
             {
-                [cell stockPriceLabel].text = (NSString*)[favorites objectAtIndex:innerIndex + 3];
+                [cell stockPriceLabel].text = stock.stockPrice;
+                [cell stockPercentChange].text = stock.percentChange;
             }
         }
-    }*/
+    }
 }
 
 #pragma mark <UICollectionViewDataSource>

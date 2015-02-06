@@ -179,7 +179,7 @@
             // Get user favorite stocks and the stocks information.
             [self getFavoriteStocksInfo:self.usernameTextField.text];
             
-            [self.user newTimerWith:1];
+            [self.user newTimerWith:3];
             
             [self performSelectorInBackground:@selector(startThread) withObject:nil];
             
