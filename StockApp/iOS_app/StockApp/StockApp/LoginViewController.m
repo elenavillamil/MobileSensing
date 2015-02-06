@@ -10,6 +10,7 @@
 #import "FavStocksCollectionViewController.h"
 #import "User.h"
 #import "BackendApi.h"
+#import "Stock.h"
 
 @interface LoginViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
@@ -53,7 +54,7 @@
     {
         char usernameChar = [username characterAtIndex:index];
         char lowerUsernameChar = tolower(usernameChar);
-        
+
         if (lowerUsernameChar < 'a' || lowerUsernameChar > 'z')
         {
             areValidString = false;
@@ -94,6 +95,9 @@
             // saving an NSString
             [self.user setUsernameWith:self.usernameTextField.text];
             [self.user setPasswordWith:self.passwordTextField.text];
+            
+            // Getting the users favorite stocks information
+            [self getFavoriteStocksInfo:self.usernameTextField.text];
             
             UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
             
@@ -164,6 +168,9 @@
             [self.user setUsernameWith:self.usernameTextField.text];
             [self.user setPasswordWith:self.passwordTextField.text];
             
+            // Get user favorite stocks and the stocks information.
+            [self getFavoriteStocksInfo:self.usernameTextField.text];
+            
             UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
             
             [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
@@ -188,6 +195,18 @@
     return YES;
 }
 
+-(void) getFavoriteStocksInfo:(NSString*) username
+{
+    NSMutableArray* stocksInfo = [BackendApi getStockInfo:[BackendApi getFavorites:username]];
+    
+    for (int i = 0; i < stocksInfo.count; i+=4)
+    {
+        Stock* tempStock = [[Stock alloc] initWithTicker:stocksInfo[i] withPrice:stocksInfo[i+1] withPercentage:stocksInfo[i+3]];
+
+        [self.user addFavorite:tempStock];
+    }
+
+}
 /*
 #pragma mark - Navigation
 
