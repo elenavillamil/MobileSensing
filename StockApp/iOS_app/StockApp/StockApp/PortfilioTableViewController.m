@@ -63,7 +63,8 @@
     
 //     Configure the cell...
     OwnedStock *stock = (OwnedStock *)[[self.user getPortfolio] objectAtIndex:indexPath.row];
-    cell.
+    cell.amountLabel.text = [NSString stringWithFormat:@"%ld", (long)stock.amount ];
+    cell.stockTickerLabel.text = stock.stockName;
     
     return cell;
 }
@@ -116,10 +117,6 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    CompanyProfileViewController *companyProfile = (CompanyProfileViewController *)[segue destinationViewController];
-    
-    PortfolioTableViewCell *cell = (PortfolioTableViewCell *)sender;
-    [companyProfile setStock:cell.companyStock];
     
 }
  

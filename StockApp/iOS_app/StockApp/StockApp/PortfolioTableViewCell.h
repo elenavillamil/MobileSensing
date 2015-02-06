@@ -12,6 +12,6 @@
 @interface PortfolioTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *amountLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *stockTickerLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stockTickerLabel;
 
 @end

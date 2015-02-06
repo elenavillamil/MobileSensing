@@ -126,10 +126,22 @@
     return NO;
 }
 
+- (NSString *)filePath
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *filePath = [documentsPath stringByAppendingPathComponent:@"portfolio.csv"];
+    if ([fileManager fileExistsAtPath:filePath]) {
+        return filePath;
+    }
+    return nil;
+}
+
 - (void)writePortfolioToFile
 {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[self dataFilePath]]) {
-        [[NSFileManager defaultManager] createFileAtPath: [self dataFilePath] contents:nil attributes:nil];
+    NSString *filePath = [self filePath];
+    if (!filePath){
+        
     }
     //ticker, buyprice, amount
     NSString *writeString = @"";
@@ -140,27 +152,21 @@
     //Moved this stuff out of the loop so that you write the complete string once and only once.
 
     NSFileHandle *handle;
-    handle = [NSFileHandle fileHandleForWritingAtPath: [self dataFilePath] ];
+    handle = [NSFileHandle fileHandleForWritingAtPath:filePath];
     [handle writeData:[writeString dataUsingEncoding:NSUTF8StringEncoding]];
     
 }
 
--(NSString *)dataFilePath {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    return [documentsDirectory stringByAppendingPathComponent:@"portfolio.csv"];
-}
-
 - (NSMutableArray *)readPortfolioFromFile
 {
-    NSMutableArray *array = nil;
+        int column = 0;
     
-    int column = 0;
-    NSArray  *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* savePath = [paths objectAtIndex:0];
-    savePath = [savePath stringByAppendingPathComponent:@"portfolio.csv"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *filePath = [documentsPath stringByAppendingPathComponent:@"portfolio.csv"];
+    BOOL fileExists = [fileManager fileExistsAtPath:filePath];
     
-    NSString *fullPath = savePath;
+    NSString *fullPath = [self filePath];
     
     NSMutableArray *titleArray=[[NSMutableArray alloc]init];
     

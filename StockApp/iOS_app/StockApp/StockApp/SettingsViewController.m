@@ -46,7 +46,7 @@
 
 -(void)onSimulationSwitchValueChange:(id)sender
 {
-    [sender timesForPicker
+//    [sender timesForPicker
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
