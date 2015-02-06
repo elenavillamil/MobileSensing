@@ -11,5 +11,7 @@
 @interface FavStocksCollectionViewController : UICollectionViewController <UIPageViewControllerDataSource>
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
+@property (weak, nonatomic) IBOutlet UIView *emptyView;
+@property (weak, nonatomic) IBOutlet UILabel *addFavoritesLabel;
 
 @end
