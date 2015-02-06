@@ -679,6 +679,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="NVP-9n-CMU" firstAttribute="leading" secondItem="JDo-db-GvX" secondAttribute="trailing" constant="45" id="2EG-iP-jNM"/>
+                            <constraint firstItem="GF1-wO-doO" firstAttribute="top" secondItem="7EN-65-5rO" secondAttribute="bottom" constant="43" id="591-ag-4k3"/>
                             <constraint firstItem="Kiy-EX-bFf" firstAttribute="top" secondItem="nVC-29-Vhg" secondAttribute="bottom" constant="56" id="5wZ-JI-hQa"/>
                             <constraint firstItem="JDo-db-GvX" firstAttribute="top" secondItem="GF1-wO-doO" secondAttribute="bottom" constant="50" id="9Me-ve-a6s"/>
                             <constraint firstItem="JDo-db-GvX" firstAttribute="top" secondItem="GF1-wO-doO" secondAttribute="bottom" constant="50" id="B00-Es-zxA"/>

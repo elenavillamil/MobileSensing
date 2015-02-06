@@ -232,8 +232,7 @@ static NSString * const test = @"http://d.yimg.com/autoc.finance.yahoo.com/autoc
     // Pass the selected object to the new view controller.
     SearchTableViewCell *searchCell = (SearchTableViewCell *)sender;
     CompanyProfileViewController *profile = (CompanyProfileViewController *)[segue destinationViewController];
-    Stock *stock = [[Stock alloc] init];
-    [profile setStock:stock];
+    [profile setInfo:searchCell.tickerLabel.text withCompanyName:searchCell.companyNameLabel.text];
 }
 
 

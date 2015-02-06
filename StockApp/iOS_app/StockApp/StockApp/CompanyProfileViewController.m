@@ -48,7 +48,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = @"Company";
     [self setupScrollView];
     
     self.graphData = [Graph sharedInstance];
@@ -63,8 +62,8 @@
 
 - (void)setInfo:(NSString *)ticker withCompanyName:(NSString *)name
 {
-    self.companyStock = [[Stock alloc] initWithTicker:ticker withPrice:@"" withPercentage:@""];
-    
+    self.companyStock = [[Stock alloc] initWithTicker:ticker withPrice:@" " withPercentage:@" "];
+    self.title = name;
 }
 
 - (void)showLoading
