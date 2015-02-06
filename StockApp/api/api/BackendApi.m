@@ -382,4 +382,22 @@ NSOutputStream *outputStream;
     return returnArray;
 }
 
++ (BOOL) resetAccount:(NSString *)username {
+    char function = (char)11;
+    char usernameSize = (char)[username length];
+    
+    NSString * messageToSend = [NSString stringWithFormat:@"%c%c%@", function, usernameSize, username];
+    
+    [self sendString:messageToSend];
+    NSString* returnedString = [self readString];
+    
+    if ([returnedString isEqualToString:@"0"])
+    {
+        return false;
+    }
+    
+    return true;
+    
+}
+
 @end
