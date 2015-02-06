@@ -24,6 +24,9 @@
 @property (nonatomic, retain) Stock *company;
 @property (retain) id<GraphDelegate> delegate;
 
+
++(Graph *)sharedInstance;
+
 - (void)getStockGraphData;
 - (NSString *)getCurrentPrice;
 - (NSString *)getPercentChange;

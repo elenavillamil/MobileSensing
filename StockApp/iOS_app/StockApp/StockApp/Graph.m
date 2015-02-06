@@ -20,6 +20,17 @@ static NSString * const baseURL = @"https://www.quandl.com/api/v1/datasets/WIKI/
 
 @implementation Graph
 
++ (Graph *)sharedInstance
+{
+    static Graph *sharedGraph = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedGraph = [[self alloc] init];
+    });
+    return sharedGraph;
+}
+
+
 - (instancetype)init
 {
     if (self = [super init]) {
