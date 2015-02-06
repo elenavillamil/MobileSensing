@@ -260,6 +260,8 @@
 -(void)refresh {
     //Get updated info from backend
     
+    [self downloadHistory];
+    
     NSMutableArray* favoriteNames = [BackendApi getFavorites:[self getUsername]];
     [self.favorites removeAllObjects];
     
