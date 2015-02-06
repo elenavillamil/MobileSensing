@@ -10,6 +10,7 @@
 #import "User.h"
 #import "HistoryFavoriteTableViewCell.h"
 #import "TransactionTableViewCell.h"
+#import "HistoryStopTableViewCell.h"
 
 @interface HistoryTableViewController ()
 
@@ -86,15 +87,15 @@
         
     } else if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"sell"])
     {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"TransactionTableViewCell" forIndexPath:indexPath];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"HistoryStopTableViewCell" forIndexPath:indexPath];
         
-        TransactionTableViewCell* newCell = (TransactionTableViewCell*)cell;
+        HistoryStopTableViewCell* newCell = (HistoryStopTableViewCell*)cell;
         
         size_t index = 5 * indexPath.row;
         
         newCell.stockStickerLabel.text = [array objectAtIndex:index + 4];
         newCell.stockPriceLabel.text = [array objectAtIndex:index + 2];
-        newCell.amountOfSharesLabel.text = [array objectAtIndex:index + 1];
+        newCell.dateLabel.text = [array objectAtIndex:index + 1];
         
     } else if ([[newArray objectAtIndex:indexPath.row] isEqualToString:@"favorite"])
     {
