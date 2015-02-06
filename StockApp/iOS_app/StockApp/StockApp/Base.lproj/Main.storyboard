@@ -490,7 +490,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="SVM-4M-tPO">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Hfy-qr-ecN">
+                        <barButtonItem key="rightBarButtonItem" title="Favorite" id="Hfy-qr-ecN">
                             <connections>
                                 <action selector="saveToFavorites:" destination="ShH-WR-SWx" id="w3G-QA-6jn"/>
                             </connections>
@@ -502,6 +502,7 @@
                         <outlet property="companyIconImageView" destination="7a4-0N-h6L" id="Jbd-lr-ymd"/>
                         <outlet property="companyScrollView" destination="Ksc-29-i2p" id="hZr-zL-Dod"/>
                         <outlet property="confirmButton" destination="nII-48-XVm" id="MGe-G6-PgK"/>
+                        <outlet property="favoriteButton" destination="Hfy-qr-ecN" id="2jR-ab-xZG"/>
                         <outlet property="graphScrollView" destination="uNJ-60-iUQ" id="AtC-YC-lTc"/>
                         <outlet property="graphView" destination="9Xx-Cf-2cm" id="c7J-G2-2iu"/>
                         <outlet property="maxValueLabel" destination="YXQ-zc-L7r" id="2d2-4S-WmR"/>

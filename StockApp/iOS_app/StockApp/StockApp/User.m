@@ -148,4 +148,9 @@
     //Get updated info from backend
 }
 
+-(void)removeFavorite:(Stock *)stock
+{
+    [self.favorites removeObject:stock];
+}
+
 @end

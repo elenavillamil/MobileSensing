@@ -40,50 +40,6 @@
     return self;
 }
 
-- (NSString *)stockName
-{
-    if (!_stockName) {
-        _stockName = [NSString init];
-    }
-    
-    return _stockName;
-}
-
-- (NSString *)stockPrice
-{
-    if (!_stockPrice) {
-        _stockPrice = [NSString init];
-    }
-    
-    return _stockPrice;
-}
-
-- (NSString *)stockTicker
-{
-    if (!_stockTicker) {
-        _stockTicker = [NSString init];
-    }
-    
-    return _stockTicker;
-}
-
-- (NSString *)percentChange
-{
-    if (!_percentChange) {
-        _percentChange = [NSString init];
-    }
-    
-    return _percentChange;
-}
-
-- (BOOL)positive
-{
-    if (!_positive) {
-        _positive = false;
-    }
-    
-    return _positive;
-}
 
 
 

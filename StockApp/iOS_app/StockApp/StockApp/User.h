@@ -28,5 +28,6 @@
 -(void)setPasswordWith:(NSString *)password;
 -(NSString*)getUsername;
 -(NSString*)getPassword;
+-(void)removeFavorite:(Stock*)stock;
 
 @end

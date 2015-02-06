@@ -12,6 +12,8 @@
 #import "FavoriteCollectionViewCell.h"
 #import "UIColor+SAColor.h"
 #import "User.h"
+#import "CompanyProfileViewController.h"
+#import "Stock.h"
 
 @interface FavStocksCollectionViewController ()
 
@@ -84,15 +86,19 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    FavoriteCollectionViewCell *cell = (FavoriteCollectionViewCell *)sender;
+    CompanyProfileViewController *profileVC = (CompanyProfileViewController*)[segue destinationViewController];
+    Stock* stock = [[Stock alloc] initWithTicker:cell.stockNameLabel.text withPrice:cell.stockPriceLabel.text withPercentage:cell.stockPercentChange.text];
+    [profileVC setStock:stock];
 }
-*/
+
 
 #pragma mark <UICollectionViewDataSource>
 
