@@ -64,6 +64,8 @@
             [alert_view show];
             self.usernameTextField.text = @"";
             self.passwordTextField.text = @"";
+            
+            break;
         }
     }
     
@@ -81,6 +83,8 @@
             [alert_view show];
             self.usernameTextField.text = @"";
             self.passwordTextField.text = @"";
+            
+            break;
         }
     }
     
@@ -132,6 +136,8 @@
             [alert_view show];
             self.usernameTextField.text = @"";
             self.passwordTextField.text = @"";
+            
+            break;
         }
     }
     
@@ -140,7 +146,7 @@
         char passwordChar = [password characterAtIndex:index];
         char lowerPasswordChar = tolower(passwordChar);
         
-        if (lowerPasswordChar < ' ')
+        if (lowerPasswordChar == ' ')
         {
             areValidString = false;
             
@@ -149,6 +155,8 @@
             [alert_view show];
             self.usernameTextField.text = @"";
             self.passwordTextField.text = @"";
+            
+            break;
         }
     }
     

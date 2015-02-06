@@ -15,13 +15,13 @@ NSMutableData *data;
 NSInputStream *inputStream;
 NSOutputStream *outputStream;
 
-#define DEBUG 0
+#define DEBUG 1
 
 + (void)initNetworkConnection{
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.43.161.14", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
     
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -146,6 +146,11 @@ NSOutputStream *outputStream;
 }
 
 + (NSString *)signIn:(NSString*) username withPassword:(NSString*) password {
+    if (!username || !password)
+    {
+        return @"";
+    }
+    
     char routine = (char) 2; // sign in code
     char usernameSize = (char)[username length];
     char passwordSize = (char)[password length];
@@ -155,6 +160,7 @@ NSOutputStream *outputStream;
     [self sendString:messageToSend];
     
     NSString* readString = [self readString];
+    
     
     return readString;
 }
@@ -248,7 +254,7 @@ NSOutputStream *outputStream;
     return [readString intValue];
 }
 
-+ (NSMutableArray*) getStockInfo:(NSArray *)stocks{
++ (NSMutableArray*) getStockInfo:(NSMutableArray *)stocks{
     char function = (char)4;
     char numberOfStocs = (char)stocks.count;
     NSString* stocksString = @"";
@@ -397,7 +403,6 @@ NSOutputStream *outputStream;
     }
     
     return false;
-    
 }
 
 @end
