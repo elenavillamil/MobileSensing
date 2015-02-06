@@ -215,6 +215,7 @@ namespace StockApp
                elements.Add("sell_amount", amount);
                elements.Add("sell_value", value);
                elements.Add("current_money", current_money);
+               elements.Add("name", name);
 
                BsonDocument to_be_inserted = new BsonDocument(elements);
 
@@ -275,6 +276,7 @@ namespace StockApp
                elements.Add("sell_amount", amount);
                elements.Add("sell_value", value);
                elements.Add("current_money", current_money);
+               elements.Add("name", name);
 
                BsonDocument to_be_inserted = new BsonDocument(elements);
 
@@ -387,7 +389,7 @@ namespace StockApp
          return 0;
       }
 
-      public static List<Tuple<string, double, double, double>> GetHistory(string username)
+      public static List<Tuple<string, double, double, double, string>> GetHistory(string username)
       {
          if (db_management == null)
          {
@@ -399,7 +401,7 @@ namespace StockApp
          var query = Query.EQ("username", username);
          var cursor = accounts.Find(query);
 
-         List<Tuple<string,double,double,double>> to_be_return = new List<Tuple<string, double, double, double>>();
+         List<Tuple<string,double,double,double, string>> to_be_return = new List<Tuple<string, double, double, double, string>>();
          foreach (BsonDocument c in cursor)
          {
             try
@@ -417,17 +419,17 @@ namespace StockApp
                returned_document.TryGetValue("history_list", out value);
 
                BsonArray bson_arr = value.AsBsonArray;
-               Tuple<string, double, double, double> temp;
+               Tuple<string, double, double, double, string> temp;
                for (int i = 0; i < bson_arr.Count; i++)
                {
-                  temp = new Tuple<string, double, double, double>(bson_arr[i][0].AsString, bson_arr[i][1].AsDouble, bson_arr[i][2].AsDouble, bson_arr[i][3].AsDouble);
+                  temp = new Tuple<string, double, double, double, string>(bson_arr[i][0].AsString, bson_arr[i][1].AsDouble, bson_arr[i][2].AsDouble, bson_arr[i][3].AsDouble, bson_arr[i][4].AsString);
                   to_be_return.Add(temp);
                }
 
             }
-            catch
+            catch (Exception e)
             {
-
+               Console.WriteLine(e.ToString());
             }
          }
 
@@ -443,11 +445,19 @@ namespace StockApp
 
          MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
          MongoCollection<BsonDocument> favorite_collection = database.GetCollection<BsonDocument>("favorite");
+         MongoCollection<BsonDocument> history_collection = database.GetCollection<BsonDocument>("history");
          var query = Query.EQ("username", username);
          var cursor = accounts.Find(query);
 
          foreach (BsonDocument c in cursor) 
          {
+            BsonElement history_id;
+            c.TryGetElement("history_id", out history_id);
+
+            string string_history_id = history_id.Value.AsString;
+            ObjectId object_history_id = new ObjectId(string_history_id);
+            var query_history_collection = Query.EQ("_id", object_history_id);
+
             BsonElement account_id;
             c.TryGetElement("favorite_id", out account_id);
 
@@ -465,6 +475,22 @@ namespace StockApp
             };
 
             favorite_collection.Update(query_favorite_collection, favorite_update_document);
+
+            Dictionary<string, object> elements = new Dictionary<string,object>();
+
+            elements.Add("type", "favorite");
+            elements.Add("sell_amount", 0.0);
+            elements.Add("sell_value", 0.0);
+            elements.Add("current_money", 0.0);
+            elements.Add("name", name);
+
+            BsonDocument history_to_be_inserted = new BsonDocument(elements);
+
+            var history_update_document = new UpdateDocument {
+               { "$push", new BsonDocument("history_list", history_to_be_inserted) }
+            };
+
+            history_collection.Update(query_history_collection, history_update_document);
 
          }
 

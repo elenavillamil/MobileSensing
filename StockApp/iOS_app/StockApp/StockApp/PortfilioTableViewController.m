@@ -63,8 +63,11 @@
     
 //     Configure the cell...
     OwnedStock *stock = (OwnedStock *)[[self.user getPortfolio] objectAtIndex:indexPath.row];
+
     cell.amountLabel.text = [NSString stringWithFormat:@"%ld", (long)stock.amount ];
     cell.stockTickerLabel.text = stock.stockName;
+
+    
     
     return cell;
 }

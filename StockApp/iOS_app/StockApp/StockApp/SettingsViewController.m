@@ -34,26 +34,6 @@
     
 }
 
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return self.timesForPicker.count;
-}
-
--(void)onSimulationSwitchValueChange:(id)sender
-{
-//    [sender timesForPicker
-}
-
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return self.timesForPicker[row];
-}
-
 - (User *)user
 {
     if (!_user) {
@@ -69,6 +49,9 @@
 }
 
 - (IBAction)doneButtonPressed:(id)sender {
+    NSString* selected = [self.timesForPicker objectAtIndex:[self.customPicker selectedRowInComponent:0]];
+    [self.user newTimerWith:selected.integerValue];
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -94,12 +77,6 @@
     }
 }
 
--(IBAction)onTimerSegmentedControlValueChange:(id)sender{
-    NSString* newTime = [sender titleForSegmentAtIndex:self.timerSegmentedControl.selectedSegmentIndex];
-    // Set NSTimer to this number
-    [self.user newTimerWith:newTime.integerValue];
-}
-
 - (IBAction)onResetButtonTouchUpInside:(id)sender {
     // Call reset on db
     [self.user reset];
@@ -113,4 +90,21 @@
     
     [[UIApplication sharedApplication].keyWindow setRootViewController:loginViewController];
 }
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.timesForPicker.count;
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return self.timesForPicker[row];
+}
+
+
 @end
