@@ -21,7 +21,9 @@ NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.43.161.14", 8080, &readStream, &writeStream);
+    //104.150.110.183 104.43.161.14
+    
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
     
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -343,10 +345,16 @@ NSOutputStream *outputStream;
         
         start += fourth_string_size + 1;
         
+        char fifth_string_size = [returnedString characterAtIndex:start];
+        NSString* fifth_string =[returnedString substringWithRange:NSMakeRange(start + 1, fifth_string_size)];
+        
+        start += fifth_string_size + 1;
+        
         [arrayToReturn addObject:first_string];
         [arrayToReturn addObject:second_string];
         [arrayToReturn addObject:third_string];
         [arrayToReturn addObject:fourth_string];
+        [arrayToReturn addObject:fifth_string];
     }
     
     return arrayToReturn;

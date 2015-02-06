@@ -135,7 +135,7 @@ namespace StockApp
       {
          string username = "jashook";
 
-         List<Tuple<string, double, double, double>> amount_result = DatabaseManagment.GetHistory(username);
+         List<Tuple<string, double, double, double, string>> amount_result = DatabaseManagment.GetHistory(username);
 
          foreach (var t in amount_result)
          {

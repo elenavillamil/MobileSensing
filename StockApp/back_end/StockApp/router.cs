@@ -544,6 +544,9 @@ namespace StockApp
 
             string fourth_string = tuple.Item4.ToString();
             char fourth_string_size = (char)fourth_string.Length;
+
+            string fifth_string = tuple.Item5;
+            char fifth_string_size = (char)tuple.Item5.Length;
          
             string_builder.Append(first_string_size);
             string_builder.Append(first_string);
@@ -556,6 +559,9 @@ namespace StockApp
 
             string_builder.Append(fourth_string_size);
             string_builder.Append(fourth_string);
+
+            string_builder.Append(fifth_string_size);
+            string_builder.Append(fifth_string);
          }
             
          string return_message = string_builder.ToString();
