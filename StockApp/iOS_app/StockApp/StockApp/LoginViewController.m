@@ -10,7 +10,7 @@
 #import "FavStocksCollectionViewController.h"
 #import "User.h"
 
-@interface LoginViewController ()
+@interface LoginViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (strong, nonatomic) User *user;
@@ -22,6 +22,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.usernameTextField.delegate = self;
+    self.passwordTextField.delegate = self;
+    
+    UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPressedUp:)];
+    [self.view addGestureRecognizer:twoFingerTapRecognizer];
+}
+
+- (void)tapPressedUp:(id)sender
+{
+    [self.usernameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,6 +69,17 @@
         //Change root navigation to favorite
 //        [self performSegueWithIdentifier:@"NavigationController" sender:self];
     }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if ([textField isEqual:self.usernameTextField]) {
+        [self.passwordTextField becomeFirstResponder];
+    } else{
+        [self.passwordTextField resignFirstResponder];
+    }
+    
+    return YES;
 }
 
 /*
