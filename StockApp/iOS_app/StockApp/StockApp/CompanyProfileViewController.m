@@ -179,6 +179,10 @@
     self.percentChangeLabel.text = [NSString stringWithFormat:@"%@", self.companyStock.percentChange];
     NSInteger moneyAvaliable = [self.user getCash];
     
+    
+    if ([self.companyStock.stockPrice intValue] == 0) {
+        return;
+    }
     NSInteger max = moneyAvaliable / [self.companyStock.stockPrice intValue];
     self.maxValueLabel.text = [NSString stringWithFormat:@"%d",max];
 }
@@ -303,6 +307,10 @@
     self.stockAmountSelectedLabel.text = @"Buy: ";
     
     NSInteger moneyAvaliable = [self.user getCash];
+    
+    if ([self.companyStock.stockPrice intValue] == 0) {
+        return;
+    }
     
     NSInteger max = moneyAvaliable / [self.companyStock.stockPrice intValue];
     self.maxValueLabel.text = [NSString stringWithFormat:@"%d",max];
