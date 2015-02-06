@@ -21,7 +21,7 @@ NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.43.161.14", 8080, &readStream, &writeStream);
     
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -403,6 +403,25 @@ NSOutputStream *outputStream;
     }
     
     return false;
+}
+
++ (BOOL) removeFavorite:(NSString *)username withStockName:(NSString *)stockName {
+    char routine = (char) 12; // remove_favorite code
+    char usernameSize = (char)[username length];
+    char stockNamesize = (char)[stockName length];
+    
+    NSString* messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@", routine, usernameSize, username, stockNamesize, stockName];
+    
+    [self sendString:messageToSend];
+    
+    NSString* readString = [self readString];
+    
+    if ([readString isEqualToString:@"Remove Failed"])
+    {
+        return false;
+    }
+    
+    return true;
 }
 
 @end

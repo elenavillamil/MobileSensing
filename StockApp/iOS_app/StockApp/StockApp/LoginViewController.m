@@ -32,6 +32,14 @@
     [self.view addGestureRecognizer:twoFingerTapRecognizer];
 }
 
+- (User *)user
+{
+    if (!_user) {
+        _user = [User sharedInstance];
+    }
+    return _user;
+}
+
 - (void)tapPressedUp:(id)sender
 {
     [self.usernameTextField resignFirstResponder];
@@ -165,11 +173,15 @@
         if (![[BackendApi signIn:self.usernameTextField.text withPassword:self.passwordTextField.text] isEqualToString:@"Login failed"])
         {
             // saving an NSString
-            [self.user setUsernameWith:self.usernameTextField.text];
-            [self.user setPasswordWith:self.passwordTextField.text];
+            [self.user setUsernameWith:username];
+            [self.user setPasswordWith:password];
             
             // Get user favorite stocks and the stocks information.
             [self getFavoriteStocksInfo:self.usernameTextField.text];
+            
+            [self.user newTimerWith:1];
+            
+            [self performSelectorInBackground:@selector(startThread) withObject:nil];
             
             UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
             
@@ -182,6 +194,11 @@
             [alert_view show];
         }
     }
+}
+
+- (void) startThread
+{
+    [self.user downloadHistory];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -211,14 +228,15 @@
     }
 
 }
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
 }
-*/
+
 
 @end

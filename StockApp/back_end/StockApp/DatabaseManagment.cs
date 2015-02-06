@@ -516,6 +516,46 @@ namespace StockApp
          return favorite_list;
       }
 
+      public static bool RemoveFavorite(string username, string to_be_removed)
+      {
+         if (db_management == null)
+         {
+            db_management = new DatabaseManagment();
+         }
+
+         MongoCollection<BsonDocument> accounts = database.GetCollection<BsonDocument>("users");
+         MongoCollection<BsonDocument> favorite_collection = database.GetCollection<BsonDocument>("favorite");
+         var query = Query.EQ("username", username);
+         var cursor = accounts.Find(query);
+
+         foreach (BsonDocument c in cursor)
+         {
+            try
+            {
+               BsonElement account_id;
+               c.TryGetElement("favorite_id", out account_id);
+
+               string string_id = account_id.Value.AsString;
+               ObjectId object_id = new ObjectId(string_id);
+               var query_favorite_collection = Query.EQ("_id", object_id);
+
+               var favorite_update_document = new UpdateDocument {
+                  { "$pull", new BsonDocument("favorite_list", new BsonDocument("name", to_be_removed)) }
+               };
+
+               var returned_document = favorite_collection.Update(query_favorite_collection, favorite_update_document);
+
+            }
+            catch
+            {
+               return false;
+            }
+         }
+
+         return true;
+
+      }
+
    }
 }
 

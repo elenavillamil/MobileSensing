@@ -180,6 +180,15 @@ namespace StockApp
             throw new Exception("FAILED TEST: Either add favorite or get favorite does not work");
          }
       }
+
+      private void TestRemoveFavorite()
+      {
+         string username = "jashook";
+         string stock = "amzn";
+
+         DatabaseManagment.AddFavorite(username, stock);
+         DatabaseManagment.RemoveFavorite(username, stock);
+      }
          
       private void TestSellOrder()
       {
@@ -651,7 +660,7 @@ namespace StockApp
          // Test with Two Threads
 
          RunServer();
-         //Run(TestHandleSettingUpAccount);
+         Run(TestHandleSettingUpAccount);
          //Run(TestHandleSigningIn);
          //Run(TestHandleRemoveAccount);
          //Run(TestHandleBuyOrder);
@@ -659,7 +668,7 @@ namespace StockApp
          //Run(TestHandleGetMoney);
          //Run(TestHandleGetHistory);
          //Run (TestHandleAddAndGetFavorites);
-         Run (TestHandleResetOrder);
+         Run (TestRemoveFavorite);
          //Run (TestGetHistory);
          //Run (TestAddFavoriteAndGetFavorites);
          /*Run (TestProperLogin);

@@ -42,6 +42,7 @@
     [self.pageViewController didMoveToParentViewController:self];
     
     self.navigationItem.title = @"Favorites";
+
 }
 
 - (void)didReceiveMemoryWarning {

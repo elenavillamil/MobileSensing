@@ -48,6 +48,9 @@
 @implementation CompanyProfileViewController
 
 - (void)viewDidLoad {
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    NSLog(@"%@",[def objectForKey:@"username"]);
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
@@ -63,11 +66,20 @@
     [self showLoading];
 }
 
+- (User *)user
+{
+    if (!_user) {
+        _user = [User sharedInstance];
+    }
+    return _user;
+}
+
 - (void)setInfo:(NSString *)ticker withCompanyName:(NSString *)name
 {
     self.companyStock = [[Stock alloc] initWithTicker:ticker withPrice:@" " withPercentage:@" "];
     self.title = name;
-    self.user = [User sharedInstance];
+    self.companyStock.stockName = name;
+
 }
 
 - (void)showLoading

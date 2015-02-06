@@ -15,7 +15,7 @@
 #import "CompanyProfileViewController.h"
 #import "Stock.h"
 
-@interface FavStocksCollectionViewController ()
+@interface FavStocksCollectionViewController () <UserDelegate>
 
 @property (strong, nonatomic) User* user;
 
@@ -32,6 +32,7 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     
     [self setupCellInsets];
     self.title = @"Favorites";
+    self.user.delegate = self;
     
     if ([self.user getFavorites].count == 0)
     {
@@ -99,6 +100,19 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     [profileVC setStock:stock];
 }
 
+
+#pragma mark - User delegate
+
+- (void) refreshData {
+    NSMutableArray* favorites = [self.user getFavorites];
+    
+    NSArray *visiblePaths = [self.collectionView indexPathsForVisibleItems];
+    
+    //for (size_t index = 0; index < [visiblePaths count]; ++index)
+    //{
+        
+    //}
+}
 
 #pragma mark <UICollectionViewDataSource>
 
