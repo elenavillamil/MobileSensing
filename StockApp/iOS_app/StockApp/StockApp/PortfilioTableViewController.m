@@ -63,7 +63,7 @@
     
 //     Configure the cell...
     OwnedStock *stock = (OwnedStock *)[[self.user getPortfolio] objectAtIndex:indexPath.row];
-    cell.
+    
     
     return cell;
 }
@@ -119,7 +119,7 @@
     CompanyProfileViewController *companyProfile = (CompanyProfileViewController *)[segue destinationViewController];
     
     PortfolioTableViewCell *cell = (PortfolioTableViewCell *)sender;
-    [companyProfile setStock:cell.companyStock];
+    //[companyProfile setStock:cell.companyStock];
     
 }
  

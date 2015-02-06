@@ -654,7 +654,7 @@
                                     <action selector="onSignOutButtonTouchUpInside:" destination="JSB-EG-CJA" eventType="touchUpInside" id="CIJ-Kg-6Vp"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1JM-KB-0Fj">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1JM-KB-0Fj">
                                 <rect key="frame" x="274" y="107" width="51" height="31"/>
                                 <color key="backgroundColor" red="0.7390309343" green="0.7390309343" blue="0.7390309343" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -681,8 +681,8 @@
                                     <action selector="onResetButtonTouchUpInside:" destination="JSB-EG-CJA" eventType="touchUpInside" id="wky-1s-beS"/>
                                 </connections>
                             </button>
-                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A3k-lb-k7F">
-                                <rect key="frame" x="111" y="121" width="375" height="162"/>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A3k-lb-k7F">
+                                <rect key="frame" x="248" y="152" width="100" height="100"/>
                                 <connections>
                                     <outlet property="dataSource" destination="JSB-EG-CJA" id="FbF-Q9-4hv"/>
                                     <outlet property="delegate" destination="JSB-EG-CJA" id="bHZ-oa-M9c"/>
@@ -691,7 +691,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="1JM-KB-0Fj" firstAttribute="top" secondItem="7EN-65-5rO" secondAttribute="bottom" constant="43" id="4a2-10-cdJ"/>
+                            <constraint firstItem="A3k-lb-k7F" firstAttribute="centerX" secondItem="1JM-KB-0Fj" secondAttribute="centerX" id="4k4-1m-g48"/>
+                            <constraint firstItem="Kiy-EX-bFf" firstAttribute="top" secondItem="A3k-lb-k7F" secondAttribute="bottom" constant="5" id="6sl-kO-MR1"/>
                             <constraint firstItem="nVC-29-Vhg" firstAttribute="top" secondItem="JDo-db-GvX" secondAttribute="bottom" constant="49" id="7Lk-6S-RFl"/>
+                            <constraint firstItem="A3k-lb-k7F" firstAttribute="leading" secondItem="JDo-db-GvX" secondAttribute="trailing" constant="59" id="9Lh-mF-Pdf"/>
                             <constraint firstItem="JDo-db-GvX" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="13" id="DfG-nE-tTb"/>
                             <constraint firstItem="GF1-wO-doO" firstAttribute="leading" secondItem="l9y-TF-mlw" secondAttribute="leadingMargin" constant="13" id="eqf-1D-hmC"/>
                             <constraint firstItem="GF1-wO-doO" firstAttribute="top" secondItem="7EN-65-5rO" secondAttribute="bottom" constant="44" id="fHh-eR-KEK"/>
