@@ -55,11 +55,63 @@ namespace StockApp
 
    			} while (bytes_transfered == ARR_SIZE);
 
-   			Thread starting_thread = new Thread (() => handler_start (accepting_socket, message));
+            Thread starting_thread = new Thread (() => handler_run (accepting_socket, message));
 
             starting_thread.Start();
    		}
    	}
+
+      private static bool SocketConnected(Socket s)
+      {
+         bool part1 = s.Poll(1000, SelectMode.SelectRead);
+         bool part2 = (s.Available == 0);
+         if (part1 && part2)
+            return false;
+         else
+            return true;
+      }
+
+      private static void handler_run(Socket socket, string message)
+      {
+         handler_start(socket, message);
+
+         while (SocketConnected(socket) == true) {
+            const int ARR_SIZE = 256;
+            int bytes_transfered = 0;
+
+            socket.ReceiveTimeout = 1000;
+
+            //Socket Buffer
+            byte[] buffer = new byte[ARR_SIZE];
+
+            string new_message = "";
+
+            do
+            {
+               try
+               {
+                  bytes_transfered = socket.Receive(buffer, buffer.Length, 0);
+               }
+
+               catch(Exception e)
+               {
+                  if (SocketConnected(socket) == false)
+                  {
+                     break;
+                  }
+               }
+
+               new_message = new_message + Encoding.ASCII.GetString(buffer, 0, bytes_transfered);
+
+            } while (bytes_transfered == ARR_SIZE);
+
+            handler_start(socket, new_message);
+         }
+
+         Console.WriteLine("Connection ended, closing the socket");
+
+         socket.Close();
+      }
 
    	private static void handler_start(Socket socket, string message)
    	{
@@ -94,27 +146,7 @@ namespace StockApp
          } else if (switch_number == 11) {
             handle_reset (socket, message);
          }
-
-         while (socket.Connected) {
-            const int ARR_SIZE = 256;
-            int bytes_transfered = 0;
-
-            //Socket Buffer
-            byte[] buffer = new byte[ARR_SIZE];
-
-            string new_message = "";
-
-            do
-            {
-               bytes_transfered = socket.Receive(buffer, buffer.Length, 0);
-
-               new_message = new_message + Encoding.ASCII.GetString(buffer, 0, bytes_transfered);
-
-            } while (bytes_transfered == ARR_SIZE);
-
-            handler_start(socket, new_message);
-         }
-   	}
+      }
 
    	////////////////////////////////////////////////////////////////////////////////
    	//

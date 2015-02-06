@@ -16,7 +16,7 @@
 + (BOOL)buyOrder:(NSString *) username withStockName:(NSString *)stockName withValue:(double) value withAmount:(size_t) amount;
 + (BOOL)sellOrder:(NSString *) username withStockName:(NSString *)stockName withValue:(double) value withAmount:(size_t) amount;
 + (NSInteger)currentAmountOfMoney:(NSString *) username;
-+ (NSMutableArray*) getStockInfo:(NSArray *)stocks;
++ (NSMutableArray*) getStockInfo:(NSMutableArray *)stocks;
 + (NSMutableArray*) getHistory:(NSString *) username;
 + (BOOL) addFavorite:(NSString *) username withStockName:(NSString *) stockName;
 + (NSMutableArray *) getFavorites:(NSString *) username;
