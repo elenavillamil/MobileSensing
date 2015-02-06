@@ -175,7 +175,7 @@ static NSString * const reuseIdentifier = @"FavoriteCollectionViewCell";
     cell.stockNameLabel.text = cellStock.stockTicker;
     cell.stockPercentChange.text = cellStock.percentChange;
     cell.stockPriceLabel.text = cellStock.stockPrice;
-    cell.positiveChange = (cellStock.percentChange < 0);
+    cell.positiveChange = ([cellStock.percentChange characterAtIndex:0] != '-');
     
     [self.arrayOfCells addObject:cell];
     

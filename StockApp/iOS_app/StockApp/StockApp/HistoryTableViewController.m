@@ -7,12 +7,23 @@
 //
 
 #import "HistoryTableViewController.h"
+#import "User.h"
 
 @interface HistoryTableViewController ()
+
+@property (strong, nonatomic) User* user;
 
 @end
 
 @implementation HistoryTableViewController
+
+- (User *)user {
+    if (!_user) {
+        _user = [ User sharedInstance];
+    }
+    
+    return _user;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -39,7 +50,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 3;
+    return ([self.user getHistory].count / 4);
 }
 
 
