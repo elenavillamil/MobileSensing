@@ -197,13 +197,17 @@
 
 -(void) getFavoriteStocksInfo:(NSString*) username
 {
-    NSMutableArray* stocksInfo = [BackendApi getStockInfo:[BackendApi getFavorites:username]];
-    
-    for (int i = 0; i < stocksInfo.count; i+=4)
+    NSMutableArray* stocksNames = [BackendApi getFavorites:username];
+    if(stocksNames.count > 0)
     {
-        Stock* tempStock = [[Stock alloc] initWithTicker:stocksInfo[i] withPrice:stocksInfo[i+1] withPercentage:stocksInfo[i+3]];
+        NSMutableArray* stocksInfo = [BackendApi getStockInfo:stocksNames];
+    
+        for (int i = 0; i < stocksInfo.count; i+=4)
+        {
+            Stock* tempStock = [[Stock alloc] initWithTicker:stocksInfo[i] withPrice:stocksInfo[i+1] withPercentage:stocksInfo[i+3]];
 
-        [self.user addFavorite:tempStock];
+            [self.user addFavorite:tempStock];
+        }
     }
 
 }
