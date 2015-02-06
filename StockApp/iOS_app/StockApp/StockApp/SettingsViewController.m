@@ -44,11 +44,6 @@
     return self.timesForPicker.count;
 }
 
--(void)onSimulationSwitchValueChange:(id)sender
-{
-    [sender timesForPicker
-}
-
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     return self.timesForPicker[row];
