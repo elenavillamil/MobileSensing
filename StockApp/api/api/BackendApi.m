@@ -21,7 +21,7 @@ NSOutputStream *outputStream;
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.116.175", 8080, &readStream, &writeStream);
         
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -391,12 +391,12 @@ NSOutputStream *outputStream;
     [self sendString:messageToSend];
     NSString* returnedString = [self readString];
     
-    if ([returnedString isEqualToString:@"0"])
+    if ([returnedString isEqualToString:@"1"])
     {
-        return false;
+        return true;
     }
     
-    return true;
+    return false;
     
 }
 

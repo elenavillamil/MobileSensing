@@ -15,13 +15,13 @@ NSMutableData *data;
 NSInputStream *inputStream;
 NSOutputStream *outputStream;
 
-#define DEBUG 0
+#define DEBUG 1
 
 + (void)initNetworkConnection{
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.110.183", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.150.116.175", 8080, &readStream, &writeStream);
         
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -146,6 +146,11 @@ NSOutputStream *outputStream;
 }
 
 + (NSString *)signIn:(NSString*) username withPassword:(NSString*) password {
+    if (!username || !password)
+    {
+        return @"";
+    }
+    
     char routine = (char) 2; // sign in code
     char usernameSize = (char)[username length];
     char passwordSize = (char)[password length];
@@ -380,6 +385,24 @@ NSOutputStream *outputStream;
     }
     
     return returnArray;
+}
+
++ (BOOL) resetAccount:(NSString *)username {
+    char function = (char)11;
+    char usernameSize = (char)[username length];
+    
+    NSString * messageToSend = [NSString stringWithFormat:@"%c%c%@", function, usernameSize, username];
+    
+    [self sendString:messageToSend];
+    NSString* returnedString = [self readString];
+    
+    if ([returnedString isEqualToString:@"1"])
+    {
+        return true;
+    }
+    
+    return false;
+    
 }
 
 @end

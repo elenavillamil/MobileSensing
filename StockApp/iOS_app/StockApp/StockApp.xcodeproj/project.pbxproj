@@ -31,6 +31,7 @@
 		EA4D244B1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D244A1A78BB15002C4201 /* HistoryFavoriteTableViewCell.m */; };
 		EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4D244D1A78BB2B002C4201 /* HistoryStopTableViewCell.m */; };
 		EA77DE121A79694F00B7BD08 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA77DE111A79694F00B7BD08 /* LoginViewController.m */; };
+		F3B94D1C1A84588000DF4E48 /* BackendApi.m in Sources */ = {isa = PBXBuildFile; fileRef = F3B94D1A1A84588000DF4E48 /* BackendApi.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +93,8 @@
 		EA4D244D1A78BB2B002C4201 /* HistoryStopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryStopTableViewCell.m; sourceTree = "<group>"; };
 		EA77DE101A79694F00B7BD08 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		EA77DE111A79694F00B7BD08 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		F3B94D1A1A84588000DF4E48 /* BackendApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BackendApi.m; path = StockApp/BackendApi.m; sourceTree = "<group>"; };
+		F3B94D1B1A84588000DF4E48 /* BackendApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackendApi.h; path = StockApp/BackendApi.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +160,8 @@
 		EA4D23FD1A789302002C4201 = {
 			isa = PBXGroup;
 			children = (
+				F3B94D1A1A84588000DF4E48 /* BackendApi.m */,
+				F3B94D1B1A84588000DF4E48 /* BackendApi.h */,
 				EA4D24081A789302002C4201 /* StockApp */,
 				EA4D24221A789302002C4201 /* StockAppTests */,
 				EA4D24071A789302002C4201 /* Products */,
@@ -391,6 +396,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA0370521A82F18700956A6F /* GraphPoint.m in Sources */,
+				F3B94D1C1A84588000DF4E48 /* BackendApi.m in Sources */,
 				EA0DCCD81A79873700D7DF4C /* CompanyProfileViewController.m in Sources */,
 				EA4D244E1A78BB2B002C4201 /* HistoryStopTableViewCell.m in Sources */,
 				EA0DCCD51A79812C00D7DF4C /* UIColor+SAColor.m in Sources */,
