@@ -177,7 +177,10 @@
     self.title = self.companyStock.stockName;
     self.priceLabel.text = [NSString stringWithFormat:@"$%@", self.companyStock.stockPrice];
     self.percentChangeLabel.text = [NSString stringWithFormat:@"%@", self.companyStock.percentChange];
+    NSInteger moneyAvaliable = [self.user getCash];
     
+    NSInteger max = moneyAvaliable / [self.companyStock.stockPrice intValue];
+    self.maxValueLabel.text = [NSString stringWithFormat:@"%d",max];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -225,7 +228,7 @@
     [self setupGraphScrollView];
     self.graphView.hidden = NO;
     [self.graphView reloadData];
-    
+    [self setupCompanyData];
 //    UIImage *graphImage = [self imageWithView:self.graphView];
 //    
 //    self.imageView = [[UIImageView alloc] initWithImage:graphImage];
@@ -299,6 +302,10 @@
     self.amaountSelectedBase = @"Buy: %d";
     self.stockAmountSelectedLabel.text = @"Buy: ";
     
+    NSInteger moneyAvaliable = [self.user getCash];
+    
+    NSInteger max = moneyAvaliable / [self.companyStock.stockPrice intValue];
+    self.maxValueLabel.text = [NSString stringWithFormat:@"%d",max];
 }
 
 - (void)setToSell
@@ -306,17 +313,48 @@
     self.amaountSelectedBase = @"Sell: %d";
     self.stockAmountSelectedLabel.text = @"Sell: ";
     
-//    self.maxValueLabel.text = [self.user getAmountOwnForStock:(self.companyStock)];
+    for (OwnedStock *owned in [self.user getPortfolio]) {
+        if ([self.companyStock.stockTicker isEqualToString:owned.stockTicker]) {
+            self.maxValueLabel.text = [NSString stringWithFormat:@"%ld", (long)owned.amount];
+            return;
+        }
+    }
+    
+   //doesnt own it
+    self.maxValueLabel.text = @"0";
 }
 
 - (void)buyStock
 {
     // connect to api and backend
+    OwnedStock *s = [[OwnedStock alloc] initWithTicker:self.companyStock.stockTicker withPrice:self.companyStock.stockPrice withPercentage:self.companyStock.percentChange];
+    s.purchasePrice = [self.companyStock.stockPrice doubleValue];
+    
+    NSInteger min = [self.minValueLabel.text integerValue];
+    NSInteger max = [self.maxValueLabel.text integerValue];
+    s.amount = (max - min) * self.stockAmountSlider.value;
+    
+    if (s.amount == 0) {
+        return;
+    }
+    
+    [self.user addStockToPortfolio:s];
 }
 
 - (void)sellStock
 {
     // connect to api and backend
+    OwnedStock *s = [[OwnedStock alloc] initWithTicker:self.companyStock.stockTicker withPrice:self.companyStock.stockPrice withPercentage:self.companyStock.percentChange];
+    s.purchasePrice = [self.companyStock.stockPrice doubleValue];
+    NSInteger min = [self.minValueLabel.text integerValue];
+    NSInteger max = [self.maxValueLabel.text integerValue];
+    s.amount = (max - min) * self.stockAmountSlider.value;
+    
+    if (s.amount == 0) {
+        return;
+    }
+    
+    [self.user sellStockFromPortfolio:s];
 }
 
 - (IBAction)saveToFavorites:(id)sender {
