@@ -9,6 +9,7 @@
 #import "HistoryTableViewController.h"
 #import "User.h"
 #import "HistoryFavoriteTableViewCell.h"
+#import "HistoryStopTableViewCell.h"
 #import "TransactionTableViewCell.h"
 #import "HistoryStopTableViewCell.h"
 
@@ -39,6 +40,11 @@
     [self.tableView setContentInset:UIEdgeInsetsMake(60,0,0,0)];
 }
 
+-(void) viewDidAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -53,6 +59,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
+    if ([self.user getHistory] == nil)
+    {
+        return 0;
+    }
     return ([self.user getHistory].count / 5);
 }
 

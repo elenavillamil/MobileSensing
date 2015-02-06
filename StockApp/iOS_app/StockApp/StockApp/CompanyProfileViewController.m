@@ -175,7 +175,15 @@
 - (void)setupCompanyData
 {
     self.title = self.companyStock.stockName;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%f", [self.graphData getValueAt:0]];
+    if (self.companyStock.stockPrice != 0)
+    {
+        self.priceLabel.text = [NSString stringWithFormat:@"$%@", self.companyStock.stockPrice];
+    }
+    else
+    {
+        self.priceLabel.text = [NSString stringWithFormat:@"$%f", [self.graphData getValueAt:0]];
+    }
+    
     self.percentChangeLabel.text = [NSString stringWithFormat:@"%@", self.companyStock.percentChange];
     NSInteger moneyAvaliable = [self.user getCash];
     
