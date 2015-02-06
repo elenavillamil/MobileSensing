@@ -13,6 +13,7 @@
 #import "Graph.h"
 #import <QuartzCore/QuartzCore.h>
 #import "User.h"
+#import "BackendApi.h"
 
 @interface CompanyProfileViewController () <UIScrollViewDelegate, UIAlertViewDelegate, GraphDelegate, JBLineChartViewDataSource, JBLineChartViewDelegate>
 
@@ -30,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *stockAmountSelectedLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *maxValueLabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *favoriteButton;
 
 
 @property (strong,nonatomic) UIImageView *imageView;
@@ -39,6 +41,7 @@
 @property (nonatomic) NSInteger amountToBuySell;
 @property (nonatomic,strong) User *user;
 @property (nonatomic, strong) UIActivityIndicatorView *loading;
+@property bool favorite;
 
 @end
 
@@ -293,7 +296,22 @@
 
 - (IBAction)saveToFavorites:(id)sender {
     //add api
-    
+    if (!self.favorite)
+    {
+        
+        [BackendApi addFavorite:[self.user getUsername] withStockName:self.companyStock.stockTicker];
+        self.favoriteButton.title = @"Remove Favorite";
+        self.favorite = true;
+        [self.user addFavorite:self.companyStock];
+    }
+    else
+    {
+        // remove fav
+        // TODO: Call remove on db
+        self.favoriteButton.title = @"Remove Favorite";
+        self.favorite = false;
+        [self.user removeFavorite:self.companyStock];
+    }
 }
 
 #pragma mark - Zoom methods
