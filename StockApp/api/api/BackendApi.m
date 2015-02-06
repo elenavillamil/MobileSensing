@@ -336,7 +336,7 @@ NSOutputStream *outputStream;
 }
 
 + (BOOL) addFavorite:(NSString *)username withStockName:(NSString *) stockName {
-    char function = (char)9;
+    char function = (char)10;
     char usernameSize = (char)[username length];
     char stockNameSize = (char)[stockName length];
                                 
@@ -354,7 +354,7 @@ NSOutputStream *outputStream;
 }
 
 + (NSMutableArray *) getFavorites:(NSString *)username {
-    char function = (char)10;
+    char function = (char)9;
     char usernameSize = (char)[username length];
     
     NSString * messageToSend = [NSString stringWithFormat:@"%c%c%@", function, usernameSize, username];
