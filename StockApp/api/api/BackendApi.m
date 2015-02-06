@@ -335,4 +335,51 @@ NSOutputStream *outputStream;
     return arrayToReturn;
 }
 
++ (BOOL) addFavorite:(NSString *)username withStockName:(NSString *) stockName {
+    char function = (char)9;
+    char usernameSize = (char)[username length];
+    char stockNameSize = (char)[stockName length];
+                                
+    NSString * messageToSend = [NSString stringWithFormat:@"%c%c%@%c%@", function, usernameSize, username, stockNameSize, stockName];
+    
+    [self sendString:messageToSend];
+    NSString* returnedString = [self readString];
+    
+    if ([returnedString isEqualToString:@"0"])
+    {
+        return false;
+    }
+    
+    return true;
+}
+
++ (NSMutableArray *) getFavorites:(NSString *)username {
+    char function = (char)10;
+    char usernameSize = (char)[username length];
+    
+    NSString * messageToSend = [NSString stringWithFormat:@"%c%c%@", function, usernameSize, username];
+    
+    [self sendString:messageToSend];
+    NSString* returnedString = [self readString];
+    
+    NSMutableArray * returnArray = [NSMutableArray new];
+    
+    char amountOfStrings = (char)[returnedString characterAtIndex:0];
+    
+    size_t start = 1;
+    
+    for (size_t index = 0; index < amountOfStrings; ++index)
+    {
+        char first_string_size = [returnedString characterAtIndex:start];
+        NSString* first_string =[returnedString substringWithRange:NSMakeRange(start + 1, first_string_size)];
+        
+        // extra one to skip the length prefix
+        start += first_string_size + 1;
+        
+        [returnArray addObject:first_string];
+    }
+    
+    return returnArray;
+}
+
 @end
