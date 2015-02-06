@@ -13,6 +13,7 @@
 #import "Graph.h"
 #import <QuartzCore/QuartzCore.h>
 #import "User.h"
+#import "BackendApi.h"
 
 @interface CompanyProfileViewController () <UIScrollViewDelegate, UIAlertViewDelegate, GraphDelegate, JBLineChartViewDataSource, JBLineChartViewDelegate>
 
@@ -30,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *stockAmountSelectedLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *maxValueLabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *favoriteButton;
 
 
 @property (strong,nonatomic) UIImageView *imageView;
@@ -39,6 +41,7 @@
 @property (nonatomic) NSInteger amountToBuySell;
 @property (nonatomic,strong) User *user;
 @property (nonatomic, strong) UIActivityIndicatorView *loading;
+@property bool favorite;
 
 @end
 
@@ -48,17 +51,22 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = @"Company";
     [self setupScrollView];
     
     self.graphData = [Graph sharedInstance];
     self.graphData.delegate = self;
-    [self.graphData getStockGraphData];
+    [self.graphData getStockGraphData:self.companyStock.stockTicker];
     self.graphView.hidden = YES;
     self.amaountSelectedBase = @"Buy: %d";
     self.amountToBuySell = 0;
     
     [self showLoading];
+}
+
+- (void)setInfo:(NSString *)ticker withCompanyName:(NSString *)name
+{
+    self.companyStock = [[Stock alloc] initWithTicker:ticker withPrice:@" " withPercentage:@" "];
+    self.title = name;
 }
 
 - (void)showLoading
@@ -141,8 +149,8 @@
 - (void)setupCompanyData
 {
     self.title = self.companyStock.stockName;
-    self.priceLabel.text = [NSString stringWithFormat:@"$%.2f", self.companyStock.stockPrice];
-    self.percentChangeLabel.text = [NSString stringWithFormat:@"%f%%", self.companyStock.percentChange];
+    self.priceLabel.text = [NSString stringWithFormat:@"$%@", self.companyStock.stockPrice];
+    self.percentChangeLabel.text = [NSString stringWithFormat:@"%@", self.companyStock.percentChange];
     
 }
 
@@ -224,7 +232,7 @@
 {
     switch (buttonIndex) {
         case 0:
-            [self.graphData getStockGraphData];
+            [self.graphData getStockGraphData:self.companyStock.stockTicker];
             break;
             
         default:
@@ -287,7 +295,22 @@
 
 - (IBAction)saveToFavorites:(id)sender {
     //add api
-    
+    if (!self.favorite)
+    {
+        
+        [BackendApi addFavorite:[self.user getUsername] withStockName:self.companyStock.stockTicker];
+        self.favoriteButton.title = @"Remove Favorite";
+        self.favorite = true;
+        [self.user addFavorite:self.companyStock];
+    }
+    else
+    {
+        // remove fav
+        // TODO: Call remove on db
+        self.favoriteButton.title = @"Remove Favorite";
+        self.favorite = false;
+        [self.user removeFavorite:self.companyStock];
+    }
 }
 
 #pragma mark - Zoom methods

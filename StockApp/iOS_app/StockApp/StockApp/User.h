@@ -37,5 +37,6 @@
 -(NSString*)getUsername;
 -(NSString*)getPassword;
 -(void)downloadHistory;
+-(void)removeFavorite:(Stock*)stock;
 
 @end

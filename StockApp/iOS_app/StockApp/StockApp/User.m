@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSMutableArray *portfolio;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) NSUserDefaults *loginInformation;
+@property double money;
 
 
 @end
@@ -136,6 +137,7 @@
     [self.history removeAllObjects];
     [self.portfolio removeAllObjects];
     [self.favorites removeAllObjects];
+    self.money = 10000;
 }
 
 -(void)newTimerWith:(NSInteger)time {
@@ -156,5 +158,9 @@
     
 }
 
+-(void)removeFavorite:(Stock *)stock
+{
+    [self.favorites removeObject:stock];
+}
 
 @end

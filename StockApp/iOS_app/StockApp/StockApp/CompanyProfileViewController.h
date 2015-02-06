@@ -13,4 +13,6 @@
 
 - (void)setStock:(Stock *)stock;
 
+- (void)setInfo:(NSString *)ticker withCompanyName:(NSString *)name;
+
 @end

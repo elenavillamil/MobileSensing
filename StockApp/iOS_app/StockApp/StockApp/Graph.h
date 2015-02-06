@@ -27,7 +27,7 @@
 
 +(Graph *)sharedInstance;
 
-- (void)getStockGraphData;
+- (void)getStockGraphData:(NSString *)ticker;
 - (NSString *)getCurrentPrice;
 - (NSString *)getPercentChange;
 - (NSInteger)getCount;
