@@ -10,6 +10,7 @@
 #import "UIColor+SAColor.h"
 #import "User.h"
 #import "BackendApi.h"
+#import "LoginViewController.h"
 
 @interface SettingsViewController ()
 
@@ -83,5 +84,10 @@
 }
 
 - (IBAction)onSignOutButtonTouchUpInside:(id)sender {
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    // Showing the sign in/ sing up options
+    LoginViewController* loginViewController = (LoginViewController*)[storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    
+    [[UIApplication sharedApplication].keyWindow setRootViewController:loginViewController];
 }
 @end
