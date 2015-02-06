@@ -54,7 +54,11 @@ NSOutputStream *outputStream;
             
         case NSStreamEventHasSpaceAvailable: {
 
-            NSLog(@"Available space");
+            #if DEBUG
+            
+                NSLog(@"Available space");
+            
+            #endif
             
             break;
             
