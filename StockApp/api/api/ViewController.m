@@ -26,8 +26,7 @@
         NSInteger response = [BackendApi currentAmountOfMoney:@"elena2"];
         NSLog(@"%li", (long)response);
         NSArray* stocks = @[@"msft", @"amzn"];
-        NSString* resp = [BackendApi getStockInfo:stocks];
-        NSLog(@"%@", resp);
+        NSMutableArray* resp = [BackendApi getStockInfo:stocks];
     }
 }
 - (IBAction)onClick:(UIButton *)sender {
