@@ -27,6 +27,7 @@
 		B67DE12E18A2F58500570519 /* Novocaine.m in Sources */ = {isa = PBXBuildFile; fileRef = B67DE12918A2F58500570519 /* Novocaine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B67DE12F18A2F58500570519 /* RingBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67DE12B18A2F58500570519 /* RingBuffer.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B67DE13218A2F69A00570519 /* satisfaction.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B67DE13118A2F69A00570519 /* satisfaction.mp3 */; };
+		F30C381D1A8C23FA00B443EE /* ModuleBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F30C381C1A8C23FA00B443EE /* ModuleBViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,8 @@
 		B67DE12A18A2F58500570519 /* RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
 		B67DE12B18A2F58500570519 /* RingBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RingBuffer.mm; sourceTree = "<group>"; };
 		B67DE13118A2F69A00570519 /* satisfaction.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = satisfaction.mp3; sourceTree = "<group>"; };
+		F30C381B1A8C23FA00B443EE /* ModuleBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ModuleBViewController.h; path = ../ModuleBViewController.h; sourceTree = "<group>"; };
+		F30C381C1A8C23FA00B443EE /* ModuleBViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModuleBViewController.m; path = ../ModuleBViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				B67DE13018A2F58F00570519 /* Novocaine */,
-				B67DE0F518A2F55400570519 /* PlayRollingStones */,
+				B67DE0F518A2F55400570519 /* ViewControllers */,
 				B67DE11418A2F55400570519 /* PlayRollingStonesTests */,
 				B67DE0EE18A2F55400570519 /* Frameworks */,
 				B67DE0ED18A2F55400570519 /* Products */,
@@ -130,25 +133,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B67DE0F518A2F55400570519 /* PlayRollingStones */ = {
+		B67DE0F518A2F55400570519 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				B67DE0FE18A2F55400570519 /* AppDelegate.h */,
-				B67DE0FF18A2F55400570519 /* AppDelegate.m */,
+				F30C381B1A8C23FA00B443EE /* ModuleBViewController.h */,
+				F30C381C1A8C23FA00B443EE /* ModuleBViewController.m */,
 				B67DE10118A2F55400570519 /* Main.storyboard */,
 				B67DE10418A2F55400570519 /* ViewController.h */,
 				B67DE10518A2F55400570519 /* ViewController.mm */,
-				B65EC5EA18A981A00033BE93 /* SMUGraphHelper.h */,
-				B65EC5ED18A992F10033BE93 /* SMUFFTHelper.h */,
 				B67DE10718A2F55400570519 /* Images.xcassets */,
 				B67DE0F618A2F55400570519 /* Supporting Files */,
 			);
+			name = ViewControllers;
 			path = PlayRollingStones;
 			sourceTree = "<group>";
 		};
 		B67DE0F618A2F55400570519 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B67DE0FE18A2F55400570519 /* AppDelegate.h */,
+				B67DE0FF18A2F55400570519 /* AppDelegate.m */,
+				B65EC5EA18A981A00033BE93 /* SMUGraphHelper.h */,
+				B65EC5ED18A992F10033BE93 /* SMUFFTHelper.h */,
 				B67DE13118A2F69A00570519 /* satisfaction.mp3 */,
 				B67DE0F718A2F55400570519 /* PlayRollingStones-Info.plist */,
 				B67DE0F818A2F55400570519 /* InfoPlist.strings */,
@@ -291,6 +297,7 @@
 			files = (
 				B67DE10618A2F55400570519 /* ViewController.mm in Sources */,
 				B67DE10018A2F55400570519 /* AppDelegate.m in Sources */,
+				F30C381D1A8C23FA00B443EE /* ModuleBViewController.m in Sources */,
 				B67DE0FC18A2F55400570519 /* main.m in Sources */,
 				B67DE12E18A2F58500570519 /* Novocaine.m in Sources */,
 				B67DE12F18A2F58500570519 /* RingBuffer.mm in Sources */,

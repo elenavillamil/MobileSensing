@@ -52,7 +52,7 @@ float *fftPhaseBuffer;
     
     // start animating the graph
     int framesPerSecond = 30;
-    int numDataArraysToGraph = 2;
+    int numDataArraysToGraph = 1;
     graphHelper = new GraphHelper(self,
                                   framesPerSecond,
                                   numDataArraysToGraph,
@@ -138,13 +138,13 @@ float *fftPhaseBuffer;
     
     // plot the audio
     ringBuffer->FetchFreshData2(audioData, kBufferLength, 0, 1);
-    graphHelper->setGraphData(0,audioData,kBufferLength); // set graph channel
+    //graphHelper->setGraphData(0,audioData,kBufferLength); // set graph channel
     
     //take the FFT
     fftHelper->forward(0,audioData, fftMagnitudeBuffer, fftPhaseBuffer);
     
     // plot the FFT
-    graphHelper->setGraphData(1,fftMagnitudeBuffer,kBufferLength/8,sqrt(kBufferLength)); // set graph channel
+    graphHelper->setGraphData(0,fftMagnitudeBuffer,kBufferLength/8,sqrt(kBufferLength)); // set graph channel
     
     graphHelper->update(); // update the graph
 }
