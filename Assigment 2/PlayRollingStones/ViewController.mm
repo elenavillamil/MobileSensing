@@ -170,11 +170,14 @@ RingBuffer *ringBuffer;
 //
 //         
 //     }];
+    [self.audioManager play];
 
 }
 
 #pragma mark - unloading and dealloc
 -(void) viewDidDisappear:(BOOL)animated{
+    
+    [self.audioManager pause];
     // stop opengl from running
     self.graphHelper->tearDownGL();
 }
