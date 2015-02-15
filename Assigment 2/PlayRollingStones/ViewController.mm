@@ -146,31 +146,6 @@ RingBuffer *ringBuffer;
          if(ringBuffer!=nil)
              ringBuffer->AddNewFloatData(data, numFrames);
      }];
-    
-//    __block float frequency = 261.0; //starting frequency
-//    __block float phase = 0.0;
-//    __block float samplingRate = audioManager.samplingRate;
-//    
-//    [audioManager setOutputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels)
-//     {
-//         
-//         double phaseIncrement = 2*M_PI*frequency/samplingRate;
-//         double repeatMax = 2*M_PI;
-//         for (int i=0; i < numFrames; ++i)
-//         {
-//             for(int j=0;j<numChannels;j++){
-//                 data[i*numChannels+j] = 0.8*sin(phase);
-//                 
-//             }
-//             phase += phaseIncrement;
-//             
-//             if(phase>repeatMax)
-//                 phase -= repeatMax;
-//         }
-//
-//         
-//     }];
-    [self.audioManager play];
 
 }
 
