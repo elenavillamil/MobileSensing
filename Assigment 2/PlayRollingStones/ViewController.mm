@@ -47,7 +47,7 @@ RingBuffer *ringBuffer;
 {
     // start animating the graph
     const static int framesPerSecond = 30;
-    const static int numDataArraysToGraph = 3;
+    const static int numDataArraysToGraph = 1;
     
     if (!_graphHelper)
     {
@@ -224,6 +224,58 @@ RingBuffer *ringBuffer;
     self.graphHelper->setGraphData(0,self.fftMagnitudeBuffer,kBufferLength/8,sqrt(kBufferLength)); // set graph channel
     
     self.graphHelper->update(); // update the graph
+    
+    [self performSelector:@selector(getTwoMax:) withObject:nil];
+
+}
+
+-(void)getTwoMax:(id)param
+{
+    float oldMax = 0.0;
+    float maxVal = 0.0;
+    float maxOne = 0.0;
+    float maxTwo = 0.0;
+    int count = 0;
+    int windowSize = 24;
+    
+    for (int i = 0; i < kBufferLength/2; ++i)
+    {
+        for (int j = 0; j+i < kBufferLength/2 && j < windowSize; ++j)
+        {
+            if (maxVal < self.fftMagnitudeBuffer[i+j])
+            {
+                maxVal = self.fftMagnitudeBuffer[i+j];
+            }
+        }
+        
+        if (oldMax == maxVal)
+        {
+            ++count;
+            
+            if (count == windowSize - 2)
+            {
+                if (maxVal > maxOne)
+                {
+                    maxOne = maxVal;
+                }
+                else if (maxVal > maxTwo)
+                {
+                    maxTwo = maxVal;
+                }
+            }
+        }
+        else
+        {
+            count = 0;
+        }
+        
+        oldMax = maxVal;
+        maxVal = 0.0;
+    }
+    
+    // update local variable if different
+    NSLog(@"Max1: %f\n", maxOne);
+    NSLog(@"Max2: %f\n", maxTwo);
 }
 
 #pragma mark - status bar
