@@ -133,6 +133,40 @@ RingBuffer *ringBufferModuleB;
     // Dispose of any resources that can be recreated.
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    
+    static bool initialized = false;
+    
+    if (!initialized) {
+        
+        __block float frequency = 261.0; //starting frequency
+        __block float phase = 0.0;
+        __block float samplingRate = self.audioManager.samplingRate;
+
+        [self.audioManager setOutputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels) {
+
+             double phaseIncrement = 2*M_PI*frequency/samplingRate;
+             double repeatMax = 2*M_PI;
+             for (int i=0; i < numFrames; ++i) {
+                 for(int j=0;j<numChannels;j++) {
+                     data[i*numChannels+j] = 0.8*sin(phase);
+                 }
+                 phase += phaseIncrement;
+
+                 if(phase>repeatMax)
+                     phase -= repeatMax;
+             }}];
+        
+        initialized = true;
+    }
+    
+    [self.audioManager play];
+}
+
+- (void) viewDidDisappear:(BOOL)animated {
+    [self.audioManager pause];
+}
+
 /*
 #pragma mark - Navigation
 
