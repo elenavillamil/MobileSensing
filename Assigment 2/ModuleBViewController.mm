@@ -8,6 +8,10 @@
 
 #import "ModuleBViewController.h"
 #import "Novocaine.h"
+#import "AudioFileReader.h"
+#import "RingBuffer.h"
+#import "SMUGraphHelper.h"
+#import "SMUFFTHelper.h"
 
 #define AVERAGE_SIZE 5
 #define SAMPLE_AMOUNT 4096
@@ -16,10 +20,108 @@
 @property (weak, nonatomic) IBOutlet UILabel *frequenceValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *frequenceValueSlider;
 @property double currentSoundPlayFrequence;
-@property (weak, nonatomic) Novocaine* novocaine;
+@property (weak, nonatomic) Novocaine* audioManager;
+
+@property (nonatomic) GraphHelper* graphHelper;
+@property (nonatomic) AudioFileReader* fileReader;
+@property (nonatomic) float* audioData;
+@property (nonatomic) SMUFFTHelper* fftHelper;
+@property (nonatomic) float* fftMagnitudeBuffer;
+@property (nonatomic) float* fftPhaseBuffer;
+@property (nonatomic) float* frequencyEqualizer;
+
 @end
 
 @implementation ModuleBViewController
+
+RingBuffer *ringBufferModuleB;
+
+- (Novocaine *) audioManager
+{
+    if (!_audioManager)
+    {
+        _audioManager = [Novocaine audioManager];
+    }
+    
+    return _audioManager;
+}
+
+- (GraphHelper*) graphHelper
+{
+    // start animating the graph
+    const static int framesPerSecond = 30;
+    const static int numDataArraysToGraph = 3;
+    
+    if (!_graphHelper)
+    {
+        //_graphHelper = new GraphHelper(self, framesPerSecond, numDataArraysToGraph);
+        
+        //_graphHelper = new GraphHelper(self, framesPerSecond, numDataArraysToGraph, PlotStyleSeparated); //drawing starts immediately after call
+    }
+    
+    return _graphHelper;
+}
+
+/*- (void) setGraphHelper:(GraphHelper *)graphHelper
+ {
+ // Do nothing, use the old graphHelper
+ }*/
+
+- (AudioFileReader*) fileReader
+{
+    // nothing :)
+    
+    return nil;
+}
+
+- (float*) audioData
+{
+    if (!_audioData)
+    {
+        _audioData = (float*)calloc(SAMPLE_AMOUNT, sizeof(float));
+    }
+    
+    return _audioData;
+}
+
+- (float*)frequencyEqualizer
+{
+    if (!_frequencyEqualizer) {
+        _frequencyEqualizer = (float*)calloc(20, sizeof(float));
+    }
+    return _frequencyEqualizer;
+}
+
+- (SMUFFTHelper*) fftHelper
+{
+    if (!_fftHelper)
+    {
+        //setup the fft
+        _fftHelper = new SMUFFTHelper(SAMPLE_AMOUNT, SAMPLE_AMOUNT, WindowTypeRect);
+    }
+    
+    return _fftHelper;
+}
+
+- (float*) fftMagnitudeBuffer
+{
+    if (!_fftMagnitudeBuffer)
+    {
+        _fftMagnitudeBuffer = (float *)calloc(SAMPLE_AMOUNT / 2, sizeof(float));
+    }
+    
+    return _fftMagnitudeBuffer;
+}
+
+- (float*) fftPhaseBuffer
+{
+    if (!_fftPhaseBuffer)
+    {
+        _fftPhaseBuffer = (float *)calloc(SAMPLE_AMOUNT/2,sizeof(float));
+    }
+    
+    return _fftPhaseBuffer;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
