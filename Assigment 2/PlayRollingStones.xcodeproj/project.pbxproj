@@ -29,7 +29,6 @@
 		B67DE13218A2F69A00570519 /* satisfaction.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B67DE13118A2F69A00570519 /* satisfaction.mp3 */; };
 		F30C381D1A8C23FA00B443EE /* ModuleBViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */; };
 		EAD901991A9148C3004C6E5C /* RootTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = EAD901981A9148C3004C6E5C /* RootTableViewController.mm */; };
-		F30C381D1A8C23FA00B443EE /* ModuleBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F30C381C1A8C23FA00B443EE /* ModuleBViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,7 +141,6 @@
 			children = (
 				F30C381B1A8C23FA00B443EE /* ModuleBViewController.h */,
 				F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */,
-				F30C381C1A8C23FA00B443EE /* ModuleBViewController.m */,
 				EAD901971A9148C3004C6E5C /* RootTableViewController.h */,
 				EAD901981A9148C3004C6E5C /* RootTableViewController.mm */,
 				B67DE10118A2F55400570519 /* Main.storyboard */,
@@ -306,7 +304,6 @@
 				B67DE10018A2F55400570519 /* AppDelegate.m in Sources */,
 				F30C381D1A8C23FA00B443EE /* ModuleBViewController.mm in Sources */,
 				EAD901991A9148C3004C6E5C /* RootTableViewController.mm in Sources */,
-				F30C381D1A8C23FA00B443EE /* ModuleBViewController.m in Sources */,
 				B67DE0FC18A2F55400570519 /* main.m in Sources */,
 				B67DE12E18A2F58500570519 /* Novocaine.m in Sources */,
 				B67DE12F18A2F58500570519 /* RingBuffer.mm in Sources */,
