@@ -27,7 +27,7 @@
 		B67DE12E18A2F58500570519 /* Novocaine.m in Sources */ = {isa = PBXBuildFile; fileRef = B67DE12918A2F58500570519 /* Novocaine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B67DE12F18A2F58500570519 /* RingBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67DE12B18A2F58500570519 /* RingBuffer.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B67DE13218A2F69A00570519 /* satisfaction.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B67DE13118A2F69A00570519 /* satisfaction.mp3 */; };
-		F30C381D1A8C23FA00B443EE /* ModuleBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F30C381C1A8C23FA00B443EE /* ModuleBViewController.m */; };
+		F30C381D1A8C23FA00B443EE /* ModuleBViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +73,7 @@
 		B67DE12B18A2F58500570519 /* RingBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RingBuffer.mm; sourceTree = "<group>"; };
 		B67DE13118A2F69A00570519 /* satisfaction.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = satisfaction.mp3; sourceTree = "<group>"; };
 		F30C381B1A8C23FA00B443EE /* ModuleBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ModuleBViewController.h; path = ../ModuleBViewController.h; sourceTree = "<group>"; };
-		F30C381C1A8C23FA00B443EE /* ModuleBViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModuleBViewController.m; path = ../ModuleBViewController.m; sourceTree = "<group>"; };
+		F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ModuleBViewController.mm; path = ../ModuleBViewController.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				F30C381B1A8C23FA00B443EE /* ModuleBViewController.h */,
-				F30C381C1A8C23FA00B443EE /* ModuleBViewController.m */,
+				F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */,
 				B67DE10118A2F55400570519 /* Main.storyboard */,
 				B67DE10418A2F55400570519 /* ViewController.h */,
 				B67DE10518A2F55400570519 /* ViewController.mm */,
@@ -297,7 +297,7 @@
 			files = (
 				B67DE10618A2F55400570519 /* ViewController.mm in Sources */,
 				B67DE10018A2F55400570519 /* AppDelegate.m in Sources */,
-				F30C381D1A8C23FA00B443EE /* ModuleBViewController.m in Sources */,
+				F30C381D1A8C23FA00B443EE /* ModuleBViewController.mm in Sources */,
 				B67DE0FC18A2F55400570519 /* main.m in Sources */,
 				B67DE12E18A2F58500570519 /* Novocaine.m in Sources */,
 				B67DE12F18A2F58500570519 /* RingBuffer.mm in Sources */,

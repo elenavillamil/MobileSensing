@@ -193,7 +193,7 @@
     }
     
     NSInteger max = moneyAvaliable / [self.graphData getValueAt:0];
-    self.maxValueLabel.text = [NSString stringWithFormat:@"%d",max];
+    self.maxValueLabel.text = [NSString stringWithFormat:@"%ld",(long)max];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -324,7 +324,7 @@
     }
     
     NSInteger max = moneyAvaliable / [self.companyStock.stockPrice intValue];
-    self.maxValueLabel.text = [NSString stringWithFormat:@"%d",max];
+    self.maxValueLabel.text = [NSString stringWithFormat:@"%ld",(long)max];
 }
 
 - (void)setToSell

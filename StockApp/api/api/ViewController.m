@@ -19,16 +19,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    [BackendApi initNetworkConnection];
+    void (^run)(void) = ^{
+        if (![BackendApi setUpAccount:@"elena2" withPassword:@"elenavillamil"])
+        {
+            NSInteger response = [BackendApi currentAmountOfMoney:@"elena2"];
+            NSLog(@"%li", (long)response);
+            NSArray* stocks = @[@"msft", @"amzn"];
+            [BackendApi resetAccount:@"elena2"];
+            
+        }
+    };
     
-    if (![BackendApi setUpAccount:@"elena2" withPassword:@"elenavillamil"])
-    {
-        NSInteger response = [BackendApi currentAmountOfMoney:@"elena2"];
-        NSLog(@"%li", (long)response);
-        NSArray* stocks = @[@"msft", @"amzn"];
-        [BackendApi resetAccount:@"elena2"];
-        
-    }
+    [BackendApi initNetworkConnection:run];
     
 }
 - (IBAction)onClick:(UIButton *)sender {

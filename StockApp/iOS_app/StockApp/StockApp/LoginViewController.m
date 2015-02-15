@@ -23,6 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
     
     self.usernameTextField.delegate = self;
@@ -98,27 +99,33 @@
     
     if (areValidString)
     {
-        if ([BackendApi setUpAccount:self.usernameTextField.text withPassword:self.passwordTextField.text])
-        {
-            // saving an NSString
-            [self.user setUsernameWith:self.usernameTextField.text];
-            [self.user setPasswordWith:self.passwordTextField.text];
+        void (^runBlock)(void) = ^{
             
-            // Getting the users favorite stocks information
-            [self getFavoriteStocksInfo:self.usernameTextField.text];
-            
-            UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
-            
-            [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
-        }
-        else
-        {
-            // Making and showing pop up to let the user know that the account could not be created
-            UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The username already exists, please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-            [alert_view show];
-            self.usernameTextField.text = @"";
-            self.passwordTextField.text = @"";
-        }
+            if ([BackendApi setUpAccount:self.usernameTextField.text withPassword:self.passwordTextField.text])
+            {
+                // saving an NSString
+                [self.user setUsernameWith:self.usernameTextField.text];
+                [self.user setPasswordWith:self.passwordTextField.text];
+                
+                // Getting the users favorite stocks information
+                [self getFavoriteStocksInfo:self.usernameTextField.text];
+                
+                UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
+                
+                [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
+            }
+            else
+            {
+                // Making and showing pop up to let the user know that the account could not be created
+                UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The username already exists, please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                [alert_view show];
+                self.usernameTextField.text = @"";
+                self.passwordTextField.text = @"";
+            }
+        };
+        
+        [BackendApi initNetworkConnection:runBlock];
+        
     }
 }
 
@@ -170,29 +177,33 @@
     
     if (areValidString)
     {
-        if (![[BackendApi signIn:self.usernameTextField.text withPassword:self.passwordTextField.text] isEqualToString:@"Login failed"])
-        {
-            // saving an NSString
-            [self.user setUsernameWith:username];
-            [self.user setPasswordWith:password];
-            
-            // Get user favorite stocks and the stocks information.
-            [self getFavoriteStocksInfo:self.usernameTextField.text];
-            
-            [self.user newTimerWith:5];
-            
-            [self performSelectorInBackground:@selector(startThread) withObject:nil];
-            
-            UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
-            
-            [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
-        }
-        else
-        {
-            // Making and showing pop up to let the user know that the account could not be created
-            UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The username or the password are incorrect, please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-            [alert_view show];
-        }
+        void(^runBlock)(void) = ^{
+            if (![[BackendApi signIn:self.usernameTextField.text withPassword:self.passwordTextField.text] isEqualToString:@"Login failed"])
+            {
+                // saving an NSString
+                [self.user setUsernameWith:username];
+                [self.user setPasswordWith:password];
+                
+                // Get user favorite stocks and the stocks information.
+                [self getFavoriteStocksInfo:self.usernameTextField.text];
+                
+                [self.user newTimerWith:5];
+                
+                [self performSelectorInBackground:@selector(startThread) withObject:nil];
+                
+                UINavigationController *nav = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"NavigationViewController"];
+                
+                [[UIApplication sharedApplication].keyWindow setRootViewController:nav];
+            }
+            else
+            {
+                // Making and showing pop up to let the user know that the account could not be created
+                UIAlertView* alert_view = [[UIAlertView alloc] initWithTitle:@"Invalid action" message:@"The username or the password are incorrect, please try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                [alert_view show];
+            }
+        };
+        
+        [BackendApi initNetworkConnection:runBlock];
     }
 }
 

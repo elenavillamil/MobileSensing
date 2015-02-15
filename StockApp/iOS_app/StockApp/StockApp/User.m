@@ -153,7 +153,7 @@
     //ticker, buyprice, amount
     NSString *writeString = @"";
     for (OwnedStock *stock in self.portfolio) {
-       writeString = [writeString stringByAppendingString:[NSString stringWithFormat:@"%@,%f,%d, \n", stock.stockTicker, stock.purchasePrice,stock.amount]];
+       writeString = [writeString stringByAppendingString:[NSString stringWithFormat:@"%@,%f,%ld, \n", stock.stockTicker, stock.purchasePrice,(long)stock.amount]];
     }
 
     //Moved this stuff out of the loop so that you write the complete string once and only once.
@@ -168,10 +168,10 @@
 {
         int column = 0;
     
-    NSFileManager *fileManager = [NSFileManager defaultManager];
+    //NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *filePath = [documentsPath stringByAppendingPathComponent:@"portfolio.csv"];
-    BOOL fileExists = [fileManager fileExistsAtPath:filePath];
+    //NSString *filePath = [documentsPath stringByAppendingPathComponent:@"portfolio.csv"];
+    //BOOL fileExists = [fileManager fileExistsAtPath:filePath];
     
     NSString *fullPath = [self filePath];
     

@@ -10,7 +10,9 @@
 
 @interface BackendApi : NSObject <NSStreamDelegate>
 
-+ (void)initNetworkConnection;
+typedef void(^runBlock)(void);
+
++ (void)initNetworkConnection:(runBlock)block;
 + (NSString *)signIn:(NSString*) username withPassword:(NSString*) password;
 + (BOOL)setUpAccount:(NSString *) username withPassword:(NSString *) password;
 + (BOOL)buyOrder:(NSString *) username withStockName:(NSString *)stockName withValue:(double) value withAmount:(size_t) amount;

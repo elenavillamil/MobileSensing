@@ -15,13 +15,15 @@ NSMutableData *data;
 NSInputStream *inputStream;
 NSOutputStream *outputStream;
 
+runBlock blockToRun;
+
 #define DEBUG 1
 
-+ (void)initNetworkConnection{
++ (void)initNetworkConnection:(runBlock)block{
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
     
-    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"104.43.161.14", 8080, &readStream, &writeStream);
+    CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"127.0.0.1", 8080, &readStream, &writeStream);
     
     inputStream = (__bridge NSInputStream *)readStream;
     inputStream.delegate = self;
@@ -32,6 +34,9 @@ NSOutputStream *outputStream;
     outputStream.delegate = self;
     [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [outputStream open];
+
+    blockToRun = block;
+    
 }
 
 + (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
@@ -49,6 +54,11 @@ NSOutputStream *outputStream;
                 NSLog(@"Stream opened");
             
             #endif
+            
+            if ([theStream isKindOfClass:[outputStream class]])
+            {
+                blockToRun();
+            }
             
             break;
             
