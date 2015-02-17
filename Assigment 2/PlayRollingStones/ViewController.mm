@@ -26,8 +26,8 @@
 @property (nonatomic) float* fftMagnitudeBuffer;
 @property (nonatomic) float* fftPhaseBuffer;
 @property (nonatomic) float* frequencyEqualizer;
-@property (nonatomic) int frequencyOne;
-@property (nonatomic) int frequencyTwo;
+@property (nonatomic) float frequencyOne;
+@property (nonatomic) float frequencyTwo;
 
 @end
 
@@ -259,16 +259,32 @@ RingBuffer *ringBuffer;
     // update local variable if different
     if (positionOne > 0)
     {
-        self.frequencyOne = positionOne;
+        // Get pick f2 + (m3 - m2) / (2m2 - m1 - m2) * Af/2
+        // Af = 3?
+        self.frequencyOne = [self calculateInterpolation:positionOne];
     }
     if (positionTwo > 0)
     {
-        self.frequencyTwo = positionTwo;
+        self.frequencyTwo = [self calculateInterpolation:positionTwo];
     }
+    
     NSLog(@"Max1: %f\n", maxOne);
     NSLog(@"Max2: %f\n", maxTwo);
     NSLog(@"Frequency 1: %i\n", positionOne);
     NSLog(@"Frequency 2: %i\n", positionTwo);
+}
+
+-(float) calculateInterpolation:(int)position
+{
+    float frequency = 0.0;
+    
+    // (m3 - m2) / (2*m2 - m1 - m2)
+    float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position]);
+    
+    // Af = 3?
+    frequency = position + (temp * 3 / 2);
+    
+    return frequency;
 }
 
 #pragma mark - status bar
