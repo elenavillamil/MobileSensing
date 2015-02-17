@@ -26,6 +26,8 @@
 @property (nonatomic) float* fftMagnitudeBuffer;
 @property (nonatomic) float* fftPhaseBuffer;
 @property (nonatomic) float* frequencyEqualizer;
+@property (nonatomic) int frequencyOne;
+@property (nonatomic) int frequencyTwo;
 
 @end
 
@@ -211,6 +213,9 @@ RingBuffer *ringBuffer;
     float maxOne = 0.0;
     float maxTwo = 0.0;
     int count = 0;
+    int tempPosition = 0;
+    int positionOne = 0;
+    int positionTwo = 0;
     int windowSize = 24;
     
     for (int i = 0; i < kBufferLength/2; ++i)
@@ -220,6 +225,7 @@ RingBuffer *ringBuffer;
             if (maxVal < self.fftMagnitudeBuffer[i+j])
             {
                 maxVal = self.fftMagnitudeBuffer[i+j];
+                tempPosition = i+j;
             }
         }
         
@@ -232,10 +238,12 @@ RingBuffer *ringBuffer;
                 if (maxVal > maxOne)
                 {
                     maxOne = maxVal;
+                    positionOne = tempPosition;
                 }
                 else if (maxVal > maxTwo)
                 {
                     maxTwo = maxVal;
+                    positionTwo = tempPosition;
                 }
             }
         }
@@ -249,8 +257,18 @@ RingBuffer *ringBuffer;
     }
     
     // update local variable if different
+    if (positionOne > 0)
+    {
+        self.frequencyOne = positionOne;
+    }
+    if (positionTwo > 0)
+    {
+        self.frequencyTwo = positionTwo;
+    }
     NSLog(@"Max1: %f\n", maxOne);
     NSLog(@"Max2: %f\n", maxTwo);
+    NSLog(@"Frequency 1: %i\n", positionOne);
+    NSLog(@"Frequency 2: %i\n", positionTwo);
 }
 
 #pragma mark - status bar
