@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GLKit/GLKit.h>
 
-@interface ModuleBViewController : UIViewController
+@interface ModuleBViewController : GLKViewController
 
 - (IBAction)onSliderChange:(id)sender;
 

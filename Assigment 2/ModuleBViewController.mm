@@ -50,13 +50,14 @@ RingBuffer *ringBufferModuleB;
 {
     // start animating the graph
     const static int framesPerSecond = 30;
-    const static int numDataArraysToGraph = 3;
+    const static int numDataArraysToGraph = 1;
     
     if (!_graphHelper)
     {
-        //_graphHelper = new GraphHelper(self, framesPerSecond, numDataArraysToGraph);
-        
-        //_graphHelper = new GraphHelper(self, framesPerSecond, numDataArraysToGraph, PlotStyleSeparated); //drawing starts immediately after call
+        _graphHelper = new GraphHelper(self,
+                                       framesPerSecond,
+                                       numDataArraysToGraph,
+                                       PlotStyleSeparated);//drawing starts immediately after call
     }
     
     return _graphHelper;
@@ -126,15 +127,14 @@ RingBuffer *ringBufferModuleB;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    ringBufferModuleB = new RingBuffer(SAMPLE_AMOUNT, 1);
+    
+    self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    
+    // Start a noise.
     static bool initialized = false;
     
     if (!initialized) {
@@ -161,10 +161,50 @@ RingBuffer *ringBufferModuleB;
     }
     
     [self.audioManager play];
+    
+    [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels)
+     {
+         if(ringBufferModuleB!=nil)
+             ringBufferModuleB->AddNewFloatData(data, numFrames);
+     }];
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
     [self.audioManager pause];
+    
+    self.graphHelper->tearDownGL();
+}
+
+-(void)dealloc {
+    self.graphHelper->tearDownGL();
+    
+    free(self.audioData);
+    free(self.fftMagnitudeBuffer);
+    free(self.fftPhaseBuffer);
+    
+    delete self.fftHelper;
+    delete ringBufferModuleB;
+    delete self.graphHelper;
+    
+    ringBufferModuleB = nil;
+    self.fftHelper = nil;
+    self.audioManager = nil;
+    self.graphHelper = nil;
+}
+
+-(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+    self.graphHelper->draw();
+}
+
+-(void)update {
+    ringBufferModuleB->FetchFreshData(self.audioData, SAMPLE_AMOUNT, 0, 1);
+    
+    self.fftHelper->forward(0, self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
+    
+    self.graphHelper->setGraphData(0, self.fftMagnitudeBuffer, SAMPLE_AMOUNT / 8, sqrt(SAMPLE_AMOUNT));
+    
+    self.graphHelper->update();
+    
 }
 
 /*
@@ -216,6 +256,8 @@ RingBuffer *ringBufferModuleB;
         
         // The average is stored in the first array
         float* averagedArr = cachedFloatArrs[0];
+        
+        
     }
     
     return false;
