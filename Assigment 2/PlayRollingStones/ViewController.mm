@@ -14,7 +14,8 @@
 #import "SMUFFTHelper.h"
 
 
-#define kBufferLength 4096
+//#define kBufferLength 4096
+#define kBufferLength 3696
 
 @interface ViewController ()
 
@@ -28,6 +29,7 @@
 @property (nonatomic) float* frequencyEqualizer;
 @property (nonatomic) float frequencyOne;
 @property (nonatomic) float frequencyTwo;
+@property (nonatomic) float deltaFrequency;
 
 @end
 
@@ -136,7 +138,8 @@ RingBuffer *ringBuffer;
     
     self.graphHelper->SetBounds(-0.9,0.9,-0.9,0.9); // bottom, top, left, right, full screen==(-1,1,-1,1)
     
-
+    self.deltaFrequency = self.audioManager.samplingRate  / kBufferLength/2;
+    NSLog(@"DFrequency %f\n", self.deltaFrequency);
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -281,8 +284,9 @@ RingBuffer *ringBuffer;
     // (m3 - m2) / (2*m2 - m1 - m2)
     float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position]);
     
-    // Af = 3?
-    frequency = position + (temp * 3 / 2);
+    // Af = sampling rate / points -> has to be around 6 change buffer size
+    
+    frequency = position + (temp * self.deltaFrequency / 2);
     
     return frequency;
 }
