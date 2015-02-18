@@ -15,7 +15,7 @@
 
 
 //#define kBufferLength 4096
-#define kBufferLength 3696
+#define kBufferLength 8192
 
 @interface ViewController ()
 
@@ -138,7 +138,7 @@ RingBuffer *ringBuffer;
     
     self.graphHelper->SetBounds(-0.9,0.9,-0.9,0.9); // bottom, top, left, right, full screen==(-1,1,-1,1)
     
-    self.deltaFrequency = self.audioManager.samplingRate  / kBufferLength/2;
+    self.deltaFrequency = self.audioManager.samplingRate  / kBufferLength;
     NSLog(@"DFrequency %f\n", self.deltaFrequency);
 }
 
@@ -222,6 +222,7 @@ RingBuffer *ringBuffer;
     int windowSize = 24;
     
     for (int i = 0; i < kBufferLength/2; ++i)
+    //for (int i = 0; i < kBufferLength/2; i+=25)
     {
         for (int j = 0; j+i < kBufferLength/2 && j < windowSize; ++j)
         {
@@ -229,6 +230,11 @@ RingBuffer *ringBuffer;
             {
                 maxVal = self.fftMagnitudeBuffer[i+j];
                 tempPosition = i+j;
+                /*if (j == windowSize/2)
+                {
+                    tempPosition = i+j;
+                    maxVal = self.fftMagnitudeBuffer[i+j];
+                }*/
             }
         }
         
@@ -236,7 +242,7 @@ RingBuffer *ringBuffer;
         {
             ++count;
             
-            if (count == windowSize - 2)
+            if (count == windowSize -1)
             {
                 if (maxVal > maxOne)
                 {
@@ -273,8 +279,8 @@ RingBuffer *ringBuffer;
     
     NSLog(@"Max1: %f\n", maxOne);
     NSLog(@"Max2: %f\n", maxTwo);
-    NSLog(@"Frequency 1: %i\n", positionOne);
-    NSLog(@"Frequency 2: %i\n", positionTwo);
+    NSLog(@"Frequency 1: %f\n", self.frequencyOne);
+    NSLog(@"Frequency 2: %f\n", self.frequencyTwo);
 }
 
 -(float) calculateInterpolation:(int)position
@@ -286,7 +292,7 @@ RingBuffer *ringBuffer;
     
     // Af = sampling rate / points -> has to be around 6 change buffer size
     
-    frequency = position + (temp * self.deltaFrequency / 2);
+    frequency = (position * self.deltaFrequency) + (temp * self.deltaFrequency / 2);
     
     return frequency;
 }
