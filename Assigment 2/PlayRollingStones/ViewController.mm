@@ -37,8 +37,7 @@
 
 RingBuffer *ringBuffer;
 
-- (Novocaine *) audioManager
-{
+- (Novocaine *) audioManager {
     if (!_audioManager)
     {
         _audioManager = [Novocaine audioManager];
@@ -47,8 +46,7 @@ RingBuffer *ringBuffer;
     return _audioManager;
 }
 
-- (GraphHelper*) graphHelper
-{
+- (GraphHelper*) graphHelper {
     // start animating the graph
     const static int framesPerSecond = 30;
     const static int numDataArraysToGraph = 1;
@@ -64,20 +62,13 @@ RingBuffer *ringBuffer;
     return _graphHelper;
 }
 
-/*- (void) setGraphHelper:(GraphHelper *)graphHelper
- {
- // Do nothing, use the old graphHelper
- }*/
-
-- (AudioFileReader*) fileReader
-{
+- (AudioFileReader*) fileReader {
     // nothing :)
     
     return nil;
 }
 
-- (float*) audioData
-{
+- (float*) audioData {
     if (!_audioData)
     {
         _audioData = (float*)calloc(kBufferLength,sizeof(float));
@@ -86,16 +77,14 @@ RingBuffer *ringBuffer;
     return _audioData;
 }
 
-- (float*)frequencyEqualizer
-{
+- (float*)frequencyEqualizer {
     if (!_frequencyEqualizer) {
         _frequencyEqualizer = (float*)calloc(20, sizeof(float));
     }
     return _frequencyEqualizer;
 }
 
-- (SMUFFTHelper*) fftHelper
-{
+- (SMUFFTHelper*) fftHelper {
     if (!_fftHelper)
     {
         //setup the fft
@@ -105,8 +94,7 @@ RingBuffer *ringBuffer;
     return _fftHelper;
 }
 
-- (float*) fftMagnitudeBuffer
-{
+- (float*) fftMagnitudeBuffer {
     if (!_fftMagnitudeBuffer)
     {
         _fftMagnitudeBuffer = (float *)calloc(kBufferLength/2,sizeof(float));
@@ -115,8 +103,7 @@ RingBuffer *ringBuffer;
     return _fftMagnitudeBuffer;
 }
 
-- (float*) fftPhaseBuffer
-{
+- (float*) fftPhaseBuffer {
     if (!_fftPhaseBuffer)
     {
         _fftPhaseBuffer = (float *)calloc(kBufferLength/2,sizeof(float));
@@ -125,14 +112,11 @@ RingBuffer *ringBuffer;
     return _fftPhaseBuffer;
 }
 
-
-
 #pragma mark - loading and appear
-- (void)viewDidLoad
-{
-    
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.title = @"Module A";
     
     ringBuffer = new RingBuffer(kBufferLength,2);
     
@@ -142,12 +126,10 @@ RingBuffer *ringBuffer;
     NSLog(@"DFrequency %f\n", self.deltaFrequency);
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-
-    [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels)
-     {
+    [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels) {
          if(ringBuffer!=nil)
              ringBuffer->AddNewFloatData(data, numFrames);
      }];
@@ -156,6 +138,7 @@ RingBuffer *ringBuffer;
 
 #pragma mark - unloading and dealloc
 -(void) viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     
     [self.audioManager pause];
     // stop opengl from running
@@ -163,6 +146,7 @@ RingBuffer *ringBuffer;
 }
 
 -(void)dealloc{
+    
     self.graphHelper->tearDownGL();
     
     free(self.audioData);
@@ -195,6 +179,7 @@ RingBuffer *ringBuffer;
     
     // plot the audio
     ringBuffer->FetchFreshData2(self.audioData, kBufferLength, 0, 1);
+    
     //graphHelper->setGraphData(0,audioData,kBufferLength); // set graph channel
     
     //take the FFT
@@ -297,9 +282,9 @@ RingBuffer *ringBuffer;
     return frequency;
 }
 
-#pragma mark - status bar
--(BOOL)prefersStatusBarHidden{
-    return YES;
-}
+//#pragma mark - status bar
+//-(BOOL)prefersStatusBarHidden{
+//    return YES;
+//}
 
 @end

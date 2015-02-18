@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *frequenceValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *frequenceValueSlider;
 @property double currentSoundPlayFrequence;
-@property (weak, nonatomic) Novocaine* audioManager;
+@property (strong, nonatomic) Novocaine* audioManager;
 
 @property (nonatomic) GraphHelper* graphHelper;
 @property (nonatomic) AudioFileReader* fileReader;
@@ -29,12 +29,20 @@
 @property (nonatomic) float* fftMagnitudeBuffer;
 @property (nonatomic) float* fftPhaseBuffer;
 @property (nonatomic) float* frequencyEqualizer;
+@property (nonatomic) float deltaFrequency;
 
 @end
 
 @implementation ModuleBViewController
 
 RingBuffer *ringBufferModuleB;
+
+// C style enum declaration
+typedef enum {
+    MovingAway,
+    MovingTowards,
+    NotMoving
+} MovingAction;
 
 - (Novocaine *) audioManager
 {
@@ -62,11 +70,6 @@ RingBuffer *ringBufferModuleB;
     
     return _graphHelper;
 }
-
-/*- (void) setGraphHelper:(GraphHelper *)graphHelper
- {
- // Do nothing, use the old graphHelper
- }*/
 
 - (AudioFileReader*) fileReader
 {
@@ -131,9 +134,13 @@ RingBuffer *ringBufferModuleB;
     ringBufferModuleB = new RingBuffer(SAMPLE_AMOUNT, 1);
     
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
+    
+    self.deltaFrequency = self.audioManager.samplingRate  / SAMPLE_AMOUNT/2;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     // Start a noise.
     static bool initialized = false;
     
@@ -157,19 +164,23 @@ RingBuffer *ringBufferModuleB;
                      phase -= repeatMax;
              }}];
         
-        initialized = true;
+        //initialized = true;
     }
-    
-    [self.audioManager play];
     
     [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels)
      {
          if(ringBufferModuleB!=nil)
              ringBufferModuleB->AddNewFloatData(data, numFrames);
      }];
+    
+    if(![self.audioManager playing]){
+        [self.audioManager play];
+    }
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
     [self.audioManager pause];
     
     self.graphHelper->tearDownGL();
@@ -197,14 +208,24 @@ RingBuffer *ringBufferModuleB;
 }
 
 -(void)update {
-    ringBufferModuleB->FetchFreshData(self.audioData, SAMPLE_AMOUNT, 0, 1);
+    static int skipCount = 1;
+    static size_t const amountToSkip = AVERAGE_SIZE;
     
+    ringBufferModuleB->FetchFreshData2(self.audioData, SAMPLE_AMOUNT, 0, 1);
     self.fftHelper->forward(0, self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
     
-    self.graphHelper->setGraphData(0, self.fftMagnitudeBuffer, SAMPLE_AMOUNT / 8, sqrt(SAMPLE_AMOUNT));
+    float* averagedArray;
     
-    self.graphHelper->update();
+    int action = [self determineAction:self.fftMagnitudeBuffer withUpdateArray:&averagedArray];
     
+    if (skipCount % amountToSkip == 0) {
+        self.graphHelper->setGraphData(0, averagedArray, SAMPLE_AMOUNT / 8, sqrt(SAMPLE_AMOUNT));
+        
+        self.graphHelper->update();
+    }
+    
+    // Reset the counter if five times has passed
+    skipCount = skipCount % amountToSkip == 0 ? 1 : skipCount + 1;
 }
 
 /*
@@ -239,28 +260,55 @@ RingBuffer *ringBufferModuleB;
     }
 }
 
+- (void) subtractArrays:(float*)firstArray withSecondArray:(float*)secondArray {
+    for (size_t index = 0; index < SAMPLE_AMOUNT; ++index) {
+        firstArray[index] -= secondArray[index];
+    }
+}
+
+- (void) toDecibles:(float*)array {
+    for (size_t index = 0; index < SAMPLE_AMOUNT; ++index) {
+        array[index] = 20 * log10(array[index]);
+    }
+}
+
 // Not Thread safe! Do not call from two threads in parallel!
-- (bool)determineAction {
-    
+//
+// Returns: Enum MovingAction
+//
+// -1: MovingAway
+// 1 : Moving Towards
+// 0 : NoMovement
+- (MovingAction)determineAction:(float*) magnitudeArr withUpdateArray:(float**) arrayToUpdate {
     // cache the float arrays
-    static float* cachedFloatArrs[AVERAGE_SIZE];
-    static size_t cachedArrIndex = 0;
+    static float* cachedFloatArrs[AVERAGE_SIZE - 1];
+    static size_t cachedArrIndex = 1;
     
-    if (cachedArrIndex % AVERAGE_SIZE)
-    {
-        cachedFloatArrs[cachedArrIndex++] = 0;
-    } else {
-        cachedArrIndex = 0;
-        
-        [self averageArrays:cachedFloatArrs withSize:AVERAGE_SIZE];
-        
-        // The average is stored in the first array
-        float* averagedArr = cachedFloatArrs[0];
-        
-        
+    if (!cachedFloatArrs[0]) {
+        for (size_t index = 0; index < AVERAGE_SIZE - 1; ++index) {
+            cachedFloatArrs[index] = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
+        }
     }
     
-    return false;
+    if (cachedArrIndex % AVERAGE_SIZE == 0)
+    {
+        cachedArrIndex = 1;
+        
+        [self averageArrays:cachedFloatArrs withSize:AVERAGE_SIZE - 1];
+        
+        // The average is stored in the first array
+        *arrayToUpdate = cachedFloatArrs[0];
+        
+        [self toDecibles:*arrayToUpdate];
+        [self toDecibles:magnitudeArr];
+        
+        [self subtractArrays:*arrayToUpdate withSecondArray:magnitudeArr];
+        
+    } else {
+        memcpy(cachedFloatArrs[(cachedArrIndex++) - 1], self.fftMagnitudeBuffer, sizeof(float) * SAMPLE_AMOUNT);
+    }
+    
+    return NotMoving;
 }
 
 - (IBAction)onSliderChange:(id)sender {

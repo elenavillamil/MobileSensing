@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--ModuleB View Controller-->
@@ -34,7 +35,7 @@
                                     <constraint firstAttribute="height" constant="30" id="YIu-S8-bdL"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -46,7 +47,13 @@
                             <constraint firstAttribute="centerX" secondItem="kxH-lA-Zos" secondAttribute="centerX" id="xUB-Xk-8mo"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="ZlX-3Z-keO"/>
+                    <navigationItem key="navigationItem" id="ZlX-3Z-keO">
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="hsf-x2-Cqh">
+                            <connections>
+                                <segue destination="eMo-I7-gye" kind="push" id="b6H-PX-MAy"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="frequenceValueLabel" destination="kxH-lA-Zos" id="sj5-ym-VRl"/>
                         <outlet property="frequenceValueSlider" destination="K64-0e-6j5" id="WgZ-iW-ApQ"/>
@@ -55,6 +62,47 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gUK-HM-D93" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1100" y="197"/>
+        </scene>
+        <!--Map Zoom-->
+        <scene sceneID="lDU-Y8-jd9">
+            <objects>
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="eMo-I7-gye" customClass="ZoomMapViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="has-BR-bct"/>
+                        <viewControllerLayoutGuide type="bottom" id="mtu-iT-SuF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tpU-Xd-lFb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="zgB-Qw-b83">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="zgB-Qw-b83" firstAttribute="top" secondItem="has-BR-bct" secondAttribute="bottom" constant="-64" id="DmH-5P-0TL"/>
+                            <constraint firstAttribute="centerY" secondItem="zgB-Qw-b83" secondAttribute="centerY" id="Dx8-eZ-oGx"/>
+                            <constraint firstAttribute="centerX" secondItem="zgB-Qw-b83" secondAttribute="centerX" id="YYo-6P-qL9"/>
+                            <constraint firstItem="zgB-Qw-b83" firstAttribute="leading" secondItem="tpU-Xd-lFb" secondAttribute="leadingMargin" constant="-16" id="cq9-cs-OAd"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Map Zoom" id="QMR-aA-V8c">
+                        <barButtonItem key="rightBarButtonItem" title="Zoom" id="A1H-GR-dVL">
+                            <connections>
+                                <action selector="zoomTest:" destination="eMo-I7-gye" id="hRB-uI-7Kf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="mapView" destination="zgB-Qw-b83" id="okq-oM-CIU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UU8-Bi-kBj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1604" y="189"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
