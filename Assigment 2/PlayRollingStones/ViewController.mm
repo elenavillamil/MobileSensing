@@ -116,6 +116,7 @@ RingBuffer *ringBuffer;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.title = @"Module A";
     
     ringBuffer = new RingBuffer(kBufferLength,2);
     
@@ -275,9 +276,9 @@ RingBuffer *ringBuffer;
     return frequency;
 }
 
-#pragma mark - status bar
--(BOOL)prefersStatusBarHidden{
-    return YES;
-}
+//#pragma mark - status bar
+//-(BOOL)prefersStatusBarHidden{
+//    return YES;
+//}
 
 @end
