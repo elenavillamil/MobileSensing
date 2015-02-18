@@ -27,8 +27,10 @@
 		B67DE12E18A2F58500570519 /* Novocaine.m in Sources */ = {isa = PBXBuildFile; fileRef = B67DE12918A2F58500570519 /* Novocaine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B67DE12F18A2F58500570519 /* RingBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67DE12B18A2F58500570519 /* RingBuffer.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B67DE13218A2F69A00570519 /* satisfaction.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B67DE13118A2F69A00570519 /* satisfaction.mp3 */; };
-		F30C381D1A8C23FA00B443EE /* ModuleBViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */; };
 		EAD901991A9148C3004C6E5C /* RootTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = EAD901981A9148C3004C6E5C /* RootTableViewController.mm */; };
+		EAD9019C1A9533A2004C6E5C /* ZoomMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = EAD9019B1A9533A2004C6E5C /* ZoomMapViewController.mm */; };
+		EAD9019E1A953777004C6E5C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD9019D1A953777004C6E5C /* MapKit.framework */; };
+		F30C381D1A8C23FA00B443EE /* ModuleBViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +77,9 @@
 		B67DE13118A2F69A00570519 /* satisfaction.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = satisfaction.mp3; sourceTree = "<group>"; };
 		EAD901971A9148C3004C6E5C /* RootTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootTableViewController.h; sourceTree = "<group>"; };
 		EAD901981A9148C3004C6E5C /* RootTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RootTableViewController.mm; sourceTree = "<group>"; };
+		EAD9019A1A9533A2004C6E5C /* ZoomMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomMapViewController.h; sourceTree = "<group>"; };
+		EAD9019B1A9533A2004C6E5C /* ZoomMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZoomMapViewController.mm; sourceTree = "<group>"; };
+		EAD9019D1A953777004C6E5C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F30C381B1A8C23FA00B443EE /* ModuleBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ModuleBViewController.h; path = ../ModuleBViewController.h; sourceTree = "<group>"; };
 		F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ModuleBViewController.mm; path = ../ModuleBViewController.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAD9019E1A953777004C6E5C /* MapKit.framework in Frameworks */,
 				B65EC5EC18A983270033BE93 /* GLKit.framework in Frameworks */,
 				B67DE0F218A2F55400570519 /* CoreGraphics.framework in Frameworks */,
 				B67DE0F418A2F55400570519 /* UIKit.framework in Frameworks */,
@@ -127,6 +133,7 @@
 		B67DE0EE18A2F55400570519 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EAD9019D1A953777004C6E5C /* MapKit.framework */,
 				B65EC5EB18A983270033BE93 /* GLKit.framework */,
 				B67DE0EF18A2F55400570519 /* Foundation.framework */,
 				B67DE0F118A2F55400570519 /* CoreGraphics.framework */,
@@ -146,6 +153,8 @@
 				B67DE10118A2F55400570519 /* Main.storyboard */,
 				B67DE10418A2F55400570519 /* ViewController.h */,
 				B67DE10518A2F55400570519 /* ViewController.mm */,
+				EAD9019A1A9533A2004C6E5C /* ZoomMapViewController.h */,
+				EAD9019B1A9533A2004C6E5C /* ZoomMapViewController.mm */,
 				B67DE10718A2F55400570519 /* Images.xcassets */,
 				B67DE0F618A2F55400570519 /* Supporting Files */,
 			);
@@ -308,6 +317,7 @@
 				B67DE12E18A2F58500570519 /* Novocaine.m in Sources */,
 				B67DE12F18A2F58500570519 /* RingBuffer.mm in Sources */,
 				B67DE12D18A2F58500570519 /* AudioFileWriter.m in Sources */,
+				EAD9019C1A9533A2004C6E5C /* ZoomMapViewController.mm in Sources */,
 				B67DE12C18A2F58500570519 /* AudioFileReader.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
