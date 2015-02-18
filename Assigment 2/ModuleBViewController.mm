@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *frequenceValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *frequenceValueSlider;
 @property double currentSoundPlayFrequence;
-@property (weak, nonatomic) Novocaine* audioManager;
+@property (strong, nonatomic) Novocaine* audioManager;
 
 @property (nonatomic) GraphHelper* graphHelper;
 @property (nonatomic) AudioFileReader* fileReader;
@@ -29,6 +29,7 @@
 @property (nonatomic) float* fftMagnitudeBuffer;
 @property (nonatomic) float* fftPhaseBuffer;
 @property (nonatomic) float* frequencyEqualizer;
+@property (nonatomic) float deltaFrequency;
 
 @end
 
@@ -62,11 +63,6 @@ RingBuffer *ringBufferModuleB;
     
     return _graphHelper;
 }
-
-/*- (void) setGraphHelper:(GraphHelper *)graphHelper
- {
- // Do nothing, use the old graphHelper
- }*/
 
 - (AudioFileReader*) fileReader
 {
@@ -131,6 +127,8 @@ RingBuffer *ringBufferModuleB;
     ringBufferModuleB = new RingBuffer(SAMPLE_AMOUNT, 1);
     
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
+    
+    self.deltaFrequency = self.audioManager.samplingRate  / SAMPLE_AMOUNT/2;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -157,16 +155,18 @@ RingBuffer *ringBufferModuleB;
                      phase -= repeatMax;
              }}];
         
-        initialized = true;
+        //initialized = true;
     }
-    
-    [self.audioManager play];
     
     [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels)
      {
          if(ringBufferModuleB!=nil)
              ringBufferModuleB->AddNewFloatData(data, numFrames);
      }];
+    
+    if(![self.audioManager playing]){
+        [self.audioManager play];
+    }
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
@@ -197,14 +197,12 @@ RingBuffer *ringBufferModuleB;
 }
 
 -(void)update {
-    ringBufferModuleB->FetchFreshData(self.audioData, SAMPLE_AMOUNT, 0, 1);
-    
+    ringBufferModuleB->FetchFreshData2(self.audioData, SAMPLE_AMOUNT, 0, 1);
     self.fftHelper->forward(0, self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
     
     self.graphHelper->setGraphData(0, self.fftMagnitudeBuffer, SAMPLE_AMOUNT / 8, sqrt(SAMPLE_AMOUNT));
     
     self.graphHelper->update();
-    
 }
 
 /*
