@@ -210,7 +210,7 @@ RingBuffer *ringBuffer;
     int tempPosition = 0;
     int positionOne = 0;
     int positionTwo = 0;
-    int windowSize = 24;
+    int windowSize = 22;
     
     // Looking for the local maximums.
     // It is a local maximum if it is the maximum for the entire window.
@@ -229,7 +229,7 @@ RingBuffer *ringBuffer;
         {
             ++count;
             
-            if (count == windowSize -1)
+            if (count > windowSize -8)
             {
                 if (maxVal > maxOne)
                 {
