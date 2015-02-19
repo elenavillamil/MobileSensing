@@ -20,7 +20,7 @@
 @interface ViewController ()
 
 @property (strong, nonatomic) Novocaine* audioManager;
-@property (nonatomic) GraphHelper* graphHelper;
+//@property (nonatomic) GraphHelper* graphHelper;
 @property (nonatomic) AudioFileReader* fileReader;
 @property (nonatomic) float* audioData;
 @property (nonatomic) SMUFFTHelper* fftHelper;
@@ -30,6 +30,8 @@
 @property (nonatomic) float frequencyOne;
 @property (nonatomic) float frequencyTwo;
 @property (nonatomic) float deltaFrequency;
+@property (weak, nonatomic) IBOutlet UILabel *frequencyOneLabel;
+@property (weak, nonatomic) IBOutlet UILabel *frequencyTwoLabel;
 
 @end
 
@@ -46,6 +48,7 @@ RingBuffer *ringBuffer;
     return _audioManager;
 }
 
+/*
 - (GraphHelper*) graphHelper {
     // start animating the graph
     const static int framesPerSecond = 30;
@@ -61,7 +64,7 @@ RingBuffer *ringBuffer;
     
     return _graphHelper;
 }
-
+*/
 - (AudioFileReader*) fileReader {
     // nothing :)
     
@@ -120,7 +123,10 @@ RingBuffer *ringBuffer;
     
     ringBuffer = new RingBuffer(kBufferLength,2);
     
-    self.graphHelper->SetBounds(-0.9,0.9,-0.9,0.9); // bottom, top, left, right, full screen==(-1,1,-1,1)
+    //self.graphHelper->SetBounds(-0.9,0.9,-0.9,0.9); // bottom, top, left, right, full screen==(-1,1,-1,1)
+    
+    self.frequencyOne = 0.0;
+    self.frequencyTwo = 0.0;
     
     self.deltaFrequency = self.audioManager.samplingRate  / kBufferLength;
     NSLog(@"DFrequency %f\n", self.deltaFrequency);
@@ -142,12 +148,12 @@ RingBuffer *ringBuffer;
     
     [self.audioManager pause];
     // stop opengl from running
-    self.graphHelper->tearDownGL();
+    //self.graphHelper->tearDownGL();
 }
 
 -(void)dealloc{
     
-    self.graphHelper->tearDownGL();
+    //self.graphHelper->tearDownGL();
     
     free(self.audioData);
     
@@ -156,12 +162,12 @@ RingBuffer *ringBuffer;
     
     delete self.fftHelper;
     delete ringBuffer;
-    delete self.graphHelper;
+    //delete self.graphHelper;
     
     ringBuffer = nil;
     self.fftHelper  = nil;
     self.audioManager = nil;
-    self.graphHelper = nil;
+    //self.graphHelper = nil;
     
     // ARC handles everything else, just clean up what we used c++ for (calloc, malloc, new)
     
@@ -170,7 +176,7 @@ RingBuffer *ringBuffer;
 #pragma mark - OpenGL and Update functions
 //  override the GLKView draw function, from OpenGLES
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    self.graphHelper->draw(); // draw the graph
+    //self.graphHelper->draw(); // draw the graph
 }
 
 
@@ -186,9 +192,9 @@ RingBuffer *ringBuffer;
     self.fftHelper->forward(0,self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
     
     // plot the FFT
-    self.graphHelper->setGraphData(0,self.fftMagnitudeBuffer,kBufferLength/8,sqrt(kBufferLength)); // set graph channel
+    //self.graphHelper->setGraphData(0,self.fftMagnitudeBuffer,kBufferLength/8,sqrt(kBufferLength)); // set graph channel
     
-    self.graphHelper->update(); // update the graph
+    //self.graphHelper->update(); // update the graph
     
     [self performSelector:@selector(getTwoMax:) withObject:nil];
 
@@ -206,8 +212,9 @@ RingBuffer *ringBuffer;
     int positionTwo = 0;
     int windowSize = 24;
     
+    // Looking for the local maximums.
+    // It is a local maximum if it is the maximum for the entire window.
     for (int i = 0; i < kBufferLength/2; ++i)
-    //for (int i = 0; i < kBufferLength/2; i+=25)
     {
         for (int j = 0; j+i < kBufferLength/2 && j < windowSize; ++j)
         {
@@ -215,11 +222,6 @@ RingBuffer *ringBuffer;
             {
                 maxVal = self.fftMagnitudeBuffer[i+j];
                 tempPosition = i+j;
-                /*if (j == windowSize/2)
-                {
-                    tempPosition = i+j;
-                    maxVal = self.fftMagnitudeBuffer[i+j];
-                }*/
             }
         }
         
@@ -231,6 +233,8 @@ RingBuffer *ringBuffer;
             {
                 if (maxVal > maxOne)
                 {
+                    maxTwo = maxOne;
+                    positionTwo = positionOne;
                     maxOne = maxVal;
                     positionOne = tempPosition;
                 }
@@ -239,6 +243,7 @@ RingBuffer *ringBuffer;
                     maxTwo = maxVal;
                     positionTwo = tempPosition;
                 }
+                count = 0;
             }
         }
         else
@@ -255,17 +260,17 @@ RingBuffer *ringBuffer;
     {
         // Get pick f2 + (m3 - m2) / (2m2 - m1 - m2) * Af/2
         // Af = 3?
-        self.frequencyOne = [self calculateInterpolation:positionOne];
+        // Setting label in main queue
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            self.frequencyOneLabel.text = [NSString stringWithFormat:@"%.2f", [self calculateInterpolation:positionOne]];
+        });
     }
     if (positionTwo > 0)
     {
-        self.frequencyTwo = [self calculateInterpolation:positionTwo];
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            self.frequencyTwoLabel.text = [NSString stringWithFormat:@"%.2f", [self calculateInterpolation:positionTwo]];
+        });
     }
-    
-    NSLog(@"Max1: %f\n", maxOne);
-    NSLog(@"Max2: %f\n", maxTwo);
-    NSLog(@"Frequency 1: %f\n", self.frequencyOne);
-    NSLog(@"Frequency 2: %f\n", self.frequencyTwo);
 }
 
 -(float) calculateInterpolation:(int)position

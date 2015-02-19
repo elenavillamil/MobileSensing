@@ -115,9 +115,74 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS" customClass="GLKView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wyf-90-fDP">
+                                <rect key="frame" x="60" y="194" width="200" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="5le-xZ-VYc"/>
+                                    <constraint firstAttribute="width" constant="200" id="ajN-O9-YOI"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.92549026012420654" green="0.97647064924240112" blue="0.96862751245498657" alpha="1" colorSpace="deviceRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loudest Frequency:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CAl-hY-fJ0">
+                                <rect key="frame" x="60" y="133" width="200" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="1r1-Qh-iPR"/>
+                                    <constraint firstAttribute="width" constant="200" id="4mu-f2-PYD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Second Loudest Frequency:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9fn-Ln-0yf">
+                                <rect key="frame" x="52" y="261" width="217" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="217" id="YHe-xC-gEw"/>
+                                    <constraint firstAttribute="height" constant="45" id="geq-uD-Jkh"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkY-bn-neJ">
+                                <rect key="frame" x="60" y="322" width="200" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="UPo-qB-6jv"/>
+                                    <constraint firstAttribute="height" constant="45" id="tIP-VZ-dyy"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.90980398654937744" green="0.97254908084869385" blue="0.96862751245498657" alpha="1" colorSpace="deviceRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.035294119268655777" green="0.070588238537311554" blue="0.078431375324726105" alpha="1" colorSpace="deviceRGB"/>
+                        <constraints>
+                            <constraint firstItem="9fn-Ln-0yf" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="36" id="52c-0w-rKT"/>
+                            <constraint firstAttribute="centerX" secondItem="9fn-Ln-0yf" secondAttribute="centerX" id="KXU-ZQ-gfd"/>
+                            <constraint firstItem="CAl-hY-fJ0" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="44" id="LIF-MW-rDj"/>
+                            <constraint firstAttribute="centerX" secondItem="CAl-hY-fJ0" secondAttribute="centerX" id="NBE-Rd-HcJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="wyf-90-fDP" secondAttribute="trailing" constant="44" id="PJd-4w-oVF"/>
+                            <constraint firstAttribute="centerY" secondItem="9fn-Ln-0yf" secondAttribute="centerY" id="Tqf-lD-vxq"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9fn-Ln-0yf" secondAttribute="trailing" constant="35" id="Txb-fZ-xFn"/>
+                            <constraint firstItem="9fn-Ln-0yf" firstAttribute="top" secondItem="wyf-90-fDP" secondAttribute="bottom" constant="22" id="XIs-hV-dml"/>
+                            <constraint firstItem="wyf-90-fDP" firstAttribute="top" secondItem="CAl-hY-fJ0" secondAttribute="bottom" constant="16" id="a7G-J7-CvJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="IkY-bn-neJ" secondAttribute="trailing" constant="44" id="abp-9C-hTf"/>
+                            <constraint firstItem="wyf-90-fDP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="44" id="aqQ-fN-lbO"/>
+                            <constraint firstItem="IkY-bn-neJ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="44" id="jSp-CX-4pY"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="CAl-hY-fJ0" secondAttribute="trailing" constant="44" id="kpr-G9-Msm"/>
+                            <constraint firstAttribute="centerX" secondItem="IkY-bn-neJ" secondAttribute="centerX" id="nrZ-op-5qc"/>
+                            <constraint firstItem="IkY-bn-neJ" firstAttribute="top" secondItem="9fn-Ln-0yf" secondAttribute="bottom" constant="16" id="snp-fM-5yZ"/>
+                            <constraint firstAttribute="centerX" secondItem="wyf-90-fDP" secondAttribute="centerX" id="x6d-fv-1Xe"/>
+                            <constraint firstItem="CAl-hY-fJ0" firstAttribute="top" secondItem="jZK-DT-YMn" secondAttribute="bottom" constant="69" id="xpZ-NH-b7R"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Ih2-cj-fGH"/>
+                    <connections>
+                        <outlet property="frequencyOneLabel" destination="wyf-90-fDP" id="6kI-p5-Ppe"/>
+                        <outlet property="frequencyTwoLabel" destination="IkY-bn-neJ" id="URx-3h-1Vj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
