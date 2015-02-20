@@ -12,6 +12,7 @@
 #import "RingBuffer.h"
 #import "SMUGraphHelper.h"
 #import "SMUFFTHelper.h"
+#import "ZoomMapViewController.h"
 
 #define AVERAGE_SIZE 0
 #define SAMPLE_AMOUNT 4096
@@ -30,6 +31,7 @@
 @property (nonatomic) float* fftPhaseBuffer;
 @property (nonatomic) float* frequencyEqualizer;
 @property (nonatomic) float deltaFrequency;
+@property (weak, nonatomic) ZoomMapViewController* child;
 
 @end
 
@@ -149,6 +151,8 @@ typedef enum {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    //self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
+
     // Start a noise.
     static bool initialized = false;
     
@@ -183,6 +187,7 @@ typedef enum {
     if(![self.audioManager playing]){
         [self.audioManager play];
     }
+    
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
@@ -190,7 +195,7 @@ typedef enum {
     
     [self.audioManager pause];
     
-    self.graphHelper->tearDownGL();
+//    self.graphHelper->tearDownGL();
 }
 
 -(void)dealloc {
@@ -249,15 +254,6 @@ typedef enum {
     }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)averageArrays:(float**) array withSize:(size_t) size {
     
@@ -410,4 +406,31 @@ typedef enum {
         self.frequenceValueLabel.text = [NSString stringWithFormat:@"%.2f", frequency];
     });
 }
+
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    self.graphHelper->tearDownGL();
+    delete self.graphHelper;
+    self.graphHelper = nil;
+    self.child = (ZoomMapViewController *)[segue destinationViewController];
+
+}
+
+- (void)keepPlayingAudio
+{
+    if (![self.audioManager playing]) {
+        [self.audioManager play];
+    }
+}
+
+- (void)zoomMap
+{
+    int random = arc4random() % 3;
+    [self.child motionReqanizer:random];
+}
+
 @end

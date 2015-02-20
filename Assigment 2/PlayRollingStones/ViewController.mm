@@ -16,6 +16,7 @@
 
 //#define kBufferLength 4096
 #define kBufferLength 8192
+//#define kBufferLength 16384
 
 @interface ViewController ()
 
@@ -118,28 +119,26 @@ RingBuffer *ringBuffer;
 #pragma mark - loading and appear
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+
     self.title = @"Module A";
     
     ringBuffer = new RingBuffer(kBufferLength,2);
     
     //self.graphHelper->SetBounds(-0.9,0.9,-0.9,0.9); // bottom, top, left, right, full screen==(-1,1,-1,1)
     
-    self.frequencyOne = 0.0;
     self.frequencyTwo = 0.0;
     
     self.deltaFrequency = self.audioManager.samplingRate  / kBufferLength;
-    NSLog(@"DFrequency %f\n", self.deltaFrequency);
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self.audioManager play];
     [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels) {
          if(ringBuffer!=nil)
              ringBuffer->AddNewFloatData(data, numFrames);
      }];
-
 }
 
 #pragma mark - unloading and dealloc
@@ -147,14 +146,9 @@ RingBuffer *ringBuffer;
     [super viewDidDisappear:animated];
     
     [self.audioManager pause];
-    // stop opengl from running
-    //self.graphHelper->tearDownGL();
 }
 
 -(void)dealloc{
-    
-    //self.graphHelper->tearDownGL();
-    
     free(self.audioData);
     
     free(self.fftMagnitudeBuffer);
@@ -162,22 +156,19 @@ RingBuffer *ringBuffer;
     
     delete self.fftHelper;
     delete ringBuffer;
-    //delete self.graphHelper;
     
     ringBuffer = nil;
     self.fftHelper  = nil;
     self.audioManager = nil;
-    //self.graphHelper = nil;
     
     // ARC handles everything else, just clean up what we used c++ for (calloc, malloc, new)
-    
 }
 
 #pragma mark - OpenGL and Update functions
 //  override the GLKView draw function, from OpenGLES
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+//- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     //self.graphHelper->draw(); // draw the graph
-}
+//}
 
 
 //  override the GLKViewController update function, from OpenGLES
@@ -186,13 +177,8 @@ RingBuffer *ringBuffer;
     // plot the audio
     ringBuffer->FetchFreshData2(self.audioData, kBufferLength, 0, 1);
     
-    //graphHelper->setGraphData(0,audioData,kBufferLength); // set graph channel
-    
     //take the FFT
     self.fftHelper->forward(0,self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
-    
-    // plot the FFT
-    //self.graphHelper->setGraphData(0,self.fftMagnitudeBuffer,kBufferLength/8,sqrt(kBufferLength)); // set graph channel
     
     //self.graphHelper->update(); // update the graph
     
@@ -210,7 +196,7 @@ RingBuffer *ringBuffer;
     int tempPosition = 0;
     int positionOne = 0;
     int positionTwo = 0;
-    int windowSize = 22;
+    int windowSize = 17;
     
     // Looking for the local maximums.
     // It is a local maximum if it is the maximum for the entire window.
@@ -221,33 +207,24 @@ RingBuffer *ringBuffer;
             if (maxVal < self.fftMagnitudeBuffer[i+j])
             {
                 maxVal = self.fftMagnitudeBuffer[i+j];
-                tempPosition = i+j;
+                tempPosition = j;
             }
         }
         
-        if (oldMax == maxVal)
+        if (tempPosition == windowSize/2)
         {
-            ++count;
-            
-            if (count > windowSize -8)
+            if (maxVal > maxOne)
             {
-                if (maxVal > maxOne)
-                {
-                    maxTwo = maxOne;
-                    positionTwo = positionOne;
-                    maxOne = maxVal;
-                    positionOne = tempPosition;
-                }
-                else if (maxVal > maxTwo)
-                {
-                    maxTwo = maxVal;
-                    positionTwo = tempPosition;
-                }
-                count = 0;
+                maxTwo = maxOne;
+                positionTwo = positionOne;
+                maxOne = maxVal;
+                positionOne = tempPosition + i;
             }
-        }
-        else
-        {
+            else if (maxVal > maxTwo)
+            {
+                maxTwo = maxVal;
+                positionTwo = tempPosition + i;
+            }
             count = 0;
         }
         
@@ -255,20 +232,25 @@ RingBuffer *ringBuffer;
         maxVal = 0.0;
     }
     
+    float newFrequencyOne = [self calculateInterpolation:positionOne];
+    float newFrequencyTwo = [self calculateInterpolation:positionTwo];
+    
+    
     // update local variable if different
-    if (positionOne > 0)
+    if (maxOne > 8 && (newFrequencyOne > self.frequencyOne + 3 || newFrequencyOne < self.frequencyOne - 3))
     {
-        // Get pick f2 + (m3 - m2) / (2m2 - m1 - m2) * Af/2
-        // Af = 3?
-        // Setting label in main queue
+        self.frequencyOne = newFrequencyOne;
+        
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            self.frequencyOneLabel.text = [NSString stringWithFormat:@"%.2f", [self calculateInterpolation:positionOne]];
+            self.frequencyOneLabel.text = [NSString stringWithFormat:@"%.2f", self.frequencyOne];
         });
     }
-    if (positionTwo > 0)
+    if (maxTwo > 8 && (newFrequencyTwo > self.frequencyTwo + 3 || newFrequencyTwo < self.frequencyTwo - 3))
     {
+        self.frequencyTwo = newFrequencyTwo;
+        
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            self.frequencyTwoLabel.text = [NSString stringWithFormat:@"%.2f", [self calculateInterpolation:positionTwo]];
+            self.frequencyTwoLabel.text = [NSString stringWithFormat:@"%.2f", self.frequencyTwo];
         });
     }
 }
@@ -277,19 +259,14 @@ RingBuffer *ringBuffer;
 {
     float frequency = 0.0;
     
-    // (m3 - m2) / (2*m2 - m1 - m2)
-    float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position]);
-    
-    // Af = sampling rate / points -> has to be around 6 change buffer size
+    // Interpolation equation: f2 + (m3 - m1) / (2m2 - m1 - m3) * Af/2
+
+    // Getting (m3 - m1) / (2*m2 - m1 - m2)
+    float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position - 1]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position + 1]);
     
     frequency = (position * self.deltaFrequency) + (temp * self.deltaFrequency / 2);
     
     return frequency;
 }
-
-//#pragma mark - status bar
-//-(BOOL)prefersStatusBarHidden{
-//    return YES;
-//}
 
 @end

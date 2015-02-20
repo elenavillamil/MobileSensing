@@ -10,4 +10,6 @@
 
 @interface ZoomMapViewController : UIViewController
 
+- (void)motionReqanizer:(int)motion;
+
 @end

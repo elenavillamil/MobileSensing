@@ -8,6 +8,7 @@
 
 #import "ZoomMapViewController.h"
 #import <MapKit/MapKit.h>
+#import "ModuleBViewController.h"
 
 @interface ZoomMapViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
@@ -32,6 +33,12 @@
     [super viewWillAppear:YES];
     self.navigationController.navigationBar.hidden = NO;
     
+    int currentVCIndex = [self.navigationController.viewControllers indexOfObject:self.navigationController.topViewController];
+    //previous view controller
+    ModuleBViewController *parent = (ModuleBViewController *)[self.navigationController.viewControllers objectAtIndex:currentVCIndex - 1];
+
+    [parent keepPlayingAudio];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,8 +55,26 @@
     // Pass the selected object to the new view controller.
 }
 */
-- (IBAction)zoomTest:(id)sender {
-    [self zoomMap:self.mapView byDelta:.5f];
+
+- (void)motionReqanizer:(int)motion
+{
+
+    switch (motion) {
+        case 0:
+            //default aka hand do nothing
+            break;
+            
+        case 1:
+            [self zoomMap:self.mapView byDelta:2.f];
+            break;
+            
+        case 2:
+            [self zoomMap:self.mapView byDelta:.5f];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - MapKit Delegate
@@ -76,8 +101,6 @@
     
 }
 
-- (IBAction)doneTapped:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
+
 
 @end

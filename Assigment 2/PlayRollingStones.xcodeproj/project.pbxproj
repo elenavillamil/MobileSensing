@@ -30,6 +30,7 @@
 		EAD901991A9148C3004C6E5C /* RootTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = EAD901981A9148C3004C6E5C /* RootTableViewController.mm */; };
 		EAD9019C1A9533A2004C6E5C /* ZoomMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = EAD9019B1A9533A2004C6E5C /* ZoomMapViewController.mm */; };
 		EAD9019E1A953777004C6E5C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD9019D1A953777004C6E5C /* MapKit.framework */; };
+		EAD901A11A96DDCA004C6E5C /* NoteFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD901A01A96DDCA004C6E5C /* NoteFinder.m */; };
 		F30C381D1A8C23FA00B443EE /* ModuleBViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,8 @@
 		EAD9019A1A9533A2004C6E5C /* ZoomMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomMapViewController.h; sourceTree = "<group>"; };
 		EAD9019B1A9533A2004C6E5C /* ZoomMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZoomMapViewController.mm; sourceTree = "<group>"; };
 		EAD9019D1A953777004C6E5C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		EAD9019F1A96DDCA004C6E5C /* NoteFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteFinder.h; sourceTree = "<group>"; };
+		EAD901A01A96DDCA004C6E5C /* NoteFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteFinder.m; sourceTree = "<group>"; };
 		F30C381B1A8C23FA00B443EE /* ModuleBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ModuleBViewController.h; path = ../ModuleBViewController.h; sourceTree = "<group>"; };
 		F30C381C1A8C23FA00B443EE /* ModuleBViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ModuleBViewController.mm; path = ../ModuleBViewController.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -207,6 +210,8 @@
 				B67DE12918A2F58500570519 /* Novocaine.m */,
 				B67DE12A18A2F58500570519 /* RingBuffer.h */,
 				B67DE12B18A2F58500570519 /* RingBuffer.mm */,
+				EAD9019F1A96DDCA004C6E5C /* NoteFinder.h */,
+				EAD901A01A96DDCA004C6E5C /* NoteFinder.m */,
 			);
 			name = Novocaine;
 			sourceTree = "<group>";
@@ -322,6 +327,7 @@
 				B67DE12D18A2F58500570519 /* AudioFileWriter.m in Sources */,
 				EAD9019C1A9533A2004C6E5C /* ZoomMapViewController.mm in Sources */,
 				B67DE12C18A2F58500570519 /* AudioFileReader.mm in Sources */,
+				EAD901A11A96DDCA004C6E5C /* NoteFinder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
