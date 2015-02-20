@@ -183,6 +183,7 @@ typedef enum {
     if(![self.audioManager playing]){
         [self.audioManager play];
     }
+
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
@@ -243,15 +244,6 @@ typedef enum {
     }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)averageArrays:(float**) array withSize:(size_t) size {
     
@@ -361,4 +353,16 @@ typedef enum {
         self.frequenceValueLabel.text = [NSString stringWithFormat:@"%.2f", frequency];
     });
 }
+
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    self.graphHelper->tearDownGL();
+    delete self.graphHelper;
+    self.graphHelper = nil;
+}
+
 @end

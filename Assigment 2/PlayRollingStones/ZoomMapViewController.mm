@@ -48,8 +48,25 @@
     // Pass the selected object to the new view controller.
 }
 */
-- (IBAction)zoomTest:(id)sender {
-    [self zoomMap:self.mapView byDelta:.5f];
+
+- (void)motionReqanizer:(int)motion
+{
+    switch (motion) {
+        case 0:
+            //default aka hand do nothing
+            break;
+            
+        case 1:
+            [self zoomMap:self.mapView byDelta:2.f];
+            break;
+            
+        case 2:
+            [self zoomMap:self.mapView byDelta:.5f];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - MapKit Delegate
