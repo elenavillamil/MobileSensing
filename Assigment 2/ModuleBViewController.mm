@@ -151,6 +151,8 @@ typedef enum {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    //self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
+
     // Start a noise.
     static bool initialized = false;
     

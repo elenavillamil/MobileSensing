@@ -15,8 +15,8 @@
 
 
 //#define kBufferLength 4096
-//#define kBufferLength 8192
-#define kBufferLength 16384
+#define kBufferLength 8192
+//#define kBufferLength 16384
 
 @interface ViewController ()
 
@@ -119,7 +119,7 @@ RingBuffer *ringBuffer;
 #pragma mark - loading and appear
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+
     self.title = @"Module A";
     
     ringBuffer = new RingBuffer(kBufferLength,2);
@@ -129,17 +129,16 @@ RingBuffer *ringBuffer;
     self.frequencyTwo = 0.0;
     
     self.deltaFrequency = self.audioManager.samplingRate  / kBufferLength;
-    NSLog(@"DFrequency %f\n", self.deltaFrequency);
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self.audioManager play];
     [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels) {
          if(ringBuffer!=nil)
              ringBuffer->AddNewFloatData(data, numFrames);
      }];
-
 }
 
 #pragma mark - unloading and dealloc
@@ -147,14 +146,9 @@ RingBuffer *ringBuffer;
     [super viewDidDisappear:animated];
     
     [self.audioManager pause];
-    // stop opengl from running
-    //self.graphHelper->tearDownGL();
 }
 
 -(void)dealloc{
-    
-    //self.graphHelper->tearDownGL();
-    
     free(self.audioData);
     
     free(self.fftMagnitudeBuffer);
@@ -162,22 +156,19 @@ RingBuffer *ringBuffer;
     
     delete self.fftHelper;
     delete ringBuffer;
-    //delete self.graphHelper;
     
     ringBuffer = nil;
     self.fftHelper  = nil;
     self.audioManager = nil;
-    //self.graphHelper = nil;
     
     // ARC handles everything else, just clean up what we used c++ for (calloc, malloc, new)
-    
 }
 
 #pragma mark - OpenGL and Update functions
 //  override the GLKView draw function, from OpenGLES
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+//- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     //self.graphHelper->draw(); // draw the graph
-}
+//}
 
 
 //  override the GLKViewController update function, from OpenGLES
@@ -186,13 +177,8 @@ RingBuffer *ringBuffer;
     // plot the audio
     ringBuffer->FetchFreshData2(self.audioData, kBufferLength, 0, 1);
     
-    //graphHelper->setGraphData(0,audioData,kBufferLength); // set graph channel
-    
     //take the FFT
     self.fftHelper->forward(0,self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
-    
-    // plot the FFT
-    //self.graphHelper->setGraphData(0,self.fftMagnitudeBuffer,kBufferLength/8,sqrt(kBufferLength)); // set graph channel
     
     //self.graphHelper->update(); // update the graph
     
@@ -282,21 +268,14 @@ RingBuffer *ringBuffer;
 {
     float frequency = 0.0;
     
-    // Interpolation equation: f2 + (m3 - m2) / (2m2 - m1 - m2) * Af/2
+    // Interpolation equation: f2 + (m3 - m1) / (2m2 - m1 - m3) * Af/2
 
-    // Getting (m3 - m2) / (2*m2 - m1 - m2)
-    float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position]);
-    
-    // Af = sampling rate / points -> has to be around 6 change buffer size
+    // Getting (m3 - m1) / (2*m2 - m1 - m2)
+    float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position - 1]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position + 3]);
     
     frequency = (position * self.deltaFrequency) + (temp * self.deltaFrequency / 2);
     
     return frequency;
 }
-
-//#pragma mark - status bar
-//-(BOOL)prefersStatusBarHidden{
-//    return YES;
-//}
 
 @end
