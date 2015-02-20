@@ -215,7 +215,7 @@ RingBuffer *ringBuffer;
         {
             ++count;
             
-            if (count > windowSize - 4)
+            if (count > windowSize - 6)
             {
                 if (maxVal > maxOne)
                 {
