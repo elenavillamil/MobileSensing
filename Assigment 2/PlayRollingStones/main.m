@@ -2,8 +2,8 @@
 //  main.m
 //  PlayRollingStones
 //
-//  Created by Eric Larson on 2/5/14.
-//  Copyright (c) 2014 Eric Larson. All rights reserved.
+//  Team E+1:
+//  Team members: Jarret Shook, Tyler Hargett, and Elena Villamil
 //
 
 #import <UIKit/UIKit.h>
