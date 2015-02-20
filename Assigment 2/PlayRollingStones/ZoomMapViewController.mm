@@ -33,12 +33,17 @@
     [super viewWillAppear:YES];
     self.navigationController.navigationBar.hidden = NO;
     
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
     int currentVCIndex = [self.navigationController.viewControllers indexOfObject:self.navigationController.topViewController];
     //previous view controller
     ModuleBViewController *parent = (ModuleBViewController *)[self.navigationController.viewControllers objectAtIndex:currentVCIndex - 1];
-
-    [parent keepPlayingAudio];
     
+    [parent keepPlayingAudio];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -101,6 +106,8 @@
     
 }
 
+
+#pragma mark
 
 
 @end

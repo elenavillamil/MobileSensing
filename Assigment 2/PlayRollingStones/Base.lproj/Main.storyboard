@@ -38,6 +38,9 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="iSI-59-LYx">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -50,14 +53,14 @@
                     <navigationItem key="navigationItem" id="ZlX-3Z-keO">
                         <barButtonItem key="rightBarButtonItem" title="Map" id="hsf-x2-Cqh">
                             <connections>
-                                <action selector="zoominourrandom:" destination="eAx-GC-wDr" id="iXa-9e-uaa"/>
-                                <segue destination="eMo-I7-gye" kind="push" id="zaO-hr-sRW"/>
+                                <action selector="addmap:" destination="eAx-GC-wDr" id="UR4-Cs-IhE"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="frequenceValueLabel" destination="kxH-lA-Zos" id="sj5-ym-VRl"/>
                         <outlet property="frequenceValueSlider" destination="K64-0e-6j5" id="WgZ-iW-ApQ"/>
+                        <outlet property="mapView" destination="iSI-59-LYx" id="HRR-zH-xJw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gUK-HM-D93" userLabel="First Responder" sceneMemberID="firstResponder"/>

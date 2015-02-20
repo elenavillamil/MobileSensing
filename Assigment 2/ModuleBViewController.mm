@@ -13,11 +13,12 @@
 #import "SMUGraphHelper.h"
 #import "SMUFFTHelper.h"
 #import "ZoomMapViewController.h"
+#import <MapKit/MapKit.h>
 
 #define AVERAGE_SIZE 0
 #define SAMPLE_AMOUNT 4096
 
-@interface ModuleBViewController ()
+@interface ModuleBViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *frequenceValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *frequenceValueSlider;
 @property double currentSoundPlayFrequence;
@@ -32,6 +33,10 @@
 @property (nonatomic) float* frequencyEqualizer;
 @property (nonatomic) float deltaFrequency;
 @property (weak, nonatomic) ZoomMapViewController* child;
+
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+
+@property int action;
 
 @end
 
@@ -193,6 +198,7 @@ typedef enum {
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
+    
     [self.audioManager pause];
     
 //    self.graphHelper->tearDownGL();
@@ -243,11 +249,16 @@ typedef enum {
     
     [self toDecibles:copyMagnitudeBuffer withSize:windowSize * .95];
     
-    int action = [self determineAction:self.fftMagnitudeBuffer withUpdateArray:&averagedArray withStartIndex:startIndex withSize:windowSize * .95 withFrequencyIndex:frequencyIndex withFrequency:frequency];
+    int newAction = [self determineAction:self.fftMagnitudeBuffer withUpdateArray:&averagedArray withStartIndex:startIndex withSize:windowSize * .95 withFrequencyIndex:frequencyIndex withFrequency:frequency];
     
-    if (action == MovingAway) {
+    if (newAction != self.action ) {
+        self.action = newAction;
+        [self zoomMap:newAction];
+    }
+    
+    if (newAction == MovingAway) {
         NSLog(@"Moving Away");
-    } else if (action == MovingTowards) {
+    } else if (newAction == MovingTowards) {
         NSLog(@"Moving Towards");
     } else {
         NSLog(@"Not Moving");
@@ -265,6 +276,7 @@ typedef enum {
         skipCount = skipCount % amountToSkip == 0 ? 1 : skipCount + 1;
     }
 }
+
 
 
 - (void)averageArrays:(float**) array withSize:(size_t) size {
@@ -425,9 +437,7 @@ typedef enum {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    self.graphHelper->tearDownGL();
-    delete self.graphHelper;
-    self.graphHelper = nil;
+    
     self.child = (ZoomMapViewController *)[segue destinationViewController];
 
 }
@@ -439,10 +449,67 @@ typedef enum {
     }
 }
 
-- (void)zoomMap
+- (void)zoomMap:(int)value
 {
-    int random = arc4random() % 3;
-    [self.child motionReqanizer:random];
+    if (!self.mapView.hidden) {
+        [self motionReqanizer:value];
+    }
+//    [self.child motionReqanizer:value];
+}
+
+- (void)motionReqanizer:(int)motion
+{
+    
+    switch (motion) {
+        case 0:
+            [self zoomMap:self.mapView byDelta:.8f];
+            break;
+            
+        case 1:
+            [self zoomMap:self.mapView byDelta:1.2f];
+            break;
+            
+        case 2:
+            break;
+            
+        default:
+            break;
+    }
+}
+
+#pragma mark - MapKit Delegate
+
+- (void)zoomMap:(MKMapView*)mapView byDelta:(float) delta {
+    
+    MKCoordinateRegion region = mapView.region;
+    MKCoordinateSpan span = mapView.region.span;
+    span.latitudeDelta*=delta;
+    span.longitudeDelta*=delta;
+    
+    if (span.latitudeDelta > 180 || span.longitudeDelta > 180) {
+        span.latitudeDelta = 180;
+        span.longitudeDelta = 180;
+    } else if (span.latitudeDelta < 0 || span.longitudeDelta < 0)
+    {
+        span.latitudeDelta = 0;
+        span.longitudeDelta = 0;
+    }
+    
+    region = [mapView regionThatFits:region];
+    region.span=span;
+    [mapView setRegion:region animated:YES];
+    
+}
+
+- (IBAction)addmap:(id)sender {
+    self.mapView.hidden = !self.mapView.hidden;
+    
+    UIBarButtonItem *button = (UIBarButtonItem *)sender;
+    if (self.mapView.hidden) {
+        button.title = @"Map";
+    } else {
+        button.title = @"Hide Map";
+    }
 }
 
 @end
