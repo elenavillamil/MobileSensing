@@ -15,7 +15,8 @@
 
 
 //#define kBufferLength 4096
-#define kBufferLength 8192
+//#define kBufferLength 8192
+#define kBufferLength 16384
 
 @interface ViewController ()
 
@@ -125,7 +126,6 @@ RingBuffer *ringBuffer;
     
     //self.graphHelper->SetBounds(-0.9,0.9,-0.9,0.9); // bottom, top, left, right, full screen==(-1,1,-1,1)
     
-    self.frequencyOne = 0.0;
     self.frequencyTwo = 0.0;
     
     self.deltaFrequency = self.audioManager.samplingRate  / kBufferLength;
@@ -229,7 +229,7 @@ RingBuffer *ringBuffer;
         {
             ++count;
             
-            if (count > windowSize -8)
+            if (count > windowSize - 4)
             {
                 if (maxVal > maxOne)
                 {
@@ -255,20 +255,25 @@ RingBuffer *ringBuffer;
         maxVal = 0.0;
     }
     
+    float newFrequencyOne = [self calculateInterpolation:positionOne];
+    float newFrequencyTwo = [self calculateInterpolation:positionTwo];
+    
+    
     // update local variable if different
-    if (positionOne > 0)
+    if (maxOne > 8 && (newFrequencyOne > self.frequencyOne + 3 || newFrequencyOne < self.frequencyOne - 3))
     {
-        // Get pick f2 + (m3 - m2) / (2m2 - m1 - m2) * Af/2
-        // Af = 3?
-        // Setting label in main queue
+        self.frequencyOne = newFrequencyOne;
+        
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            self.frequencyOneLabel.text = [NSString stringWithFormat:@"%.2f", [self calculateInterpolation:positionOne]];
+            self.frequencyOneLabel.text = [NSString stringWithFormat:@"%.2f", self.frequencyOne];
         });
     }
-    if (positionTwo > 0)
+    if (maxTwo > 8 && (newFrequencyTwo > self.frequencyTwo + 3 || newFrequencyTwo < self.frequencyTwo - 3))
     {
+        self.frequencyTwo = newFrequencyTwo;
+        
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            self.frequencyTwoLabel.text = [NSString stringWithFormat:@"%.2f", [self calculateInterpolation:positionTwo]];
+            self.frequencyTwoLabel.text = [NSString stringWithFormat:@"%.2f", self.frequencyTwo];
         });
     }
 }
@@ -277,7 +282,9 @@ RingBuffer *ringBuffer;
 {
     float frequency = 0.0;
     
-    // (m3 - m2) / (2*m2 - m1 - m2)
+    // Interpolation equation: f2 + (m3 - m2) / (2m2 - m1 - m2) * Af/2
+
+    // Getting (m3 - m2) / (2*m2 - m1 - m2)
     float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position]);
     
     // Af = sampling rate / points -> has to be around 6 change buffer size
