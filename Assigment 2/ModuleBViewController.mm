@@ -13,7 +13,7 @@
 #import "SMUGraphHelper.h"
 #import "SMUFFTHelper.h"
 
-#define AVERAGE_SIZE 5
+#define AVERAGE_SIZE 0
 #define SAMPLE_AMOUNT 4096
 
 @interface ModuleBViewController ()
@@ -36,13 +36,21 @@
 @implementation ModuleBViewController
 
 RingBuffer *ringBufferModuleB;
+float frequency = 17500.0; //starting frequency
 
-// C style enum declaration
 typedef enum {
     MovingAway,
     MovingTowards,
     NotMoving
 } MovingAction;
+
+- (double) currentSoundPlayFrequence {
+    if (!_currentSoundPlayFrequence) {
+        _currentSoundPlayFrequence = 17500;
+    }
+    
+    return _currentSoundPlayFrequence;
+}
 
 - (Novocaine *) audioManager
 {
@@ -146,7 +154,6 @@ typedef enum {
     
     if (!initialized) {
         
-        __block float frequency = 261.0; //starting frequency
         __block float phase = 0.0;
         __block float samplingRate = self.audioManager.samplingRate;
 
@@ -218,14 +225,22 @@ typedef enum {
     
     int action = [self determineAction:self.fftMagnitudeBuffer withUpdateArray:&averagedArray];
     
-    if (skipCount % amountToSkip == 0) {
-        self.graphHelper->setGraphData(0, averagedArray, SAMPLE_AMOUNT / 8, sqrt(SAMPLE_AMOUNT));
+    if (AVERAGE_SIZE == 0 || skipCount % amountToSkip == 0) {
+        const size_t windowSize = 250;
+        
+        size_t frequencyIndex = frequency / (44100 / (SAMPLE_AMOUNT));
+        
+        float* startPoint = &averagedArray[frequencyIndex] - windowSize;
+        
+        self.graphHelper->setGraphData(0, startPoint, windowSize * .95, sqrt(SAMPLE_AMOUNT));
         
         self.graphHelper->update();
     }
     
-    // Reset the counter if five times has passed
-    skipCount = skipCount % amountToSkip == 0 ? 1 : skipCount + 1;
+    if (AVERAGE_SIZE) {
+        // Reset the counter if AVERAGE_SIZE times has passed
+        skipCount = skipCount % amountToSkip == 0 ? 1 : skipCount + 1;
+    }
 }
 
 /*
@@ -267,7 +282,7 @@ typedef enum {
 }
 
 - (void) toDecibles:(float*)array {
-    for (size_t index = 0; index < SAMPLE_AMOUNT; ++index) {
+    for (size_t index = 0; index < SAMPLE_AMOUNT / 2; ++index) {
         array[index] = 20 * log10(array[index]);
     }
 }
@@ -281,39 +296,69 @@ typedef enum {
 // 0 : NoMovement
 - (MovingAction)determineAction:(float*) magnitudeArr withUpdateArray:(float**) arrayToUpdate {
     // cache the float arrays
-    static float* cachedFloatArrs[AVERAGE_SIZE - 1];
+    static float** cachedFloatArrs;
     static size_t cachedArrIndex = 1;
+    static bool initialized = false;
     
-    if (!cachedFloatArrs[0]) {
-        for (size_t index = 0; index < AVERAGE_SIZE - 1; ++index) {
-            cachedFloatArrs[index] = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
+    if (!cachedFloatArrs) {
+        if (AVERAGE_SIZE == 0) {
+            cachedFloatArrs = (float**)malloc(sizeof(float*) * 1);
+            *cachedFloatArrs = NULL;
+            
+            *cachedFloatArrs = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
+            memset(*cachedFloatArrs, 0, sizeof(SAMPLE_AMOUNT));
+        } else {
+            cachedFloatArrs = (float**)malloc(sizeof(float*) * AVERAGE_SIZE - 1);
+            memset(cachedFloatArrs, 0, sizeof(float*) * AVERAGE_SIZE - 1);
+            
+            for (size_t index = 0; index < AVERAGE_SIZE - 1; ++index) {
+                cachedFloatArrs[index] = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
+            }
         }
     }
     
-    if (cachedArrIndex % AVERAGE_SIZE == 0)
-    {
-        cachedArrIndex = 1;
-        
-        [self averageArrays:cachedFloatArrs withSize:AVERAGE_SIZE - 1];
-        
-        // The average is stored in the first array
-        *arrayToUpdate = cachedFloatArrs[0];
-        
-        [self toDecibles:*arrayToUpdate];
-        [self toDecibles:magnitudeArr];
-        
-        [self subtractArrays:*arrayToUpdate withSecondArray:magnitudeArr];
-        
+    if (AVERAGE_SIZE != 0) {
+        if (cachedArrIndex % AVERAGE_SIZE == 0) {
+            cachedArrIndex = 1;
+            
+            [self averageArrays:cachedFloatArrs withSize:AVERAGE_SIZE - 1];
+            
+            // The average is stored in the first array
+            *arrayToUpdate = cachedFloatArrs[0];
+            
+            [self toDecibles:*arrayToUpdate];
+            [self toDecibles:magnitudeArr];
+            
+            //[self subtractArrays:*arrayToUpdate withSecondArray:magnitudeArr];
+            
+        } else {
+            memcpy(cachedFloatArrs[(cachedArrIndex++) - 1], self.fftMagnitudeBuffer, sizeof(float) * SAMPLE_AMOUNT);
+        }
     } else {
-        memcpy(cachedFloatArrs[(cachedArrIndex++) - 1], self.fftMagnitudeBuffer, sizeof(float) * SAMPLE_AMOUNT);
+        if (!initialized && magnitudeArr[0] != 0) {
+            memcpy(*cachedFloatArrs, magnitudeArr, SAMPLE_AMOUNT);
+            
+            [self toDecibles:*cachedFloatArrs];
+            
+            initialized = true;
+        }
+        
+        [self toDecibles:magnitudeArr];
+        *arrayToUpdate = magnitudeArr;
+        
+        for (size_t index = 0; index < AVERAGE_SIZE; ++index) {
+            magnitudeArr[index] -= *cachedFloatArrs[index];
+        }
     }
     
     return NotMoving;
 }
 
 - (IBAction)onSliderChange:(id)sender {
-    self.currentSoundPlayFrequence = self.frequenceValueSlider.value;
+    frequency = self.frequenceValueSlider.value;
     
-    self.frequenceValueLabel.text = [NSString stringWithFormat:@"%.2f", self.currentSoundPlayFrequence];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.frequenceValueLabel.text = [NSString stringWithFormat:@"%.2f", frequency];
+    });
 }
 @end
