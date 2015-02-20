@@ -258,6 +258,9 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Eric Larson";
 				TargetAttributes = {
+					B67DE0EB18A2F55400570519 = {
+						DevelopmentTeam = 2P62NT5ZCM;
+					};
 					B67DE10C18A2F55400570519 = {
 						TestTargetID = B67DE0EB18A2F55400570519;
 					};

@@ -223,16 +223,22 @@ typedef enum {
     
     float* averagedArray;
     
-    int action = [self determineAction:self.fftMagnitudeBuffer withUpdateArray:&averagedArray];
+    const size_t windowSize = 30;
+    size_t frequencyIndex = frequency / (self.audioManager.samplingRate / (float)(SAMPLE_AMOUNT));
+    size_t startIndex = frequencyIndex - windowSize / 2;
+    
+    int action = [self determineAction:self.fftMagnitudeBuffer withUpdateArray:&averagedArray withStartIndex:startIndex withSize:windowSize * .95 withFrequencyIndex:frequencyIndex withFrequency:frequency];
+    
+    if (action == MovingAway) {
+        NSLog(@"Moving Away");
+    } else if (action == MovingTowards) {
+        NSLog(@"Moving Towards");
+    } else {
+        NSLog(@"Not Moving");
+    }
     
     if (AVERAGE_SIZE == 0 || skipCount % amountToSkip == 0) {
-        const size_t windowSize = 250;
-        
-        size_t frequencyIndex = frequency / (44100 / (SAMPLE_AMOUNT));
-        
-        float* startPoint = &averagedArray[frequencyIndex] - windowSize;
-        
-        self.graphHelper->setGraphData(0, startPoint, windowSize * .95, sqrt(SAMPLE_AMOUNT));
+        self.graphHelper->setGraphData(0, averagedArray == NULL ? self.fftMagnitudeBuffer : averagedArray, windowSize * .95, sqrt(SAMPLE_AMOUNT));
         
         self.graphHelper->update();
     }
@@ -260,7 +266,7 @@ typedef enum {
     for (size_t index = 1; index < size; ++index) {
         
         // Loop over the total amount of samples
-        for (size_t sampleIndex = 0; sampleIndex < SAMPLE_AMOUNT; ++sampleIndex) {
+        for (size_t sampleIndex = 0; sampleIndex < size; ++sampleIndex) {
             array[0][sampleIndex] += array[index][sampleIndex];
             
         }
@@ -269,20 +275,20 @@ typedef enum {
     
     // Loop over the total amount of samples and calculate the average
     // by dividing by the amount of samples added together
-    for (size_t sampleIndex = 0; sampleIndex < SAMPLE_AMOUNT; ++sampleIndex) {
+    for (size_t sampleIndex = 0; sampleIndex < size; ++sampleIndex) {
         array[0][sampleIndex] /= size;
         
     }
 }
 
 - (void) subtractArrays:(float*)firstArray withSecondArray:(float*)secondArray {
-    for (size_t index = 0; index < SAMPLE_AMOUNT; ++index) {
+    for (size_t index = 0; index < SAMPLE_AMOUNT / 2; ++index) {
         firstArray[index] -= secondArray[index];
     }
 }
 
-- (void) toDecibles:(float*)array {
-    for (size_t index = 0; index < SAMPLE_AMOUNT / 2; ++index) {
+- (void) toDecibles:(float*)array withSize:(size_t) size {
+    for (size_t index = 0; index < size; ++index) {
         array[index] = 20 * log10(array[index]);
     }
 }
@@ -294,60 +300,103 @@ typedef enum {
 // -1: MovingAway
 // 1 : Moving Towards
 // 0 : NoMovement
-- (MovingAction)determineAction:(float*) magnitudeArr withUpdateArray:(float**) arrayToUpdate {
+- (MovingAction)determineAction:(float*) magnitudeArr withUpdateArray:(float**) arrayToUpdate withStartIndex:(size_t)startIndex withSize:(size_t) size withFrequencyIndex:(size_t) frequencyIndex withFrequency:(float) currentFrequency {
     // cache the float arrays
-    static float** cachedFloatArrs;
+    static float* cachedFloatArrs;
     static size_t cachedArrIndex = 1;
     static bool initialized = false;
+    static float sFrequency = frequency;
+    
+    static size_t count = 0;
+    
+    static float leftBaseLine = 0;
+    static float rightBaseLine = 0;
+    
+    static size_t catchUp = 0;
+    
+    // How many times have we called this function
+    ++count;
     
     if (!cachedFloatArrs) {
-        if (AVERAGE_SIZE == 0) {
-            cachedFloatArrs = (float**)malloc(sizeof(float*) * 1);
-            *cachedFloatArrs = NULL;
+        // Not averaging, therefore just make array
+        
+        cachedFloatArrs = (float*)malloc(sizeof(float) * size);
+        
+        memset(cachedFloatArrs, 0, sizeof(float) * size);
+    }
+        
+    // Move down the array to zero in at a particular point
+    magnitudeArr += startIndex;
+    
+    if (!initialized && count == 10) {
+        memcpy(cachedFloatArrs, magnitudeArr, sizeof(float) * size);
+        
+        [self toDecibles:cachedFloatArrs withSize:size];
+        
+        initialized = true;
+    }
+    
+    if (!initialized) {
+        return NotMoving;
+    }
+    
+    if (sFrequency != currentFrequency) {
+        if (catchUp++ == 10) {
+            memcpy(cachedFloatArrs, magnitudeArr, sizeof(float) * size);
             
-            *cachedFloatArrs = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
-            memset(*cachedFloatArrs, 0, sizeof(SAMPLE_AMOUNT));
-        } else {
-            cachedFloatArrs = (float**)malloc(sizeof(float*) * AVERAGE_SIZE - 1);
-            memset(cachedFloatArrs, 0, sizeof(float*) * AVERAGE_SIZE - 1);
+            [self toDecibles:cachedFloatArrs withSize:size];
             
-            for (size_t index = 0; index < AVERAGE_SIZE - 1; ++index) {
-                cachedFloatArrs[index] = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
-            }
+            // Intialized, should already be true.
+            
+            catchUp = 0;
+            
+            count = 0;
+            
+            sFrequency = currentFrequency;
         }
     }
     
-    if (AVERAGE_SIZE != 0) {
-        if (cachedArrIndex % AVERAGE_SIZE == 0) {
-            cachedArrIndex = 1;
-            
-            [self averageArrays:cachedFloatArrs withSize:AVERAGE_SIZE - 1];
-            
-            // The average is stored in the first array
-            *arrayToUpdate = cachedFloatArrs[0];
-            
-            [self toDecibles:*arrayToUpdate];
-            [self toDecibles:magnitudeArr];
-            
-            //[self subtractArrays:*arrayToUpdate withSecondArray:magnitudeArr];
-            
-        } else {
-            memcpy(cachedFloatArrs[(cachedArrIndex++) - 1], self.fftMagnitudeBuffer, sizeof(float) * SAMPLE_AMOUNT);
+    [self toDecibles:magnitudeArr withSize:size];
+    *arrayToUpdate = magnitudeArr;
+    
+    for (size_t index = 0; index < size; ++index) {
+        magnitudeArr[index] -= (cachedFloatArrs)[index];
+    }
+    
+    float leftMax = -1000.0;
+    
+    for (size_t index = 0; index < frequencyIndex - startIndex; ++index) {
+        if (magnitudeArr[index] > leftMax) {
+            leftMax = magnitudeArr[index];
         }
-    } else {
-        if (!initialized && magnitudeArr[0] != 0) {
-            memcpy(*cachedFloatArrs, magnitudeArr, SAMPLE_AMOUNT);
-            
-            [self toDecibles:*cachedFloatArrs];
-            
-            initialized = true;
+    }
+    
+    float rightMax = -1000.0;
+    
+    for (size_t index = frequencyIndex - startIndex + 1; index < size; ++index) {
+        if (magnitudeArr[index] > rightMax) {
+            rightMax = magnitudeArr[index];
         }
+    }
+    
+    if (count > 9 && count < 30) {
+        leftBaseLine += leftMax;
+        rightBaseLine += rightMax;
+    }
+    
+    if (count == 60) {
+        leftBaseLine /= 20;
+        rightBaseLine /= 20;
+    }
+    
+    if (count >= 30) {
+        NSLog(@"Left BaseLine: %f Left Max: %f", leftBaseLine, leftMax);
+        NSLog(@"Right BaseLine: %f Right Max: %f", rightBaseLine, rightMax);
         
-        [self toDecibles:magnitudeArr];
-        *arrayToUpdate = magnitudeArr;
-        
-        for (size_t index = 0; index < AVERAGE_SIZE; ++index) {
-            magnitudeArr[index] -= *cachedFloatArrs[index];
+        if (rightMax > rightBaseLine * 1.3) {
+            return MovingTowards;
+        } else if (leftMax > leftBaseLine * 1.2) {
+            return MovingAway;
         }
     }
     
