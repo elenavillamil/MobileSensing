@@ -161,6 +161,12 @@ typedef enum {
     
     //self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
 
+    frequency = frequency == 17500 ? 17501 : 17500;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.frequenceValueLabel.text = [NSString stringWithFormat:@"%.2f", frequency];
+    });
+    
     // Start a noise.
     static bool initialized = false;
     
@@ -417,9 +423,9 @@ typedef enum {
         NSLog(@"Left BaseLine: %f Left Max: %f", leftBaseLine, leftMax);
         NSLog(@"Right BaseLine: %f Right Max: %f", rightBaseLine, rightMax);
         
-        if (rightMax > rightBaseLine * 1.3) {
+        if (rightMax > leftMax && rightMax > rightBaseLine * 1.3) {
             return MovingTowards;
-        } else if (leftMax > leftBaseLine * 1.2) {
+        } else if (leftMax > leftBaseLine * 1.3) {
             return MovingAway;
         }
     }
