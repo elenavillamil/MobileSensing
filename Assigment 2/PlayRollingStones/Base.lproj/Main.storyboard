@@ -19,17 +19,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="17500" minValue="15000" maxValue="20000" translatesAutoresizingMaskIntoConstraints="NO" id="K64-0e-6j5">
-                                <rect key="frame" x="67" y="168" width="186" height="31"/>
+                                <rect key="frame" x="67" y="200" width="186" height="31"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="182" id="2vb-8I-R48"/>
                                     <constraint firstAttribute="height" constant="30" id="J5h-oJ-dx9"/>
+                                    <constraint firstAttribute="width" constant="182" id="jRL-5F-qPb"/>
                                 </constraints>
                                 <connections>
                                     <action selector="onSliderChange:" destination="eAx-GC-wDr" eventType="valueChanged" id="fe5-k8-Gmp"/>
                                 </connections>
                             </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Moving" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w0W-QT-XHV">
+                                <rect key="frame" x="118" y="264" width="83.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="17500" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxH-lA-Zos">
-                                <rect key="frame" x="110" y="117" width="100" height="30"/>
+                                <rect key="frame" x="110" y="149" width="100" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="4DX-ou-uxO"/>
                                     <constraint firstAttribute="height" constant="30" id="YIu-S8-bdL"/>
@@ -38,20 +44,28 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="iSI-59-LYx">
+                            <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="iSI-59-LYx">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="K64-0e-6j5" firstAttribute="top" secondItem="kxH-lA-Zos" secondAttribute="bottom" constant="21" id="1Ti-he-g63"/>
-                            <constraint firstItem="kxH-lA-Zos" firstAttribute="top" secondItem="PpF-XZ-cQD" secondAttribute="bottom" constant="53" id="BiF-43-kK3"/>
-                            <constraint firstAttribute="centerX" secondItem="K64-0e-6j5" secondAttribute="centerX" id="dSs-ud-atm"/>
-                            <constraint firstAttribute="centerX" secondItem="kxH-lA-Zos" secondAttribute="centerX" id="xUB-Xk-8mo"/>
+                            <constraint firstAttribute="centerX" secondItem="kxH-lA-Zos" secondAttribute="centerX" id="9dB-G7-qKP"/>
+                            <constraint firstItem="w0W-QT-XHV" firstAttribute="top" secondItem="K64-0e-6j5" secondAttribute="bottom" constant="34.5" id="KKQ-Wc-EFw"/>
+                            <constraint firstItem="K64-0e-6j5" firstAttribute="top" secondItem="kxH-lA-Zos" secondAttribute="bottom" constant="21" id="Llq-Fx-Kep"/>
+                            <constraint firstItem="iSI-59-LYx" firstAttribute="leading" secondItem="1bd-ao-Jve" secondAttribute="leadingMargin" constant="-16" id="OVo-ZG-R6E"/>
+                            <constraint firstAttribute="centerY" secondItem="K64-0e-6j5" secondAttribute="centerY" constant="69" id="e8b-CT-Y6C"/>
+                            <constraint firstAttribute="centerX" secondItem="w0W-QT-XHV" secondAttribute="centerX" id="j5q-nm-Sl4"/>
+                            <constraint firstItem="iSI-59-LYx" firstAttribute="top" secondItem="PpF-XZ-cQD" secondAttribute="bottom" constant="-64" id="maB-7v-ZPX"/>
+                            <constraint firstAttribute="centerY" secondItem="iSI-59-LYx" secondAttribute="centerY" id="rDV-uA-cSP"/>
+                            <constraint firstItem="kxH-lA-Zos" firstAttribute="top" secondItem="PpF-XZ-cQD" secondAttribute="bottom" constant="85" id="ugD-nq-AE8"/>
+                            <constraint firstAttribute="centerY" secondItem="kxH-lA-Zos" secondAttribute="centerY" constant="120" id="xyC-vc-SGF"/>
+                            <constraint firstAttribute="centerX" secondItem="iSI-59-LYx" secondAttribute="centerX" id="yMt-5R-XF0"/>
+                            <constraint firstAttribute="centerX" secondItem="K64-0e-6j5" secondAttribute="centerX" id="zuA-8T-HuF"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ZlX-3Z-keO">
-                        <barButtonItem key="rightBarButtonItem" title="Map" id="hsf-x2-Cqh">
+                        <barButtonItem key="rightBarButtonItem" title="Show Map" id="hsf-x2-Cqh">
                             <connections>
                                 <action selector="addmap:" destination="eAx-GC-wDr" id="UR4-Cs-IhE"/>
                             </connections>
@@ -60,6 +74,7 @@
                     <connections>
                         <outlet property="frequenceValueLabel" destination="kxH-lA-Zos" id="sj5-ym-VRl"/>
                         <outlet property="frequenceValueSlider" destination="K64-0e-6j5" id="WgZ-iW-ApQ"/>
+                        <outlet property="handMovingLabel" destination="w0W-QT-XHV" id="8Yb-xM-Nf3"/>
                         <outlet property="mapView" destination="iSI-59-LYx" id="HRR-zH-xJw"/>
                     </connections>
                 </viewController>

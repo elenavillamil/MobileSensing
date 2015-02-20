@@ -35,6 +35,7 @@
 @property (weak, nonatomic) ZoomMapViewController* child;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet UILabel *handMovingLabel;
 
 @property int action;
 
@@ -151,6 +152,8 @@ typedef enum {
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
     
     self.deltaFrequency = self.audioManager.samplingRate  / SAMPLE_AMOUNT/2;
+    
+    self.handMovingLabel.textColor = [UIColor whiteColor];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -254,14 +257,15 @@ typedef enum {
     if (newAction != self.action ) {
         self.action = newAction;
         [self zoomMap:newAction];
-    }
-    
-    if (newAction == MovingAway) {
-        NSLog(@"Moving Away");
-    } else if (newAction == MovingTowards) {
-        NSLog(@"Moving Towards");
-    } else {
-        NSLog(@"Not Moving");
+        
+        if (newAction == MovingAway) {
+            self.handMovingLabel.text = @"Moving Away";
+        } else if (newAction == MovingTowards) {
+            self.handMovingLabel.text = @"Moving Towards";
+        } else {
+            self.handMovingLabel.text = @"Not Moving";
+        }
+        
     }
     
     if (AVERAGE_SIZE == 0 || skipCount % amountToSkip == 0) {
