@@ -95,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "197"
             endingLineNumber = "197"
-            landmarkName = "-dealloc"
+            landmarkName = "-viewDidDisappear:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -159,8 +159,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "294"
             endingLineNumber = "294"
-            landmarkName = "-toDecibles:withSize:"
-            landmarkType = "5">
+            landmarkName = "@implementation ModuleBViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -175,7 +175,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "402"
             endingLineNumber = "402"
-            landmarkName = "-determineAction:withUpdateArray:withStartIndex:withSize:withFrequencyIndex:withFrequency:"
+            landmarkName = "-onSliderChange:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -223,7 +223,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "403"
             endingLineNumber = "403"
-            landmarkName = "-determineAction:withUpdateArray:withStartIndex:withSize:withFrequencyIndex:withFrequency:"
+            landmarkName = "-onSliderChange:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
