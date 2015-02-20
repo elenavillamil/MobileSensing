@@ -33,6 +33,12 @@
     [super viewWillAppear:YES];
     self.navigationController.navigationBar.hidden = NO;
     
+    int currentVCIndex = [self.navigationController.viewControllers indexOfObject:self.navigationController.topViewController];
+    //previous view controller
+    ModuleBViewController *parent = (ModuleBViewController *)[self.navigationController.viewControllers objectAtIndex:currentVCIndex - 1];
+
+    [parent keepPlayingAudio];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -95,11 +101,6 @@
     
 }
 
-- (IBAction)doneTapped:(id)sender {
-    ModuleBViewController *parent = (ModuleBViewController *)self.parentViewController;
-    [parent reputGraph];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
+
 
 @end

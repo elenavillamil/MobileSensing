@@ -12,6 +12,7 @@
 #import "RingBuffer.h"
 #import "SMUGraphHelper.h"
 #import "SMUFFTHelper.h"
+#import "ZoomMapViewController.h"
 
 #define AVERAGE_SIZE 0
 #define SAMPLE_AMOUNT 4096
@@ -30,6 +31,7 @@
 @property (nonatomic) float* fftPhaseBuffer;
 @property (nonatomic) float* frequencyEqualizer;
 @property (nonatomic) float deltaFrequency;
+@property (weak, nonatomic) ZoomMapViewController* child;
 
 @end
 
@@ -365,6 +367,21 @@ typedef enum {
     self.graphHelper->tearDownGL();
     delete self.graphHelper;
     self.graphHelper = nil;
+    self.child = (ZoomMapViewController *)[segue destinationViewController];
+
+}
+
+- (void)keepPlayingAudio
+{
+    if (![self.audioManager playing]) {
+        [self.audioManager play];
+    }
+}
+
+- (void)zoomMap
+{
+    int random = arc4random() % 3;
+    [self.child motionReqanizer:random];
 }
 
 @end
