@@ -196,7 +196,7 @@ RingBuffer *ringBuffer;
     int tempPosition = 0;
     int positionOne = 0;
     int positionTwo = 0;
-    int windowSize = 22;
+    int windowSize = 17;
     
     // Looking for the local maximums.
     // It is a local maximum if it is the maximum for the entire window.
@@ -207,33 +207,24 @@ RingBuffer *ringBuffer;
             if (maxVal < self.fftMagnitudeBuffer[i+j])
             {
                 maxVal = self.fftMagnitudeBuffer[i+j];
-                tempPosition = i+j;
+                tempPosition = j;
             }
         }
         
-        if (oldMax == maxVal)
+        if (tempPosition == windowSize/2)
         {
-            ++count;
-            
-            if (count > windowSize - 6)
+            if (maxVal > maxOne)
             {
-                if (maxVal > maxOne)
-                {
-                    maxTwo = maxOne;
-                    positionTwo = positionOne;
-                    maxOne = maxVal;
-                    positionOne = tempPosition;
-                }
-                else if (maxVal > maxTwo)
-                {
-                    maxTwo = maxVal;
-                    positionTwo = tempPosition;
-                }
-                count = 0;
+                maxTwo = maxOne;
+                positionTwo = positionOne;
+                maxOne = maxVal;
+                positionOne = tempPosition + i;
             }
-        }
-        else
-        {
+            else if (maxVal > maxTwo)
+            {
+                maxTwo = maxVal;
+                positionTwo = tempPosition + i;
+            }
             count = 0;
         }
         
