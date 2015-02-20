@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446105668.596849"
+            timestampString = "446118731.09926"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "252"
+            endingLineNumber = "252"
             landmarkName = "-update"
             landmarkType = "5">
          </BreakpointContent>
@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446105668.596849"
+            timestampString = "446118731.09926"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
             landmarkName = "@implementation ModuleBViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446117004.403526"
+            timestampString = "446118731.09926"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "402"
-            endingLineNumber = "402"
+            startingLineNumber = "414"
+            endingLineNumber = "414"
             landmarkName = "-onSliderChange:"
             landmarkType = "5">
          </BreakpointContent>
@@ -186,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446097875.180206"
+            timestampString = "446118613.079289"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
             landmarkName = "-update"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446097875.858492"
+            timestampString = "446118613.079289"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
             landmarkName = "-update"
             landmarkType = "5">
          </BreakpointContent>
@@ -218,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446117004.403526"
+            timestampString = "446118731.09926"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "403"
-            endingLineNumber = "403"
+            startingLineNumber = "415"
+            endingLineNumber = "415"
             landmarkName = "-onSliderChange:"
             landmarkType = "5">
          </BreakpointContent>
@@ -234,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446114712.143169"
+            timestampString = "446118613.079289"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
             landmarkName = "-update"
             landmarkType = "5">
          </BreakpointContent>
@@ -250,7 +250,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446116797.199118"
+            timestampString = "446118731.09926"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "356"
+            endingLineNumber = "356"
+            landmarkName = "-determineAction:withUpdateArray:withStartIndex:withSize:withFrequencyIndex:withFrequency:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ModuleBViewController.mm"
+            timestampString = "446118731.09926"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "344"
@@ -266,27 +282,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModuleBViewController.mm"
-            timestampString = "446116797.199118"
+            timestampString = "446118731.09926"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "332"
-            endingLineNumber = "332"
-            landmarkName = "-determineAction:withUpdateArray:withStartIndex:withSize:withFrequencyIndex:withFrequency:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ModuleBViewController.mm"
-            timestampString = "446117004.403526"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "359"
-            endingLineNumber = "359"
+            startingLineNumber = "371"
+            endingLineNumber = "371"
             landmarkName = "-determineAction:withUpdateArray:withStartIndex:withSize:withFrequencyIndex:withFrequency:"
             landmarkType = "5">
          </BreakpointContent>

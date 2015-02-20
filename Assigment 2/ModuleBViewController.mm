@@ -68,7 +68,7 @@ typedef enum {
 {
     // start animating the graph
     const static int framesPerSecond = 30;
-    const static int numDataArraysToGraph = 1;
+    const static int numDataArraysToGraph = 2;
     
     if (!_graphHelper)
     {
@@ -222,6 +222,13 @@ typedef enum {
 -(void)update {
     static int skipCount = 1;
     static size_t const amountToSkip = AVERAGE_SIZE;
+    static float* copyMagnitudeBuffer = 0;
+    
+    if (!copyMagnitudeBuffer) {
+        copyMagnitudeBuffer = (float*)malloc(sizeof(float) * (SAMPLE_AMOUNT / 2));
+        
+        memset(copyMagnitudeBuffer, 0, sizeof(SAMPLE_AMOUNT / 2));
+    }
     
     ringBufferModuleB->FetchFreshData2(self.audioData, SAMPLE_AMOUNT, 0, 1);
     self.fftHelper->forward(0, self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
@@ -231,6 +238,10 @@ typedef enum {
     const size_t windowSize = 30;
     size_t frequencyIndex = frequency / (self.audioManager.samplingRate / (float)(SAMPLE_AMOUNT));
     size_t startIndex = frequencyIndex - windowSize / 2;
+    
+    memcpy(copyMagnitudeBuffer, self.fftMagnitudeBuffer, sizeof(float) * (SAMPLE_AMOUNT / 2));
+    
+    [self toDecibles:copyMagnitudeBuffer withSize:windowSize * .95];
     
     int action = [self determineAction:self.fftMagnitudeBuffer withUpdateArray:&averagedArray withStartIndex:startIndex withSize:windowSize * .95 withFrequencyIndex:frequencyIndex withFrequency:frequency];
     
@@ -244,6 +255,7 @@ typedef enum {
     
     if (AVERAGE_SIZE == 0 || skipCount % amountToSkip == 0) {
         self.graphHelper->setGraphData(0, averagedArray == NULL ? self.fftMagnitudeBuffer : averagedArray, windowSize * .95, sqrt(SAMPLE_AMOUNT));
+        self.graphHelper->setGraphData(1, copyMagnitudeBuffer + startIndex, windowSize * .95, sqrt(SAMPLE_AMOUNT));
         
         self.graphHelper->update();
     }
