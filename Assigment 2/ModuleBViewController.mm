@@ -182,8 +182,6 @@ typedef enum {
                  if(phase>repeatMax)
                      phase -= repeatMax;
              }}];
-        
-        //initialized = true;
     }
     
     [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels)
