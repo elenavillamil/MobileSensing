@@ -44,21 +44,14 @@
 @implementation ModuleBViewController
 
 RingBuffer *ringBufferModuleB;
-float frequency = 17500.0; //starting frequency
+float frequency = 17500.0;  // Global to avoid ARC problems.
+
 
 typedef enum {
     MovingAway,
     MovingTowards,
     NotMoving
 } MovingAction;
-
-- (double) currentSoundPlayFrequence {
-    if (!_currentSoundPlayFrequence) {
-        _currentSoundPlayFrequence = 17500;
-    }
-    
-    return _currentSoundPlayFrequence;
-}
 
 - (Novocaine *) audioManager
 {
@@ -159,9 +152,7 @@ typedef enum {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    //self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
-
-    // Start a noise.
+    // Start sine wave.
     static bool initialized = false;
     
     if (!initialized) {
@@ -199,10 +190,7 @@ typedef enum {
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    
     [self.audioManager pause];
-    
-//    self.graphHelper->tearDownGL();
 }
 
 -(void)dealloc {
@@ -290,9 +278,7 @@ typedef enum {
         // Loop over the total amount of samples
         for (size_t sampleIndex = 0; sampleIndex < size; ++sampleIndex) {
             array[0][sampleIndex] += array[index][sampleIndex];
-            
         }
-        
     }
     
     // Loop over the total amount of samples and calculate the average
@@ -412,9 +398,6 @@ typedef enum {
     }
     
     if (count >= 30) {
-        NSLog(@"Left BaseLine: %f Left Max: %f", leftBaseLine, leftMax);
-        NSLog(@"Right BaseLine: %f Right Max: %f", rightBaseLine, rightMax);
-        
         if (rightMax > rightBaseLine * 1.3) {
             return MovingTowards;
         } else if (leftMax > leftBaseLine * 1.2) {

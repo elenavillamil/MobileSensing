@@ -124,8 +124,6 @@ RingBuffer *ringBuffer;
     
     ringBuffer = new RingBuffer(kBufferLength,2);
     
-    //self.graphHelper->SetBounds(-0.9,0.9,-0.9,0.9); // bottom, top, left, right, full screen==(-1,1,-1,1)
-    
     self.frequencyTwo = 0.0;
     
     self.deltaFrequency = self.audioManager.samplingRate  / kBufferLength;
@@ -165,12 +163,7 @@ RingBuffer *ringBuffer;
     // ARC handles everything else, just clean up what we used c++ for (calloc, malloc, new)
 }
 
-#pragma mark - OpenGL and Update functions
-//  override the GLKView draw function, from OpenGLES
-//- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    //self.graphHelper->draw(); // draw the graph
-//}
-
+#pragma mark - Update function
 
 //  override the GLKViewController update function, from OpenGLES
 - (void)update{
@@ -181,10 +174,7 @@ RingBuffer *ringBuffer;
     //take the FFT
     self.fftHelper->forward(0,self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
     
-    //self.graphHelper->update(); // update the graph
-    
     [self performSelector:@selector(getTwoMax:) withObject:nil];
-
 }
 
 -(void)getTwoMax:(id)param
@@ -200,7 +190,7 @@ RingBuffer *ringBuffer;
     int windowSize = 17;
     
     // Looking for the local maximums.
-    // It is a local maximum if it is the maximum for the entire window.
+    // It is a local maximum if it is the maximum for the window matches the middle of thw window
     for (int i = 0; i < kBufferLength/2; ++i)
     {
         for (int j = 0; j+i < kBufferLength/2 && j < windowSize; ++j)
@@ -237,7 +227,7 @@ RingBuffer *ringBuffer;
     float newFrequencyTwo = [self calculateInterpolation:positionTwo];
     
     
-    // update local variable if different
+    // update local variable and label if different from previous value
     if (maxOne > 8 && (newFrequencyOne > self.frequencyOne + 3 || newFrequencyOne < self.frequencyOne - 3))
     {
         self.frequencyOne = newFrequencyOne;
