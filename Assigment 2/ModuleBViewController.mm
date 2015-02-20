@@ -36,7 +36,7 @@
 @implementation ModuleBViewController
 
 RingBuffer *ringBufferModuleB;
-float frequency = 1750.0; //starting frequency
+float frequency = 17500.0; //starting frequency
 
 typedef enum {
     MovingAway,
@@ -46,7 +46,7 @@ typedef enum {
 
 - (double) currentSoundPlayFrequence {
     if (!_currentSoundPlayFrequence) {
-        _currentSoundPlayFrequence = 1750;
+        _currentSoundPlayFrequence = 17500;
     }
     
     return _currentSoundPlayFrequence;
@@ -226,7 +226,13 @@ typedef enum {
     int action = [self determineAction:self.fftMagnitudeBuffer withUpdateArray:&averagedArray];
     
     if (AVERAGE_SIZE == 0 || skipCount % amountToSkip == 0) {
-        self.graphHelper->setGraphData(0, averagedArray, SAMPLE_AMOUNT / 8, sqrt(SAMPLE_AMOUNT));
+        const size_t windowSize = 250;
+        
+        size_t frequencyIndex = frequency / (44100 / (SAMPLE_AMOUNT));
+        
+        float* startPoint = &averagedArray[frequencyIndex] - windowSize;
+        
+        self.graphHelper->setGraphData(0, startPoint, windowSize * .95, sqrt(SAMPLE_AMOUNT));
         
         self.graphHelper->update();
     }
@@ -277,7 +283,7 @@ typedef enum {
 
 - (void) toDecibles:(float*)array {
     for (size_t index = 0; index < SAMPLE_AMOUNT / 2; ++index) {
-        array[index] = array[index] == 0 ? 0 : 20 * log10(array[index]);
+        array[index] = 20 * log10(array[index]);
     }
 }
 
@@ -292,13 +298,22 @@ typedef enum {
     // cache the float arrays
     static float** cachedFloatArrs;
     static size_t cachedArrIndex = 1;
+    static bool initialized = false;
     
-    if (!cachedFloatArrs && AVERAGE_SIZE != 0) {
-        cachedFloatArrs = (float**)malloc(sizeof(float*) * AVERAGE_SIZE - 1);
-        memset(cachedFloatArrs, 0, sizeof(float*) * AVERAGE_SIZE - 1);
-        
-        for (size_t index = 0; index < AVERAGE_SIZE - 1; ++index) {
-            cachedFloatArrs[index] = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
+    if (!cachedFloatArrs) {
+        if (AVERAGE_SIZE == 0) {
+            cachedFloatArrs = (float**)malloc(sizeof(float*) * 1);
+            *cachedFloatArrs = NULL;
+            
+            *cachedFloatArrs = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
+            memset(*cachedFloatArrs, 0, sizeof(SAMPLE_AMOUNT));
+        } else {
+            cachedFloatArrs = (float**)malloc(sizeof(float*) * AVERAGE_SIZE - 1);
+            memset(cachedFloatArrs, 0, sizeof(float*) * AVERAGE_SIZE - 1);
+            
+            for (size_t index = 0; index < AVERAGE_SIZE - 1; ++index) {
+                cachedFloatArrs[index] = (float*)malloc(sizeof(float) * SAMPLE_AMOUNT);
+            }
         }
     }
     
@@ -320,8 +335,20 @@ typedef enum {
             memcpy(cachedFloatArrs[(cachedArrIndex++) - 1], self.fftMagnitudeBuffer, sizeof(float) * SAMPLE_AMOUNT);
         }
     } else {
+        if (!initialized && magnitudeArr[0] != 0) {
+            memcpy(*cachedFloatArrs, magnitudeArr, SAMPLE_AMOUNT);
+            
+            [self toDecibles:*cachedFloatArrs];
+            
+            initialized = true;
+        }
+        
         [self toDecibles:magnitudeArr];
         *arrayToUpdate = magnitudeArr;
+        
+        for (size_t index = 0; index < AVERAGE_SIZE; ++index) {
+            magnitudeArr[index] -= *cachedFloatArrs[index];
+        }
     }
     
     return NotMoving;
@@ -330,6 +357,8 @@ typedef enum {
 - (IBAction)onSliderChange:(id)sender {
     frequency = self.frequenceValueSlider.value;
     
-    self.frequenceValueLabel.text = [NSString stringWithFormat:@"%.2f", frequency];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.frequenceValueLabel.text = [NSString stringWithFormat:@"%.2f", frequency];
+    });
 }
 @end
