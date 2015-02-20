@@ -8,6 +8,7 @@
 
 #import "ZoomMapViewController.h"
 #import <MapKit/MapKit.h>
+#import "ModuleBViewController.h"
 
 @interface ZoomMapViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
@@ -51,6 +52,7 @@
 
 - (void)motionReqanizer:(int)motion
 {
+
     switch (motion) {
         case 0:
             //default aka hand do nothing
@@ -94,6 +96,9 @@
 }
 
 - (IBAction)doneTapped:(id)sender {
+    ModuleBViewController *parent = (ModuleBViewController *)self.parentViewController;
+    [parent reputGraph];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

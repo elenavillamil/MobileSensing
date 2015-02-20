@@ -12,5 +12,5 @@
 @interface ModuleBViewController : GLKViewController
 
 - (IBAction)onSliderChange:(id)sender;
-
+- (void)reputGraph;
 @end
