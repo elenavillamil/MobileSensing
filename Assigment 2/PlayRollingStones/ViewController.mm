@@ -134,6 +134,7 @@ RingBuffer *ringBuffer;
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self.audioManager setOutputBlock:nil];
     [self.audioManager play];
     [self.audioManager setInputBlock:^(float *data, UInt32 numFrames, UInt32 numChannels) {
          if(ringBuffer!=nil)
