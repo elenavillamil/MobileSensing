@@ -38,22 +38,12 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="HyO-FX-qWz">
-                                <rect key="frame" x="40" y="420" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="b54-jN-rfc"/>
-                                    <constraint firstAttribute="height" constant="128" id="maY-N4-pFJ"/>
-                                </constraints>
-                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="K64-0e-6j5" firstAttribute="top" secondItem="kxH-lA-Zos" secondAttribute="bottom" constant="21" id="1Ti-he-g63"/>
-                            <constraint firstAttribute="centerX" secondItem="HyO-FX-qWz" secondAttribute="centerX" id="AA5-bm-XG3"/>
                             <constraint firstItem="kxH-lA-Zos" firstAttribute="top" secondItem="PpF-XZ-cQD" secondAttribute="bottom" constant="53" id="BiF-43-kK3"/>
-                            <constraint firstItem="BJ4-wb-Usd" firstAttribute="top" secondItem="HyO-FX-qWz" secondAttribute="bottom" constant="20" id="IsS-YU-Byn"/>
                             <constraint firstAttribute="centerX" secondItem="K64-0e-6j5" secondAttribute="centerX" id="dSs-ud-atm"/>
-                            <constraint firstAttribute="centerY" secondItem="HyO-FX-qWz" secondAttribute="centerY" constant="-200" id="swR-2h-rYC"/>
                             <constraint firstAttribute="centerX" secondItem="kxH-lA-Zos" secondAttribute="centerX" id="xUB-Xk-8mo"/>
                         </constraints>
                     </view>
@@ -68,7 +58,6 @@
                     <connections>
                         <outlet property="frequenceValueLabel" destination="kxH-lA-Zos" id="sj5-ym-VRl"/>
                         <outlet property="frequenceValueSlider" destination="K64-0e-6j5" id="WgZ-iW-ApQ"/>
-                        <outlet property="mapView" destination="HyO-FX-qWz" id="bAI-Zi-bxn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gUK-HM-D93" userLabel="First Responder" sceneMemberID="firstResponder"/>

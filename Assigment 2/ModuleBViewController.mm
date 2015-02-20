@@ -12,12 +12,11 @@
 #import "RingBuffer.h"
 #import "SMUGraphHelper.h"
 #import "SMUFFTHelper.h"
-#import <MapKit/MapKit.h>
 
 #define AVERAGE_SIZE 0
 #define SAMPLE_AMOUNT 4096
 
-@interface ModuleBViewController () <MKMapViewDelegate>
+@interface ModuleBViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *frequenceValueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *frequenceValueSlider;
 @property double currentSoundPlayFrequence;
@@ -31,7 +30,6 @@
 @property (nonatomic) float* fftPhaseBuffer;
 @property (nonatomic) float* frequencyEqualizer;
 @property (nonatomic) float deltaFrequency;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
 @end
 
@@ -187,7 +185,7 @@ typedef enum {
     if(![self.audioManager playing]){
         [self.audioManager play];
     }
-
+    
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
@@ -195,7 +193,7 @@ typedef enum {
     
     [self.audioManager pause];
     
-    self.graphHelper->tearDownGL();
+//    self.graphHelper->tearDownGL();
 }
 
 -(void)dealloc {
@@ -367,59 +365,6 @@ typedef enum {
     self.graphHelper->tearDownGL();
     delete self.graphHelper;
     self.graphHelper = nil;
-}
-
-- (void)motionReqanizer:(int)motion
-{
-    switch (motion) {
-        case 0:
-            //default aka hand do nothing
-            break;
-            
-        case 1:
-            [self zoomMap:self.mapView byDelta:2.f];
-            break;
-            
-        case 2:
-            [self zoomMap:self.mapView byDelta:.5f];
-            break;
-            
-        default:
-            break;
-    }
-}
-
-#pragma mark - MapKit Delegate
-
-- (void)zoomMap:(MKMapView*)mapView byDelta:(float) delta {
-    
-    MKCoordinateRegion region = mapView.region;
-    MKCoordinateSpan span = mapView.region.span;
-    span.latitudeDelta*=delta;
-    span.longitudeDelta*=delta;
-    
-    if (span.latitudeDelta > 180 || span.longitudeDelta > 180) {
-        span.latitudeDelta = 180;
-        span.longitudeDelta = 180;
-    } else if (span.latitudeDelta < 0 || span.longitudeDelta < 0)
-    {
-        span.latitudeDelta = 0;
-        span.longitudeDelta = 0;
-    }
-    
-    region = [mapView regionThatFits:region];
-    region.span=span;
-    [mapView setRegion:region animated:YES];
-    
-}
-//- (IBAction)zoominourrandom:(id)sender {
-//    int value = arc4random() % 2;
-//    [self motionReqanizer:value];
-//}
-
-- (void)reputGraph
-{
-    self.graphHelper->draw();
 }
 
 @end
