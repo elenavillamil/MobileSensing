@@ -271,7 +271,7 @@ RingBuffer *ringBuffer;
     // Interpolation equation: f2 + (m3 - m1) / (2m2 - m1 - m3) * Af/2
 
     // Getting (m3 - m1) / (2*m2 - m1 - m2)
-    float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position - 1]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position + 3]);
+    float temp = (self.fftMagnitudeBuffer[position + 1] - self.fftMagnitudeBuffer[position - 1]) / (2*self.fftMagnitudeBuffer[position] - self.fftMagnitudeBuffer[position - 1] - self.fftMagnitudeBuffer[position + 1]);
     
     frequency = (position * self.deltaFrequency) + (temp * self.deltaFrequency / 2);
     
