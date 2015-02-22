@@ -151,6 +151,14 @@ typedef enum {
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    //self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
+
+    frequency = frequency == 17500 ? 17501 : 17500;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.frequenceValueLabel.text = [NSString stringWithFormat:@"%.2f", frequency];
+    });
     
     // Start sine wave.
     static bool initialized = false;
@@ -398,9 +406,18 @@ typedef enum {
     }
     
     if (count >= 30) {
-        if (rightMax > rightBaseLine * 1.3) {
+        // Messing with possible noise levels.
+        float multiplicand = rightBaseLine < 4 ? 1.3 : 1.1;
+        
+        if (rightBaseLine > 5 && rightBaseLine < 7) {
+            multiplicand = 1.2;
+        }
+        
+        multiplicand = rightBaseLine > 35 ? .9 : multiplicand;
+
+        if (rightMax > leftMax && rightMax > rightBaseLine * multiplicand) {
             return MovingTowards;
-        } else if (leftMax > leftBaseLine * 1.2) {
+        } else if (leftMax > leftBaseLine * multiplicand) {
             return MovingAway;
         }
     }
