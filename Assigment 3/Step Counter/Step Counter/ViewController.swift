@@ -10,6 +10,11 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var yesterdayStepsLabel: UILabel!
+    @IBOutlet weak var todayStepsLabel: UILabel!
+    @IBOutlet weak var stepsToGoalLabel: UILabel!
+    @IBOutlet weak var currentActivityLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
