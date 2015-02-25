@@ -9,6 +9,8 @@
 import SceneKit
 
 class PrimitivesScene: SCNScene {
+    
+    var gameBall : Ball!
 
     override init() {
         super.init()
@@ -28,7 +30,9 @@ class PrimitivesScene: SCNScene {
         let ball = Ball()
         ball.position = SCNVector3(x: 3.0, y: 0.0, z: 0.0)
         ball.physicsBody = SCNPhysicsBody.dynamicBody()
-        self.rootNode.addChildNode(ball)
+        
+        gameBall = ball
+        self.rootNode.addChildNode(gameBall)
     }
     
     func setCameraPostion() {
@@ -47,23 +51,28 @@ class PrimitivesScene: SCNScene {
         let wallNode = SCNNode()
         wallNode.geometry = wall
         wallNode.physicsBody = SCNPhysicsBody.staticBody()
-        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:0)
+        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:-5)
         
         rootNode.addChildNode(wallNode)
     }
     
     func addWalls() {
           
-        let wall = SCNBox(width: 1.0, height: 1, length: 3.0, chamferRadius: 0.0)
-        wall.firstMaterial?.doubleSided = true
-        wall.firstMaterial?.diffuse.contents = UIColor.blueColor()
-            
+        let wall = SCNBox(width: 1.0, height: 1.0, length: 1.0, chamferRadius: 0.0)
         let wallNode = SCNNode()
         wallNode.geometry = wall
         wallNode.physicsBody = SCNPhysicsBody.staticBody()
-        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:0)
+        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:-6)
             
         rootNode.addChildNode(wallNode)
             
+    }
+    
+    func update() {
+            // Something cool
+            if (gameBall.position.z < -20.0) {
+                println("Ball fell off")
+            
+            }
     }
 }

@@ -40,16 +40,19 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
             let acceleration = accelerometerData.acceleration
             
             let accelX = Float(9.8 * acceleration.x)
-            let accelY = Float(-9.8 * acceleration.y)
-            let accelZ = Float(9.8 * acceleration.z)
+            let accelY = Float(9.8 * acceleration.y)
+            let accelZ = Float(50 * acceleration.z)
             
             self.scene.physicsWorld.gravity = SCNVector3(x: accelX, y: accelY, z: accelZ)
+            
+            if (self.scene.rootNode.childNodes.count <= 3){
+                self.lostLife()
+            }
         }
     }
 
-     override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func lostLife() {
+        
     }
     
 
