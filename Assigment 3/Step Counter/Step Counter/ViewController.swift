@@ -11,13 +11,16 @@ import CoreMotion
 
 
 class ViewController: UIViewController {
-
     
     let activityManager = CMMotionActivityManager()
     let customQueue = NSOperationQueue()
     let pedometer = CMPedometer()
     
-    
+    @IBOutlet weak var yesterdayStepsLabel: UILabel!
+    @IBOutlet weak var todayStepsLabel: UILabel!
+    @IBOutlet weak var stepsToGoalLabel: UILabel!
+    @IBOutlet weak var currentActivityLabel: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.

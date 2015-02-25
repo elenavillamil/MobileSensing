@@ -152,6 +152,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="currentActivityLabel" destination="Rsq-Bf-EuJ" id="4qL-IO-XwA"/>
+                        <outlet property="stepsToGoalLabel" destination="PG7-vh-HbZ" id="IrD-7X-adz"/>
+                        <outlet property="todayStepsLabel" destination="gzT-YC-G3t" id="eBv-ap-obJ"/>
+                        <outlet property="yesterdayStepsLabel" destination="OdP-Q5-8oW" id="2KW-Sm-zlu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
