@@ -22,7 +22,7 @@ class ViewController: UIViewController {
 
     @IBAction func playGame(sender: AnyObject) {
         if (true) {
-            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("GameViewController") as! GameViewController
+            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("GameViewController") as GameViewController
 
             self.navigationController?.pushViewController(secondViewController, animated:true)
         }
