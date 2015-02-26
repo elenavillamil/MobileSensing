@@ -31,7 +31,7 @@ class ViewController: UIViewController {
                     
                     dispatch_async(dispatch_get_main_queue())
                         {
-                            self.textLabel.text = activity.description
+                            self.currentActivityLabel.text = activity.description
                     }
             }
         }
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
                 
                 dispatch_async(dispatch_get_main_queue())
                     {
-                        self.textLabelLower.text = pedData.description
+                        self.todayStepsLabel.text = pedData.description
                 }
             }
         }
