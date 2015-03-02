@@ -12,7 +12,7 @@ import OpenGLES
 import CoreMotion
 import QuartzCore
 
-class GameViewController: UIViewController, SCNSceneRendererDelegate {
+class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
 
     var scene : PrimitivesScene!
     var motionManager : CMMotionManager!
@@ -26,10 +26,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         scnView.scene = scene
         scnView.backgroundColor = UIColor.blackColor()
         scnView.autoenablesDefaultLighting = true
-        
+                
         setUpPhysics()
         
+        scene.physicsWorld.contactDelegate = self
     }
+    
+
     
     func setUpPhysics() {
         // Detect motion
@@ -56,6 +59,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     }
     
 
+    
+    func physicsWorld(world: SCNPhysicsWorld,
+        didBeginContact contact: SCNPhysicsContact) {
+            var nodeA = contact.nodeA
+            var nodeB = contact.nodeB
+            
+            if nodeA .isMemberOfClass(Ball) {
+                println("Is Ball")
+            }
+    }
     /*
     // MARK: - Navigation
 

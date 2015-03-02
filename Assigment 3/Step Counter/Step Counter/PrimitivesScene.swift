@@ -11,19 +11,42 @@ import SceneKit
 class PrimitivesScene: SCNScene {
     
     var gameBall : Ball!
-
+    var deathFloor : DeathFloor!
+    
     override init() {
         super.init()
         
         setCameraPostion()
-        addWalls()
+//        addWalls()
         addFloor()
         testBall()
+        addDeathFloor()
+
     
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func addDeathFloor() {
+//        let floor = SCNFloor()
+//        floor.firstMaterial?.diffuse.contents = UIColor.greenColor();
+//        let floorNode = SCNNode(geometry: floor)
+//        floorNode.position.y = -2.5
+//        
+//        self.rootNode.addChildNode(floorNode)
+        
+        let wall = SCNPlane(width: 300.0, height: 300.0)
+        wall.firstMaterial?.doubleSided = true
+        wall.firstMaterial?.diffuse.contents = UIColor.greenColor()
+        
+        deathFloor = SCNNode()
+        deathFloor.geometry = wall
+        deathFloor.physicsBody = SCNPhysicsBody.staticBody()
+        deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:-50)
+        
+        rootNode.addChildNode(deathFloor)
     }
     
     func testBall() {
@@ -51,7 +74,7 @@ class PrimitivesScene: SCNScene {
         let wallNode = SCNNode()
         wallNode.geometry = wall
         wallNode.physicsBody = SCNPhysicsBody.staticBody()
-        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:-5)
+        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:0)
         
         rootNode.addChildNode(wallNode)
     }
@@ -66,13 +89,5 @@ class PrimitivesScene: SCNScene {
             
         rootNode.addChildNode(wallNode)
             
-    }
-    
-    func update() {
-            // Something cool
-            if (gameBall.position.z < -20.0) {
-                println("Ball fell off")
-            
-            }
     }
 }
