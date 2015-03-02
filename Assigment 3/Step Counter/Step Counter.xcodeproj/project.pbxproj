@@ -12,6 +12,7 @@
 		EAD901AC1A9BF9C1004C6E5C /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD901AB1A9BF9C1004C6E5C /* Ball.swift */; };
 		EAD9EB671A9C014200CA3DB8 /* PrimitivesScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD9EB661A9C014200CA3DB8 /* PrimitivesScene.swift */; };
 		EAD9EB691A9EA58B00CA3DB8 /* DeathFloor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD9EB681A9EA58B00CA3DB8 /* DeathFloor.swift */; };
+		F33D34581A9E988B00210EA2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33D34571A9E988B00210EA2 /* User.swift */; };
 		F3B663B91A9A814B004EDF3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B663B81A9A814B004EDF3E /* AppDelegate.swift */; };
 		F3B663BB1A9A814B004EDF3E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B663BA1A9A814B004EDF3E /* ViewController.swift */; };
 		F3B663BE1A9A814B004EDF3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3B663BC1A9A814B004EDF3E /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 		EAD901AB1A9BF9C1004C6E5C /* Ball.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
 		EAD9EB661A9C014200CA3DB8 /* PrimitivesScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimitivesScene.swift; sourceTree = "<group>"; };
 		EAD9EB681A9EA58B00CA3DB8 /* DeathFloor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeathFloor.swift; sourceTree = "<group>"; };
+		F33D34571A9E988B00210EA2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F3B663B31A9A814B004EDF3E /* Step Counter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Step Counter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3B663B71A9A814B004EDF3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F3B663B81A9A814B004EDF3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				EAD9EB661A9C014200CA3DB8 /* PrimitivesScene.swift */,
 				EAD901AB1A9BF9C1004C6E5C /* Ball.swift */,
 				EAD9EB681A9EA58B00CA3DB8 /* DeathFloor.swift */,
+				F33D34571A9E988B00210EA2 /* User.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 				EAD9EB691A9EA58B00CA3DB8 /* DeathFloor.swift in Sources */,
 				F3B663B91A9A814B004EDF3E /* AppDelegate.swift in Sources */,
 				F3B663DF1A9A88A5004EDF3E /* SettingsViewController.swift in Sources */,
+				F33D34581A9E988B00210EA2 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

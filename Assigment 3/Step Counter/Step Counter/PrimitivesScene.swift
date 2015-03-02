@@ -11,7 +11,7 @@ import SceneKit
 class PrimitivesScene: SCNScene {
     
     var gameBall : Ball!
-    var deathFloor : DeathFloor!
+    var deathFloor : SCNNode!
     
     override init() {
         super.init()

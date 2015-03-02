@@ -7,12 +7,46 @@
 //
 
 import UIKit
+import CoreMotion
+
 
 class ViewController: UIViewController {
+    
+    let activityManager = CMMotionActivityManager()
+    let customQueue = NSOperationQueue()
+    let pedometer = CMPedometer()
+    
+    @IBOutlet weak var yesterdayStepsLabel: UILabel!
+    @IBOutlet weak var todayStepsLabel: UILabel!
+    @IBOutlet weak var stepsToGoalLabel: UILabel!
+    @IBOutlet weak var currentActivityLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if CMMotionActivityManager.isActivityAvailable(){
+            self.activityManager.startActivityUpdatesToQueue( self.customQueue)
+                { (activity:CMMotionActivity!) -> Void in
+                    
+                    dispatch_async(dispatch_get_main_queue())
+                        {
+                            self.currentActivityLabel.text = activity.description
+                    }
+            }
+        }
+        
+        
+        if CMPedometer.isStepCountingAvailable(){
+            self.pedometer.startPedometerUpdatesFromDate(NSDate()) { (pedData: CMPedometerData!, error: NSError!) -> Void in
+                
+                dispatch_async(dispatch_get_main_queue())
+                    {
+                        self.todayStepsLabel.text = pedData.description
+                }
+            }
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {

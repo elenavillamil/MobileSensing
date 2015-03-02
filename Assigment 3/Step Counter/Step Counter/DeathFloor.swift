@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Elena Villamil. All rights reserved.
 //
 
-import Cocoa
+import UIKit
+import SceneKit
 
 class DeathFloor: SCNNode {
-
 }
