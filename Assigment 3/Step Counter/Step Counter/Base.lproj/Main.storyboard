@@ -248,7 +248,7 @@
                                     <constraint firstAttribute="width" constant="170" id="pB0-KX-ZgS"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.69019609689999994" green="0.80392163989999998" blue="0.92941182850000004" alpha="1" colorSpace="deviceRGB"/>

@@ -29,6 +29,9 @@ class User {
     {
         userDefaults.setInteger(0, forKey: "lifes");
         userDefaults.setInteger(5000, forKey: "goal");
+        userDefaults.setInteger(0, forKey: "today");
+        userDefaults.setInteger(0, forKey: "yesterday");
+
     }
     
     func getLifes() -> Int
@@ -41,6 +44,16 @@ class User {
         return userDefaults.integerForKey("goal");
     }
     
+    func getTodaySteps() -> Int
+    {
+        return userDefaults.integerForKey("today");
+    }
+    
+    func getYesterdaySteps() -> Int
+    {
+        return userDefaults.integerForKey("yesterday");
+    }
+    
     func setLifes(lifes: Int)
     {
         userDefaults.setInteger(lifes, forKey: "lifes");
@@ -49,5 +62,15 @@ class User {
     func setGoal(goal: Int)
     {
         userDefaults.setInteger(goal, forKey: "goal");
+    }
+    
+    func setTodaySteps(today: Int)
+    {
+        userDefaults.setInteger(today, forKey: "today");
+    }
+    
+    func setYesterdaySteps(yesterday: Int)
+    {
+        userDefaults.setInteger(yesterday, forKey: "yesterday");
     }
 }

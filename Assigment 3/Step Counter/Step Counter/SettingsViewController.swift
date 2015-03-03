@@ -13,14 +13,29 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var goalLabel: UILabel!
     @IBOutlet weak var setGoalTextField: UITextField!
     
+    let user = User.sharedInstance
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        goalLabel.text = NSString (format: "%d", self.user.getGoal())
 
         // Do any additional setup after loading the view.
     }
 
     @IBAction func confirmNewGoal(sender: AnyObject) {
+        let newGoal = self.setGoalTextField.text
+        if (newGoal.toInt() > 3000)
+        {
+            self.goalLabel.text = newGoal
+            self.user.setGoal(newGoal.toInt()!)
+        }
+        else
+        {
+            // Pop up
+        }
+        // check new goal is all numeric???
     }
     
     override func didReceiveMemoryWarning() {
