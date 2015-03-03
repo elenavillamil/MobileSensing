@@ -77,6 +77,8 @@ class ViewController: UIViewController {
             }
             
             let from = now.dateByAddingTimeInterval(-60*60*24)
+            //NSCalendar
+            //textField.resign first responder
             
             //Get yesterday steps
             self.pedometer.queryPedometerDataFromDate(from, toDate: now) {

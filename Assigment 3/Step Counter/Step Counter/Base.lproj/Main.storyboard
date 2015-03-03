@@ -248,10 +248,14 @@
                                     <constraint firstAttribute="width" constant="170" id="pB0-KX-ZgS"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <action selector="toRemoveKeyboard:" destination="tl4-0l-CwD" eventType="editingDidEnd" id="vRW-30-agD"/>
+                                </connections>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.69019609689999994" green="0.80392163989999998" blue="0.92941182850000004" alpha="1" colorSpace="deviceRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="YIr-Vk-edP" secondAttribute="trailing" constant="59" id="0Xu-eN-6T5"/>
                             <constraint firstItem="7t6-ad-DOR" firstAttribute="top" secondItem="YIr-Vk-edP" secondAttribute="bottom" constant="94" id="5LL-Ij-EXv"/>
@@ -274,6 +278,9 @@
                             <constraint firstItem="1kd-IH-dNK" firstAttribute="top" secondItem="92Z-b5-6Bf" secondAttribute="bottom" constant="95" id="sfW-tn-GFG"/>
                             <constraint firstItem="92Z-b5-6Bf" firstAttribute="top" secondItem="bo5-0b-Ol5" secondAttribute="bottom" constant="30" id="zGG-h4-ifh"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Jeb-DN-LcJ" appends="YES" id="gRk-AM-WxV"/>
+                        </connections>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Settings" id="0kp-Gl-v78"/>
@@ -285,6 +292,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MHs-yp-nxW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Jeb-DN-LcJ">
+                    <connections>
+                        <action selector="toRemoveKeyboard:" destination="tl4-0l-CwD" id="sbR-Ze-UI7"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1568.8" y="-61.533333333333331"/>
         </scene>

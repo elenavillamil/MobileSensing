@@ -16,6 +16,7 @@ class SettingsViewController: UIViewController {
     let user = User.sharedInstance
     
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,7 +27,7 @@ class SettingsViewController: UIViewController {
 
     @IBAction func confirmNewGoal(sender: AnyObject) {
         let newGoal = self.setGoalTextField.text
-        if (newGoal.toInt() > 3000)
+        if (newGoal.toInt() >= 3000)
         {
             self.goalLabel.text = newGoal
             self.user.setGoal(newGoal.toInt()!)
@@ -38,9 +39,9 @@ class SettingsViewController: UIViewController {
         // check new goal is all numeric???
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction func toRemoveKeyboard(sender: AnyObject) {
+        self.setGoalTextField.resignFirstResponder()
     }
     
     /*
