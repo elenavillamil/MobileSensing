@@ -40,6 +40,7 @@ class ViewController: UIViewController {
             self.pedometer.startPedometerUpdatesFromDate(now) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
                     
+                    // Needs to add today's steps if the app start once the day has already started
                     let steps = pedData.numberOfSteps.integerValue
                     
                     // Set today steps
@@ -53,6 +54,24 @@ class ViewController: UIViewController {
                     else
                     {
                         self.stepsToGoalLabel.text = "Met!"
+                        
+                        if steps - self.user.getGoal() >= 100 && steps - self.user.getGoal() < 200 && !self.user.getExtraLifeOne()
+                        {
+                            self.user.setExtraLifeOne(true)
+                            self.user.setLifes(self.user.getLifes() + 1)
+                        }
+                        
+                        else if steps - self.user.getGoal() >= 200 && steps - self.user.getGoal() < 400 && !self.user.getExtraLifeTwo()
+                        {
+                            self.user.setExtraLifeTwo(true)
+                            self.user.setLifes(self.user.getLifes() + 1)
+                        }
+                        
+                        else if steps - self.user.getGoal() >= 400 && !self.user.getExtraLifeThree()
+                        {
+                            self.user.setExtraLifeThree(true)
+                            self.user.setLifes(self.user.getLifes() + 1)
+                        }
                     }
                 }
             }

@@ -27,11 +27,21 @@ class User {
     
     init()
     {
-        userDefaults.setInteger(0, forKey: "lifes");
-        userDefaults.setInteger(5000, forKey: "goal");
-        userDefaults.setInteger(0, forKey: "today");
-        userDefaults.setInteger(0, forKey: "yesterday");
-
+        userDefaults.setInteger(0, forKey: "lifes")
+        userDefaults.setInteger(5000, forKey: "goal")
+        userDefaults.setInteger(0, forKey: "today")
+        userDefaults.setInteger(0, forKey: "yesterday")
+        userDefaults.setBool(false, forKey: "extraLifeOne")
+        userDefaults.setBool(false, forKey: "extraLifeTwo")
+        userDefaults.setBool(false, forKey: "extraLifeThree")
+    }
+    
+    func resetAtTheEndOfDay(endSteps: Int)
+    {
+        userDefaults.setBool(false, forKey: "extraLifeOne")
+        userDefaults.setBool(false, forKey: "extraLifeTwo")
+        userDefaults.setBool(false, forKey: "extraLifeThree")
+        userDefaults.setInteger(endSteps, forKey: "yesterday")
     }
     
     func getLifes() -> Int
@@ -54,6 +64,21 @@ class User {
         return userDefaults.integerForKey("yesterday");
     }
     
+    func getExtraLifeOne() -> Bool
+    {
+        return userDefaults.boolForKey("extraLifeOne");
+    }
+    
+    func getExtraLifeTwo() -> Bool
+    {
+        return userDefaults.boolForKey("extraLifeTwo");
+    }
+    
+    func getExtraLifeThree() -> Bool
+    {
+        return userDefaults.boolForKey("extraLifeThree");
+    }
+    
     func setLifes(lifes: Int)
     {
         userDefaults.setInteger(lifes, forKey: "lifes");
@@ -72,5 +97,20 @@ class User {
     func setYesterdaySteps(yesterday: Int)
     {
         userDefaults.setInteger(yesterday, forKey: "yesterday");
+    }
+    
+    func setExtraLifeOne(set: Bool)
+    {
+        userDefaults.setBool(set, forKey: "ExtraLifeOne");
+    }
+    
+    func setExtraLifeTwo(set: Bool)
+    {
+        userDefaults.setBool(set, forKey: "extraLifeTwo");
+    }
+    
+    func setExtraLifeThree(set: Bool)
+    {
+        userDefaults.setBool(set, forKey: "extraLifeThree");
     }
 }
