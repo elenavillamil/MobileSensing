@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     let activityManager = CMMotionActivityManager()
     let customQueue = NSOperationQueue()
     let pedometer = CMPedometer()
+    let user = User.sharedInstance
     let twentyFourHours = 24 * 3600 as NSTimeInterval
 
     @IBOutlet weak var yesterdayStepsLabel: UILabel!
@@ -32,20 +33,35 @@ class ViewController: UIViewController {
     }
     
     func fetchPedometerData() {
+        let now = NSDate()
+        
         if CMPedometer.isStepCountingAvailable(){
-            self.pedometer.startPedometerUpdatesFromDate(NSDate()) {
+            self.pedometer.startPedometerUpdatesFromDate(now) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
-                    self.todayStepsLabel.text = NSString(format: "%d", pedData.numberOfSteps)
                     
-                    // add accessor to steps in goal in settings
-                    // self.stepsToGoLabel.text = *goalSteps - pedData.numberOfSteps
+                    let steps = pedData.numberOfSteps.integerValue
+                    
+                    // Set today steps
+                    self.todayStepsLabel.text = NSString(format: "%d", steps)
+                    
+                    // Set steps to goal
+                    if self.user.getGoal() - steps > 0
+                    {
+                        self.stepsToGoalLabel.text = NSString(format: "%d", self.user.getGoal() - steps)
+                    }
+                    else
+                    {
+                        self.stepsToGoalLabel.text = "Met!"
+                    }
                 }
             }
             
-            //MAY BE ILLEGAL -- ASK ELENA
-            self.pedometer.startPedometerUpdatesFromDate(NSDate(timeIntervalSinceNow: -twentyFourHours)) {
+            let from = now.dateByAddingTimeInterval(-60*60*24)
+            
+            //Get yesterday steps
+            self.pedometer.queryPedometerDataFromDate(from, toDate: now) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
-                    self.todayStepsLabel.text = NSString(format: "%d", pedData.numberOfSteps)
+                    self.yesterdayStepsLabel.text = NSString(format: "%d", pedData.numberOfSteps)
                 }
             }
         }

@@ -9,6 +9,18 @@
 import Foundation
 
 class User {
+    
+    class var sharedInstance: User {
+        struct Static {
+            static var onceToken: dispatch_once_t = 0
+            static var instance: User? = nil
+        }
+        dispatch_once(&Static.onceToken) {
+            Static.instance = User()
+        }
+        return Static.instance!
+    }
+    
     var yesterdaySteps = 0;
     var todaySteps = 0;
     let userDefaults = NSUserDefaults.standardUserDefaults();
@@ -16,7 +28,7 @@ class User {
     init()
     {
         userDefaults.setInteger(0, forKey: "lifes");
-        userDefaults.setInteger(0, forKey: "goal");
+        userDefaults.setInteger(5000, forKey: "goal");
     }
     
     func getLifes() -> Int
