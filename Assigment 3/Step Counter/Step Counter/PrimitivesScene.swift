@@ -75,8 +75,14 @@ class PrimitivesScene: SCNScene {
             wallNode.addChildNode(childNode as SCNNode)
         }
         
-        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:0)
+        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z: 0.0)
         
+        
+        //wallNode.pivot = SCNMatrix4MakeRotation(angle: CGFloat(M_PI_2), x: 1, y: 0, z: 0)
+        //wallNode.rotation = SCNVector4(x: 0, y: 0, z: 1, w: 0)
+        
+        wallNode.eulerAngles = SCNVector3Make(Float(M_PI_2), 0.0, 0.0)
+        wallNode.physicsBody = SCNPhysicsBody.staticBody()
         
         //let wall = SCNPlane(width: 30.0, height: 30.0)
         //wall.firstMaterial?.doubleSided = true
