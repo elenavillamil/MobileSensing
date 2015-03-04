@@ -47,9 +47,13 @@ class User {
         {
             userDefaults.setBool(false, forKey: "extraLifeThree")
         }
+        if (userDefaults.objectForKey("lastDay") == nil)
+        {
+            userDefaults.setInteger(0, forKey: "lastDay")
+        }
     }
     
-    func resetAtTheEndOfDay()
+    func resetWhenNewDay()
     {
         userDefaults.setBool(false, forKey: "extraLifeOne")
         userDefaults.setBool(false, forKey: "extraLifeTwo")
@@ -81,6 +85,11 @@ class User {
         return userDefaults.boolForKey("extraLifeThree");
     }
     
+    func getLastDay() -> Int
+    {
+        return userDefaults.integerForKey("lastDay");
+    }
+
     func setLifes(lifes: Int)
     {
         userDefaults.setInteger(lifes, forKey: "lifes");
@@ -104,5 +113,10 @@ class User {
     func setExtraLifeThree(set: Bool)
     {
         userDefaults.setBool(set, forKey: "extraLifeThree");
+    }
+    
+    func setLastDay(day: Int)
+    {
+        userDefaults.setInteger(day, forKey: "lastDay");
     }
 }
