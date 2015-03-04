@@ -20,7 +20,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let scnView = self.view as! SCNView
+        let scnView = self.view as SCNView
         let nScene = PrimitivesScene()
         scene = nScene
         scnView.scene = scene

@@ -66,14 +66,25 @@ class PrimitivesScene: SCNScene {
     
     func addFloor()
     {
-        let wall = SCNPlane(width: 30.0, height: 30.0)
-        wall.firstMaterial?.doubleSided = true
-        wall.firstMaterial?.diffuse.contents = UIColor.blueColor()
+        var wallNode = SCNNode()
         
-        let wallNode = SCNNode()
-        wallNode.geometry = wall
-        wallNode.physicsBody = SCNPhysicsBody.staticBody()
+        let workingScene = SCNScene(named: "table_model.dae")
+        let nodeArray = workingScene!.rootNode.childNodes
+        
+        for childNode in nodeArray {
+            wallNode.addChildNode(childNode as SCNNode)
+        }
+        
         wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:0)
+        
+        
+        //let wall = SCNPlane(width: 30.0, height: 30.0)
+        //wall.firstMaterial?.doubleSided = true
+        //wall.firstMaterial?.diffuse.contents = UIColor.blueColor()
+        
+        //let wallNode = SCNNode()
+        //wallNode.geometry = wall
+        //wallNode.physicsBody = SCNPhysicsBody.staticBody()
         
         rootNode.addChildNode(wallNode)
     }
