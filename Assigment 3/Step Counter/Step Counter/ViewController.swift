@@ -11,7 +11,7 @@ import CoreMotion
 import Foundation
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIAlertViewDelegate{
     
     let activityManager = CMMotionActivityManager()
     let customQueue = NSOperationQueue()
@@ -43,6 +43,8 @@ class ViewController: UIViewController {
     func fetchPedometerData() {
         // Get current time when the app starts
         var now = NSDate()
+    
+        var startSteps = 0
         
         // Get day, month, year and time of that current time
         let gregorianCalendar = NSCalendar(calendarIdentifier:NSGregorianCalendar)
@@ -69,17 +71,28 @@ class ViewController: UIViewController {
 
         // Check if pedometer is available
         if CMPedometer.isStepCountingAvailable(){
-            self.pedometer.startPedometerUpdatesFromDate(fromStartToday) {
+            
+            //Get today steps up to now
+            self.pedometer.queryPedometerDataFromDate(fromStartToday, toDate: now) {
+                (pedData: CMPedometerData!, error: NSError!) -> Void in
+                startSteps = pedData.numberOfSteps.integerValue
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.todayStepsLabel.text = NSString(format: "%d", startSteps)
+                    self.setGoalLabel(startSteps)
+                }
+            }
+            
+            // Start the updates
+            self.pedometer.startPedometerUpdatesFromDate(now) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
                     
                     // Needs to add today's steps if the app start once the day has already started
-                    let steps = pedData.numberOfSteps.integerValue
+                    let steps = startSteps + pedData.numberOfSteps.integerValue
                     
                     // Set today steps
                     self.todayStepsLabel.text = NSString(format: "%d", steps)
                     // Set steps to goal
                     self.setGoalLabel(steps)
-                    
                 }
             }
             
@@ -134,7 +147,6 @@ class ViewController: UIViewController {
                     }
                 }
             }
-            
         }
     }
     
@@ -182,6 +194,15 @@ class ViewController: UIViewController {
 
             self.navigationController?.pushViewController(secondViewController, animated:true)
         }
+        else
+        {
+            var alert = UIAlertView(title: "Zero Lifes", message: "You need at least 1 life to play. Meet your daily goal or overpass it to win lifes!", delegate: self, cancelButtonTitle: "Ok")
+            alert.show()
+        }
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
     }
 
 }
