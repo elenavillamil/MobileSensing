@@ -70,7 +70,7 @@ class GameViewController: UIViewController, UIAlertViewDelegate, SCNSceneRendere
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if alertView.title
+        //if alertView.title
     }
     
 
