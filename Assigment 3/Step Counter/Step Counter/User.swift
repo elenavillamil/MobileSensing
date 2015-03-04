@@ -27,7 +27,10 @@ class User {
     
     init()
     {
-        userDefaults.setInteger(0, forKey: "lifes")
+        if (userDefaults.objectForKey("lifes") == nil)
+        {
+            userDefaults.setInteger(0, forKey: "lifes")
+        }
         if (userDefaults.objectForKey("goal") == nil)
         {
             userDefaults.setInteger(5000, forKey: "goal")
