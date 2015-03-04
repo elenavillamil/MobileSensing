@@ -91,8 +91,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     func newBall() {
         scene.addBall()
     }
-    
-    
 
     
     func physicsWorld(world: SCNPhysicsWorld,
