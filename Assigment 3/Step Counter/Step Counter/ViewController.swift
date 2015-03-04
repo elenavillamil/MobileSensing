@@ -33,12 +33,7 @@ class ViewController: UIViewController, UIAlertViewDelegate{
         currentActivityLabel.textAlignment = .Center
         
         fetchMotionActivityData()
-<<<<<<< HEAD
-        fetchPedometerData()
-=======
-        
         //fetchPedometerData()
->>>>>>> 24c6fe31ca050fdde20c7def82f7af0f4d53e992
     }
     
     override func viewDidAppear(animated: Bool) {
