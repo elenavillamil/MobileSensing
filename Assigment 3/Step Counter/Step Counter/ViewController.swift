@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreMotion
+import Foundation
 
 
 class ViewController: UIViewController {
@@ -34,14 +35,34 @@ class ViewController: UIViewController {
     }
     
     func fetchPedometerData() {
+        // Get current time when the app starts
         let now = NSDate()
+        var stepsSoFar = 0
+        
+        let gregorianCalendar = NSCalendar(calendarIdentifier:NSGregorianCalendar)
+        let flags:NSCalendarUnit = .DayCalendarUnit | .MonthCalendarUnit | .YearCalendarUnit | .HourCalendarUnit | .MinuteCalendarUnit | .SecondCalendarUnit
+        let components = gregorianCalendar?.components(flags, fromDate: now)
+        
+        let hour: Int = components!.hour
+        let minute: Int = components!.minute
+        let second: Int = components!.second
+        
+        let subtraction = (Double)(hour * (-60) * 60 - minute * 60 - second)
+        
+        let fromStartToday = now.dateByAddingTimeInterval(subtraction)
+
+        self.pedometer.queryPedometerDataFromDate(fromStartToday, toDate: now) {
+            (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
+                stepsSoFar = pedData.numberOfSteps.integerValue
+            }
+        }
         
         if CMPedometer.isStepCountingAvailable(){
             self.pedometer.startPedometerUpdatesFromDate(now) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
                     
                     // Needs to add today's steps if the app start once the day has already started
-                    let steps = pedData.numberOfSteps.integerValue
+                    let steps = stepsSoFar + pedData.numberOfSteps.integerValue
                     
                     // Set today steps
                     self.todayStepsLabel.text = NSString(format: "%d", steps)
@@ -76,12 +97,10 @@ class ViewController: UIViewController {
                 }
             }
             
-            let from = now.dateByAddingTimeInterval(-60*60*24)
-            //NSCalendar
-            //textField.resign first responder
+            let fromStartYesterday = fromStartToday.dateByAddingTimeInterval(-60*60*24)
             
             //Get yesterday steps
-            self.pedometer.queryPedometerDataFromDate(from, toDate: now) {
+            self.pedometer.queryPedometerDataFromDate(fromStartYesterday, toDate: fromStartToday) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
                     self.yesterdayStepsLabel.text = NSString(format: "%d", pedData.numberOfSteps)
                 }
