@@ -14,8 +14,10 @@ import QuartzCore
 
 class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
 
+    @IBOutlet weak var livesLabel: UILabel!
     var scene : PrimitivesScene!
     var motionManager : CMMotionManager!
+    var user : User!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +30,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         scnView.autoenablesDefaultLighting = true
                 
         setUpPhysics()
-        
+        livesLabel.text = "Lives: ".stringByAppendingString("\(user.getLifes())")
         scene.physicsWorld.contactDelegate = self
+    
     }
     
 
@@ -65,7 +68,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             var nodeA = contact.nodeA
             var nodeB = contact.nodeB
             
-            if nodeA .isKindOfClass(DeathFloor) || nodeB.isKindOfClass(DeathFloor) {
+            if nodeA .isKindOfClass(Ball) || nodeB.isKindOfClass(DeathFloor) {
                 println("You Died")
             }
     }
