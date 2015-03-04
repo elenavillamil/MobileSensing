@@ -43,14 +43,18 @@ class PrimitivesScene: SCNScene {
         
         deathFloor.geometry = wall
         deathFloor.physicsBody = SCNPhysicsBody.staticBody()
-        deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:0)
+        deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:-5)
         
         rootNode.addChildNode(deathFloor)
     }
     
+    func removeBall() {
+        self.gameBall.removeFromParentNode()
+    }
+    
     func addBall() {
         let ball = Ball()
-        ball.position = SCNVector3(x: -0.4, y: -0.8, z: 0.2)
+        ball.position = SCNVector3(x: 0.0, y: -0.8, z: 0.21)
         ball.physicsBody = SCNPhysicsBody.dynamicBody()
         
         gameBall = ball

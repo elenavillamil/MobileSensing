@@ -12,7 +12,7 @@ import OpenGLES
 import CoreMotion
 import QuartzCore
 
-class GameViewController: UIViewController, UIAlertViewDelegate, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
+class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
 
     @IBOutlet weak var livesLabel: UILabel!
     var scene : PrimitivesScene!
@@ -57,23 +57,41 @@ class GameViewController: UIViewController, UIAlertViewDelegate, SCNSceneRendere
     }
 
     func lostLife() {
+        scene.removeBall()
         var currentLives = user.getLifes() - 1
         user.setLifes(currentLives)
         if (currentLives > 0) {
-            var alert = UIAlertView(title: "You Died!", message: "The Ball fell off the map...", delegate: self, cancelButtonTitle: "Quit", otherButtonTitles: "Try Again")
-            alert.show()
+            var alert = UIAlertController(title: "You died!", message: "The Ball fell off the map...", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                
+            }
+            alert.addAction(cancelAction)
+            
+            let OKAction = UIAlertAction(title: "Play again", style: .Default) { (action) in
+                // ...
+                self.newBall()
+            }
+            alert.addAction(OKAction)
+            self.presentViewController(alert, animated: true, completion: nil)
         } else {
-            var alert = UIAlertView(title: "You Died! Mwahhh", message: "The Ball fell off the map... And have no lives left. Walk more for extra lives", delegate: self, cancelButtonTitle: "Okay")
+            var alert = UIAlertController(title: "You died!", message: "The Ball fell off the map...", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                
+            }
+            alert.addAction(cancelAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+
         }
         
         
     }
     
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if alertView.title == "You Died!" && buttonIndex == 1 {
-            scene.addBall()
-        }
+    func newBall() {
+        scene.addBall()
     }
+    
     
 
     

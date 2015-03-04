@@ -11,7 +11,7 @@ import SceneKit
 class Ball : SCNNode {
     override init() {
         super.init()
-        var radius: CGFloat = CGFloat(1.1)
+        var radius: CGFloat = CGFloat(1.2)
         radius = radius - CGFloat(1)
         let sphereGeometry = SCNSphere(radius: radius)
         let sphereNode = SCNNode(geometry: sphereGeometry)
