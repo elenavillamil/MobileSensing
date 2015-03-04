@@ -50,7 +50,7 @@ class PrimitivesScene: SCNScene {
     
     func testBall() {
         let ball = Ball()
-        ball.position = SCNVector3(x: 5.0, y: 0.0, z: 0.0)
+        ball.position = SCNVector3(x: 0, y: 0.0, z: 1.0)
         ball.physicsBody = SCNPhysicsBody.dynamicBody()
         
         gameBall = ball
