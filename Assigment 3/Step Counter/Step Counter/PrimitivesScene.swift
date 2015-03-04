@@ -19,7 +19,7 @@ class PrimitivesScene: SCNScene {
         setCameraPostion()
 //        addWalls()
         addFloor()
-        testBall()
+        addBall()
         addDeathFloor()
 
     
@@ -48,7 +48,7 @@ class PrimitivesScene: SCNScene {
         rootNode.addChildNode(deathFloor)
     }
     
-    func testBall() {
+    func addBall() {
         let ball = Ball()
         ball.position = SCNVector3(x: 0.1, y: 0.1, z: 1.0)
         ball.physicsBody = SCNPhysicsBody.dynamicBody()

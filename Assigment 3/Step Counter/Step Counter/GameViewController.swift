@@ -63,14 +63,16 @@ class GameViewController: UIViewController, UIAlertViewDelegate, SCNSceneRendere
             var alert = UIAlertView(title: "You Died!", message: "The Ball fell off the map...", delegate: self, cancelButtonTitle: "Quit", otherButtonTitles: "Try Again")
             alert.show()
         } else {
-            var alert = UIAlertView(title: "You Died!", message: "The Ball fell off the map... And have no lives left. Walk more for extra lives", delegate: self, cancelButtonTitle: "Okay")
+            var alert = UIAlertView(title: "You Died! Mwahhh", message: "The Ball fell off the map... And have no lives left. Walk more for extra lives", delegate: self, cancelButtonTitle: "Okay")
         }
         
         
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if alertView.title
+        if alertView.title == "You Died!" && buttonIndex == 1 {
+            scene.addBall()
+        }
     }
     
 
