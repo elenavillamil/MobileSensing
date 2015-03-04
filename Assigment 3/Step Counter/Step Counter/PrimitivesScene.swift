@@ -9,14 +9,19 @@
 import SceneKit
 
 class PrimitivesScene: SCNScene {
-
+    
+    var gameBall : Ball!
+    var deathFloor : DeathFloor = DeathFloor()
+    
     override init() {
         super.init()
         
         setCameraPostion()
-        addWalls()
+//        addWalls()
         addFloor()
         testBall()
+        addDeathFloor()
+
     
     }
 
@@ -24,11 +29,32 @@ class PrimitivesScene: SCNScene {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func addDeathFloor() {
+//        let floor = SCNFloor()
+//        floor.firstMaterial?.diffuse.contents = UIColor.greenColor();
+//        let floorNode = SCNNode(geometry: floor)
+//        floorNode.position.y = -2.5
+//        
+//        self.rootNode.addChildNode(floorNode)
+        
+        let wall = SCNPlane(width: 300.0, height: 300.0)
+        wall.firstMaterial?.doubleSided = true
+        wall.firstMaterial?.diffuse.contents = UIColor.greenColor()
+        
+        deathFloor.geometry = wall
+        deathFloor.physicsBody = SCNPhysicsBody.staticBody()
+        deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:-50)
+        
+        rootNode.addChildNode(deathFloor)
+    }
+    
     func testBall() {
         let ball = Ball()
         ball.position = SCNVector3(x: 3.0, y: 0.0, z: 0.0)
         ball.physicsBody = SCNPhysicsBody.dynamicBody()
-        self.rootNode.addChildNode(ball)
+        
+        gameBall = ball
+        self.rootNode.addChildNode(gameBall)
     }
     
     func setCameraPostion() {
@@ -40,28 +66,36 @@ class PrimitivesScene: SCNScene {
     
     func addFloor()
     {
-        let wall = SCNPlane(width: 30.0, height: 30.0)
-        wall.firstMaterial?.doubleSided = true
-        wall.firstMaterial?.diffuse.contents = UIColor.blueColor()
+        var wallNode = SCNNode()
         
-        let wallNode = SCNNode()
-        wallNode.geometry = wall
-        wallNode.physicsBody = SCNPhysicsBody.staticBody()
+        let workingScene = SCNScene(named: "table_model.dae")
+        let nodeArray = workingScene!.rootNode.childNodes
+        
+        for childNode in nodeArray {
+            wallNode.addChildNode(childNode as SCNNode)
+        }
+        
         wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:0)
+        
+        
+        //let wall = SCNPlane(width: 30.0, height: 30.0)
+        //wall.firstMaterial?.doubleSided = true
+        //wall.firstMaterial?.diffuse.contents = UIColor.blueColor()
+        
+        //let wallNode = SCNNode()
+        //wallNode.geometry = wall
+        //wallNode.physicsBody = SCNPhysicsBody.staticBody()
         
         rootNode.addChildNode(wallNode)
     }
     
     func addWalls() {
           
-        let wall = SCNBox(width: 1.0, height: 1, length: 3.0, chamferRadius: 0.0)
-        wall.firstMaterial?.doubleSided = true
-        wall.firstMaterial?.diffuse.contents = UIColor.blueColor()
-            
+        let wall = SCNBox(width: 1.0, height: 1.0, length: 1.0, chamferRadius: 0.0)
         let wallNode = SCNNode()
         wallNode.geometry = wall
         wallNode.physicsBody = SCNPhysicsBody.staticBody()
-        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:0)
+        wallNode.position = SCNVector3(x: 0.0, y: 0.0, z:-6)
             
         rootNode.addChildNode(wallNode)
             

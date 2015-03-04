@@ -12,7 +12,7 @@ import OpenGLES
 import CoreMotion
 import QuartzCore
 
-class GameViewController: UIViewController, SCNSceneRendererDelegate {
+class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
 
     var scene : PrimitivesScene!
     var motionManager : CMMotionManager!
@@ -26,10 +26,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         scnView.scene = scene
         scnView.backgroundColor = UIColor.blackColor()
         scnView.autoenablesDefaultLighting = true
-        
+                
         setUpPhysics()
         
+        scene.physicsWorld.contactDelegate = self
     }
+    
+
     
     func setUpPhysics() {
         // Detect motion
@@ -40,19 +43,32 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
             let acceleration = accelerometerData.acceleration
             
             let accelX = Float(9.8 * acceleration.x)
-            let accelY = Float(-9.8 * acceleration.y)
-            let accelZ = Float(9.8 * acceleration.z)
+            let accelY = Float(9.8 * acceleration.y)
+            let accelZ = Float(50 * acceleration.z)
             
             self.scene.physicsWorld.gravity = SCNVector3(x: accelX, y: accelY, z: accelZ)
+            
+            if (self.scene.rootNode.childNodes.count <= 3){
+                self.lostLife()
+            }
         }
     }
 
-     override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func lostLife() {
+        
     }
     
 
+    
+    func physicsWorld(world: SCNPhysicsWorld,
+        didBeginContact contact: SCNPhysicsContact) {
+            var nodeA = contact.nodeA
+            var nodeB = contact.nodeB
+            
+            if nodeA .isKindOfClass(DeathFloor) || nodeB.isKindOfClass(DeathFloor) {
+                println("You Died")
+            }
+    }
     /*
     // MARK: - Navigation
 
