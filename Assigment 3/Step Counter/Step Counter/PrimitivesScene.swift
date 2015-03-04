@@ -43,7 +43,7 @@ class PrimitivesScene: SCNScene {
         
         deathFloor.geometry = wall
         deathFloor.physicsBody = SCNPhysicsBody.staticBody()
-        deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:-30)
+        deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:0)
         
         rootNode.addChildNode(deathFloor)
     }

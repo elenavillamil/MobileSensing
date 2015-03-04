@@ -28,6 +28,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        
         fetchMotionActivityData()
         
         fetchPedometerData()
@@ -42,17 +43,22 @@ class ViewController: UIViewController {
     func fetchPedometerData() {
         // Get current time when the app starts
         var now = NSDate()
-        //var realNow = now.dateByAddingTimeInterval(-6*60*60)
-
-        var stepsSoFar = 0
         
+        // Get day, month, year and time of that current time
         let gregorianCalendar = NSCalendar(calendarIdentifier:NSGregorianCalendar)
 
         let flags:NSCalendarUnit = .DayCalendarUnit | .MonthCalendarUnit | .YearCalendarUnit | .HourCalendarUnit | .MinuteCalendarUnit | .SecondCalendarUnit
         let components = gregorianCalendar?.components(flags, fromDate: now)
         
-        //components!.hour = components!.hour - 6
+        // Check if today is the same day save in defualt, for the extra lifes
+        let day = components!.day
+        if (day != self.user.getLastDay())
+        {
+            self.user.setLastDay(day)
+            self.user.resetWhenNewDay()
+        }
         
+        // Getting the hour so we can get a new NSDate starting at 00:00 am of current date
         let hour: Int = components!.hour
         let minute: Int = components!.minute
         let second: Int = components!.second
@@ -61,12 +67,13 @@ class ViewController: UIViewController {
         
         let fromStartToday = now.dateByAddingTimeInterval(subtraction)
 
+        // Check if pedometer is available
         if CMPedometer.isStepCountingAvailable(){
             self.pedometer.startPedometerUpdatesFromDate(fromStartToday) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
                     
                     // Needs to add today's steps if the app start once the day has already started
-                    let steps = stepsSoFar + pedData.numberOfSteps.integerValue
+                    let steps = pedData.numberOfSteps.integerValue
                     
                     // Set today steps
                     self.todayStepsLabel.text = NSString(format: "%d", steps)
@@ -76,11 +83,9 @@ class ViewController: UIViewController {
                 }
             }
             
+            // Substract 24 hours from 00:00am of today to get a NSDate of yesterday at 00:00
             let fromStartYesterday = fromStartToday.dateByAddingTimeInterval(-60*60*24)
-            println(fromStartYesterday)
-            println(fromStartToday)
-            println(now)
-            
+                        
             //Get yesterday steps
             self.pedometer.queryPedometerDataFromDate(fromStartYesterday, toDate: fromStartToday) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in
@@ -172,7 +177,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func playGame(sender: AnyObject) {
-        if (true) {
+        if (self.user.getLifes() > 0) {
             let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("GameViewController") as GameViewController
 
             self.navigationController?.pushViewController(secondViewController, animated:true)

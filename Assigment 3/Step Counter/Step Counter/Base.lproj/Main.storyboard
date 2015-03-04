@@ -174,8 +174,23 @@
                     <view key="view" contentMode="scaleToFill" id="oyV-Z8-Y48" customClass="SCNView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7tC-pJ-GH3">
+                                <rect key="frame" x="262" y="28" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7tC-pJ-GH3" firstAttribute="top" secondItem="51v-n5-Cko" secondAttribute="bottom" constant="8" id="VeS-Ck-Ykr"/>
+                            <constraint firstItem="7tC-pJ-GH3" firstAttribute="trailing" secondItem="oyV-Z8-Y48" secondAttribute="trailingMargin" id="fRq-MS-AAJ"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="livesLabel" destination="7tC-pJ-GH3" id="8tc-uM-P5z"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="paK-ax-APD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

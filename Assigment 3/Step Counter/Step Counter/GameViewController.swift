@@ -12,10 +12,12 @@ import OpenGLES
 import CoreMotion
 import QuartzCore
 
-class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
+class GameViewController: UIViewController, UIAlertViewDelegate, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
 
+    @IBOutlet weak var livesLabel: UILabel!
     var scene : PrimitivesScene!
     var motionManager : CMMotionManager!
+    var user = User.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +30,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         scnView.autoenablesDefaultLighting = true
                 
         setUpPhysics()
-        
+        var lifesString: NSString = "\(user.getLifes())"
+        var frontString: NSString = "Lives: "
+        livesLabel.text = frontString.stringByAppendingString(lifesString)
         scene.physicsWorld.contactDelegate = self
+    
     }
     
 
@@ -48,14 +53,24 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             
             self.scene.physicsWorld.gravity = SCNVector3(x: accelX, y: accelY, z: accelZ)
             
-            if (self.scene.rootNode.childNodes.count <= 3){
-                self.lostLife()
-            }
         }
     }
 
     func lostLife() {
+        var currentLives = user.getLifes() - 1
+        user.setLifes(currentLives)
+        if (currentLives > 0) {
+            var alert = UIAlertView(title: "You Died!", message: "The Ball fell off the map...", delegate: self, cancelButtonTitle: "Quit", otherButtonTitles: "Try Again")
+            alert.show()
+        } else {
+            var alert = UIAlertView(title: "You Died!", message: "The Ball fell off the map... And have no lives left. Walk more for extra lives", delegate: self, cancelButtonTitle: "Okay")
+        }
         
+        
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if alertView.title
     }
     
 
@@ -65,8 +80,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             var nodeA = contact.nodeA
             var nodeB = contact.nodeB
             
-            if nodeA .isKindOfClass(DeathFloor) || nodeB.isKindOfClass(DeathFloor) {
+            if nodeA.isKindOfClass(Ball) && nodeB.isKindOfClass(DeathFloor) {
                 println("You Died")
+                lostLife()
             }
     }
     /*
