@@ -11,7 +11,7 @@ import SceneKit
 class PrimitivesScene: SCNScene {
     
     var gameBall : Ball!
-    var deathFloor : SCNNode!
+    var deathFloor : DeathFloor = DeathFloor()
     
     override init() {
         super.init()
@@ -41,7 +41,6 @@ class PrimitivesScene: SCNScene {
         wall.firstMaterial?.doubleSided = true
         wall.firstMaterial?.diffuse.contents = UIColor.greenColor()
         
-        deathFloor = SCNNode()
         deathFloor.geometry = wall
         deathFloor.physicsBody = SCNPhysicsBody.staticBody()
         deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:-50)

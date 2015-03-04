@@ -65,8 +65,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             var nodeA = contact.nodeA
             var nodeB = contact.nodeB
             
-            if nodeA .isMemberOfClass(Ball) {
-                println("Is Ball")
+            if nodeA .isKindOfClass(DeathFloor) || nodeB.isKindOfClass(DeathFloor) {
+                println("You Died")
             }
     }
     /*
