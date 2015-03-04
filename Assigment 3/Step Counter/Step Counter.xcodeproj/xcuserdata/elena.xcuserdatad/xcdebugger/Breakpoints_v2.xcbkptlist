@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Step Counter/ViewController.swift"
-            timestampString = "447133481.28175"
+            timestampString = "447139167.341227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "fetchMotionActivityData()"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,13 +26,121 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Step Counter/ViewController.swift"
-            timestampString = "447133481.28175"
+            timestampString = "447137745.034542"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "fetchPedometerData()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Step Counter/ViewController.swift"
+            timestampString = "447137745.034542"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "fetchPedometerData()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Step Counter/ViewController.swift"
+            timestampString = "447139167.341227"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "fetchPedometerData()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Step Counter/ViewController.swift"
+            timestampString = "447139167.341227"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "fetchPedometerData()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Step Counter/ViewController.swift"
+            timestampString = "447137745.034542"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "47"
             endingLineNumber = "47"
             landmarkName = "fetchPedometerData()"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Step_Counter.ViewController.fetchPedometerData (Step_Counter.ViewController)() -&gt; ()"
+                  moduleName = "Step Counter"
+                  urlString = "file:///Users/elena/OneDrive/School/Elena/MobileSensing/Assigment%203/Step%20Counter/Step%20Counter/ViewController.swift"
+                  timestampString = "447136153.649074"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "156">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Step_Counter.ViewController.(fetchPedometerData (Step_Counter.ViewController) -&gt; () -&gt; ()).(closure #1).(closure #1)"
+                  moduleName = "Step Counter"
+                  urlString = "file:///Users/elena/OneDrive/School/Elena/MobileSensing/Assigment%203/Step%20Counter/Step%20Counter/ViewController.swift"
+                  timestampString = "447136153.649474"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "60"
+                  endingLineNumber = "60"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Step_Counter.ViewController.(fetchPedometerData (Step_Counter.ViewController) -&gt; () -&gt; ()).(closure #2).(closure #1)"
+                  moduleName = "Step Counter"
+                  urlString = "file:///Users/elena/OneDrive/School/Elena/MobileSensing/Assigment%203/Step%20Counter/Step%20Counter/ViewController.swift"
+                  timestampString = "447136153.649802"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -42,11 +150,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Step Counter/ViewController.swift"
-            timestampString = "447133481.28175"
+            timestampString = "447137745.034542"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "fetchPedometerData()"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +166,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Step Counter/ViewController.swift"
-            timestampString = "447133481.28175"
+            timestampString = "447139167.341227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "fetchPedometerData()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Step Counter/ViewController.swift"
+            timestampString = "447139167.341227"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
             landmarkName = "fetchPedometerData()"
             landmarkType = "5">
          </BreakpointContent>

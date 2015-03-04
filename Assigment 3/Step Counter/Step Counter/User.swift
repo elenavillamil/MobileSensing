@@ -27,21 +27,33 @@ class User {
     
     init()
     {
-        userDefaults.setInteger(0, forKey: "lifes")
-        userDefaults.setInteger(5000, forKey: "goal")
-        userDefaults.setInteger(0, forKey: "today")
-        userDefaults.setInteger(0, forKey: "yesterday")
-        userDefaults.setBool(false, forKey: "extraLifeOne")
-        userDefaults.setBool(false, forKey: "extraLifeTwo")
-        userDefaults.setBool(false, forKey: "extraLifeThree")
+        if (userDefaults.objectForKey("lifes") == nil)
+        {
+            userDefaults.setInteger(0, forKey: "lifes")
+        }
+        if (userDefaults.objectForKey("goal") == nil)
+        {
+            userDefaults.setInteger(5000, forKey: "goal")
+        }
+        if (userDefaults.objectForKey("extreLifeOne") == nil)
+        {
+            userDefaults.setBool(false, forKey: "extraLifeOne")
+        }
+        if (userDefaults.objectForKey("extreLifeTwo") == nil)
+        {
+            userDefaults.setBool(false, forKey: "extraLifeTwo")
+        }
+        if (userDefaults.objectForKey("extreLifeThree") == nil)
+        {
+            userDefaults.setBool(false, forKey: "extraLifeThree")
+        }
     }
     
-    func resetAtTheEndOfDay(endSteps: Int)
+    func resetAtTheEndOfDay()
     {
         userDefaults.setBool(false, forKey: "extraLifeOne")
         userDefaults.setBool(false, forKey: "extraLifeTwo")
         userDefaults.setBool(false, forKey: "extraLifeThree")
-        userDefaults.setInteger(endSteps, forKey: "yesterday")
     }
     
     func getLifes() -> Int
@@ -52,16 +64,6 @@ class User {
     func getGoal() -> Int
     {
         return userDefaults.integerForKey("goal");
-    }
-    
-    func getTodaySteps() -> Int
-    {
-        return userDefaults.integerForKey("today");
-    }
-    
-    func getYesterdaySteps() -> Int
-    {
-        return userDefaults.integerForKey("yesterday");
     }
     
     func getExtraLifeOne() -> Bool
@@ -87,16 +89,6 @@ class User {
     func setGoal(goal: Int)
     {
         userDefaults.setInteger(goal, forKey: "goal");
-    }
-    
-    func setTodaySteps(today: Int)
-    {
-        userDefaults.setInteger(today, forKey: "today");
-    }
-    
-    func setYesterdaySteps(yesterday: Int)
-    {
-        userDefaults.setInteger(yesterday, forKey: "yesterday");
     }
     
     func setExtraLifeOne(set: Bool)

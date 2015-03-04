@@ -28,20 +28,30 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        
         fetchMotionActivityData()
+        
+        fetchPedometerData()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
         fetchPedometerData()
     }
     
     func fetchPedometerData() {
         // Get current time when the app starts
-        let now = NSDate()
+        var now = NSDate()
+        //var realNow = now.dateByAddingTimeInterval(-6*60*60)
+
         var stepsSoFar = 0
         
         let gregorianCalendar = NSCalendar(calendarIdentifier:NSGregorianCalendar)
+
         let flags:NSCalendarUnit = .DayCalendarUnit | .MonthCalendarUnit | .YearCalendarUnit | .HourCalendarUnit | .MinuteCalendarUnit | .SecondCalendarUnit
         let components = gregorianCalendar?.components(flags, fromDate: now)
+        
+        //components!.hour = components!.hour - 6
         
         let hour: Int = components!.hour
         let minute: Int = components!.minute
@@ -51,14 +61,8 @@ class ViewController: UIViewController {
         
         let fromStartToday = now.dateByAddingTimeInterval(subtraction)
 
-        self.pedometer.queryPedometerDataFromDate(fromStartToday, toDate: now) {
-            (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
-                stepsSoFar = pedData.numberOfSteps.integerValue
-            }
-        }
-        
         if CMPedometer.isStepCountingAvailable(){
-            self.pedometer.startPedometerUpdatesFromDate(now) {
+            self.pedometer.startPedometerUpdatesFromDate(fromStartToday) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
                     
                     // Needs to add today's steps if the app start once the day has already started
@@ -66,43 +70,23 @@ class ViewController: UIViewController {
                     
                     // Set today steps
                     self.todayStepsLabel.text = NSString(format: "%d", steps)
-                    
                     // Set steps to goal
-                    if self.user.getGoal() - steps > 0
-                    {
-                        self.stepsToGoalLabel.text = NSString(format: "%d", self.user.getGoal() - steps)
-                    }
-                    else
-                    {
-                        self.stepsToGoalLabel.text = "Met!"
-                        
-                        if steps - self.user.getGoal() >= 100 && steps - self.user.getGoal() < 200 && !self.user.getExtraLifeOne()
-                        {
-                            self.user.setExtraLifeOne(true)
-                            self.user.setLifes(self.user.getLifes() + 1)
-                        }
-                        
-                        else if steps - self.user.getGoal() >= 200 && steps - self.user.getGoal() < 400 && !self.user.getExtraLifeTwo()
-                        {
-                            self.user.setExtraLifeTwo(true)
-                            self.user.setLifes(self.user.getLifes() + 1)
-                        }
-                        
-                        else if steps - self.user.getGoal() >= 400 && !self.user.getExtraLifeThree()
-                        {
-                            self.user.setExtraLifeThree(true)
-                            self.user.setLifes(self.user.getLifes() + 1)
-                        }
-                    }
+                    self.setGoalLabel(steps)
+                    
                 }
             }
             
             let fromStartYesterday = fromStartToday.dateByAddingTimeInterval(-60*60*24)
+            println(fromStartYesterday)
+            println(fromStartToday)
+            println(now)
             
             //Get yesterday steps
             self.pedometer.queryPedometerDataFromDate(fromStartYesterday, toDate: fromStartToday) {
-                (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
-                    self.yesterdayStepsLabel.text = NSString(format: "%d", pedData.numberOfSteps)
+                (pedData: CMPedometerData!, error: NSError!) -> Void in
+                let yesterdaySteps = pedData.numberOfSteps
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.yesterdayStepsLabel.text = NSString(format: "%d", yesterdaySteps)
                 }
             }
         }
@@ -148,6 +132,40 @@ class ViewController: UIViewController {
             
         }
     }
+    
+    
+    func setGoalLabel(steps: Int)
+    {
+        // Set steps to goal
+        if self.user.getGoal() - steps > 0
+        {
+            self.stepsToGoalLabel.text = NSString(format: "%d", self.user.getGoal() - steps)
+        }
+        else
+        {
+            self.stepsToGoalLabel.text = "Met!"
+            
+            if steps - self.user.getGoal() >= 100 && steps - self.user.getGoal() < 200 && !self.user.getExtraLifeOne()
+            {
+                self.user.setExtraLifeOne(true)
+                self.user.setLifes(self.user.getLifes() + 1)
+            }
+                
+            else if steps - self.user.getGoal() >= 200 && steps - self.user.getGoal() < 400 && !self.user.getExtraLifeTwo()
+            {
+                self.user.setExtraLifeTwo(true)
+                self.user.setLifes(self.user.getLifes() + 1)
+            }
+                
+            else if steps - self.user.getGoal() >= 400 && !self.user.getExtraLifeThree()
+            {
+                self.user.setExtraLifeThree(true)
+                self.user.setLifes(self.user.getLifes() + 1)
+            }
+        }
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
