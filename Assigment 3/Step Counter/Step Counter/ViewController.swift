@@ -26,11 +26,13 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
+        yesterdayStepsLabel.textAlignment = .Center
+        todayStepsLabel.textAlignment = .Center
+        stepsToGoalLabel.textAlignment = .Center
+        currentActivityLabel.textAlignment = .Center
         
         fetchMotionActivityData()
-        
         fetchPedometerData()
     }
     

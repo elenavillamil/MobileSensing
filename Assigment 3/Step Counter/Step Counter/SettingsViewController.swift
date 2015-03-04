@@ -21,6 +21,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         goalLabel.text = NSString (format: "%d", self.user.getGoal())
+        setGoalTextField.textAlignment = .Center
 
         // Do any additional setup after loading the view.
     }
@@ -36,6 +37,7 @@ class SettingsViewController: UIViewController {
         {
             // Pop up
         }
+        toRemoveKeyboard(self.user)
         // check new goal is all numeric???
     }
     
