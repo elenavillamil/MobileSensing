@@ -50,7 +50,7 @@ class PrimitivesScene: SCNScene {
     
     func testBall() {
         let ball = Ball()
-        ball.position = SCNVector3(x: 3.0, y: 0.0, z: 0.0)
+        ball.position = SCNVector3(x: 5.0, y: 6.0, z: 0.0)
         ball.physicsBody = SCNPhysicsBody.dynamicBody()
         
         gameBall = ball
@@ -60,7 +60,7 @@ class PrimitivesScene: SCNScene {
     func setCameraPostion() {
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 4)
+        cameraNode.position = SCNVector3(x:-5, y: 1, z: 8)
         rootNode.addChildNode(cameraNode)
     }
     
