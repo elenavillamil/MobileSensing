@@ -43,7 +43,7 @@ class PrimitivesScene: SCNScene {
         
         deathFloor.geometry = wall
         deathFloor.physicsBody = SCNPhysicsBody.staticBody()
-        deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:-50)
+        deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:-30)
         
         rootNode.addChildNode(deathFloor)
     }
@@ -60,7 +60,7 @@ class PrimitivesScene: SCNScene {
     func setCameraPostion() {
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 30)
+        cameraNode.position = SCNVector3(x: 0, y: 0, z: 4)
         rootNode.addChildNode(cameraNode)
     }
     

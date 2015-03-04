@@ -11,8 +11,9 @@ import SceneKit
 class Ball : SCNNode {
     override init() {
         super.init()
-        
-        let sphereGeometry = SCNSphere(radius: 1.0)
+        var radius: CGFloat = CGFloat(1.2)
+        radius = radius - CGFloat(1)
+        let sphereGeometry = SCNSphere(radius: radius)
         let sphereNode = SCNNode(geometry: sphereGeometry)
         sphereGeometry.firstMaterial?.diffuse.contents = UIColor.redColor()
         
