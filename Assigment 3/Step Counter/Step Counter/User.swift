@@ -27,6 +27,7 @@ class User {
     
     init()
     {
+        var i: NSInteger = userDefaults.integerForKey("lifes")
         if (userDefaults.objectForKey("lifes") == nil)
         {
             userDefaults.setInteger(0, forKey: "lifes")

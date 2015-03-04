@@ -11,7 +11,7 @@ import CoreMotion
 import Foundation
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIAlertViewDelegate{
     
     let activityManager = CMMotionActivityManager()
     let customQueue = NSOperationQueue()
@@ -33,7 +33,12 @@ class ViewController: UIViewController {
         currentActivityLabel.textAlignment = .Center
         
         fetchMotionActivityData()
+<<<<<<< HEAD
         fetchPedometerData()
+=======
+        
+        //fetchPedometerData()
+>>>>>>> 24c6fe31ca050fdde20c7def82f7af0f4d53e992
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -45,6 +50,8 @@ class ViewController: UIViewController {
     func fetchPedometerData() {
         // Get current time when the app starts
         var now = NSDate()
+    
+        var startSteps = 0
         
         // Get day, month, year and time of that current time
         let gregorianCalendar = NSCalendar(calendarIdentifier:NSGregorianCalendar)
@@ -71,17 +78,28 @@ class ViewController: UIViewController {
 
         // Check if pedometer is available
         if CMPedometer.isStepCountingAvailable(){
-            self.pedometer.startPedometerUpdatesFromDate(fromStartToday) {
+            
+            //Get today steps up to now
+            self.pedometer.queryPedometerDataFromDate(fromStartToday, toDate: now) {
+                (pedData: CMPedometerData!, error: NSError!) -> Void in
+                startSteps = pedData.numberOfSteps.integerValue
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.todayStepsLabel.text = NSString(format: "%d", startSteps)
+                    self.setGoalLabel(startSteps)
+                }
+            }
+            
+            // Start the updates
+            self.pedometer.startPedometerUpdatesFromDate(now) {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
                     
                     // Needs to add today's steps if the app start once the day has already started
-                    let steps = pedData.numberOfSteps.integerValue
+                    let steps = startSteps + pedData.numberOfSteps.integerValue
                     
                     // Set today steps
                     self.todayStepsLabel.text = NSString(format: "%d", steps)
                     // Set steps to goal
                     self.setGoalLabel(steps)
-                    
                 }
             }
             
@@ -93,7 +111,7 @@ class ViewController: UIViewController {
                 (pedData: CMPedometerData!, error: NSError!) -> Void in
                 let yesterdaySteps = pedData.numberOfSteps
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.yesterdayStepsLabel.text = NSString(format: "%d", yesterdaySteps)
+                    self.yesterdayStepsLabel.text = NSString(format: "%d", yesterdaySteps.integerValue)
                 }
             }
         }
@@ -136,7 +154,6 @@ class ViewController: UIViewController {
                     }
                 }
             }
-            
         }
     }
     
@@ -150,15 +167,17 @@ class ViewController: UIViewController {
         }
         else
         {
+            self.user.setLifes(self.user.getLifes() + 1)
+                        
             self.stepsToGoalLabel.text = "Met!"
             
-            if steps - self.user.getGoal() >= 100 && steps - self.user.getGoal() < 200 && !self.user.getExtraLifeOne()
+            if steps - self.user.getGoal() >= 100 && !self.user.getExtraLifeOne()
             {
                 self.user.setExtraLifeOne(true)
                 self.user.setLifes(self.user.getLifes() + 1)
             }
                 
-            else if steps - self.user.getGoal() >= 200 && steps - self.user.getGoal() < 400 && !self.user.getExtraLifeTwo()
+            else if steps - self.user.getGoal() >= 200 && !self.user.getExtraLifeTwo()
             {
                 self.user.setExtraLifeTwo(true)
                 self.user.setLifes(self.user.getLifes() + 1)
@@ -184,6 +203,15 @@ class ViewController: UIViewController {
 
             self.navigationController?.pushViewController(secondViewController, animated:true)
         }
+        else
+        {
+            var alert = UIAlertView(title: "Zero Lifes", message: "You need at least 1 life to play. Meet your daily goal or overpass it to win lifes!", delegate: self, cancelButtonTitle: "Ok")
+            alert.show()
+        }
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
     }
 
 }
