@@ -31,7 +31,7 @@ class ViewController: UIViewController, UIAlertViewDelegate{
         
         fetchMotionActivityData()
         
-        fetchPedometerData()
+        //fetchPedometerData()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -104,7 +104,7 @@ class ViewController: UIViewController, UIAlertViewDelegate{
                 (pedData: CMPedometerData!, error: NSError!) -> Void in
                 let yesterdaySteps = pedData.numberOfSteps
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.yesterdayStepsLabel.text = NSString(format: "%d", yesterdaySteps)
+                    self.yesterdayStepsLabel.text = NSString(format: "%d", yesterdaySteps.integerValue)
                 }
             }
         }
@@ -160,15 +160,17 @@ class ViewController: UIViewController, UIAlertViewDelegate{
         }
         else
         {
+            self.user.setLifes(self.user.getLifes() + 1)
+                        
             self.stepsToGoalLabel.text = "Met!"
             
-            if steps - self.user.getGoal() >= 100 && steps - self.user.getGoal() < 200 && !self.user.getExtraLifeOne()
+            if steps - self.user.getGoal() >= 100 && !self.user.getExtraLifeOne()
             {
                 self.user.setExtraLifeOne(true)
                 self.user.setLifes(self.user.getLifes() + 1)
             }
                 
-            else if steps - self.user.getGoal() >= 200 && steps - self.user.getGoal() < 400 && !self.user.getExtraLifeTwo()
+            else if steps - self.user.getGoal() >= 200 && !self.user.getExtraLifeTwo()
             {
                 self.user.setExtraLifeTwo(true)
                 self.user.setLifes(self.user.getLifes() + 1)
