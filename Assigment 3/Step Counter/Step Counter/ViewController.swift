@@ -178,13 +178,13 @@ class ViewController: UIViewController, UIAlertViewDelegate{
                 self.user.setLifes(self.user.getLifes() + 1)
             }
                 
-            else if steps - self.user.getGoal() >= 200 && !self.user.getExtraLifeTwo()
+            if steps - self.user.getGoal() >= 200 && !self.user.getExtraLifeTwo()
             {
                 self.user.setExtraLifeTwo(true)
                 self.user.setLifes(self.user.getLifes() + 1)
             }
                 
-            else if steps - self.user.getGoal() >= 400 && !self.user.getExtraLifeThree()
+            if steps - self.user.getGoal() >= 400 && !self.user.getExtraLifeThree()
             {
                 self.user.setExtraLifeThree(true)
                 self.user.setLifes(self.user.getLifes() + 1)
