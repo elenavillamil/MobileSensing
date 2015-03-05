@@ -60,8 +60,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         scene.removeBall()
         
         var currentLives = user.getLifes() - 1
-        self.livesLabel.text = NSString(format: "Lives: %d", currentLives)
-        user.setLifes(currentLives)
+        
+        if (currentLives >= 0)
+        {
+            self.livesLabel.text = NSString(format: "Lives: %d", currentLives)
+            user.setLifes(currentLives)
+        }
         
         if (currentLives > 0) {
             var alert = UIAlertController(title: "You died!", message: "The Ball fell off the map...", preferredStyle: .Alert)
