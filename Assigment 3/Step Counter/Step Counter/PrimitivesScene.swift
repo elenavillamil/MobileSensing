@@ -12,7 +12,7 @@ class PrimitivesScene: SCNScene {
     
     var gameBall : Ball!
     var deathFloor : DeathFloor = DeathFloor()
-    
+    var winWall : WinWall!
     override init() {
         super.init()
         
@@ -22,6 +22,7 @@ class PrimitivesScene: SCNScene {
         addBall()
         addDeathFloor()
 
+        addWinWall()
     
     }
 
@@ -46,6 +47,15 @@ class PrimitivesScene: SCNScene {
         deathFloor.position = SCNVector3(x: 0.0, y: 0.0, z:-5)
         
         rootNode.addChildNode(deathFloor)
+    }
+    
+    func addWinWall() {
+        let wallNode = WinWall()
+        wallNode.physicsBody = SCNPhysicsBody.staticBody()
+        wallNode.position = SCNVector3(x: 1.0, y: -1, z: 0.21)
+        
+        winWall = wallNode
+        self.rootNode.addChildNode(winWall)
     }
     
     func removeBall() {
