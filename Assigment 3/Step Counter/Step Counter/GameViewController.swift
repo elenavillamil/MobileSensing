@@ -94,6 +94,22 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     func newBall() {
         scene.addBall()
     }
+    
+    func winner() {
+        var alert = UIAlertController(title: "You won!", message: "You obviously played this way to much. You show stop...", preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+            
+        }
+        alert.addAction(cancelAction)
+        
+        let OKAction = UIAlertAction(title: "Play again", style: .Default) { (action) in
+            // ...
+            self.newBall()
+        }
+        alert.addAction(OKAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
 
     
     func physicsWorld(world: SCNPhysicsWorld,
@@ -104,6 +120,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             if nodeA.isKindOfClass(Ball) && nodeB.isKindOfClass(DeathFloor) {
                 println("You Died")
                 lostLife()
+            } else if nodeA.isKindOfClass(Ball) && nodeB.isKindOfClass(WinWall) {
+                winner()
             }
     }
     /*
