@@ -36,15 +36,19 @@ class User {
         {
             userDefaults.setInteger(5000, forKey: "goal")
         }
-        if (userDefaults.objectForKey("extreLifeOne") == nil)
+        if (userDefaults.objectForKey("goalLife") == nil)
+        {
+            userDefaults.setBool(false, forKey: "goalLife")
+        }
+        if (userDefaults.objectForKey("extraLifeOne") == nil)
         {
             userDefaults.setBool(false, forKey: "extraLifeOne")
         }
-        if (userDefaults.objectForKey("extreLifeTwo") == nil)
+        if (userDefaults.objectForKey("extraLifeTwo") == nil)
         {
             userDefaults.setBool(false, forKey: "extraLifeTwo")
         }
-        if (userDefaults.objectForKey("extreLifeThree") == nil)
+        if (userDefaults.objectForKey("extraLifeThree") == nil)
         {
             userDefaults.setBool(false, forKey: "extraLifeThree")
         }
@@ -56,6 +60,7 @@ class User {
     
     func resetWhenNewDay()
     {
+        userDefaults.setBool(false, forKey: "goalLife")
         userDefaults.setBool(false, forKey: "extraLifeOne")
         userDefaults.setBool(false, forKey: "extraLifeTwo")
         userDefaults.setBool(false, forKey: "extraLifeThree")
@@ -63,57 +68,67 @@ class User {
     
     func getLifes() -> Int
     {
-        return userDefaults.integerForKey("lifes");
+        return userDefaults.integerForKey("lifes")
     }
     
     func getGoal() -> Int
     {
-        return userDefaults.integerForKey("goal");
+        return userDefaults.integerForKey("goal")
+    }
+    
+    func getGoalLife() -> Bool
+    {
+        return userDefaults.boolForKey("goalLife")
     }
     
     func getExtraLifeOne() -> Bool
     {
-        return userDefaults.boolForKey("extraLifeOne");
+        return userDefaults.boolForKey("extraLifeOne")
     }
     
     func getExtraLifeTwo() -> Bool
     {
-        return userDefaults.boolForKey("extraLifeTwo");
+        return userDefaults.boolForKey("extraLifeTwo")
     }
     
     func getExtraLifeThree() -> Bool
     {
-        return userDefaults.boolForKey("extraLifeThree");
+        return userDefaults.boolForKey("extraLifeThree")
     }
     
     func getLastDay() -> Int
     {
-        return userDefaults.integerForKey("lastDay");
+        return userDefaults.integerForKey("lastDay")
     }
 
     func setLifes(lifes: Int)
     {
-        userDefaults.setInteger(lifes, forKey: "lifes");
+        userDefaults.setInteger(lifes, forKey: "lifes")
     }
     
     func setGoal(goal: Int)
     {
-        userDefaults.setInteger(goal, forKey: "goal");
+        userDefaults.setInteger(goal, forKey: "goal")
+    }
+    
+    func setGoalLife(set: Bool)
+    {
+        userDefaults.setBool(set, forKey: "goalLife")
     }
     
     func setExtraLifeOne(set: Bool)
     {
-        userDefaults.setBool(set, forKey: "ExtraLifeOne");
+        userDefaults.setBool(set, forKey: "extraLifeOne")
     }
     
     func setExtraLifeTwo(set: Bool)
     {
-        userDefaults.setBool(set, forKey: "extraLifeTwo");
+        userDefaults.setBool(set, forKey: "extraLifeTwo")
     }
     
     func setExtraLifeThree(set: Bool)
     {
-        userDefaults.setBool(set, forKey: "extraLifeThree");
+        userDefaults.setBool(set, forKey: "extraLifeThree")
     }
     
     func setLastDay(day: Int)

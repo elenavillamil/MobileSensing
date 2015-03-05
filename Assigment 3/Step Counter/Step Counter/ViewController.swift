@@ -86,8 +86,8 @@ class ViewController: UIViewController, UIAlertViewDelegate{
             
             // Start the updates
             self.pedometer.startPedometerUpdatesFromDate(now) {
-                (pedData: CMPedometerData!, error: NSError!) -> Void in dispatch_async(dispatch_get_main_queue()) {
-                    
+                (pedData: CMPedometerData!, error: NSError!) -> Void in
+                dispatch_async(dispatch_get_main_queue()) {
                     // Needs to add today's steps if the app start once the day has already started
                     let steps = startSteps + pedData.numberOfSteps.integerValue
                     
@@ -158,13 +158,19 @@ class ViewController: UIViewController, UIAlertViewDelegate{
         // Set steps to goal
         if self.user.getGoal() - steps > 0
         {
+            // Already in main queue
             self.stepsToGoalLabel.text = NSString(format: "%d", self.user.getGoal() - steps)
         }
         else
         {
-            self.user.setLifes(self.user.getLifes() + 1)
-                        
+            // Already in main queue
             self.stepsToGoalLabel.text = "Met!"
+
+            if (!self.user.getGoalLife())
+            {
+                self.user.setGoalLife(true)
+                self.user.setLifes(self.user.getLifes() + 1)
+            }
             
             if steps - self.user.getGoal() >= 100 && !self.user.getExtraLifeOne()
             {
@@ -193,15 +199,19 @@ class ViewController: UIViewController, UIAlertViewDelegate{
     }
 
     @IBAction func playGame(sender: AnyObject) {
-        if (true) {
+        if (self.user.getLifes() > 0) {
             let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("GameViewController") as GameViewController
 
             self.navigationController?.pushViewController(secondViewController, animated:true)
         }
         else
         {
-            var alert = UIAlertView(title: "Zero Lifes", message: "You need at least 1 life to play. Meet your daily goal or overpass it to win lifes!", delegate: self, cancelButtonTitle: "Ok")
-            alert.show()
+            var alert = UIAlertController(title: "Zero Lifes", message: "You need at least 1 life to play. Meet your daily goal or overpass it to win lifes!", preferredStyle: .Alert)
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+            }
+            alert.addAction(cancelAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+
         }
     }
     
