@@ -63,8 +63,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         if (currentLives >= 0)
         {
-            self.livesLabel.text = NSString(format: "Lives: %d", currentLives)
-            user.setLifes(currentLives)
+            self.user.setLifes(currentLives)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.livesLabel.text = NSString(format: "Lives: %d", currentLives)
+            }
         }
         
         if (currentLives > 0) {
