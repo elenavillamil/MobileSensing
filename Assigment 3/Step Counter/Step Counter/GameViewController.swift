@@ -42,8 +42,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     func setUpPhysics() {
         // Detect motion
         motionManager = CMMotionManager()
-        motionManager.accelerometerUpdateInterval = 0.1
         
+        if !motionManager.accelerometerAvailable {
+            return
+        }
+        
+        motionManager.accelerometerUpdateInterval = 0.1
         motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()) { (accelerometerData, error) in
             let acceleration = accelerometerData.acceleration
             
@@ -120,7 +124,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             if nodeA.isKindOfClass(Ball) && nodeB.isKindOfClass(DeathFloor) {
                 println("You Died")
                 lostLife()
-            } else if nodeA.isKindOfClass(Ball) && nodeB.isKindOfClass(WinWall) {
+            } else if nodeA.isKindOfClass(WinWall) || nodeB.isKindOfClass(WinWall) {
+                println("You won!")
                 winner()
             }
     }
