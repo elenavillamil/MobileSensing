@@ -12,7 +12,7 @@ import SceneKit
 class WinWall: SCNNode {
     override init() {
         super.init()
-        let sphereGeometry = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0)
+        let sphereGeometry = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
         let sphereNode = SCNNode(geometry: sphereGeometry)
         sphereGeometry.firstMaterial?.diffuse.contents = UIColor.blackColor()
         

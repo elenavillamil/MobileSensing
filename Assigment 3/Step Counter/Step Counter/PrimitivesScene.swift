@@ -52,7 +52,7 @@ class PrimitivesScene: SCNScene {
     func addWinWall() {
         let wallNode = WinWall()
         wallNode.physicsBody = SCNPhysicsBody.staticBody()
-        wallNode.position = SCNVector3(x: 1.0, y: -1, z: 0.21)
+        wallNode.position = SCNVector3(x: -1.0, y: 0.5, z: 0.21)
         
         winWall = wallNode
         self.rootNode.addChildNode(winWall)
