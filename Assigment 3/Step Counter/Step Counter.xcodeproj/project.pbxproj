@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A3E63A3E1AA7CE5D00625046 /* new_table_model.dae in Resources */ = {isa = PBXBuildFile; fileRef = A3E63A3D1AA7CE5D00625046 /* new_table_model.dae */; };
+		A3E63A401AA7D79500625046 /* new_table_model.dae in Resources */ = {isa = PBXBuildFile; fileRef = A3E63A3F1AA7D79500625046 /* new_table_model.dae */; };
 		EA5EC2291A9C00780005CD72 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA5EC2281A9C00780005CD72 /* SceneKit.framework */; };
 		EAD901A81A9BF82F004C6E5C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD901A71A9BF82F004C6E5C /* GameViewController.swift */; };
 		EAD901AC1A9BF9C1004C6E5C /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD901AB1A9BF9C1004C6E5C /* Ball.swift */; };
@@ -35,7 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A3E63A3D1AA7CE5D00625046 /* new_table_model.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = new_table_model.dae; sourceTree = "<group>"; };
+		A3E63A3F1AA7D79500625046 /* new_table_model.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = new_table_model.dae; sourceTree = "<group>"; };
 		EA5EC2281A9C00780005CD72 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		EAD901A71A9BF82F004C6E5C /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		EAD901AB1A9BF9C1004C6E5C /* Ball.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		F3B663B61A9A814B004EDF3E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A3E63A3D1AA7CE5D00625046 /* new_table_model.dae */,
+				A3E63A3F1AA7D79500625046 /* new_table_model.dae */,
 				F3B663B71A9A814B004EDF3E /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -236,7 +236,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3E63A3E1AA7CE5D00625046 /* new_table_model.dae in Resources */,
+				A3E63A401AA7D79500625046 /* new_table_model.dae in Resources */,
 				F3B663BE1A9A814B004EDF3E /* Main.storyboard in Resources */,
 				F3B663C31A9A814B004EDF3E /* LaunchScreen.xib in Resources */,
 				F3B663C01A9A814B004EDF3E /* Images.xcassets in Resources */,
