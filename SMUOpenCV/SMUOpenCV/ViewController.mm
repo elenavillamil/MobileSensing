@@ -132,7 +132,7 @@ using namespace cv;
             NSLog(@"New Values: B: %.1f, G: %.1f,R: %.1f", self.lastAverage.val[0], self.lastAverage.val[1], self.lastAverage.val[2]);
             self.handFound = true;
             
-            self.ignoreFrameCount = 30;
+            self.ignoreFrameCount = 45;
             
             NSLog(@"Hand Found");
             
