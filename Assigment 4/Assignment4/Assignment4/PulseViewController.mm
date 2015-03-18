@@ -8,11 +8,12 @@
 
 #import "PulseViewController.h"
 #import "SMUGraphHelper.h"
+#import "AVFoundation/AVFoundation.h"
 
 @interface PulseViewController ()
 
 @property (nonatomic) GraphHelper* graphHelper;
-
+@property (weak, nonatomic) IBOutlet UILabel *heartRateLabel;
 @end
 
 @implementation PulseViewController
@@ -22,7 +23,8 @@
     // Do any additional setup after loading the view.
     
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
-    
+    [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,16 +55,30 @@
 }
 
 - (void)updateGraph {
-//        self.graphHelper->setGraphData(0, averagedArray == NULL ? self.fftMagnitudeBuffer : averagedArray, windowSize * .95, sqrt(SAMPLE_AMOUNT));
-//        self.graphHelper->setGraphData(1, copyMagnitudeBuffer + startIndex, windowSize * .95, sqrt(SAMPLE_AMOUNT));
-//        
-//        self.graphHelper->update();
+    const size_t windowSize = 30;
+    float* data = (float*)malloc(sizeof(float) * 300);
+    
+    for (int i = 1; i < 300; i++)
+    {
+        float x = float(i);
+        if (x > 150) {
+            x -= (x-150);
+        }
+        
+        data[i] = x+100;
+    }
+    
+    
+    self.graphHelper->setGraphData(0, data, windowSize, 0);
+    self.graphHelper->update();
+    free(data);
+    data = nil;
 
 }
 
 -(void)dealloc {
     self.graphHelper->tearDownGL();
-    
+
 
     delete self.graphHelper;
 
@@ -73,14 +89,5 @@
     self.graphHelper->draw();
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
