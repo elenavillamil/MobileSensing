@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D5929661AB9272F00259654 /* CvVideoCameraMod.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5929651AB9272F00259654 /* CvVideoCameraMod.m */; };
+		3D5929681AB9283900259654 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5929671AB9283900259654 /* AssetsLibrary.framework */; };
 		EA7178681AB8E41500941666 /* RootTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7178671AB8E41500941666 /* RootTableViewController.swift */; };
 		EA71786A1AB8E7AC00941666 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA7178691AB8E7AC00941666 /* opencv2.framework */; };
 		EA71786E1AB9168900941666 /* PulseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = EA71786D1AB9168900941666 /* PulseViewController.mm */; };
@@ -32,6 +34,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D5929641AB9272F00259654 /* CvVideoCameraMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CvVideoCameraMod.h; path = Assignment4/CvVideoCameraMod.h; sourceTree = "<group>"; };
+		3D5929651AB9272F00259654 /* CvVideoCameraMod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CvVideoCameraMod.m; path = Assignment4/CvVideoCameraMod.m; sourceTree = "<group>"; };
+		3D5929671AB9283900259654 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		EA7178671AB8E41500941666 /* RootTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootTableViewController.swift; sourceTree = "<group>"; };
 		EA7178691AB8E7AC00941666 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		EA71786B1AB9168800941666 /* Assignment4-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Assignment4-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -58,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D5929681AB9283900259654 /* AssetsLibrary.framework in Frameworks */,
 				EA7178731AB91ACC00941666 /* CoreGraphics.framework in Frameworks */,
 				EA7178711AB91ABE00941666 /* GLKit.framework in Frameworks */,
 				EA71786A1AB8E7AC00941666 /* opencv2.framework in Frameworks */,
@@ -77,6 +83,9 @@
 		F39B5E5E1AB872840001C13A = {
 			isa = PBXGroup;
 			children = (
+				3D5929671AB9283900259654 /* AssetsLibrary.framework */,
+				3D5929641AB9272F00259654 /* CvVideoCameraMod.h */,
+				3D5929651AB9272F00259654 /* CvVideoCameraMod.m */,
 				EA7178721AB91ACC00941666 /* CoreGraphics.framework */,
 				EA7178701AB91ABE00941666 /* GLKit.framework */,
 				F39B5E691AB872840001C13A /* Assignment4 */,
@@ -239,6 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D5929661AB9272F00259654 /* CvVideoCameraMod.m in Sources */,
 				EA71786E1AB9168900941666 /* PulseViewController.mm in Sources */,
 				F39B5E911AB873410001C13A /* VideoAnalgesic.swift in Sources */,
 				F39B5E6F1AB872840001C13A /* ViewController.swift in Sources */,
