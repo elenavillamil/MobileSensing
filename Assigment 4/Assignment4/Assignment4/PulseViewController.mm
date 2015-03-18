@@ -19,9 +19,6 @@ using namespace cv;
 
 @property (nonatomic) GraphHelper* graphHelper;
 @property (weak, nonatomic) IBOutlet UILabel *heartRateLabel;
-
-@property (weak, nonatomic) IBOutlet UIButton *switchCameraButton;
-@property (weak, nonatomic) IBOutlet UIButton *toggleTorchButton;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) CvVideoCameraMod *videoCamera;
 @property (nonatomic) BOOL torchIsOn;
@@ -45,7 +42,7 @@ using namespace cv;
     
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
 
-    [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
+//    [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
 
 
     
@@ -71,17 +68,16 @@ using namespace cv;
     
     [self.videoCamera start];
     
-    self.torchIsOn = NO;
+    [self setTorchIsOn:NO];
 
     
 
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self setTorchIsOn:YES];
 }
-
 
 -(void)dealloc {
     //graph
@@ -161,21 +157,21 @@ using namespace cv;
     // change the hue inside an image
     
     //convert to HSV
-    //    cvtColor(image, image_copy, CV_BGRA2BGR);
-    //    cvtColor(image_copy, image_copy, CV_BGR2HSV);
-    //
-    //    //grab  just the Hue chanel
-    //    vector<Mat> layers;
-    //    cv::split(image_copy,layers);
-    //
-    //    // shift the colors
-    //    cv::add(layers[0],80.0,layers[0]);
-    //
-    //    // get back image from separated layers
-    //    cv::merge(layers,image_copy);
-    //
-    //    cvtColor(image_copy, image_copy, CV_HSV2BGR);
-    //    cvtColor(image_copy, image, CV_BGR2BGRA);
+        cvtColor(image, image_copy, CV_BGRA2BGR);
+        cvtColor(image_copy, image_copy, CV_BGR2HSV);
+    
+        //grab  just the Hue chanel
+        vector<Mat> layers;
+        cv::split(image_copy,layers);
+    
+        // shift the colors
+        cv::add(layers[0],80.0,layers[0]);
+    
+        // get back image from separated layers
+        cv::merge(layers,image_copy);
+    
+        cvtColor(image_copy, image_copy, CV_HSV2BGR);
+        cvtColor(image_copy, image, CV_BGR2BGRA);
     
     //============================================
     // get average pixel intensity
@@ -197,6 +193,14 @@ using namespace cv;
         //NSLog(@"Old Values: B: %.1f, G: %.1f,R: %.1f", avgPixelIntensity.val[0], avgPixelIntensity.val[1], avgPixelIntensity.val[2]);
         //NSLog(@"New Values: B: %.1f, G: %.1f,R: %.1f", self.lastAverage.val[0], self.lastAverage.val[1], self.lastAverage.val[2]);
         
+        float* graphData = (float *)malloc(sizeof(float) * self.count);
+        for (int i = 0; i < self.count; i++) {
+            graphData[i] = float(self.r[i]);
+        }
+        
+        self.graphHelper->setGraphData(0, graphData, 30, 0);
+        self.graphHelper->update();
+        
         if (!self.handFound && !self.firstTime && (avgPixelIntensity.val[0] > self.lastAverage.val[0] + 5 || avgPixelIntensity.val[0] < self.lastAverage.val[0] - 5) && (avgPixelIntensity.val[1] > self.lastAverage[1] + 5 || avgPixelIntensity.val[1] < self.lastAverage.val[1] - 5) && (avgPixelIntensity.val[2] > self.lastAverage.val[2] + 5 || avgPixelIntensity.val[2] < self.lastAverage.val[2] - 5))
         {
             //NSLog(@"Finger Found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -210,12 +214,7 @@ using namespace cv;
             
             self.originalValue = avgPixelIntensity;
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.toggleTorchButton.enabled = NO;
-                self.switchCameraButton.enabled = NO;
-            });
         }
-        
         else if (self.handFound && (avgPixelIntensity.val[0] > self.originalValue.val[0] + 5 || avgPixelIntensity.val[0] < self.originalValue.val[0] - 5) && (avgPixelIntensity.val[1] > self.originalValue[1] + 5 || avgPixelIntensity.val[1] < self.originalValue.val[1] - 5) && (avgPixelIntensity.val[2] > self.originalValue.val[2] + 5 || avgPixelIntensity.val[2] < self.originalValue.val[2] - 5))
         {
             NSLog(@"Old Values: B: %.1f, G: %.1f,R: %.1f", avgPixelIntensity.val[0], avgPixelIntensity.val[1], avgPixelIntensity.val[2]);
@@ -225,13 +224,7 @@ using namespace cv;
             
             NSLog(@"Removed");
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.toggleTorchButton.enabled = YES;
-                self.switchCameraButton.enabled = YES;
-            });
-        }
-        
-        else
+        } else
         {
             self.firstTime = false;
         }
@@ -275,7 +268,7 @@ using namespace cv;
     if ([device hasTorch] && self.videoCamera.defaultAVCaptureDevicePosition == AVCaptureDevicePositionBack)
     {
         [device lockForConfiguration:nil];
-        [device setTorchMode: onOff ? AVCaptureTorchModeOn : AVCaptureTorchModeOff];
+        [device setTorchMode:AVCaptureTorchModeOn];
         [device unlockForConfiguration];
     }
     

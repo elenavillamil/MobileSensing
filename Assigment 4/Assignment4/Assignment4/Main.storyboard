@@ -186,6 +186,7 @@
                     <navigationItem key="navigationItem" id="U6w-uW-LvG"/>
                     <connections>
                         <outlet property="heartRateLabel" destination="w99-Ye-1eZ" id="3ip-Sd-ktN"/>
+                        <outlet property="imageView" destination="xdF-eo-1ck" id="bfQ-TY-Cei"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="elx-lv-yAS" userLabel="First Responder" sceneMemberID="firstResponder"/>
