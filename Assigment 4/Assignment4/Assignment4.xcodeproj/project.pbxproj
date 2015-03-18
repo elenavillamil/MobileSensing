@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA7178681AB8E41500941666 /* RootTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7178671AB8E41500941666 /* RootTableViewController.swift */; };
+		EA71786A1AB8E7AC00941666 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA7178691AB8E7AC00941666 /* opencv2.framework */; };
+		EA71786E1AB9168900941666 /* PulseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = EA71786D1AB9168900941666 /* PulseViewController.mm */; };
+		EA7178711AB91ABE00941666 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA7178701AB91ABE00941666 /* GLKit.framework */; };
+		EA7178731AB91ACC00941666 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA7178721AB91ACC00941666 /* CoreGraphics.framework */; };
 		F39B5E6D1AB872840001C13A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39B5E6C1AB872840001C13A /* AppDelegate.swift */; };
 		F39B5E6F1AB872840001C13A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39B5E6E1AB872840001C13A /* ViewController.swift */; };
 		F39B5E771AB872840001C13A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F39B5E751AB872840001C13A /* LaunchScreen.xib */; };
@@ -27,6 +32,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EA7178671AB8E41500941666 /* RootTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootTableViewController.swift; sourceTree = "<group>"; };
+		EA7178691AB8E7AC00941666 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		EA71786B1AB9168800941666 /* Assignment4-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Assignment4-Bridging-Header.h"; sourceTree = "<group>"; };
+		EA71786C1AB9168900941666 /* PulseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PulseViewController.h; sourceTree = "<group>"; };
+		EA71786D1AB9168900941666 /* PulseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PulseViewController.mm; sourceTree = "<group>"; };
+		EA71786F1AB9198F00941666 /* SMUGraphHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMUGraphHelper.h; sourceTree = "<group>"; };
+		EA7178701AB91ABE00941666 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		EA7178721AB91ACC00941666 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F39B5E671AB872840001C13A /* Assignment4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Assignment4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F39B5E6B1AB872840001C13A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F39B5E6C1AB872840001C13A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +58,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA7178731AB91ACC00941666 /* CoreGraphics.framework in Frameworks */,
+				EA7178711AB91ABE00941666 /* GLKit.framework in Frameworks */,
+				EA71786A1AB8E7AC00941666 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +77,8 @@
 		F39B5E5E1AB872840001C13A = {
 			isa = PBXGroup;
 			children = (
+				EA7178721AB91ACC00941666 /* CoreGraphics.framework */,
+				EA7178701AB91ABE00941666 /* GLKit.framework */,
 				F39B5E691AB872840001C13A /* Assignment4 */,
 				F39B5E7F1AB872840001C13A /* Assignment4Tests */,
 				F39B5E681AB872840001C13A /* Products */,
@@ -81,10 +99,15 @@
 			children = (
 				F39B5E6C1AB872840001C13A /* AppDelegate.swift */,
 				F39B5E6E1AB872840001C13A /* ViewController.swift */,
+				EA7178671AB8E41500941666 /* RootTableViewController.swift */,
+				EA71786C1AB9168900941666 /* PulseViewController.h */,
+				EA71786D1AB9168900941666 /* PulseViewController.mm */,
 				F39B5E8C1AB872F80001C13A /* Main.storyboard */,
+				EA71786F1AB9198F00941666 /* SMUGraphHelper.h */,
 				F39B5E8E1AB8732A0001C13A /* Images.xcassets */,
 				F39B5E751AB872840001C13A /* LaunchScreen.xib */,
 				F39B5E6A1AB872840001C13A /* Supporting Files */,
+				EA71786B1AB9168800941666 /* Assignment4-Bridging-Header.h */,
 			);
 			path = Assignment4;
 			sourceTree = "<group>";
@@ -92,6 +115,7 @@
 		F39B5E6A1AB872840001C13A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EA7178691AB8E7AC00941666 /* opencv2.framework */,
 				F39B5E901AB873410001C13A /* VideoAnalgesic.swift */,
 				F39B5E6B1AB872840001C13A /* Info.plist */,
 			);
@@ -215,8 +239,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA71786E1AB9168900941666 /* PulseViewController.mm in Sources */,
 				F39B5E911AB873410001C13A /* VideoAnalgesic.swift in Sources */,
 				F39B5E6F1AB872840001C13A /* ViewController.swift in Sources */,
+				EA7178681AB8E41500941666 /* RootTableViewController.swift in Sources */,
 				F39B5E6D1AB872840001C13A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,10 +358,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Assignment4",
+				);
 				INFOPLIST_FILE = Assignment4/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Assignment4/Assignment4-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -343,10 +376,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Assignment4",
+				);
 				INFOPLIST_FILE = Assignment4/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Assignment4/Assignment4-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -403,6 +442,7 @@
 				F39B5E881AB872840001C13A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F39B5E891AB872840001C13A /* Build configuration list for PBXNativeTarget "Assignment4Tests" */ = {
 			isa = XCConfigurationList;
@@ -411,6 +451,7 @@
 				F39B5E8B1AB872840001C13A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
