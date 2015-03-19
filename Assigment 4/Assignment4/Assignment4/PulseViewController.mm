@@ -51,6 +51,7 @@ typedef struct {
 @property NSInteger count;
 @property int ignoreFrameCount;
 @property int countFrames;
+@property int heartRate;
 
 @property double* unfiltered_hues;
 
@@ -261,10 +262,13 @@ typedef struct {
     self.unfiltered_hues[self.count] = convert.h;
     if (self.countFrames > 300) {
         [self butterworthFilter];
-        int test = [self peakDetection:self.unfiltered_hues count:(int) self.count];
-        NSString *printout = @"%d";
+        int rate = [self peakDetection:self.unfiltered_hues count:(int) self.count];        
+        self.heartRate = rate;
         
-        NSLog(printout, test);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.heartRateLabel.text = [NSString stringWithFormat:@"%d", self.heartRate];
+        });
+        
     }
 }
 

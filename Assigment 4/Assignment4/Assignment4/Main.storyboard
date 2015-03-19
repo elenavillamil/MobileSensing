@@ -169,18 +169,24 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w99-Ye-1eZ">
                                 <rect key="frame" x="82" y="72" width="157" height="115"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="96"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xdF-eo-1ck">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xdF-eo-1ck">
                                 <rect key="frame" x="66" y="405" width="189" height="155"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="189" id="XcE-A5-cjh"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="w99-Ye-1eZ" firstAttribute="top" secondItem="Znt-5W-Rji" secondAttribute="bottom" constant="8" id="NgP-pl-q1Z"/>
+                            <constraint firstItem="ffZ-4K-QGI" firstAttribute="top" secondItem="xdF-eo-1ck" secondAttribute="bottom" constant="8" id="RJx-2a-gGq"/>
                             <constraint firstAttribute="centerX" secondItem="w99-Ye-1eZ" secondAttribute="centerX" constant="-0.5" id="W8m-j8-ztU"/>
                             <constraint firstAttribute="centerY" secondItem="w99-Ye-1eZ" secondAttribute="centerY" constant="154.5" id="jrQ-v7-cHK"/>
+                            <constraint firstAttribute="centerY" secondItem="xdF-eo-1ck" secondAttribute="centerY" constant="-198.5" id="sBz-QK-dPG"/>
+                            <constraint firstAttribute="centerX" secondItem="xdF-eo-1ck" secondAttribute="centerX" constant="-0.5" id="zQb-gp-TJv"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="U6w-uW-LvG"/>
