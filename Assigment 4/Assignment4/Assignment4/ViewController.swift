@@ -56,9 +56,12 @@ class ViewController: UIViewController {
             context: self.videoManager.getCIContext(),
             options: optsDetector)
         
-        var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(UIApplication.sharedApplication().statusBarOrientation)]
-        
         self.videoManager.setProcessingBlock( { (var imageInput) -> (CIImage) in
+            
+            var orientation = UIApplication.sharedApplication().statusBarOrientation
+            
+            var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(UIApplication.sharedApplication().statusBarOrientation)]
+            
             
             var features = detector.featuresInImage(imageInput, options: optsFace)
             var swappedPoint = CGPoint()
@@ -84,18 +87,38 @@ class ViewController: UIViewController {
                 
                 applyFilterToRectangle(f.bounds, yellowColor)
                 
-                let origin = CGPoint(x: f.mouthPosition.x - 10, y: f.mouthPosition.y - 40)
+                var mouthOrigin:CGPoint
+                var leftEyeOrigin:CGPoint
+                var rightEyeOrigin:CGPoint
                 
-                var mouthRectangle = CGRect(origin: origin, size: CGSize(width: 20.0, height: 80.0))
+                var mouthRectangle:CGRect
+                var leftEyeRectangle:CGRect
+                var rightEyeRectangle:CGRect
+                
+                if (orientation.isPortrait)
+                {
+                    mouthOrigin = CGPoint(x: f.mouthPosition.x - 10, y: f.mouthPosition.y - 40)
+                    leftEyeOrigin = CGPoint(x: f.leftEyePosition.x - 10.0, y: f.leftEyePosition.y - 20)
+                    rightEyeOrigin = CGPoint(x: f.rightEyePosition.x - 10.0, y: f.rightEyePosition.y - 20)
+                    
+                    mouthRectangle = CGRect(origin: mouthOrigin, size: CGSize(width: 20.0, height: 80.0))
+                    leftEyeRectangle = CGRect(origin: leftEyeOrigin, size: CGSize(width: 20.0, height: 40.0))
+                    rightEyeRectangle = CGRect(origin: rightEyeOrigin, size: CGSize(width: 20.0, height: 40.0))
+                }
+                else
+                {
+                    mouthOrigin = CGPoint(x: f.mouthPosition.x - 40, y: f.mouthPosition.y - 10)
+                    leftEyeOrigin = CGPoint(x: f.leftEyePosition.x - 20.0, y: f.leftEyePosition.y - 10)
+                    rightEyeOrigin = CGPoint(x: f.rightEyePosition.x - 20.0, y: f.rightEyePosition.y - 10)
+                    
+                    mouthRectangle = CGRect(origin: mouthOrigin, size: CGSize(width: 80.0, height: 20.0))
+                    leftEyeRectangle = CGRect(origin: leftEyeOrigin, size: CGSize(width: 40.0, height: 20.0))
+                    rightEyeRectangle = CGRect(origin: rightEyeOrigin, size: CGSize(width: 40.0, height: 20.0))
+                }
+                
                 applyFilterToRectangle(mouthRectangle, blueColor)
                 
-                let leftEyeOrigin = CGPoint(x: f.leftEyePosition.x - 10.0, y: f.leftEyePosition.y - 20)
-                var leftEyeRectangle = CGRect(origin: leftEyeOrigin, size: CGSize(width: 20.0, height: 40.0))
-                
                 applyFilterToRectangle(leftEyeRectangle, redColor)
-                
-                let rightEyeOrigin = CGPoint(x: f.rightEyePosition.x - 10.0, y: f.rightEyePosition.y - 20)
-                var rightEyeRectangle = CGRect(origin: rightEyeOrigin, size: CGSize(width: 20.0, height: 40.0))
                 
                 applyFilterToRectangle(rightEyeRectangle, redColor)
                 
