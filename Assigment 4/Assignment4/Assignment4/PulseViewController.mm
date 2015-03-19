@@ -50,6 +50,7 @@ typedef struct {
 @property  double* b;
 @property NSInteger count;
 @property int ignoreFrameCount;
+@property int countFrames;
 
 @property double* unfiltered_hues;
 
@@ -74,6 +75,7 @@ typedef struct {
     self.firstTime = true;
     self.handFound = false;
     self.ignoreFrameCount = 15;
+    self.countFrames = 0;
     
     self.videoCamera = [[CvVideoCameraMod alloc] initWithParentView:self.imageView];
     self.videoCamera.delegate = self;
@@ -114,7 +116,7 @@ typedef struct {
 - (GraphHelper*) graphHelper
 {
     // start animating the graph
-    //const static int framesPerSecond = 30; <-- USING CONST FROM ABOVE
+//    const static int framesPerSecond = 30;// <-- USING CONST FROM ABOVE
     const static int numDataArraysToGraph = 1;
     
     if (!_graphHelper)
@@ -176,6 +178,7 @@ typedef struct {
 #ifdef __cplusplus
 -(void) processImage:(Mat &)image{
     
+    if (!COUNT_MAX) return;
     // Do some OpenCV stuff with the image
     Mat image_copy;
     Mat grayFrame, output;
@@ -204,7 +207,7 @@ typedef struct {
             graphData[i] = float(self.r[i]);
         }
         
-        self.graphHelper->setGraphData(0, graphData, 30, 0);
+        self.graphHelper->setGraphData(0, graphData, 30.0, sqrt(30.0));
         self.graphHelper->update();
         
         if (!self.handFound && !self.firstTime && (avgPixelIntensity.val[0] > self.lastAverage.val[0] + 5 || avgPixelIntensity.val[0] < self.lastAverage.val[0] - 5) && (avgPixelIntensity.val[1] > self.lastAverage[1] + 5 || avgPixelIntensity.val[1] < self.lastAverage.val[1] - 5) && (avgPixelIntensity.val[2] > self.lastAverage.val[2] + 5 || avgPixelIntensity.val[2] < self.lastAverage.val[2] - 5))
@@ -220,8 +223,13 @@ typedef struct {
             self.originalValue = avgPixelIntensity;
             [self keepRednessFactor:avgPixelIntensity];
             
-        }
-        else if (self.handFound && (avgPixelIntensity.val[0] > self.originalValue.val[0] + 5 || avgPixelIntensity.val[0] < self.originalValue.val[0] - 5) && (avgPixelIntensity.val[1] > self.originalValue[1] + 5 || avgPixelIntensity.val[1] < self.originalValue.val[1] - 5) && (avgPixelIntensity.val[2] > self.originalValue.val[2] + 5 || avgPixelIntensity.val[2] < self.originalValue.val[2] - 5))
+        }else if (self.handFound && self.countFrames < 450) {
+            self.countFrames++;
+            
+            self.originalValue = avgPixelIntensity;
+            [self keepRednessFactor:avgPixelIntensity];
+            
+        } else if (self.handFound && (avgPixelIntensity.val[0] > self.originalValue.val[0] + 5 || avgPixelIntensity.val[0] < self.originalValue.val[0] - 5) && (avgPixelIntensity.val[1] > self.originalValue[1] + 5 || avgPixelIntensity.val[1] < self.originalValue.val[1] - 5) && (avgPixelIntensity.val[2] > self.originalValue.val[2] + 5 || avgPixelIntensity.val[2] < self.originalValue.val[2] - 5))
         {
             NSLog(@"Old Values: B: %.1f, G: %.1f,R: %.1f", avgPixelIntensity.val[0], avgPixelIntensity.val[1], avgPixelIntensity.val[2]);
             NSLog(@"New Values: B: %.1f, G: %.1f,R: %.1f", self.lastAverage.val[0], self.lastAverage.val[1], self.lastAverage.val[2]);
@@ -230,7 +238,7 @@ typedef struct {
             
             NSLog(@"Removed");
             
-        } else
+        }  else
         {
             self.firstTime = false;
         }
@@ -251,7 +259,13 @@ typedef struct {
     //takes avg of RGB values, converts to HSV, grabs and stores hue
     hsv convert = [self rgb2hsv_s:avgBGRvals];
     self.unfiltered_hues[self.count] = convert.h;
-    
+    if (self.countFrames > 300) {
+        [self butterworthFilter];
+        int test = [self peakDetection:self.unfiltered_hues count:(int) self.count];
+        NSString *printout = @"%d";
+        
+        NSLog(printout, test);
+    }
 }
 
 // developed from MATLAB found at http://www.ignaciomellado.es/blog/Measuring-heart-rate-with-a-smartphone-camera
@@ -645,6 +659,42 @@ typedef struct {
             break;
     }
     return oCol;
+}
+
+- (int)peakDetection:(double*) points count:( int) numOfPoints {
+    static int window = 16;
+    
+    int numOfPeaks = 0;
+    double* peaks = (double*)malloc(sizeof(double) * numOfPoints);
+    
+    
+    for (int index  = 0 ; index < numOfPoints; ++index) {
+        double sPoint = points[index];
+        double max = sPoint;
+        int tempMaxPostion = 0;
+        
+        for (int start = index+1; start < numOfPoints && start < window; ++start) {
+            if (max < points[start]) {
+                max = points[start];
+                tempMaxPostion = start - index;
+                
+            }
+        }
+        
+        if (tempMaxPostion == window/2 ) {
+            peaks[numOfPeaks] = index;
+            numOfPeaks++;
+        }
+    }
+    
+    int heartBeat = 0;
+    
+    for (int index = 1; index < numOfPeaks; index++) {
+        heartBeat += peaks[index] - peaks[index-1];
+    }
+    heartBeat /= numOfPeaks*2;
+    
+    return heartBeat;
 }
 
 #pragma mark Hardware - torch & camera
