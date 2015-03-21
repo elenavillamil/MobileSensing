@@ -80,12 +80,17 @@ float currentFrequency = 30.0;
 //This is declared here in order to bypass Automatic Reference Counting (ARC)...
 //If this was declared as a property, the block using it would retain a strong
 //reference to it and the memory would never be deallocated
-RingBuffer *ringBuffer;
+//RingBuffer *ringBuffer;
+
+float hueValues[countMax];
+int count;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    ringBuffer = new RingBuffer(ringBufferLength,2);
+    // Zero out our buffer.
+    memset(hueValues, 0, countMax);
+    count = 0;
     
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
     
@@ -125,14 +130,6 @@ RingBuffer *ringBuffer;
     self.graphHelper->tearDownGL();
     delete self.graphHelper;
     self.graphHelper = nil;
-    
-    // pixels
-
-    // free(self.unfiltered_hues)
-    // delete []self.unfiltered_hues;
-    delete ringBuffer;
-    ringBuffer = nil;
-    
 }
 
 
@@ -152,6 +149,7 @@ RingBuffer *ringBuffer;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    // Zero out the ring buffer
     if(ringBuffer!=nil)
             ringBuffer->AddNewFloatData(self.pulseData, ringBufferLength);
 }
@@ -191,7 +189,8 @@ RingBuffer *ringBuffer;
 
 -(float*)pulseData {
     if(!_pulseData)
-        _pulseData = (float*)calloc(ringBufferLength,sizeof(float));
+        _pulseData = (float*)calloc(ringBufferLength, sizeof(float));
+    
     return _pulseData;
 }
 
@@ -238,7 +237,7 @@ RingBuffer *ringBuffer;
     //[self dBmagnitude];
     
     // Plot the filtered
-    self.graphHelper->setGraphData(0,self.pulseData + self.startingPoint, self.endPoint - self.startingPoint, sqrt(ringBufferLength)/60/30); // set graph channel
+    //self.graphHelper->setGraphData(0,self.pulseData + self.startingPoint, self.endPoint - self.startingPoint, sqrt(ringBufferLength)/60/30); // set graph channel
     
     self.graphHelper->update(); // update the graph
 }
@@ -246,6 +245,8 @@ RingBuffer *ringBuffer;
 - (IBAction)startPulseMeter:(id)sender 
 {
     if (self.checkPulse == false) {
+        
+        
         self.checkPulse = true;
         [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
     }
@@ -272,68 +273,16 @@ RingBuffer *ringBuffer;
     {
         // get hue value only
         self.hue = avg_HSV.val[0];
-
-    }
-    
-    else if (self.fingerDetected)
-    {
-        if((blueGreen >60)) {
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.torchIsOn = true;
-                [self setTorchOn:YES];
-            });
-            
-    //        if(!self.torchIsOn) {
-    //            self.torchIsOn = true;
-    //            [self setTorchOn:YES];
-    //            NSLog(@"Finger Found!!!!!!!!!!!!!");
-        }
-    
         
-        
-    
+        // Start capturing all the data needed.
 
-        
-        else if (self.fingerDetected)
-        {
-            if (self.hue > 90 || blueGreen < 60)
-            {
-                NSLog(@"Measuring Hue");
-            }
-            else
-            {
-                self.fingerDetected = false;
-                if(self.torchIsOn) {
-                    self.torchOn = false;
-                    dispatch_async(dispatch_get_main_queue(),
-                                   ^{
-                                       [self setTorchOn:false];
-                                   });
-                }
-                NSLog(@"Finger Removed");
-            }
-        }
-        else
-        {
-            self.fingerDetected = false;
-            if(self.torchIsOn) {
-                self.torchOn = false;
-                dispatch_async(dispatch_get_main_queue(),
-                               ^{
-                                   [self setTorchOn:false];
-                               });
-            }
-            NSLog(@"No Finger");
-        }
-
-        self.lastAverage = avg_BGR;
     }
     else
     {
         --self.ignoreFrameCount;
     }
 }
+
 #endif
 
 - (void)keepRednessFactor: (Scalar) avgBGRvals
