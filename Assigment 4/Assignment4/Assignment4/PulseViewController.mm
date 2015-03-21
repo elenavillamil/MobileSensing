@@ -270,34 +270,64 @@ RingBuffer *ringBuffer;
     
     if (!self.ignoreFrameCount)
     {
-    // get hue value only
-    self.hue = avg_HSV.val[0];
-    
-    NSLog(@" %d", blueGreen);
-    if (blueGreen <= 60 && !self.fingerDetected) {
-        self.fingerDetected = true;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.torchIsOn = true;
-            [self setTorchOn:YES];
-        });
-        
+        // get hue value only
+        self.hue = avg_HSV.val[0];
 
     }
     
     else if (self.fingerDetected)
     {
         if((blueGreen >60)) {
+
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.torchIsOn = false;
-                [self setTorchOn:NO];
+                self.torchIsOn = true;
+                [self setTorchOn:YES];
             });
+            
+    //        if(!self.torchIsOn) {
+    //            self.torchIsOn = true;
+    //            [self setTorchOn:YES];
+    //            NSLog(@"Finger Found!!!!!!!!!!!!!");
         }
     
         
         
-    }
+    
+
         
-    self.lastAverage = avg_BGR;
+        else if (self.fingerDetected)
+        {
+            if (self.hue > 90 || blueGreen < 60)
+            {
+                NSLog(@"Measuring Hue");
+            }
+            else
+            {
+                self.fingerDetected = false;
+                if(self.torchIsOn) {
+                    self.torchOn = false;
+                    dispatch_async(dispatch_get_main_queue(),
+                                   ^{
+                                       [self setTorchOn:false];
+                                   });
+                }
+                NSLog(@"Finger Removed");
+            }
+        }
+        else
+        {
+            self.fingerDetected = false;
+            if(self.torchIsOn) {
+                self.torchOn = false;
+                dispatch_async(dispatch_get_main_queue(),
+                               ^{
+                                   [self setTorchOn:false];
+                               });
+            }
+            NSLog(@"No Finger");
+        }
+
+        self.lastAverage = avg_BGR;
     }
     else
     {
