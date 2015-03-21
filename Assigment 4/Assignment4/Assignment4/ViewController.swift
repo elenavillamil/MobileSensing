@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var flashSlider: UISlider!
     var videoManager : VideoAnalgesic! = nil
     let filter :CIFilter = CIFilter(name: "CIColorMonochrome")
+    var countLeftEye = 0
+    var countRightEye = 0
     
     @IBAction func panRecognized(sender: AnyObject) {
         let point = sender.translationInView(self.view)
@@ -48,7 +50,6 @@ class ViewController: UIViewController {
         let redColor = CIColor(red: 255.0, green: 0.0, blue: 0.0)
         
         self.filter.setValue(yellowColor, forKey: "inputColor")
-        //filter.setValue(75, forKey: "inputRadius")
         
         let optsDetector = [CIDetectorAccuracy:CIDetectorAccuracyLow]
         
@@ -59,36 +60,26 @@ class ViewController: UIViewController {
         //var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(UIApplication.sharedApplication().statusBarOrientation)]
         
         var overlayFilter :CIFilter = CIFilter(name: "CISourceOverCompositing")
+        var noirFilter :CIFilter = CIFilter(name: "CIPhotoEffectNoir")
+        var invertFilter :CIFilter = CIFilter(name: "CIColorInvert")
+        var bloomFilter :CIFilter = CIFilter(name: "CIBloom")
         
         self.videoManager.setProcessingBlock( { (var imageInput) -> (CIImage) in
             
             var orientation = UIApplication.sharedApplication().statusBarOrientation
             
-            var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(UIApplication.sharedApplication().statusBarOrientation)]
+            var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(UIApplication.sharedApplication().statusBarOrientation), CIDetectorSmile: true, CIDetectorEyeBlink : true]
             
             var features = detector.featuresInImage(imageInput, options: optsFace)
             
             var swappedPoint = CGPoint()
             
-            var counter : Int = 0
-            
             var tmpImage = imageInput
             var croppedImage :CIImage
             
             for f in features as [CIFaceFeature] {
-                NSLog("%d", counter)
-                
-                if (counter > 0)
-                {
-                    NSLog("Two Faces :)")
-                    
-                    counter = 100
-                }
-                
-                counter += 1
                 
                 // Face
-                
                 croppedImage = tmpImage.imageByCroppingToRect(f.bounds)
                 
                 self.filter.setValue(croppedImage, forKey: "inputImage")
@@ -149,7 +140,6 @@ class ViewController: UIViewController {
                     
                     
                     // Mouth
-                    
                     var newOverlayFilter :CIFilter = CIFilter(name: "CISourceOverCompositing")
                     
                     croppedImage = imageInput.imageByCroppingToRect(mouthRectangle)
@@ -165,7 +155,6 @@ class ViewController: UIViewController {
                     tmpImage = newOverlayFilter.outputImage
                     
                     // Left Eye
-                    
                     croppedImage = imageInput.imageByCroppingToRect(leftEyeRectangle)
                     
                     self.filter.setValue(croppedImage, forKey: "inputImage")
@@ -179,7 +168,6 @@ class ViewController: UIViewController {
                     tmpImage = newOverlayFilter.outputImage
                     
                     // Right Eye
-                    
                     croppedImage = imageInput.imageByCroppingToRect(rightEyeRectangle)
                     
                     self.filter.setValue(croppedImage, forKey: "inputImage")
@@ -192,22 +180,50 @@ class ViewController: UIViewController {
                     
                     tmpImage = newOverlayFilter.outputImage
                     
+                    NSLog(f.hasSmile ? "Yes" : "No");
+                    
+                    if(f.hasSmile)
+                    {
+                        noirFilter.setValue(tmpImage, forKey: "inputImage")
+                        tmpImage = noirFilter.outputImage
+                    }
+                    
+                    if (f.leftEyeClosed)
+                    {
+                        self.countLeftEye += 1
+                        
+                        if (self.countLeftEye > 2)
+                        {
+                            invertFilter.setValue(tmpImage, forKey: "inputImage")
+                            tmpImage = invertFilter.outputImage
+
+                        }
+                    }
+                    else
+                    {
+                        self.countLeftEye = 0
+                    }
+                    
+                    if(f.rightEyeClosed)
+                    {
+                        self.countRightEye += 1
+                        
+                        if (self.countRightEye > 2)
+                        {
+                            bloomFilter.setValue(2.0, forKey: "inputIntensity")
+                            bloomFilter.setValue(tmpImage, forKey: "inputImage")
+                            tmpImage = bloomFilter.outputImage
+                        }
+                    }
+                    else
+                    {
+                        self.countRightEye = 0
+                    }
+                    
                 }
-                
             }
             
             return tmpImage;
-//            if (overlayFilter.outputImage != nil)
-//            {
-//                return overlayFilter.outputImage
-//            }
-//                
-//            else
-//            {
-//                return imageInput;
-//            }
-            
-            
         })
         
         self.videoManager.start()
