@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3D5929661AB9272F00259654 /* CvVideoCameraMod.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5929651AB9272F00259654 /* CvVideoCameraMod.m */; };
 		3D5929681AB9283900259654 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5929671AB9283900259654 /* AssetsLibrary.framework */; };
+		3DEEF5681ABB8EE7007F3478 /* RingBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEF5671ABB8EE7007F3478 /* RingBuffer.mm */; };
 		EA7178681AB8E41500941666 /* RootTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7178671AB8E41500941666 /* RootTableViewController.swift */; };
 		EA71786A1AB8E7AC00941666 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA7178691AB8E7AC00941666 /* opencv2.framework */; };
 		EA71786E1AB9168900941666 /* PulseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = EA71786D1AB9168900941666 /* PulseViewController.mm */; };
@@ -37,6 +38,8 @@
 		3D5929641AB9272F00259654 /* CvVideoCameraMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CvVideoCameraMod.h; path = Assignment4/CvVideoCameraMod.h; sourceTree = "<group>"; };
 		3D5929651AB9272F00259654 /* CvVideoCameraMod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CvVideoCameraMod.m; path = Assignment4/CvVideoCameraMod.m; sourceTree = "<group>"; };
 		3D5929671AB9283900259654 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		3DEEF5661ABB8EE7007F3478 /* RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RingBuffer.h; path = Assignment4/RingBuffer.h; sourceTree = "<group>"; };
+		3DEEF5671ABB8EE7007F3478 /* RingBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RingBuffer.mm; path = Assignment4/RingBuffer.mm; sourceTree = "<group>"; };
 		EA7178671AB8E41500941666 /* RootTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootTableViewController.swift; sourceTree = "<group>"; };
 		EA7178691AB8E7AC00941666 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		EA71786B1AB9168800941666 /* Assignment4-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Assignment4-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -83,6 +86,8 @@
 		F39B5E5E1AB872840001C13A = {
 			isa = PBXGroup;
 			children = (
+				3DEEF5661ABB8EE7007F3478 /* RingBuffer.h */,
+				3DEEF5671ABB8EE7007F3478 /* RingBuffer.mm */,
 				3D5929671AB9283900259654 /* AssetsLibrary.framework */,
 				3D5929641AB9272F00259654 /* CvVideoCameraMod.h */,
 				3D5929651AB9272F00259654 /* CvVideoCameraMod.m */,
@@ -251,6 +256,7 @@
 				3D5929661AB9272F00259654 /* CvVideoCameraMod.m in Sources */,
 				EA71786E1AB9168900941666 /* PulseViewController.mm in Sources */,
 				F39B5E911AB873410001C13A /* VideoAnalgesic.swift in Sources */,
+				3DEEF5681ABB8EE7007F3478 /* RingBuffer.mm in Sources */,
 				F39B5E6F1AB872840001C13A /* ViewController.swift in Sources */,
 				EA7178681AB8E41500941666 /* RootTableViewController.swift in Sources */,
 				F39B5E6D1AB872840001C13A /* AppDelegate.swift in Sources */,
