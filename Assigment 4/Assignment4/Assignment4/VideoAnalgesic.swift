@@ -64,6 +64,11 @@ class VideoAnalgesic: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AV
         }
     }
     
+    func getCapturePosition() -> AVCaptureDevicePosition
+    {
+        return self.devicePosition
+    }
+    
     // for setting the camera we should use
     func toggleCameraPosition(){
         // AVCaptureDevicePosition.Back
