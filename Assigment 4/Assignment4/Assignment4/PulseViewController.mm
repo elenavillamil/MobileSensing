@@ -27,20 +27,6 @@ using namespace cv;
 #define COUNT_MAX 100
 #define FPS 30
 
-typedef struct
-{
-    double r;       // percent
-    double g;       // percent
-    double b;       // percent
-} rgb;
-
-typedef struct
-{
-    double h;       // angle in degrees
-    double s;       // percent
-    double v;       // percent
-} hsv;
-
 float currentFrequency = 30.0;
 
 // Heart rate lower limit [bpm]
@@ -70,8 +56,6 @@ float currentFrequency = 30.0;
 
 @property NSMutableArray* unfiltered_hues;
 @property (nonatomic) float *pulseData;
-@property (nonatomic) int startingPoint;
-@property (nonatomic) int endPoint;
 
 @end
 
@@ -82,14 +66,14 @@ float currentFrequency = 30.0;
 //reference to it and the memory would never be deallocated
 //RingBuffer *ringBuffer;
 
-float hueValues[countMax];
+float hueValues[COUNT_MAX];
 int count;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // Zero out our buffer.
-    memset(hueValues, 0, countMax);
+    memset(hueValues, 0, COUNT_MAX * sizeof(float));
     count = 0;
     
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
@@ -112,6 +96,10 @@ int count;
     self.videoCamera.defaultFPS = FRAMES_PER_SECOND;
     self.videoCamera.grayscaleMode = NO;
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.heartRateLabel.text = @" ";
+    });
+    
     [self.videoCamera start];
     
     [self setTorchIsOn:NO];
@@ -122,7 +110,16 @@ int count;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self setTorchIsOn:NO];
+    
+    
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    if ([device hasTorch])
+    {
+        [device lockForConfiguration:nil];
+        [device setTorchMode: AVCaptureTorchModeOn];
+        [device unlockForConfiguration];
+    }
 }
 
 -(void)dealloc {
@@ -136,6 +133,8 @@ int count;
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     self.graphHelper->tearDownGL();
+    
+    memset(hueValues, 0, COUNT_MAX * sizeof(float));
     
     // FORCE TORCH OFF
     
@@ -171,9 +170,6 @@ int count;
     return _graphHelper;
 }
 
-
-
-
 //  override the GLKView draw function, from OpenGLES
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     self.graphHelper->draw();
@@ -185,23 +181,9 @@ int count;
 
 -(float*)pulseData {
     if(!_pulseData)
-        _pulseData = (float*)calloc(ringBufferLength, sizeof(float));
+        _pulseData = (float*)calloc(COUNT_MAX, sizeof(float));
     
     return _pulseData;
-}
-
--(int)startingPoint {
-    if (!_startingPoint) {
-        _startingPoint = (currentFrequency - (graphWidth / 2)) / (sampleRate/(float)ringBufferLength);
-    }
-    return _startingPoint;
-}
-
--(int)endPoint {
-    if (!_endPoint) {
-        _endPoint = (currentFrequency + (graphWidth / 2)) / (sampleRate/(float)ringBufferLength);
-    }
-    return _endPoint;
 }
 
 //  override the GLKViewController update function, from OpenGLES
@@ -220,7 +202,7 @@ int count;
 //        }
     
     // Plot the audio
-    ringBuffer->FetchFreshData2(self.pulseData, ringBufferLength, 1, 1);
+    //ringBuffer->FetchFreshData2(self.pulseData, ringBufferLength, 1, 1);
     
     // Filter
     
@@ -233,12 +215,12 @@ int count;
     //[self dBmagnitude];
     
     // Plot the filtered
-    //self.graphHelper->setGraphData(0,self.pulseData + self.startingPoint, self.endPoint - self.startingPoint, sqrt(ringBufferLength)/60/30); // set graph channel
+    self.graphHelper->setGraphData(0, self.pulseData, COUNT_MAX, sqrt(COUNT_MAX)); // set graph channel
     
     self.graphHelper->update(); // update the graph
 }
 
-- (IBAction)startPulseMeter:(id)sender 
+- (IBAction)startPulseMeter:(id)sender
 {
     if (self.checkPulse == false) {
         
@@ -261,18 +243,29 @@ int count;
     Scalar avg_BGR = cv::mean(image_copy);
     cvtColor(image, image_copy, CV_BGR2HSV);    // convert to HSV to get Hue
     Scalar avg_HSV= cv::mean(image_copy);
-    int blueGreen = avg_BGR[1] + avg_BGR[0];
+    //int blueGreen = avg_BGR[1] + avg_BGR[0];
     //NSLog(@"Red: %.1f, Green: %.1f, Blue: %.1f", avg_BGR[2], avg_BGR[1], avg_BGR[0]);
     NSLog(@"Val: %.1f, Sat: %.1f, Hue: %.1f", avg_HSV[2], avg_HSV[1], avg_HSV[0]);
     
     if (!self.ignoreFrameCount)
     {
-        // get hue value only
-        self.hue = avg_HSV.val[0];
+        if (count == COUNT_MAX)
+        {
+            //self.graphHelper->setGraphData(0, hueValues, COUNT_MAX);
+            //self.graphHelper->update(); // update the graph
+            
+            //memcpy(self.pulseData, hueValues, sizeof(float) * COUNT_MAX);
+            
+            //memset(pulseData, 0, sizeof(float) * COUNT_MAX);
+            count = 0;
+        }
         
-        // Start capturing all the data needed.
-
+        
+        
+        // get hue value only
+        self.pulseData[count++] = avg_HSV.val[0];
     }
+    
     else
     {
         --self.ignoreFrameCount;
