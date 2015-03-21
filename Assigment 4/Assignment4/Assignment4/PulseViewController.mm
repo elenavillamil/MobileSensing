@@ -99,7 +99,7 @@ int count;
     
     self.firstTime = false;
     self.fingerDetected = false;
-    self.ignoreFrameCount = 15;
+    self.ignoreFrameCount = 60;  // ignore first two seconds of data to give them 2 seconds to place this finger
     self.countFrames = 0;
     self.checkPulse = false;
     
@@ -148,10 +148,6 @@ int count;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-    // Zero out the ring buffer
-    if(ringBuffer!=nil)
-            ringBuffer->AddNewFloatData(self.pulseData, ringBufferLength);
 }
 
 #pragma mark - Graphing
