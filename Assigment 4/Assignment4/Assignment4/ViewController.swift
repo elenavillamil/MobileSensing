@@ -68,7 +68,19 @@ class ViewController: UIViewController {
             
             var orientation = UIApplication.sharedApplication().statusBarOrientation
             
-            var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(UIApplication.sharedApplication().statusBarOrientation), CIDetectorSmile: true, CIDetectorEyeBlink : true]
+            if (self.videoManager.getCapturePosition() == AVCaptureDevicePosition.Back)
+            {
+                if (orientation == UIInterfaceOrientation.LandscapeLeft)
+                {
+                    orientation = UIInterfaceOrientation.LandscapeRight
+                }
+                else if (orientation == UIInterfaceOrientation.LandscapeRight)
+                {
+                    orientation = UIInterfaceOrientation.LandscapeLeft
+                }
+            }
+            
+            var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(orientation), CIDetectorSmile: true, CIDetectorEyeBlink : true]
             
             var features = detector.featuresInImage(imageInput, options: optsFace)
             
@@ -130,6 +142,7 @@ class ViewController: UIViewController {
                     else
                     {
                         mouthOrigin = CGPoint(x: f.mouthPosition.x - 40, y: f.mouthPosition.y - 10)
+                        
                         leftEyeOrigin = CGPoint(x: f.leftEyePosition.x - 20.0, y: f.leftEyePosition.y - 10)
                         rightEyeOrigin = CGPoint(x: f.rightEyePosition.x - 20.0, y: f.rightEyePosition.y - 10)
                         
