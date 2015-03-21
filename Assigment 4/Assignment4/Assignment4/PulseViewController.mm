@@ -17,17 +17,19 @@ using namespace cv;
 #define N 10 //The number of images which construct a time series for each pixel
 #define PI 3.14159
 
-const static int COUNT_MAX = 100;
-const static int FPS = 30;
-const static int FILTER_ORDER = 5;
+#define COUNT_MAX 100
+#define FPS 30
+#define FILTER_ORDER 5
 
-typedef struct {
+typedef struct
+{
     double r;       // percent
     double g;       // percent
     double b;       // percent
 } rgb;
 
-typedef struct {
+typedef struct
+{
     double h;       // angle in degrees
     double s;       // percent
     double v;       // percent
@@ -45,9 +47,9 @@ typedef struct {
 @property bool firstTime;
 @property bool handFound;
 @property Scalar originalValue;
-@property  double* r;
-@property  double* g;
-@property  double* b;
+@property double* r;
+@property double* g;
+@property double* b;
 @property NSInteger count;
 @property int ignoreFrameCount;
 @property int countFrames;
@@ -65,11 +67,13 @@ typedef struct {
     
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
 
-//  [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
+    //  [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
     
+    // Potential memory leak
     self.r = new double[COUNT_MAX];
     self.g = new double[COUNT_MAX];
     self.b = new double[COUNT_MAX];
+    
     self.unfiltered_hues = new double[COUNT_MAX];
     self.count = 0;
     
@@ -91,13 +95,11 @@ typedef struct {
     
     [self setTorchIsOn:NO];
 
-    
-
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self setTorchIsOn:YES];
+    [self setTorchIsOn:NO];
 }
 
 -(void)dealloc {
@@ -106,10 +108,10 @@ typedef struct {
     delete self.graphHelper;
     self.graphHelper = nil;
     //pixels
-    delete []self.r;
-    delete []self.g;
-    delete []self.b;
-    delete []self.unfiltered_hues;
+    delete [] self.r;
+    delete [] self.g;
+    delete [] self.b;
+    delete [] self.unfiltered_hues;
 }
 
 #pragma mark - Graphing
@@ -117,7 +119,6 @@ typedef struct {
 - (GraphHelper*) graphHelper
 {
     // start animating the graph
-//    const static int framesPerSecond = 30;// <-- USING CONST FROM ABOVE
     const static int numDataArraysToGraph = 1;
     
     if (!_graphHelper)
@@ -125,7 +126,7 @@ typedef struct {
         _graphHelper = new GraphHelper(self,
                                        FPS,
                                        numDataArraysToGraph,
-                                       PlotStyleSeparated);//drawing starts immediately after call
+                                       PlotStyleSeparated); //drawing starts immediately after call
     }
     
     return _graphHelper;
@@ -179,8 +180,9 @@ typedef struct {
 #ifdef __cplusplus
 -(void) processImage:(Mat &)image{
     
+    // Always true?
     if (!COUNT_MAX) return;
-    // Do some OpenCV stuff with the image
+    
     Mat image_copy;
     Mat grayFrame, output;
 
@@ -195,7 +197,7 @@ typedef struct {
     
     self.b[self.count] = avgPixelIntensity.val[0];
     self.g[self.count] = avgPixelIntensity.val[1];
-    self.r[self.count++] = avgPixelIntensity.val[2];  //<-- WHY IS THIS COUNT++
+    self.r[self.count++] = avgPixelIntensity.val[2];  // <-- WHY IS THIS COUNT++
     
     // Ignore first values of when the camera is turn on.
     if (!self.ignoreFrameCount)
@@ -203,10 +205,8 @@ typedef struct {
         //NSLog(@"Old Values: B: %.1f, G: %.1f,R: %.1f", avgPixelIntensity.val[0], avgPixelIntensity.val[1], avgPixelIntensity.val[2]);
         //NSLog(@"New Values: B: %.1f, G: %.1f,R: %.1f", self.lastAverage.val[0], self.lastAverage.val[1], self.lastAverage.val[2]);
         
-        float* graphData = (float *)malloc(sizeof(float) * self.count);
-        for (int i = 0; i < self.count; i++) {
-            graphData[i] = float(self.r[i]);
-        }
+        float* graphData = new float[self.count];
+        memcpy(graphData, self.r, self.count);
         
         self.graphHelper->setGraphData(0, graphData, 30.0, sqrt(30.0));
         self.graphHelper->update();
@@ -224,8 +224,8 @@ typedef struct {
             self.originalValue = avgPixelIntensity;
             [self keepRednessFactor:avgPixelIntensity];
             
-        }else if (self.handFound && self.countFrames < 450) {
-            self.countFrames++;
+        } else if (self.handFound && self.countFrames < 450) {
+            ++self.countFrames;
             
             self.originalValue = avgPixelIntensity;
             [self keepRednessFactor:avgPixelIntensity];
@@ -259,7 +259,9 @@ typedef struct {
 {
     //takes avg of RGB values, converts to HSV, grabs and stores hue
     hsv convert = [self rgb2hsv_s:avgBGRvals];
+    
     self.unfiltered_hues[self.count] = convert.h;
+    
     if (self.countFrames > 300) {
         [self butterworthFilter];
         int rate = [self peakDetection:self.unfiltered_hues count:(int) self.count];        
@@ -745,6 +747,7 @@ typedef struct {
     [device unlockForConfiguration];
     
 }
+
 /*
 #pragma mark - Navigation
 
