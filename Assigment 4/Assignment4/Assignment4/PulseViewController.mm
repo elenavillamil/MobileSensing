@@ -285,7 +285,10 @@ RingBuffer *ringBuffer;
         self.hue = avg_HSV.val[0];
         
         NSLog(@" %d", blueGreen);
-        if (blueGreen <= 60 && !self.fingerDetected) {
+        if (blueGreen <= 30 && !self.fingerDetected)
+        {
+            NSLog(@"Founder Finger");
+
             self.fingerDetected = true;
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.torchIsOn = true;
@@ -300,15 +303,21 @@ RingBuffer *ringBuffer;
         
         else if (self.fingerDetected)
         {
-            if((blueGreen >60) && self.torchIsOn) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.torchIsOn = false;
-                    [self setTorchOn:NO];
-                });
-            }
-        
-            if ((self.hue > 100)){
+            if (self.hue > 90 || blueGreen < 60)
+            {
                 NSLog(@"Measuring Hue");
+            }
+            else
+            {
+                self.fingerDetected = false;
+                if(self.torchIsOn) {
+                    self.torchOn = false;
+                    dispatch_async(dispatch_get_main_queue(),
+                                   ^{
+                                       [self setTorchOn:false];
+                                   });
+                }
+                NSLog(@"Finger Removed");
             }
         }
         else
@@ -317,12 +326,13 @@ RingBuffer *ringBuffer;
             if(self.torchIsOn) {
                 self.torchOn = false;
                 dispatch_async(dispatch_get_main_queue(),
-                ^{
-                    [self setTorchOn:false];
-                });
+                               ^{
+                                   [self setTorchOn:false];
+                               });
             }
-            NSLog(@"Removed");
+            NSLog(@"No Finger");
         }
+
         self.lastAverage = avg_BGR;
     }
     else
