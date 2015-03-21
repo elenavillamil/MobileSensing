@@ -172,14 +172,16 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xdF-eo-1ck">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xdF-eo-1ck">
                                 <rect key="frame" x="66" y="405" width="189" height="155"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="xdF-eo-1ck" firstAttribute="leading" secondItem="GB2-0x-9EK" secondAttribute="leadingMargin" constant="50" id="5Op-7i-4Ac"/>
                             <constraint firstItem="w99-Ye-1eZ" firstAttribute="top" secondItem="Znt-5W-Rji" secondAttribute="bottom" constant="8" id="NgP-pl-q1Z"/>
                             <constraint firstAttribute="centerX" secondItem="w99-Ye-1eZ" secondAttribute="centerX" constant="-0.5" id="W8m-j8-ztU"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="xdF-eo-1ck" secondAttribute="trailing" constant="49" id="dcn-74-YHv"/>
                             <constraint firstAttribute="centerY" secondItem="w99-Ye-1eZ" secondAttribute="centerY" constant="154.5" id="jrQ-v7-cHK"/>
                         </constraints>
                     </view>
