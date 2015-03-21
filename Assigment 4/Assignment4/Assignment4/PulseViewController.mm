@@ -85,8 +85,6 @@ RingBuffer *ringBuffer;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    ringBuffer = new RingBuffer(ringBufferLength,2);
-    
     self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
     
     self.hue = 0.0;
@@ -94,7 +92,7 @@ RingBuffer *ringBuffer;
     
     self.firstTime = false;
     self.fingerDetected = false;
-    self.ignoreFrameCount = 15;
+    self.ignoreFrameCount = 60;  // ignore first two seconds of data to give them 2 seconds to place this finger
     self.countFrames = 0;
     self.checkPulse = false;
     
@@ -127,11 +125,6 @@ RingBuffer *ringBuffer;
     self.graphHelper = nil;
     
     // pixels
-
-    // free(self.unfiltered_hues)
-    // delete []self.unfiltered_hues;
-    delete ringBuffer;
-    ringBuffer = nil;
     
 }
 
@@ -152,8 +145,6 @@ RingBuffer *ringBuffer;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    if(ringBuffer!=nil)
-            ringBuffer->AddNewFloatData(self.pulseData, ringBufferLength);
 }
 
 #pragma mark - Graphing

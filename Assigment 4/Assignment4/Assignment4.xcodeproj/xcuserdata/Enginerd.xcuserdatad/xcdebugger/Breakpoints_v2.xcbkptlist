@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment4/PulseViewController.mm"
-            timestampString = "448662504.667093"
+            timestampString = "448663198.039477"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
             landmarkName = "-processImage:"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment4/PulseViewController.mm"
-            timestampString = "448662504.667093"
+            timestampString = "448663198.039477"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "292"
-            endingLineNumber = "292"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "-processImage:"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment4/PulseViewController.mm"
-            timestampString = "448662504.667093"
+            timestampString = "448663198.039477"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
+            startingLineNumber = "341"
+            endingLineNumber = "341"
             landmarkName = "-keepRednessFactor:"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment4/PulseViewController.mm"
-            timestampString = "448662504.667093"
+            timestampString = "448663198.039477"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "354"
-            endingLineNumber = "354"
+            startingLineNumber = "343"
+            endingLineNumber = "343"
             landmarkName = "@implementation PulseViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment4/PulseViewController.mm"
-            timestampString = "448662504.667093"
+            timestampString = "448663198.039477"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "355"
-            endingLineNumber = "355"
+            startingLineNumber = "344"
+            endingLineNumber = "344"
             landmarkName = "-butterworthFilter"
             landmarkType = "5">
          </BreakpointContent>
@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment4/PulseViewController.mm"
-            timestampString = "448662504.667093"
+            timestampString = "448663198.039477"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "357"
-            endingLineNumber = "357"
+            startingLineNumber = "346"
+            endingLineNumber = "346"
             landmarkName = "-butterworthFilter"
             landmarkType = "5">
          </BreakpointContent>
