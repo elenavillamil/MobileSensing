@@ -56,36 +56,51 @@ class ViewController: UIViewController {
             context: self.videoManager.getCIContext(),
             options: optsDetector)
         
+        //var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(UIApplication.sharedApplication().statusBarOrientation)]
+        
+        var overlayFilter :CIFilter = CIFilter(name: "CISourceOverCompositing")
+        
         self.videoManager.setProcessingBlock( { (var imageInput) -> (CIImage) in
             
             var orientation = UIApplication.sharedApplication().statusBarOrientation
             
             var optsFace = [CIDetectorImageOrientation:self.videoManager.getImageOrientationFromUIOrientation(UIApplication.sharedApplication().statusBarOrientation)]
             
-            
             var features = detector.featuresInImage(imageInput, options: optsFace)
+            
             var swappedPoint = CGPoint()
             
-            let overlayFilter :CIFilter = CIFilter(name: "CISourceOverCompositing")
+            var counter : Int = 0
             
-            for f in features as [CIFaceFeature]{
+            var tmpImage = imageInput
+            var croppedImage :CIImage
+            
+            for f in features as [CIFaceFeature] {
+                NSLog("%d", counter)
                 
-                let applyFilterToRectangle = { (rectangle:CGRect, color:CIColor) -> Void in
-                    var croppedImage = imageInput.imageByCroppingToRect(rectangle)
+                if (counter > 0)
+                {
+                    NSLog("Two Faces :)")
                     
-                    self.filter.setValue(croppedImage, forKey: "inputImage")
-                    self.filter.setValue(color, forKey: "inputColor")
-                    
-                    croppedImage = self.filter.outputImage
-                    
-                    overlayFilter.setValue(croppedImage, forKey: "inputImage")
-                    overlayFilter.setValue(imageInput, forKey: "inputBackgroundImage")
-                    
-                    imageInput = overlayFilter.outputImage
-                    
+                    counter = 100
                 }
                 
-                applyFilterToRectangle(f.bounds, yellowColor)
+                counter += 1
+                
+                // Face
+                
+                croppedImage = tmpImage.imageByCroppingToRect(f.bounds)
+                
+                self.filter.setValue(croppedImage, forKey: "inputImage")
+                self.filter.setValue(yellowColor, forKey: "inputColor")
+                
+                croppedImage = self.filter.outputImage
+                
+                overlayFilter.setValue(croppedImage, forKey: "inputImage")
+                overlayFilter.setValue(tmpImage, forKey: "inputBackgroundImage")
+                
+                tmpImage = overlayFilter.outputImage
+                
                 
                 var mouthOrigin:CGPoint
                 var leftEyeOrigin:CGPoint
@@ -95,8 +110,11 @@ class ViewController: UIViewController {
                 var leftEyeRectangle:CGRect
                 var rightEyeRectangle:CGRect
                 
-                if (orientation.isPortrait)
+                
+                if (f.hasMouthPosition && f.hasLeftEyePosition && f.hasRightEyePosition)
                 {
+                    
+                    /*
                     mouthOrigin = CGPoint(x: f.mouthPosition.x - 10, y: f.mouthPosition.y - 40)
                     leftEyeOrigin = CGPoint(x: f.leftEyePosition.x - 10.0, y: f.leftEyePosition.y - 20)
                     rightEyeOrigin = CGPoint(x: f.rightEyePosition.x - 10.0, y: f.rightEyePosition.y - 20)
@@ -104,35 +122,90 @@ class ViewController: UIViewController {
                     mouthRectangle = CGRect(origin: mouthOrigin, size: CGSize(width: 20.0, height: 80.0))
                     leftEyeRectangle = CGRect(origin: leftEyeOrigin, size: CGSize(width: 20.0, height: 40.0))
                     rightEyeRectangle = CGRect(origin: rightEyeOrigin, size: CGSize(width: 20.0, height: 40.0))
-                }
-                else
-                {
-                    mouthOrigin = CGPoint(x: f.mouthPosition.x - 40, y: f.mouthPosition.y - 10)
-                    leftEyeOrigin = CGPoint(x: f.leftEyePosition.x - 20.0, y: f.leftEyePosition.y - 10)
-                    rightEyeOrigin = CGPoint(x: f.rightEyePosition.x - 20.0, y: f.rightEyePosition.y - 10)
+                    */
                     
-                    mouthRectangle = CGRect(origin: mouthOrigin, size: CGSize(width: 80.0, height: 20.0))
-                    leftEyeRectangle = CGRect(origin: leftEyeOrigin, size: CGSize(width: 40.0, height: 20.0))
-                    rightEyeRectangle = CGRect(origin: rightEyeOrigin, size: CGSize(width: 40.0, height: 20.0))
+                    
+                    if (orientation.isPortrait)
+                    {
+                        mouthOrigin = CGPoint(x: f.mouthPosition.x - 10, y: f.mouthPosition.y - 40)
+                        leftEyeOrigin = CGPoint(x: f.leftEyePosition.x - 10.0, y: f.leftEyePosition.y - 20)
+                        rightEyeOrigin = CGPoint(x: f.rightEyePosition.x - 10.0, y: f.rightEyePosition.y - 20)
+                        
+                        mouthRectangle = CGRect(origin: mouthOrigin, size: CGSize(width: 20.0, height: 80.0))
+                        leftEyeRectangle = CGRect(origin: leftEyeOrigin, size: CGSize(width: 20.0, height: 40.0))
+                        rightEyeRectangle = CGRect(origin: rightEyeOrigin, size: CGSize(width: 20.0, height: 40.0))
+                    }
+                        
+                    else
+                    {
+                        mouthOrigin = CGPoint(x: f.mouthPosition.x - 40, y: f.mouthPosition.y - 10)
+                        leftEyeOrigin = CGPoint(x: f.leftEyePosition.x - 20.0, y: f.leftEyePosition.y - 10)
+                        rightEyeOrigin = CGPoint(x: f.rightEyePosition.x - 20.0, y: f.rightEyePosition.y - 10)
+                        
+                        mouthRectangle = CGRect(origin: mouthOrigin, size: CGSize(width: 80.0, height: 20.0))
+                        leftEyeRectangle = CGRect(origin: leftEyeOrigin, size: CGSize(width: 40.0, height: 20.0))
+                        rightEyeRectangle = CGRect(origin: rightEyeOrigin, size: CGSize(width: 40.0, height: 20.0))
+                    }
+                    
+                    
+                    // Mouth
+                    
+                    var newOverlayFilter :CIFilter = CIFilter(name: "CISourceOverCompositing")
+                    
+                    croppedImage = imageInput.imageByCroppingToRect(mouthRectangle)
+                    
+                    self.filter.setValue(croppedImage, forKey: "inputImage")
+                    self.filter.setValue(blueColor, forKey: "inputColor")
+                    
+                    croppedImage = self.filter.outputImage
+                    
+                    newOverlayFilter.setValue(croppedImage, forKey: "inputImage")
+                    newOverlayFilter.setValue(tmpImage, forKey: "inputBackgroundImage")
+                    
+                    tmpImage = newOverlayFilter.outputImage
+                    
+                    // Left Eye
+                    
+                    croppedImage = imageInput.imageByCroppingToRect(leftEyeRectangle)
+                    
+                    self.filter.setValue(croppedImage, forKey: "inputImage")
+                    self.filter.setValue(redColor, forKey: "inputColor")
+                    
+                    croppedImage = self.filter.outputImage
+                    
+                    newOverlayFilter.setValue(croppedImage, forKey: "inputImage")
+                    newOverlayFilter.setValue(tmpImage, forKey: "inputBackgroundImage")
+                    
+                    tmpImage = newOverlayFilter.outputImage
+                    
+                    // Right Eye
+                    
+                    croppedImage = imageInput.imageByCroppingToRect(rightEyeRectangle)
+                    
+                    self.filter.setValue(croppedImage, forKey: "inputImage")
+                    self.filter.setValue(redColor, forKey: "inputColor")
+                    
+                    croppedImage = self.filter.outputImage
+                    
+                    newOverlayFilter.setValue(croppedImage, forKey: "inputImage")
+                    newOverlayFilter.setValue(tmpImage, forKey: "inputBackgroundImage")
+                    
+                    tmpImage = newOverlayFilter.outputImage
+                    
                 }
-                
-                applyFilterToRectangle(mouthRectangle, blueColor)
-                
-                applyFilterToRectangle(leftEyeRectangle, redColor)
-                
-                applyFilterToRectangle(rightEyeRectangle, redColor)
                 
             }
             
-            if (overlayFilter.outputImage != nil)
-            {
-                return overlayFilter.outputImage
-            }
-                
-            else
-            {
-                return imageInput;
-            }
+            return tmpImage;
+//            if (overlayFilter.outputImage != nil)
+//            {
+//                return overlayFilter.outputImage
+//            }
+//                
+//            else
+//            {
+//                return imageInput;
+//            }
             
             
         })

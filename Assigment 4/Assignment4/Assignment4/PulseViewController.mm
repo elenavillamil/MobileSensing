@@ -44,6 +44,8 @@ static const int BPM_H = 300;                       // Heart rate higher limit [
 @property double hue;
 @property NSInteger count;
 @property int ignoreFrameCount;
+@property int countFrames;
+@property int heartRate;
 
 @property NSMutableArray* unfiltered_hues;
 @property (nonatomic) float *pulseData;
@@ -72,6 +74,7 @@ RingBuffer *ringBuffer;
     self.firstTime = false;
     self.fingerDetected = false;
     self.ignoreFrameCount = 15;
+    self.countFrames = 0;
     
     self.videoCamera = [[CvVideoCameraMod alloc] initWithParentView:self.imageView];
     self.videoCamera.delegate = self;
@@ -253,7 +256,7 @@ RingBuffer *ringBuffer;
 #ifdef __cplusplus
 -(void) processImage:(Mat &)image{
     
-    // get image copy, convert colors & get averages
+
     Mat image_copy;
     cvtColor(image, image_copy, CV_BGRA2BGR);   // get rid of alpha for processing
     Scalar avg_BGR = cv::mean(image_copy);
@@ -270,6 +273,7 @@ RingBuffer *ringBuffer;
     NSLog(@" %d", blueGreen);
     if (blueGreen <= 30 && !self.fingerDetected) {
         
+
         self.fingerDetected = true;
         if(!self.torchIsOn) {
             self.torchOn = true;
@@ -293,6 +297,7 @@ RingBuffer *ringBuffer;
                 
             }
             NSLog(@"Removed");
+
         }
     }
         
@@ -303,8 +308,7 @@ RingBuffer *ringBuffer;
 
 - (void)keepRednessFactor: (Scalar) avgBGRvals
 {
-    
-    
+
 }
 
 // partially developed from MATLAB found at http://www.ignaciomellado.es/blog/Measuring-heart-rate-with-a-smartphone-camera
@@ -430,9 +434,54 @@ RingBuffer *ringBuffer;
             i = i + 1;
         }
     }
-    
+
     return count;
 }
+
+- (int)peakDetection:(double*) points count:( int) numOfPoints {
+    static int window = 16;
+    
+    int numOfPeaks = 0;
+    double* peaks = (double*)malloc(sizeof(double) * numOfPoints);
+    
+    
+    for (int index  = 0 ; index < numOfPoints; ++index) {
+        double sPoint = points[index];
+        double max = sPoint;
+        int tempMaxPostion = 0;
+        
+        for (int start = index+1; start < numOfPoints && start < window; ++start) {
+            if (max < points[start]) {
+                max = points[start];
+                tempMaxPostion = start - index;
+                
+            }
+        }
+        
+        if (tempMaxPostion == window/2 ) {
+            peaks[numOfPeaks] = index;
+            numOfPeaks++;
+        }
+    }
+    
+    int heartBeat = 0;
+    
+    for (int index = 1; index < numOfPeaks; index++) {
+        heartBeat += peaks[index] - peaks[index-1];
+    }
+    heartBeat /= numOfPeaks*2;
+    
+    return heartBeat;
+}
+
+#pragma mark Hardware - torch & camera
+
+- (IBAction)toggleTorch:(id)sender {
+    // you will need to fix the problem of video stopping when the torch is applied in this method
+    self.torchIsOn = !self.torchIsOn;
+    [self setTorchOn:self.torchIsOn];
+}
+
 
 // Smoothed data helps remove outliers that may be caused by interference, finger movement or pressure changes.
 // This will only help with small interference changes.
