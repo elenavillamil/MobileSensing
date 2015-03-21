@@ -157,6 +157,7 @@ using namespace cv;
                 self.toggleTorchButton.enabled = YES;
                 self.switchCameraButton.enabled = YES;
             });
+            
         }
         
         else

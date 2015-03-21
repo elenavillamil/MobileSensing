@@ -51,6 +51,7 @@ float currentFrequency = 30.0;
 
 @interface PulseViewController () <CvVideoCameraDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *checkPulseButton;
 @property (nonatomic) GraphHelper* graphHelper;
 @property (weak, nonatomic) IBOutlet UILabel *heartRateLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -59,6 +60,7 @@ float currentFrequency = 30.0;
 @property Scalar lastAverage;
 @property bool firstTime;
 @property bool fingerDetected;
+@property bool checkPulse;
 @property Scalar originalValue;
 @property double hue;
 @property NSInteger count;
@@ -94,6 +96,7 @@ RingBuffer *ringBuffer;
     self.fingerDetected = false;
     self.ignoreFrameCount = 15;
     self.countFrames = 0;
+    self.checkPulse = false;
     
     self.videoCamera = [[CvVideoCameraMod alloc] initWithParentView:self.imageView];
     self.videoCamera.delegate = self;
@@ -174,27 +177,7 @@ RingBuffer *ringBuffer;
     return _graphHelper;
 }
 
-//- (void)updateGraph {
-//    const size_t windowSize = 30;
-//    float* data = (float*)malloc(sizeof(float) * 300);
-//    
-//    for (int i = 1; i < 300; i++)
-//    {
-//        float x = float(i);
-//        if (x > 150) {
-//            x -= (x-150);
-//        }
-//        
-//        data[i] = x+100;
-//    }
-//    
-//    
-//    self.graphHelper->setGraphData(0, data, windowSize, 0);
-//    self.graphHelper->update();
-//    free(data);
-//    data = nil;
-//
-//}
+
 
 
 //  override the GLKView draw function, from OpenGLES
@@ -260,9 +243,15 @@ RingBuffer *ringBuffer;
     self.graphHelper->update(); // update the graph
 }
 
-
--(void)startPulseMeter
+- (IBAction)startPulseMeter:(id)sender 
 {
+    if (self.checkPulse == false) {
+        self.checkPulse = true;
+        [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
+    }
+    else {
+        self.checkPulse = false;
+    }
     
 }
 
@@ -292,25 +281,19 @@ RingBuffer *ringBuffer;
             [self setTorchOn:YES];
         });
         
-//        if(!self.torchIsOn) {
-//            self.torchIsOn = true;
-//            [self setTorchOn:YES];
-//            NSLog(@"Finger Found!!!!!!!!!!!!!");
+
     }
     
     else if (self.fingerDetected)
     {
-        if((blueGreen >60) && self.torchIsOn) {
+        if((blueGreen >60)) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.torchIsOn = false;
                 [self setTorchOn:NO];
             });
         }
     
-        if ((self.hue > 100)){
-            NSLog(@"Measuring Hue");
-            //logging data for pulse calculation
-        }
+        
         
     }
         
