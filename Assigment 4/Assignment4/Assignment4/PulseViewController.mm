@@ -138,11 +138,6 @@ RingBuffer *ringBuffer;
     self.graphHelper->tearDownGL();
     
     // FORCE TORCH OFF
-//    if(self.torchIsOn) {
-//        self.torchOn = false;
-//        [self setTorchOn:NO];
-//        
-//    }
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     [device lockForConfiguration:nil];
@@ -281,10 +276,11 @@ RingBuffer *ringBuffer;
     cvtColor(image, image_copy, CV_BGR2HSV);    // convert to HSV to get Hue
     Scalar avg_HSV= cv::mean(image_copy);
     int blueGreen = avg_BGR[1] + avg_BGR[0];
-    //NSLog(@"Red: %.1f, Green: %.1f, Blue: %.1f", avg_BGR[2], avg_BGR[1], avg_BGR[0]);
-    NSLog(@"Val: %.1f, Sat: %.1f, Hue: %.1f", avg_HSV[2], avg_HSV[1], avg_HSV[0]);
+    NSLog(@"Red: %.1f, Green: %.1f, Blue: %.1f", avg_BGR[2], avg_BGR[1], avg_BGR[0]);
+    //NSLog(@"Val: %.1f, Sat: %.1f, Hue: %.1f", avg_HSV[2], avg_HSV[1], avg_HSV[0]);
     
-    
+    if (!self.ignoreFrameCount)
+    {
     // get hue value only
     self.hue = avg_HSV.val[0];
     
@@ -302,7 +298,7 @@ RingBuffer *ringBuffer;
     {
         if ((self.hue > 100) && self.fingerDetected){
             NSLog(@"Measuring Hue");
-            
+            //logging data for pulse calculation
         }
         
         else
@@ -314,12 +310,16 @@ RingBuffer *ringBuffer;
                 
             }
             NSLog(@"Removed");
-
+            
         }
     }
         
     self.lastAverage = avg_BGR;
-
+    }
+    else
+    {
+        --self.ignoreFrameCount;
+    }
 }
 #endif
 
