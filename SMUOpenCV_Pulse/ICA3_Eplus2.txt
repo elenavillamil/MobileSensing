@@ -1,0 +1,23 @@
+Jarret Shook
+Elena Villamil
+Candie Solis
+Tyler Hargett
+
+For thought:
+
+How could you use the code to identify heart rate?
+When placing a finger over the camera, we can detect the changes in red intensity of the
+finger.  But even more noticeable are the changes in the blue values, which can be easily
+watched with the naked eye.  100 points (frames) collected at 30FPS is approximately 
+3 seconds, which would be the equivalent of two heartbeats.  Identifying the peaks of the 
+red and blue values can indicate when the heart beats.
+
+
+Could you write code that turns on the torch whenever someone places their finger 
+over the camera?
+Yes, we can make a determination of color values as we are doing, then toggle the torch
+on until the finger is removed.
+
+Each float array created was 100 points long: how many seconds of data is this?
+100 points == 100 frames, collected at 30 frames per second, equates to 3.33 seconds --
+long enough for 2 heartbeats.

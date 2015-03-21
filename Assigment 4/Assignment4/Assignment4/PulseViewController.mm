@@ -276,8 +276,8 @@ RingBuffer *ringBuffer;
     cvtColor(image, image_copy, CV_BGR2HSV);    // convert to HSV to get Hue
     Scalar avg_HSV= cv::mean(image_copy);
     int blueGreen = avg_BGR[1] + avg_BGR[0];
-    NSLog(@"Red: %.1f, Green: %.1f, Blue: %.1f", avg_BGR[2], avg_BGR[1], avg_BGR[0]);
-    //NSLog(@"Val: %.1f, Sat: %.1f, Hue: %.1f", avg_HSV[2], avg_HSV[1], avg_HSV[0]);
+    //NSLog(@"Red: %.1f, Green: %.1f, Blue: %.1f", avg_BGR[2], avg_BGR[1], avg_BGR[0]);
+    NSLog(@"Val: %.1f, Sat: %.1f, Hue: %.1f", avg_HSV[2], avg_HSV[1], avg_HSV[0]);
     
     if (!self.ignoreFrameCount)
     {
@@ -285,33 +285,33 @@ RingBuffer *ringBuffer;
     self.hue = avg_HSV.val[0];
     
     NSLog(@" %d", blueGreen);
-    if (blueGreen <= 30 && !self.fingerDetected) {
+    if (blueGreen <= 60 && !self.fingerDetected) {
         self.fingerDetected = true;
-        if(!self.torchIsOn) {
-            self.torchOn = true;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.torchIsOn = true;
             [self setTorchOn:YES];
-            NSLog(@"Finger Found!!!!!!!!!!!!!");
-         }
+        });
+        
+//        if(!self.torchIsOn) {
+//            self.torchIsOn = true;
+//            [self setTorchOn:YES];
+//            NSLog(@"Finger Found!!!!!!!!!!!!!");
     }
     
-    else //blueGreeen > 20, self.fingerDetected
+    else if (self.fingerDetected)
     {
-        if ((self.hue > 100) && self.fingerDetected){
+        if((blueGreen >60) && self.torchIsOn) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.torchIsOn = false;
+                [self setTorchOn:NO];
+            });
+        }
+    
+        if ((self.hue > 100)){
             NSLog(@"Measuring Hue");
             //logging data for pulse calculation
         }
         
-        else
-        {
-            self.fingerDetected = false;
-            if(self.torchIsOn) {
-                self.torchOn = false;
-                [self setTorchOn:NO];
-                
-            }
-            NSLog(@"Removed");
-            
-        }
     }
         
     self.lastAverage = avg_BGR;
