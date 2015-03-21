@@ -24,7 +24,7 @@ using namespace cv;
 #define FRAMES_PER_SECOND 30;
 #define FILTER_ORDER 5;
 
-#define COUNT_MAX 100
+#define COUNT_MAX 90
 #define FPS 30
 
 float currentFrequency = 30.0;
@@ -35,6 +35,7 @@ float currentFrequency = 30.0;
 // Heart rate higher limit [bpm]
 #define BPM_H 300
 
+#define WINDOW_SIZE 5
 @interface PulseViewController () <CvVideoCameraDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *checkPulseButton;
@@ -53,6 +54,7 @@ float currentFrequency = 30.0;
 @property int ignoreFrameCount;
 @property int countFrames;
 @property int heartRate;
+@property int peakCount;
 
 @property NSMutableArray* unfiltered_hues;
 @property (nonatomic) float *pulseData;
@@ -80,6 +82,7 @@ int count;
     
     self.hue = 0.0;
     self.count = 0;
+    self.peakCount = 0;
     
     self.firstTime = false;
     self.fingerDetected = false;
@@ -251,16 +254,35 @@ int count;
     {
         if (count == COUNT_MAX)
         {
-            //self.graphHelper->setGraphData(0, hueValues, COUNT_MAX);
-            //self.graphHelper->update(); // update the graph
+            self.peakCount = 0;
+            int tempPosition = 0;
+            int maxVal = 0;
             
-            //memcpy(self.pulseData, hueValues, sizeof(float) * COUNT_MAX);
+            for (int i = 0; i < COUNT_MAX; ++i)
+            {
+                for (int j = 0; j+i < COUNT_MAX && j < WINDOW_SIZE; ++j)
+                {
+                    if (maxVal < self.pulseData[i+j])
+                    {
+                        maxVal = self.pulseData[i+j];
+                        tempPosition = j;
+                    }
+                }
+                
+                if (tempPosition == WINDOW_SIZE/2)
+                {
+                    self.peakCount += 1;
+                }
+            }
             
-            //memset(pulseData, 0, sizeof(float) * COUNT_MAX);
+            int bpm = self.peakCount * 20;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.heartRateLabel.text = [NSString stringWithFormat:@"%d", bpm];
+            });
+            
             count = 0;
         }
-        
-        
         
         // get hue value only
         self.pulseData[count++] = avg_HSV.val[0];
