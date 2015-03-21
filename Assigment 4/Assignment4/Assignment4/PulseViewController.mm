@@ -276,52 +276,54 @@ RingBuffer *ringBuffer;
     cvtColor(image, image_copy, CV_BGR2HSV);    // convert to HSV to get Hue
     Scalar avg_HSV= cv::mean(image_copy);
     int blueGreen = avg_BGR[1] + avg_BGR[0];
-    NSLog(@"Red: %.1f, Green: %.1f, Blue: %.1f", avg_BGR[2], avg_BGR[1], avg_BGR[0]);
-    //NSLog(@"Val: %.1f, Sat: %.1f, Hue: %.1f", avg_HSV[2], avg_HSV[1], avg_HSV[0]);
+    //NSLog(@"Red: %.1f, Green: %.1f, Blue: %.1f", avg_BGR[2], avg_BGR[1], avg_BGR[0]);
+    NSLog(@"Val: %.1f, Sat: %.1f, Hue: %.1f", avg_HSV[2], avg_HSV[1], avg_HSV[0]);
     
     if (!self.ignoreFrameCount)
     {
-    // get hue value only
-    self.hue = avg_HSV.val[0];
-    
-    NSLog(@" %d", blueGreen);
-    if (blueGreen <= 40 && !self.fingerDetected) {
-        self.fingerDetected = true;
-        if(!self.torchIsOn) {
-            self.torchOn = true;
-            dispatch_async(dispatch_get_main_queue(),
-                           ^{
-                               [self setTorchOn:true];
-                           });
-                        NSLog(@"Finger Found!!!!!!!!!!!!!");
-         }
-    }
-    
-    else if (blueGreen <= 30)//blueGreeen > 20, self.fingerDetected
-    {
-        NSLog(@"Measuring Hue");
-
-        //if ((self.hue > 100) && self.fingerDetected){
-          //  NSLog(@"Measuring Hue");
-            //logging data for pulse calculation
-        //}
-    }
+        // get hue value only
+        self.hue = avg_HSV.val[0];
         
-    else
-    {
-        self.fingerDetected = false;
-        if(self.torchIsOn) {
-            self.torchOn = false;
-            dispatch_async(dispatch_get_main_queue(),
-            ^{
-                [self setTorchOn:false];
+        NSLog(@" %d", blueGreen);
+        if (blueGreen <= 60 && !self.fingerDetected) {
+            self.fingerDetected = true;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.torchIsOn = true;
+                [self setTorchOn:YES];
             });
+            
+    //        if(!self.torchIsOn) {
+    //            self.torchIsOn = true;
+    //            [self setTorchOn:YES];
+    //            NSLog(@"Finger Found!!!!!!!!!!!!!");
         }
-        NSLog(@"Removed");
         
-    }
+        else if (self.fingerDetected)
+        {
+            if((blueGreen >60) && self.torchIsOn) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.torchIsOn = false;
+                    [self setTorchOn:NO];
+                });
+            }
         
-    self.lastAverage = avg_BGR;
+            if ((self.hue > 100)){
+                NSLog(@"Measuring Hue");
+            }
+        }
+        else
+        {
+            self.fingerDetected = false;
+            if(self.torchIsOn) {
+                self.torchOn = false;
+                dispatch_async(dispatch_get_main_queue(),
+                ^{
+                    [self setTorchOn:false];
+                });
+            }
+            NSLog(@"Removed");
+        }
+        self.lastAverage = avg_BGR;
     }
     else
     {
