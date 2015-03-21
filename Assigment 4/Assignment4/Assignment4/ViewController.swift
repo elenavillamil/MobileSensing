@@ -193,8 +193,6 @@ class ViewController: UIViewController {
                     
                     tmpImage = newOverlayFilter.outputImage
                     
-                    NSLog(f.hasSmile ? "Yes" : "No");
-                    
                     if(f.hasSmile)
                     {
                         noirFilter.setValue(tmpImage, forKey: "inputImage")
@@ -205,6 +203,7 @@ class ViewController: UIViewController {
                     {
                         self.countLeftEye += 1
                         
+                        // To avoid getting false positives or just regular blinking.
                         if (self.countLeftEye > 2)
                         {
                             invertFilter.setValue(tmpImage, forKey: "inputImage")
@@ -221,6 +220,7 @@ class ViewController: UIViewController {
                     {
                         self.countRightEye += 1
                         
+                        // To avoid getting false positives or just regular blinking.
                         if (self.countRightEye > 2)
                         {
                             bloomFilter.setValue(2.0, forKey: "inputIntensity")
