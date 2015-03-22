@@ -24,7 +24,7 @@ using namespace cv;
 #define FRAMES_PER_SECOND 30;
 #define FILTER_ORDER 5;
 
-#define COUNT_MAX 90
+#define COUNT_MAX 300 //90
 #define FPS 30
 
 float currentFrequency = 30.0;
@@ -35,7 +35,7 @@ float currentFrequency = 30.0;
 // Heart rate higher limit [bpm]
 #define BPM_H 300
 
-#define WINDOW_SIZE 5
+#define WINDOW_SIZE 10
 @interface PulseViewController () <CvVideoCameraDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *checkPulseButton;
@@ -191,59 +191,20 @@ int count;
 
 //  override the GLKViewController update function, from OpenGLES
 - (void)update{
-//    const size_t windowSize = 30;
-//        float* data = (float*)malloc(sizeof(float) * 300);
-//    
-//        for (int i = 1; i < 300; i++)
-//        {
-//            float x = float(i);
-//            if (x > 150) {
-//                x -= (x-150);
-//            }
-//    
-//            data[i] = x+100;
-//        }
-    
-    // Plot the audio
-    //ringBuffer->FetchFreshData2(self.pulseData, ringBufferLength, 1, 1);
-    
-    // Filter
-    
-    // Take the FFT
-    // self.fftHelper->forward(0,self.audioData, self.fftMagnitudeBuffer, self.fftPhaseBuffer);
-    
-    // Get peaks from FFT data
-    //[self getPeaks];
-    
-    //[self dBmagnitude];
-    
-    // Plot the filtered
+
     self.graphHelper->setGraphData(0, self.pulseData, COUNT_MAX, sqrt(COUNT_MAX)); // set graph channel
     
     self.graphHelper->update(); // update the graph
 }
 
-- (IBAction)startPulseMeter:(id)sender
-{
-    if (self.checkPulse == false) {
-        
-        
-        self.checkPulse = true;
-        [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
-    }
-    else {
-        self.checkPulse = false;
-    }
-    
-}
+
 
 #ifdef __cplusplus
 -(void) processImage:(Mat &)image{
     Mat image_copy;
-    Mat grayFrame, output;
 
-    cvtColor(image, image_copy, CV_BGRA2BGR);   // get rid of alpha for processing
-    Scalar avg_BGR = cv::mean(image_copy);
+    //cvtColor(image, image_copy, CV_BGRA2BGR);   // get rid of alpha for processing
+    //Scalar avg_BGR = cv::mean(image_copy);
     cvtColor(image, image_copy, CV_BGR2HSV);    // convert to HSV to get Hue
     Scalar avg_HSV= cv::mean(image_copy);
     //int blueGreen = avg_BGR[1] + avg_BGR[0];
@@ -252,6 +213,13 @@ int count;
     
     if (!self.ignoreFrameCount)
     {
+        int fps = FRAMES_PER_SECOND;
+        float seconds = COUNT_MAX/fps;
+        float minutes = seconds/60;
+        
+        static float peaks[COUNT_MAX];
+        int peaksCount = 0;
+        
         if (count == COUNT_MAX)
         {
             self.peakCount = 0;
@@ -271,14 +239,27 @@ int count;
                 
                 if (tempPosition == WINDOW_SIZE/2)
                 {
+                    peaks[peaksCount++] = i;
+                    
                     self.peakCount += 1;
                 }
             }
             
-            int bpm = self.peakCount * 20;
+            int offsets = 0;
+            
+            for (int i = 0; i < self.peakCount - 1; ++i)
+            {
+                offsets += peaks[i + 1] - peaks[i];
+            }
+            
+            float averageOffset = offsets / self.peakCount;
+            
+            float bpm = (fps / averageOffset) * 60;
+            
+            //float bpm = self.peakCount / minutes;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.heartRateLabel.text = [NSString stringWithFormat:@"%d", bpm];
+                self.heartRateLabel.text = [NSString stringWithFormat:@"%.0f", bpm];
             });
             
             count = 0;
