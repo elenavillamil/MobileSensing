@@ -25,6 +25,7 @@ using namespace cv;
 #define FILTER_ORDER 5;
 
 #define COUNT_MAX 600 //90
+
 #define FPS 30
 
 float currentFrequency = 30.0;
@@ -33,7 +34,7 @@ float currentFrequency = 30.0;
 #define BPM_L 10
 
 // Heart rate higher limit [bpm]
-#define BPM_H 300
+#define BPM_H 90
 
 #define WINDOW_SIZE 3
 @interface PulseViewController () <CvVideoCameraDelegate>
