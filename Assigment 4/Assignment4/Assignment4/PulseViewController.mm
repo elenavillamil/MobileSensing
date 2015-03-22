@@ -24,7 +24,7 @@ using namespace cv;
 #define FRAMES_PER_SECOND 30;
 #define FILTER_ORDER 5;
 
-#define COUNT_MAX 300 //90
+#define COUNT_MAX 600 //90
 #define FPS 30
 
 float currentFrequency = 30.0;
@@ -35,7 +35,7 @@ float currentFrequency = 30.0;
 // Heart rate higher limit [bpm]
 #define BPM_H 300
 
-#define WINDOW_SIZE 10
+#define WINDOW_SIZE 3
 @interface PulseViewController () <CvVideoCameraDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *checkPulseButton;
@@ -228,6 +228,7 @@ int count;
             
             for (int i = 0; i < COUNT_MAX; ++i)
             {
+                
                 for (int j = 0; j+i < COUNT_MAX && j < WINDOW_SIZE; ++j)
                 {
                     if (maxVal < self.pulseData[i+j])
@@ -239,11 +240,14 @@ int count;
                 
                 if (tempPosition == WINDOW_SIZE/2)
                 {
+                    maxVal = 0;
+
                     peaks[peaksCount++] = i;
                     
                     self.peakCount += 1;
                 }
             }
+            
             
             int offsets = 0;
             
@@ -255,6 +259,9 @@ int count;
             float averageOffset = offsets / self.peakCount;
             
             float bpm = (fps / averageOffset) * 60;
+            
+            
+            //float bpm = self.peakCount * 4;
             
             //float bpm = self.peakCount / minutes;
             
