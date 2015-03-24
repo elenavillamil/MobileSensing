@@ -8,6 +8,7 @@
 //
 
 #import "ViewController.h"
+#import "AppDelegate.h"
 
 @interface ViewController ()
 
@@ -15,7 +16,6 @@
 
 @implementation ViewController
 
-// CHANGE 3: Add support for lazy instantiation (like we did in the table view controller)
 
 - (void)viewDidLoad
 {
@@ -38,6 +38,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector (OnBLEDidReceiveData:) name:@"BLEReceievedData" object:nil];
 }
 
+// CHANGE 3: Add support for lazy instantiation (like we did in the table view controller)
+-(BLE*)bleShield
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return appDelegate.bleShield;
+}
+
+
 //setup auto rotation in code
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -48,13 +56,22 @@
 NSTimer *rssiTimer;
 -(void) readRSSITimer:(NSTimer *)timer
 {
-    [bleShield readRSSI]; // be sure that the RSSI is up to date
+    [self.bleShield readRSSI]; // be sure that the RSSI is up to date
 }
 
-#pragma mark - BLEdelegate protocol methods
--(void) bleDidUpdateRSSI:(NSNumber *)rssi
+//#pragma mark - BLEdelegate protocol methods
+//-(void) bleDidUpdateRSSI:(NSNumber *)rssi
+//{
+//    self.labelRSSI.text = rssi.stringValue; // when RSSI read is complete, display it
+//}
+
+-(void) OnBLEDidUpdateRSSI:(NSNotification *)notification
 {
-    self.labelRSSI.text = rssi.stringValue; // when RSSI read is complete, display it
+    NSNumber* rssi = [[notification userInfo] objectForKey:@"RSSI"];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.labelRSSI.text = rssi.stringValue; // when RSSI read is complete, display it
+    });
 }
 
 // OLD FUNCITON: parse the received data using BLEDelegate protocol
@@ -71,14 +88,25 @@ NSTimer *rssiTimer;
 {
     NSData* d = [[notification userInfo] objectForKey:@"data"];
     NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
-    self.label.text = s;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.label.text = s;
+    });
 }
 
 // we disconnected, stop running
-- (void) bleDidDisconnect
+//- (void) bleDidDisconnect
+//{
+//    //CHANGE 5.b: remove all instances of the button at top
+//    [self.buttonConnect setTitle:@"Connect" forState:UIControlStateNormal];
+//    
+//    [rssiTimer invalidate];
+//}
+
+// we disconnected, stop running
+- (void) OnBLEDidDisconnect:(NSNotification *)notification
 {
     //CHANGE 5.b: remove all instances of the button at top
-    [self.buttonConnect setTitle:@"Connect" forState:UIControlStateNormal];
     
     [rssiTimer invalidate];
 }
@@ -88,17 +116,29 @@ NSTimer *rssiTimer;
 // you might be interested in the following method:
 // NSString *deviceName =[notification.userInfo objectForKey:@"deviceName"];
 // now just wait to send or receive
--(void) bleDidConnect
+//-(void) bleDidConnect
+//{
+//    //CHANGE 5.a: Remove all usage of the connect button and remove from storyboard
+//    [self.spinner stopAnimating];
+//    [self.buttonConnect setTitle:@"Disconnect" forState:UIControlStateNormal];
+//    
+//    // Schedule to read RSSI every 1 sec.
+//    rssiTimer = [NSTimer scheduledTimerWithTimeInterval:(float)1.0 target:self selector:@selector(readRSSITimer:) userInfo:nil repeats:YES];
+//}
+
+-(void) OnBLEDidConnect:(NSNotification *)notification
 {
     //CHANGE 5.a: Remove all usage of the connect button and remove from storyboard
-    [self.spinner stopAnimating];
-    [self.buttonConnect setTitle:@"Disconnect" forState:UIControlStateNormal];
+    //[self.spinner stopAnimating];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.labelPeripheralName.text = [[notification userInfo] objectForKey:@"deviceName"];
+    });
+    
     
     // Schedule to read RSSI every 1 sec.
     rssiTimer = [NSTimer scheduledTimerWithTimeInterval:(float)1.0 target:self selector:@selector(readRSSITimer:) userInfo:nil repeats:YES];
 }
-
-
 
 #pragma mark - UI operations storyboard
 - (IBAction)BLEShieldSend:(id)sender
@@ -116,7 +156,7 @@ NSTimer *rssiTimer;
     s = [NSString stringWithFormat:@"%@\r\n", s];
     d = [s dataUsingEncoding:NSUTF8StringEncoding];
     
-    [bleShield write:d];
+    [self.bleShield write:d];
 }
 
 
