@@ -263,7 +263,8 @@ public:
         graphs[arrayNum].graphSize = dataLength;
         
         normalization *= (bounds->height/2.0);
-        addToPlot *= (bounds->height/2.0);
+        //addToPlot *= (bounds->height/2.0);
+        addToPlot *= (bounds->height);
         for(int i = 0; i < dataLength; i++) {
             float x = (((float)i) - lengthOverTwo) * xnormalizer;
             graphs[arrayNum].points[i].x = x + bounds->center;
