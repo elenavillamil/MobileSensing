@@ -7,9 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BLE.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, BLEDelegate>
+{
+    BLE* m_ble_endpoint;
+}
 
+@property (weak, nonatomic) IBOutlet UIPickerView *timesPicker;
+@property (weak, nonatomic) IBOutlet UISlider *brightnessSlider;
+@property (weak, nonatomic) IBOutlet UISlider *loudnessSlider;
+@property (weak, nonatomic) IBOutlet UILabel *brightnessLabel;
+@property (weak, nonatomic) IBOutlet UILabel *loudnessLabel;
 
 @end
 

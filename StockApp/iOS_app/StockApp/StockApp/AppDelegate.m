@@ -22,7 +22,7 @@
     // Override point for customization after application launch.
     
     User* user;
-    
+    /*
     // Try to log in to the database
     if ([[BackendApi signIn:[user getUsername] withPassword:[user getPassword]] isEqualToString:@""])
     {
@@ -32,7 +32,7 @@
         
         self.window.rootViewController = loginViewController;
     }
-    
+    */
     return YES;
 }
 

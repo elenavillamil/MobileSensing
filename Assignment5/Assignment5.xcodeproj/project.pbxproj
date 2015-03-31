@@ -14,6 +14,7 @@
 		F36FDD621AC705DC003DE14E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F36FDD611AC705DC003DE14E /* Images.xcassets */; };
 		F36FDD651AC705DC003DE14E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F36FDD631AC705DC003DE14E /* LaunchScreen.xib */; };
 		F36FDD711AC705DC003DE14E /* Assignment5Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = F36FDD701AC705DC003DE14E /* Assignment5Tests.m */; };
+		F36FDD7E1ACA2B29003DE14E /* BLE.m in Sources */ = {isa = PBXBuildFile; fileRef = F36FDD7C1ACA2B29003DE14E /* BLE.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,9 @@
 		F36FDD6A1AC705DC003DE14E /* Assignment5Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Assignment5Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F36FDD6F1AC705DC003DE14E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F36FDD701AC705DC003DE14E /* Assignment5Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Assignment5Tests.m; sourceTree = "<group>"; };
+		F36FDD7B1ACA2B29003DE14E /* BLE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLE.h; sourceTree = "<group>"; };
+		F36FDD7C1ACA2B29003DE14E /* BLE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLE.m; sourceTree = "<group>"; };
+		F36FDD7D1ACA2B29003DE14E /* BLEDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDefines.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,7 @@
 				F36FDD531AC705DC003DE14E /* Assignment5 */,
 				F36FDD6D1AC705DC003DE14E /* Assignment5Tests */,
 				F36FDD521AC705DC003DE14E /* Products */,
+				F36FDD7A1ACA2B29003DE14E /* BLE */,
 			);
 			sourceTree = "<group>";
 		};
@@ -117,6 +122,16 @@
 				F36FDD6F1AC705DC003DE14E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F36FDD7A1ACA2B29003DE14E /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				F36FDD7B1ACA2B29003DE14E /* BLE.h */,
+				F36FDD7C1ACA2B29003DE14E /* BLE.m */,
+				F36FDD7D1ACA2B29003DE14E /* BLEDefines.h */,
+			);
+			path = BLE;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,6 +237,7 @@
 				F36FDD5D1AC705DC003DE14E /* ViewController.m in Sources */,
 				F36FDD5A1AC705DC003DE14E /* AppDelegate.m in Sources */,
 				F36FDD571AC705DC003DE14E /* main.m in Sources */,
+				F36FDD7E1ACA2B29003DE14E /* BLE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
