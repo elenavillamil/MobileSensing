@@ -40,12 +40,40 @@
 - (void) bleDidReceiveData:(unsigned char *)data length:(int)length
 {
     NSData* inputData = [NSData dataWithBytes:data length:length];
-    NSString* parsedStr = [[NSString alloc] initWithData:inputData encoding:NSUTF8StringEncoding];
     
+    unsigned char dataBuffer[2] = { 0 };
+    
+    [inputData getBytes:dataBuffer length:sizeof(char) * 2];
+    
+    unsigned char protocolStatement = dataBuffer[0];
+    int dataPassed = dataBuffer[1];
+    
+    if (protocolStatement == 0)
+    {
+        // Light intensity
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.loudnessSlider.value = dataPassed;
+            
+            self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", dataPassed];
+        });
+    }
+    
+    else if (protocolStatement == 1)
+    {
+        // Buzzer intensity
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.loudnessSlider.value = dataPassed;
+            
+            self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", dataPassed];
+        });
+    }
+    
+    // 2 - 255 are unused.
     
 }
 
-// Connecting to BRC (basketball robot controler) bluetooth.
 - (void) bleConnect:(id) param
 {
     //self._status.text = @"Connecting...";
@@ -78,12 +106,12 @@
 }
 - (IBAction)brightnessChangeInside:(id)sender {
     // Updating label
-    char currentValue = (char)self.brightnessSlider.value;
+    unsigned char currentValue = (char)self.brightnessSlider.value;
     self.brightnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
     // TODO -> Proper Protocol when creating the data to send
     
-    char protocolBuffer[2] = { 0, currentValue };
+    unsigned char protocolBuffer[2] = { 0, currentValue };
     NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
     
     // Sending the new slider value to the Arduino
@@ -92,12 +120,12 @@
 
 - (IBAction)brightnessChangeOutside:(id)sender {
     // Updating label
-    char currentValue = (char)self.brightnessSlider.value;
+    unsigned char currentValue = (char)self.brightnessSlider.value;
     self.brightnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
     // TODO -> Proper Protocol when creating the data to send
     
-    char protocolBuffer[2] = { 0, currentValue };
+    unsigned char protocolBuffer[2] = { 0, currentValue };
     NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
     
     // Sending the new slider value to the Arduino
@@ -107,12 +135,12 @@
 
 - (IBAction)loudnessChangeInside:(id)sender {
     // Updating label
-    char currentValue = (char)self.loudnessSlider.value;
+    unsigned char currentValue = (char)self.loudnessSlider.value;
     self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
     // TODO -> Proper Protocol when creating the data to send
     
-    char protocolBuffer[2] = { 1, currentValue };
+    unsigned char protocolBuffer[2] = { 1, currentValue };
     
     NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
     // Sending the new slider value to the Arduino
@@ -121,12 +149,12 @@
 
 - (IBAction)loudnessChangeOutside:(id)sender {
     // Updating label
-    char currentValue = (char)self.loudnessSlider.value;
+    unsigned char currentValue = (char)self.loudnessSlider.value;
     self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
     // TODO -> Proper Protocol when creating the data to send
     
-    char protocolBuffer[2] = { 1, currentValue };
+    unsigned char protocolBuffer[2] = { 1, currentValue };
     
     NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
     // Sending the new slider value to the Arduino
@@ -147,15 +175,18 @@
 {
     return self.timesForPicker[row];
 }
+
 - (IBAction)onSetTimeClicked:(id)sender {
     NSString* selected = [self.timesForPicker objectAtIndex:[self.timesPicker selectedRowInComponent:0]];
-    char currentValue = (char)selected.intValue;
+    unsigned char currentValue = (char)selected.intValue;
+    
+    unsigned char dataBuffer[2] = { 4, currentValue };
     
     // TODO -> Proper Protocol when creating the data to send
-    //Getting the height in a byte so it can be send
-    NSData* dataToSend = [NSData dataWithBytes:&currentValue length: sizeof(char)];
+    // Getting the height in a byte so it can be send
+    NSData* dataToSend = [NSData dataWithBytes:&dataBuffer length: sizeof(char) * 2];
     
-    //Sending the new slider value to the Arduino
+    // Sending the new slider value to the Arduino
     [bleEndpoint write:dataToSend];
 }
 
