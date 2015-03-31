@@ -22,8 +22,8 @@
     self.timesForPicker = @[@"5", @"10", @"15", @"20", @"25", @"30", @"35", @"40", @"45", @"50", @"55", @"60"];
     
     // Initializing the bluetooth.
-    m_ble_endpoint = [[BLE alloc] init];
-    [m_ble_endpoint controlSetup];
+    bleEndpoint = [[BLE alloc] init];
+    [bleEndpoint controlSetup];
 }
 
 -(void) bleDidConnect
@@ -39,8 +39,8 @@
 // Receiving and proccessing the Data
 - (void) bleDidReceiveData:(unsigned char *)data length:(int)length
 {
-    NSData* input_data = [NSData dataWithBytes:data length:length];
-    NSString* parsed_str = [[NSString alloc] initWithData:input_data encoding:NSUTF8StringEncoding];
+    NSData* inputData = [NSData dataWithBytes:data length:length];
+    NSString* parsedStr = [[NSString alloc] initWithData:inputData encoding:NSUTF8StringEncoding];
     
     
 }
@@ -54,23 +54,23 @@
     
     //start search for peripherals with a timeout of 3 seconds
     // this is an asunchronous call and will return before search is complete
-    [m_ble_endpoint findBLEPeripherals:3];
+    [bleEndpoint findBLEPeripherals:3];
     
     // Sleep the three seconds
     [NSThread sleepForTimeInterval:3.0f];
     
-    if(m_ble_endpoint.peripherals.count > 0)
+    if(bleEndpoint.peripherals.count > 0)
     {
         // connect to the first found peripheral
         
-        for(int i = 0; i < m_ble_endpoint.peripherals.count; ++i)
+        for(int i = 0; i < bleEndpoint.peripherals.count; ++i)
         {
-            CBPeripheral* peripheral = [m_ble_endpoint.peripherals objectAtIndex:i];
+            CBPeripheral* peripheral = [bleEndpoint.peripherals objectAtIndex:i];
             
             // TODO -> Bluetooth name?
             if ([peripheral.name isEqualToString:@"TeamE+2"])
             {
-                [m_ble_endpoint connectPeripheral:[m_ble_endpoint.peripherals objectAtIndex:i]];
+                [bleEndpoint connectPeripheral:[bleEndpoint.peripherals objectAtIndex:i]];
             }
         }
         
@@ -78,51 +78,59 @@
 }
 - (IBAction)brightnessChangeInside:(id)sender {
     // Updating label
-    int current_value = self.brightnessSlider.value;
-    self.brightnessLabel.text = [[NSString alloc] initWithFormat:@"%d", current_value];
+    char currentValue = (char)self.brightnessSlider.value;
+    self.brightnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
     // TODO -> Proper Protocol when creating the data to send
-
-    NSData* data_to_send = [NSData dataWithBytes:&current_value length: 1];
-    //Sending the new slider value to the Arduino
-    [m_ble_endpoint write:data_to_send];
+    
+    char protocolBuffer[2] = { 0, currentValue };
+    NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
+    
+    // Sending the new slider value to the Arduino
+    [bleEndpoint write:dataToSend];
 }
 
 - (IBAction)brightnessChangeOutside:(id)sender {
     // Updating label
-    int current_value = self.brightnessSlider.value;
-    self.brightnessLabel.text = [[NSString alloc] initWithFormat:@"%d", current_value];
+    char currentValue = (char)self.brightnessSlider.value;
+    self.brightnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
     // TODO -> Proper Protocol when creating the data to send
-
-    NSData* data_to_send = [NSData dataWithBytes:&current_value length: 1];
-    //Sending the new slider value to the Arduino
-    [m_ble_endpoint write:data_to_send];
+    
+    char protocolBuffer[2] = { 0, currentValue };
+    NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
+    
+    // Sending the new slider value to the Arduino
+    [bleEndpoint write:dataToSend];
     
 }
 
 - (IBAction)loudnessChangeInside:(id)sender {
     // Updating label
-    int current_value = self.loudnessSlider.value;
-    self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", current_value];
+    char currentValue = (char)self.loudnessSlider.value;
+    self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
     // TODO -> Proper Protocol when creating the data to send
     
-    NSData* data_to_send = [NSData dataWithBytes:&current_value length: 1];
-    //Sending the new slider value to the Arduino
-    [m_ble_endpoint write:data_to_send];
+    char protocolBuffer[2] = { 1, currentValue };
+    
+    NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
+    // Sending the new slider value to the Arduino
+    [bleEndpoint write:dataToSend];
 }
 
 - (IBAction)loudnessChangeOutside:(id)sender {
     // Updating label
-    int current_value = self.loudnessSlider.value;
-    self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", current_value];
+    char currentValue = (char)self.loudnessSlider.value;
+    self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
     // TODO -> Proper Protocol when creating the data to send
-
-    NSData* data_to_send = [NSData dataWithBytes:&current_value length: 1];
-    //Sending the new slider value to the Arduino
-    [m_ble_endpoint write:data_to_send];
+    
+    char protocolBuffer[2] = { 1, currentValue };
+    
+    NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
+    // Sending the new slider value to the Arduino
+    [bleEndpoint write:dataToSend];
 }
 
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -141,14 +149,14 @@
 }
 - (IBAction)onSetTimeClicked:(id)sender {
     NSString* selected = [self.timesForPicker objectAtIndex:[self.timesPicker selectedRowInComponent:0]];
-    int current_value = selected.intValue;
+    char currentValue = (char)selected.intValue;
     
     // TODO -> Proper Protocol when creating the data to send
     //Getting the height in a byte so it can be send
-    NSData* data_to_send = [NSData dataWithBytes:&current_value length: 1];
+    NSData* dataToSend = [NSData dataWithBytes:&currentValue length: sizeof(char)];
     
     //Sending the new slider value to the Arduino
-    [m_ble_endpoint write:data_to_send];
+    [bleEndpoint write:dataToSend];
 }
 
 

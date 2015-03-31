@@ -11,7 +11,7 @@
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, BLEDelegate>
 {
-    BLE* m_ble_endpoint;
+    BLE* bleEndpoint;
 }
 
 @property (weak, nonatomic) IBOutlet UIPickerView *timesPicker;
