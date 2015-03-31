@@ -16,49 +16,28 @@
 
 using namespace cv;
 
-#define sampleRate 30          //Default # samples / second, this value WILL NOT be used for the actual sampling rate
-#define ringBufferLength 450   //Length of the ring buffer being used for video data, 15 seconds
-#define N 10 //The number of images which construct a time series for each pixel
 #define PI 3.14159
 #define graphWidth 450.0           //Width (in Hz) of the section of the graph that is displayed
-#define FRAMES_PER_SECOND 30;
-#define FILTER_ORDER 5;
+#define FRAMES_PER_SECOND 30
 
-#define COUNT_MAX 300
+#define BUFFERED_FRAMES 300
+#define WINDOW_SIZE 17
 
-#define FPS 30
+// TIME INTERVALS
+int fps = FRAMES_PER_SECOND;        // some math functions will not work with FRAMES_PER_SECOND in the denominator
+float seconds = BUFFERED_FRAMES/fps;
+float minutes = seconds/60;
 
-float currentFrequency = 30.0;
-
-// Heart rate lower limit [bpm]
-#define BPM_L 10
-
-// Heart rate higher limit [bpm]
-#define BPM_H 90
-
-#define WINDOW_SIZE 7
 @interface PulseViewController () <CvVideoCameraDelegate>
-
-@property (weak, nonatomic) IBOutlet UIButton *checkPulseButton;
 @property (nonatomic) GraphHelper* graphHelper;
 @property (weak, nonatomic) IBOutlet UILabel *heartRateLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) CvVideoCameraMod *videoCamera;
 @property (nonatomic) BOOL torchIsOn;
-@property Scalar lastAverage;
-@property bool firstTime;
+
 @property bool fingerDetected;
-@property bool checkPulse;
-@property Scalar originalValue;
-@property double hue;
-@property NSInteger count;
-@property int ignoreFrameCount;
-@property int countFrames;
-@property int heartRate;
 @property int peakCount;
 
-@property NSMutableArray* unfiltered_hues;
-@property (nonatomic) float *pulseData;
 
 @end
 
@@ -68,28 +47,24 @@ float currentFrequency = 30.0;
 //If this was declared as a property, the block using it would retain a strong
 //reference to it and the memory would never be deallocated
 //RingBuffer *ringBuffer;
-
-float hueValues[COUNT_MAX];
-int count;
+float hueValues[BUFFERED_FRAMES];
+float pulseData[BUFFERED_FRAMES];
+float filteredHueValues[BUFFERED_FRAMES];
+int frameCount;
+int ignoreFrameCount = 60;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // Zero out our buffer.
-    memset(hueValues, 0, COUNT_MAX * sizeof(float));
-    count = 0;
+    memset(hueValues, 0, BUFFERED_FRAMES * sizeof(float));
+    frameCount = 0;
     
-    self.graphHelper->SetBounds(-0.9, 0.9, -0.9, 0.9);
+    self.graphHelper->SetBounds(-0.5, 0.5, -0.9, 0.9);
     
-    self.hue = 0.0;
-    self.count = 0;
     self.peakCount = 0;
     
-    self.firstTime = false;
     self.fingerDetected = false;
-    self.ignoreFrameCount = 60;  // ignore first two seconds of data to give them 2 seconds to place this finger
-    self.countFrames = 0;
-    self.checkPulse = false;
     
     self.videoCamera = [[CvVideoCameraMod alloc] initWithParentView:self.imageView];
     self.videoCamera.delegate = self;
@@ -108,13 +83,10 @@ int count;
     
     [self setTorchIsOn:NO];
 
-    //[NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateGraph) userInfo:nil repeats:YES];
-
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
@@ -128,25 +100,27 @@ int count;
 
 -(void)dealloc {
     // Graph
-    self.graphHelper->tearDownGL();
-    delete self.graphHelper;
-    self.graphHelper = nil;
+    //delete self.graphHelper;
 }
 
 
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    self.graphHelper->tearDownGL();
     
-    memset(hueValues, 0, COUNT_MAX * sizeof(float));
+    memset(hueValues, 0, BUFFERED_FRAMES * sizeof(float));
     
     // FORCE TORCH OFF
-    
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     [device lockForConfiguration:nil];
     [device setTorchMode:AVCaptureTorchModeOff];
     [device unlockForConfiguration];
     
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.graphHelper->tearDownGL();
+    delete self.graphHelper;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -158,19 +132,17 @@ int count;
 - (GraphHelper*) graphHelper
 {
     // start animating the graph
-    const static int framesPerSecond = 30;
     const static int numDataArraysToGraph = 1;
     
     if (!_graphHelper)
     {
         _graphHelper = new GraphHelper(self,
-                                       framesPerSecond,
+                                       fps,
                                        numDataArraysToGraph,
                                        PlotStyleSeparated); // Drawing starts immediately after call
         
-        _graphHelper->SetBounds(-0.9,0.9,-0.9,0.9);
+        _graphHelper->SetBounds(-0.7,0.7,-0.9,0.9);
     }
-    
     return _graphHelper;
 }
 
@@ -182,18 +154,9 @@ int count;
 
 #pragma mark - Imaging
 
-
--(float*)pulseData {
-    if(!_pulseData)
-        _pulseData = (float*)calloc(COUNT_MAX, sizeof(float));
-    
-    return _pulseData;
-}
-
-//  override the GLKViewController update function, from OpenGLES
 - (void)update{
 
-    self.graphHelper->setGraphData(0, self.pulseData, COUNT_MAX, sqrt(COUNT_MAX)); // set graph channel
+    self.graphHelper->setGraphData(0, pulseData, BUFFERED_FRAMES, sqrt(BUFFERED_FRAMES)); // set graph channel
     
     self.graphHelper->update(); // update the graph
 }
@@ -204,7 +167,7 @@ int count;
 -(void) processImage:(Mat &)image{
     Mat image_copy;
 
-    //cvtColor(image, image_copy, CV_BGRA2BGR);   // get rid of alpha for processing
+    cvtColor(image, image_copy, CV_BGRA2BGR);   // get rid of alpha for processing
     //Scalar avg_BGR = cv::mean(image_copy);
     cvtColor(image, image_copy, CV_BGR2HSV);    // convert to HSV to get Hue
     Scalar avg_HSV= cv::mean(image_copy);
@@ -212,107 +175,34 @@ int count;
     //NSLog(@"Red: %.1f, Green: %.1f, Blue: %.1f", avg_BGR[2], avg_BGR[1], avg_BGR[0]);
     NSLog(@"Val: %.1f, Sat: %.1f, Hue: %.1f", avg_HSV[2], avg_HSV[1], avg_HSV[0]);
     
-    if (!self.ignoreFrameCount)
+    if (!ignoreFrameCount)
     {
-        int fps = FRAMES_PER_SECOND;
-        float seconds = COUNT_MAX/fps;
-        float minutes = seconds/60;
         
-        static float peaks[COUNT_MAX];
-        int peaksCount = 0;
-        
-        if (count == COUNT_MAX)
+        if (frameCount == BUFFERED_FRAMES)
         {
-            self.peakCount = 0;
-            int tempPosition = 0;
-            int maxVal = 0;
-            
-            for (int i = 0; i < COUNT_MAX; ++i)
-            {
-                
-                for (int j = 0; j+i < COUNT_MAX && j < WINDOW_SIZE; ++j)
-                {
-                    if (maxVal < self.pulseData[i+j])
-                    {
-                        maxVal = self.pulseData[i+j];
-                        tempPosition = j;
-                    }
-                }
-                
-                if (tempPosition == (WINDOW_SIZE/2) -1)
-                {
-
-                    peaks[peaksCount++] = i;
-                    
-                    self.peakCount += 1;
-                }
-                maxVal = 0;
-
-            }
-            
-            
-            int offsets = 0;
-            
-            for (int i = 0; i < self.peakCount - 1; ++i)
-            {
-                offsets += peaks[i + 1] - peaks[i];
-            }
-            
-            float averageOffset = offsets / self.peakCount;
-            
-            float bpm = (fps / averageOffset) * 60;
-            
-            
-            //float bpm = self.peakCount *2;
-            
-            //float bpm = self.peakCount / minutes;
+            // puts filtered hue values through a median smoother and counts the peaks
+            self.peakCount = [self getPeakCount];
+            float heart_bpm = self.peakCount / minutes;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.heartRateLabel.text = [NSString stringWithFormat:@"%.0f", bpm];
+                self.heartRateLabel.text = [NSString stringWithFormat:@"%.0f", heart_bpm];
             });
-            
-            count = 0;
+            self.peakCount = 0;
+            frameCount = 0;
         }
         
-        // get hue value only
-        self.pulseData[count++] = avg_HSV.val[0];
+        // store filtered hue value
+        pulseData[frameCount++] = [self butterworth:avg_HSV.val[0]];
     }
-    
     else
     {
-        --self.ignoreFrameCount;
+        --ignoreFrameCount;
     }
 }
-
 #endif
-
-- (void)keepRednessFactor: (Scalar) avgBGRvals
-{
-    
-}
-
-// partially developed from MATLAB found at http://www.ignaciomellado.es/blog/Measuring-heart-rate-with-a-smartphone-camera
-- (void)butterworthFilter
-{
-//    static const int BPM_L = 40;                        // Heart rate lower limit [bpm]
-//    static const int BPM_H = 230;                       // Heart rate higher limit [bpm]
-    //static const int FILTER_STABILIZATION_TIME = 1;     // [seconds]
-    
-    //double scaleFactor = [self sf_bwbp :2 :BPM_L/60.0 :BPM_H/60.0];  // divide by 60 to convert to seconds
-    // Butterworth frequencies must be in [0, 1], where 1 corresponds to half the sampling rate
-   // double cornerLow = (BPM_L/60.0)*scaleFactor;
-    //double cornerHigh = (BPM_H/60.0)*scaleFactor;
-   
-    //time series of 5
-    double y[5];
-    double x[5]={1,2,3,4,5};
- //   [self filter :FILTER_ORDER :DenC :NumC :5 :x :y];
-    
-}
 
 
 #pragma mark Hardware - torch & camera
-
 
 //http://sugartin.info/2012/03/13/switching-the-flash-light-on-and-off/
 
@@ -326,19 +216,63 @@ int count;
         [device setTorchMode: onOff ? AVCaptureTorchModeOn : AVCaptureTorchModeOff];
         [device unlockForConfiguration];
     }
-    
 }
 
-- (void)setTorchOff: (BOOL) onOff
-{
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    [device lockForConfiguration:nil];
-    [device setTorchMode:AVCaptureTorchModeOff];
-    [device unlockForConfiguration];
-    
+
+- (IBAction)toggleTorch:(id)sender {
+    // you will need to fix the problem of video stopping when the torch is applied in this method
+    self.torchIsOn = !self.torchIsOn;
+    [self setTorchOn:self.torchIsOn];
 }
 
 #pragma mark - Data processing
+
+/* 
+    4th order Butterworth Bandpass filter 
+    a blend of an implementation found here
+    http://stackoverflow.com/questions/664877/i-need-to-implement-a-butterworth-filter-in-c-is-it-easier-get-a-library-with-t, 
+    and one found here https://github.com/lehn0058/ATHeartRate, which is a model file of an app called ATHeartRate.
+    sample rate - varies between possible camera frequencies. Either 30, 60, 120, or 240 FPS
+    corner1 freq. = 0.667 Hz (assuming a minimum heart rate of 40 bpm, 40 beats/60 seconds = 0.667 Hz)
+    corner2 freq. = 4.167 Hz (assuming a maximum heart rate of 250 bpm, 250 beats/60 secods = 4.167 Hz)
+    Research shows that the bandpass Butterworth (4th order) is a good filter to use to eliminate higher and lower frequency noise from our "signal"
+    This website http://www-users.cs.york.ac.uk/~fisher/cgi-bin/mkfscript was used to generate MatLab code that provided the coefficents for this filter, as well as the gain value.
+ */
+
+-(float)butterworth: (float) input
+{
+    const int NZEROS = 8;
+    const int NPOLES = 8;
+    static float xv[NZEROS+1], yv[NPOLES+1];
+    float dGain = 1.232232910e+02;
+    
+    xv[0] = xv[1];
+    xv[1] = xv[2];
+    xv[2] = xv[3];
+    xv[3] = xv[4];
+    xv[4] = xv[5];
+    xv[5] = xv[6];
+    xv[6] = xv[7];
+    xv[7] = xv[8];
+    xv[8] = input / dGain;
+    
+    yv[0] = yv[1];
+    yv[1] = yv[2];
+    yv[2] = yv[3];
+    yv[3] = yv[4];
+    yv[4] = yv[5];
+    yv[5] = yv[6];
+    yv[6] = yv[7];
+    yv[7] = yv[8];
+    yv[8] =   (xv[0] + xv[8]) - 4 * (xv[2] + xv[6]) + 6 * xv[4]
+            + ( -0.1397436053 * yv[0]) + (  1.2948188815 * yv[1])
+            + ( -5.4070037946 * yv[2]) + ( 13.2683981280 * yv[3])
+            + (-20.9442560520 * yv[4]) + ( 21.7932169160 * yv[5])
+            + (-14.5817197500 * yv[6]) + (  5.7161939252 * yv[7]);
+    
+    return (yv[8]);
+}
+
 
 //  Following Code adapted from...
 //  HeartRateDetection.m
@@ -348,48 +282,20 @@ int count;
 //  Copyright (c) 2015 Brandon Lehner. All rights reserved.
 //
 
-- (NSArray *)butterworthBandpassFilter:(NSArray *)inputData
-{
-    const int NZEROS = 8;
-    const int NPOLES = 8;
-    static float xv[NZEROS+1], yv[NPOLES+1];
-    
-    // http://www-users.cs.york.ac.uk/~fisher/cgi-bin/mkfscript
-    // Butterworth Bandpass filter
-    // 4th order
-    // sample rate - varies between possible camera frequencies. Either 30, 60, 120, or 240 FPS
-    // corner1 freq. = 0.667 Hz (assuming a minimum heart rate of 40 bpm, 40 beats/60 seconds = 0.667 Hz)
-    // corner2 freq. = 4.167 Hz (assuming a maximum heart rate of 250 bpm, 250 beats/60 secods = 4.167 Hz)
-    // Bandpass filter was chosen because it removes frequency noise outside of our target range (both higher and lower)
-    double dGain = 1.232232910e+02;
-    
-    NSMutableArray *outputData = [[NSMutableArray alloc] init];
-    for (NSNumber *number in inputData)
-    {
-        double input = number.doubleValue;
-        
-        xv[0] = xv[1]; xv[1] = xv[2]; xv[2] = xv[3]; xv[3] = xv[4]; xv[4] = xv[5]; xv[5] = xv[6]; xv[6] = xv[7]; xv[7] = xv[8];
-        xv[8] = input / dGain;
-        yv[0] = yv[1]; yv[1] = yv[2]; yv[2] = yv[3]; yv[3] = yv[4]; yv[4] = yv[5]; yv[5] = yv[6]; yv[6] = yv[7]; yv[7] = yv[8];
-        yv[8] =   (xv[0] + xv[8]) - 4 * (xv[2] + xv[6]) + 6 * xv[4]
-        + ( -0.1397436053 * yv[0]) + (  1.2948188815 * yv[1])
-        + ( -5.4070037946 * yv[2]) + ( 13.2683981280 * yv[3])
-        + (-20.9442560520 * yv[4]) + ( 21.7932169160 * yv[5])
-        + (-14.5817197500 * yv[6]) + (  5.7161939252 * yv[7]);
-        
-        [outputData addObject:@(yv[8])];
-    }
-    
-    return outputData;
-}
-
-
 // Find the peaks in our data - these are the heart beats.
 // At a 30 Hz detection rate, assuming 250 max beats per minute, a peak can't be closer than 7 data points apart.
-- (int)peakCount:(NSArray *)inputData
+- (int)getPeakCount
 {
+    NSMutableArray *butteredPulse = [[NSMutableArray alloc] init];
+    
+    for(int i = 0; i < BUFFERED_FRAMES; i++){
+        [butteredPulse insertObject:[NSNumber numberWithFloat:pulseData[i]] atIndex:i];
+    }
+    
+    NSArray *inputData = [self medianSmoothing:butteredPulse];
+    
     if (inputData.count == 0)
-    {
+        {
         return 0;
     }
     
@@ -417,51 +323,6 @@ int count;
 
     return count;
 }
-
-- (int)peakDetection:(double*) points count:( int) numOfPoints {
-    static int window = 16;
-    
-    int numOfPeaks = 0;
-    double* peaks = (double*)malloc(sizeof(double) * numOfPoints);
-    
-    
-    for (int index  = 0 ; index < numOfPoints; ++index) {
-        double sPoint = points[index];
-        double max = sPoint;
-        int tempMaxPostion = 0;
-        
-        for (int start = index+1; start < numOfPoints && start < window; ++start) {
-            if (max < points[start]) {
-                max = points[start];
-                tempMaxPostion = start - index;
-                
-            }
-        }
-        
-        if (tempMaxPostion == window/2 ) {
-            peaks[numOfPeaks] = index;
-            numOfPeaks++;
-        }
-    }
-    
-    int heartBeat = 0;
-    
-    for (int index = 1; index < numOfPeaks; index++) {
-        heartBeat += peaks[index] - peaks[index-1];
-    }
-    heartBeat /= numOfPeaks*2;
-    
-    return heartBeat;
-}
-
-#pragma mark Hardware - torch & camera
-
-- (IBAction)toggleTorch:(id)sender {
-    // you will need to fix the problem of video stopping when the torch is applied in this method
-    self.torchIsOn = !self.torchIsOn;
-    [self setTorchOn:self.torchIsOn];
-}
-
 
 // Smoothed data helps remove outliers that may be caused by interference, finger movement or pressure changes.
 // This will only help with small interference changes.
@@ -498,6 +359,7 @@ int count;
     
     return newData;
 }
+
 
 /*
 #pragma mark - Navigation

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F39B5E661AB872840001C13A"
-               BuildableName = "Assignment4.app"
-               BlueprintName = "Assignment4"
-               ReferencedContainer = "container:Assignment4.xcodeproj">
+               BlueprintIdentifier = "B623740E1AA0CD4F008CC135"
+               BuildableName = "SMUOpenCV.app"
+               BlueprintName = "SMUOpenCV"
+               ReferencedContainer = "container:SMUOpenCV.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F39B5E7B1AB872840001C13A"
-               BuildableName = "Assignment4Tests.xctest"
-               BlueprintName = "Assignment4Tests"
-               ReferencedContainer = "container:Assignment4.xcodeproj">
+               BlueprintIdentifier = "B62374271AA0CD4F008CC135"
+               BuildableName = "SMUOpenCVTests.xctest"
+               BlueprintName = "SMUOpenCVTests"
+               ReferencedContainer = "container:SMUOpenCV.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,20 +46,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F39B5E7B1AB872840001C13A"
-               BuildableName = "Assignment4Tests.xctest"
-               BlueprintName = "Assignment4Tests"
-               ReferencedContainer = "container:Assignment4.xcodeproj">
+               BlueprintIdentifier = "B62374271AA0CD4F008CC135"
+               BuildableName = "SMUOpenCVTests.xctest"
+               BlueprintName = "SMUOpenCVTests"
+               ReferencedContainer = "container:SMUOpenCV.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F39B5E661AB872840001C13A"
-            BuildableName = "Assignment4.app"
-            BlueprintName = "Assignment4"
-            ReferencedContainer = "container:Assignment4.xcodeproj">
+            BlueprintIdentifier = "B623740E1AA0CD4F008CC135"
+            BuildableName = "SMUOpenCV.app"
+            BlueprintName = "SMUOpenCV"
+            ReferencedContainer = "container:SMUOpenCV.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -76,18 +76,13 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F39B5E661AB872840001C13A"
-            BuildableName = "Assignment4.app"
-            BlueprintName = "Assignment4"
-            ReferencedContainer = "container:Assignment4.xcodeproj">
+            BlueprintIdentifier = "B623740E1AA0CD4F008CC135"
+            BuildableName = "SMUOpenCV.app"
+            BlueprintName = "SMUOpenCV"
+            ReferencedContainer = "container:SMUOpenCV.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
-         <AdditionalOption
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "YES">
-         </AdditionalOption>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
@@ -100,10 +95,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F39B5E661AB872840001C13A"
-            BuildableName = "Assignment4.app"
-            BlueprintName = "Assignment4"
-            ReferencedContainer = "container:Assignment4.xcodeproj">
+            BlueprintIdentifier = "B623740E1AA0CD4F008CC135"
+            BuildableName = "SMUOpenCV.app"
+            BlueprintName = "SMUOpenCV"
+            ReferencedContainer = "container:SMUOpenCV.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
