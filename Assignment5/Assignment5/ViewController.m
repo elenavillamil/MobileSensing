@@ -24,6 +24,12 @@
     // Initializing the bluetooth.
     bleEndpoint = [[BLE alloc] init];
     [bleEndpoint controlSetup];
+    
+    bleEndpoint.delegate = self;
+
+    
+    [self performSelectorInBackground:@selector(bleConnect:) withObject:nil];
+
 }
 
 -(void) bleDidConnect
@@ -40,7 +46,8 @@
 - (void) bleDidReceiveData:(unsigned char *)data length:(int)length
 {
     NSData* inputData = [NSData dataWithBytes:data length:length];
-    
+    //NSString* parsed_str = [[NSString alloc] initWithData:inputData encoding:NSUTF8StringEncoding];
+
     unsigned char dataBuffer[2] = { 0 };
     
     [inputData getBytes:dataBuffer length:sizeof(char) * 2];
@@ -96,8 +103,10 @@
             CBPeripheral* peripheral = [bleEndpoint.peripherals objectAtIndex:i];
             
             // TODO -> Bluetooth name?
-            if ([peripheral.name isEqualToString:@"TeamE+2"])
+            if ([peripheral.name isEqualToString:@"EplusTwo"])
             {
+                NSLog(@"Connected by hacking through BLE.h :)");
+                
                 [bleEndpoint connectPeripheral:[bleEndpoint.peripherals objectAtIndex:i]];
             }
         }
