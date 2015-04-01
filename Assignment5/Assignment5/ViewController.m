@@ -11,10 +11,22 @@
 @interface ViewController ()
 
 @property (strong, nonatomic)NSArray* timesForPicker;
+@property (strong, nonatomic) NSDictionary* runningQueues;
 
 @end
 
 @implementation ViewController
+
+- (NSDictionary*) runningQueus
+{
+    if (!_runningQueues)
+    {
+        _runningQueues = [NSDictionary new];
+    }
+    
+    return _runningQueues;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,7 +40,6 @@
     [self startCountdownToNextEvent];
     
     bleEndpoint.delegate = self;
-    
     
     [self performSelectorInBackground:@selector(bleConnect:) withObject:nil];
     
@@ -58,20 +69,48 @@
         NSDate* eventDate = event.startDate;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSTimeInterval timeToEvent = [eventDate timeIntervalSinceDate:[NSDate new]];
+            NSString* selected = [self.timesForPicker objectAtIndex:[self.timesPicker selectedRowInComponent:0]];
+            int currentValue = selected.intValue;
+            
+            if ([self.runningQueues objectForKey:selected])
+            {
+                // Found a key, we already have a block waiting.
+                // Therefore use that one without launching another.
+                
+                return;
+            }
+            
+            [self.runningQueues setValue:nil forKey:selected];
+            
+            // Subtrace the amount of time to notify the user
+            NSDate* workingDate = [eventDate dateByAddingTimeInterval:-currentValue * 60];
+            
+            NSTimeInterval timeToEvent = [workingDate timeIntervalSinceDate:[NSDate new]];
             
             sleep(timeToEvent);
             
-            // Send the signal to start counting down.
+            // Check to see if the time interval has been changed, if so we waited x time for nothing.
+            // Just fall through.
             
-            unsigned char dataBuffer[2] = { 2, 0 };
+            selected = [self.timesForPicker objectAtIndex:[self.timesPicker selectedRowInComponent:0]];
             
-            // Getting the height in a byte so it can be send
-            NSData* dataToSend = [NSData dataWithBytes:&dataBuffer length: sizeof(char) * 2];
+            int checkValue = selected.intValue;
             
-            // Sending the new slider value to the Arduino
-            [bleEndpoint write:dataToSend];
+            if (currentValue != checkValue)
+            {
+                // Send the signal to start counting down.
+                
+                unsigned char dataBuffer[2] = { 2, 0 };
+                
+                // Getting the height in a byte so it can be send
+                NSData* dataToSend = [NSData dataWithBytes:&dataBuffer length: sizeof(char) * 2];
+                
+                // Sending the new slider value to the Arduino
+                [bleEndpoint write:dataToSend];
+            }
+            
         });
+    
     }];
 
 }
@@ -283,6 +322,10 @@
     
     // Sending the new slider value to the Arduino
     [bleEndpoint write:dataToSend];
+    
+    // start a new countdown.
+    // The old one now is deprecated and will automatically handle that.
+    [self startCountdownToNextEvent];
 }
 
 

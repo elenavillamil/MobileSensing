@@ -15,11 +15,11 @@
     BLE* bleEndpoint;
 }
 
-@property (weak, nonatomic) IBOutlet UIPickerView *timesPicker;
-@property (weak, nonatomic) IBOutlet UISlider *brightnessSlider;
-@property (weak, nonatomic) IBOutlet UISlider *loudnessSlider;
-@property (weak, nonatomic) IBOutlet UILabel *brightnessLabel;
-@property (weak, nonatomic) IBOutlet UILabel *loudnessLabel;
+@property (weak, nonatomic) IBOutlet UIPickerView* timesPicker;
+@property (weak, nonatomic) IBOutlet UISlider* brightnessSlider;
+@property (weak, nonatomic) IBOutlet UISlider* loudnessSlider;
+@property (weak, nonatomic) IBOutlet UILabel* brightnessLabel;
+@property (weak, nonatomic) IBOutlet UILabel* loudnessLabel;
 
 @end
 
