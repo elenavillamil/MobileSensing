@@ -16,4 +16,10 @@
 #define RBL_CHAR_TX_UUID                         "713D0002-503E-4C75-BA94-3148F18D941E"
 #define RBL_CHAR_RX_UUID                         "713D0003-503E-4C75-BA94-3148F18D941E"
 
+#define UART_SERVICE_UUID                        "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+#define UART_TXD_UUID                            "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+#define UART_RXD_UUID                            "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+#define UART_DFU_UUID                            "00001530-1212-EFDE-1523-785FEABCD123"
+
+
 #define RBL_BLE_FRAMEWORK_VER                    0x0200

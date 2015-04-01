@@ -103,7 +103,7 @@
             CBPeripheral* peripheral = [bleEndpoint.peripherals objectAtIndex:i];
             
             // TODO -> Bluetooth name?
-            if ([peripheral.name isEqualToString:@"EplusTwo"])
+            if ([peripheral.name isEqualToString:@"TeamE2"])
             {
                 NSLog(@"Connected by hacking through BLE.h :)");
                 
