@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <EventKit/EventKit.h>
 #import "BLE.h"
 
 @interface ViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, BLEDelegate>
