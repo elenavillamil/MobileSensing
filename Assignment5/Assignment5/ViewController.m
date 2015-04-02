@@ -107,11 +107,13 @@
             
             [self.runningQueues setValue:nil forKey:selected];
             
-            // Subtrace the amount of time to notify the user
+            // Subtract the amount of time to notify the user
             NSDate* workingDate = [eventDate dateByAddingTimeInterval:-currentValue * 60];
             
             NSTimeInterval timeToEvent = [workingDate timeIntervalSinceDate:[NSDate new]];
             
+            // Check if the time to the event is less than the warning time.
+            // If so just select next event in the calendar.
             while (timeToEvent < self.currentWarningTime)
             {
                 eventsIndexPosition += 1;
@@ -132,7 +134,7 @@
                 timeToEvent = [workingDate timeIntervalSinceDate:[NSDate new]];
             }
             
-            sleep(timeToEvent);
+            [NSThread sleepForTimeInterval:timeToEvent];
             
             // Check to see if the time interval has been changed, if so we waited x time for nothing.
             // Just fall through.
@@ -249,10 +251,14 @@
             CBPeripheral* peripheral = [bleEndpoint.peripherals objectAtIndex:i];
             
             // TODO -> Bluetooth name?
+            if ([peripheral.name isEqualToString:@"brc"])
+            {
+                [bleEndpoint connectPeripheral:[bleEndpoint.peripherals objectAtIndex:i]];
+            }
+            
+            // TODO -> Bluetooth name?
             if ([peripheral.name isEqualToString:@"TeamE2"])
             {
-                NSLog(@"Connected by hacking through BLE.h :)");
-                
                 [bleEndpoint connectPeripheral:[bleEndpoint.peripherals objectAtIndex:i]];
             }
         }
