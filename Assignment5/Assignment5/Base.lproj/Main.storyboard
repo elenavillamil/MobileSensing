@@ -32,6 +32,7 @@
                                     <constraint firstAttribute="width" constant="92" id="XUd-Fy-w3a"/>
                                 </constraints>
                                 <state key="normal" title="Set Time">
+                                    <color key="titleColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -40,6 +41,7 @@
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="255" translatesAutoresizingMaskIntoConstraints="NO" id="a33-Ne-pZE">
                                 <rect key="frame" x="181" y="337" width="118" height="31"/>
+                                <color key="minimumTrackTintColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="brightnessChangeInside:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="XMz-aE-Vl1"/>
                                     <action selector="brightnessChangeOutside:" destination="vXZ-lx-hvc" eventType="touchUpOutside" id="sUp-Kz-6P0"/>
@@ -47,6 +49,7 @@
                             </slider>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="255" translatesAutoresizingMaskIntoConstraints="NO" id="kIe-rH-zvV">
                                 <rect key="frame" x="181" y="442" width="118" height="31"/>
+                                <color key="minimumTrackTintColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="loudnessChangeInside:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Bgz-5w-dF3"/>
                                     <action selector="loudnessChangeOutside:" destination="vXZ-lx-hvc" eventType="touchUpOutside" id="wCX-S3-0X3"/>
@@ -59,19 +62,19 @@
                                     <constraint firstAttribute="height" constant="21" id="ZTa-4g-yn5"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set loudness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BNG-j7-G3b">
                                 <rect key="frame" x="42" y="446" width="100" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rmF-hg-KG8">
                                 <rect key="frame" x="225" y="480" width="50" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Glq-ss-PDU">
@@ -81,23 +84,23 @@
                                     <constraint firstAttribute="height" constant="21" id="OuK-sC-YkA"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Disconnected" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5mR-X4-0xk">
                                 <rect key="frame" x="107" y="55" width="106" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.10480035247809838" green="0.16995279838538974" blue="0.36574731691919193" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Warning time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NHh-vj-ddg">
                                 <rect key="frame" x="33" y="141" width="255" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.21275507800579332" green="0.56466415855126373" blue="0.87831439393939392" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.65033789142661014" green="0.78543562326798377" blue="0.92467645202020199" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="Glq-ss-PDU" secondAttribute="trailing" constant="29" id="AfW-5Y-JzO"/>

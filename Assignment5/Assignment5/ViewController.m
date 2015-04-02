@@ -326,8 +326,6 @@
     unsigned char currentValue = (char)self.loudnessSlider.value;
     self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
-    // TODO -> Proper Protocol when creating the data to send
-    
     unsigned char protocolBuffer[2] = { 1, currentValue };
     
     NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
@@ -345,7 +343,7 @@
     return self.timesForPicker.count;
 }
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+-(NSAttributedString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     return self.timesForPicker[row];
 }
