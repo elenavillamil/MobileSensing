@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic)NSArray* timesForPicker;
 @property (strong, nonatomic) NSDictionary* runningQueues;
+@property int currentWarningTime;
 
 @end
 
@@ -31,7 +32,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.timesForPicker = @[@"5", @"10", @"15", @"20", @"25", @"30", @"35", @"40", @"45", @"50", @"55", @"60"];
+    self.timesForPicker = @[@"5", @"10", @"15", @"20", @"25", @"30"];
+    
+    [self.timesPicker selectRow:5 inComponent:0 animated:false];
+    
+    self.currentWarningTime = 30;
     
     // Initializing the bluetooth.
     bleEndpoint = [[BLE alloc] init];
@@ -102,7 +107,6 @@
                 
                 unsigned char dataBuffer[2] = { 2, 0 };
                 
-                // Getting the height in a byte so it can be send
                 NSData* dataToSend = [NSData dataWithBytes:&dataBuffer length: sizeof(char) * 2];
                 
                 // Sending the new slider value to the Arduino
@@ -163,46 +167,20 @@
     
     else if (protocolStatement == 2)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Arduino Alarm"
-                                                                       message:@"Meeting specifics here"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Arduino Alarm" message:@"Meeting specifics here" preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {
-                                                                  unsigned char dataBuffer[2] = { 3, 0 };
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            unsigned char dataBuffer[2] = { 3, 0 };
+            NSData* dataToSend = [NSData dataWithBytes:&dataBuffer length: sizeof(char) * 2];
                                                                   
-                                                                  // TODO -> Proper Protocol when creating the data to send
-                                                                  // Getting the height in a byte so it can be send
-                                                                  NSData* dataToSend = [NSData dataWithBytes:&dataBuffer length: sizeof(char) * 2];
-                                                                  
-                                                                  // Sending the new slider value to the Arduino
-                                                                  [bleEndpoint write:dataToSend];
-                                                                  
-                                                              }];
-        
-        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault
-                                                             handler:^(UIAlertAction * action) {
-                                                                 // For now ok and cancel do the same thing.
-                                                                 
-                                                                 unsigned char dataBuffer[2] = { 3, 0 };
-                                                                 
-                                                                 // TODO -> Proper Protocol when creating the data to send
-                                                                 // Getting the height in a byte so it can be send
-                                                                 NSData* dataToSend = [NSData dataWithBytes:&dataBuffer length: sizeof(char) * 2];
-                                                                 
-                                                                 // Sending the new slider value to the Arduino
-                                                                 [bleEndpoint write:dataToSend];
-                                                                 
-                                                             }];
-        
+            // Sending the new slider value to the Arduino
+            [bleEndpoint write:dataToSend];
+        }];
         
         [alert addAction:defaultAction];
-        [alert addAction:cancelAction];
         [self presentViewController:alert animated:YES completion:nil];
 
     }
-    
-    // 2 - 255 are unused.
     
 }
 
@@ -316,12 +294,12 @@
     
     unsigned char dataBuffer[2] = { 4, currentValue };
     
-    // TODO -> Proper Protocol when creating the data to send
-    // Getting the height in a byte so it can be send
     NSData* dataToSend = [NSData dataWithBytes:&dataBuffer length: sizeof(char) * 2];
     
     // Sending the new slider value to the Arduino
     [bleEndpoint write:dataToSend];
+    
+    self.currentWarningTime = selected.intValue;
     
     // start a new countdown.
     // The old one now is deprecated and will automatically handle that.
