@@ -11,7 +11,7 @@
 @interface ViewController ()
 
 @property (strong, nonatomic)NSArray* timesForPicker;
-@property (strong, nonatomic) NSDictionary* runningQueues;
+@property (strong, nonatomic) NSMutableDictionary* runningQueues;
 @property (strong, nonatomic) EKEventStore * eventStore;
 @property int currentWarningTime;
 
@@ -19,11 +19,11 @@
 
 @implementation ViewController
 
-- (NSDictionary*) runningQueus
+- (NSMutableDictionary*) runningQueues
 {
     if (!_runningQueues)
     {
-        _runningQueues = [NSDictionary new];
+        _runningQueues = [NSMutableDictionary new];
     }
     
     return _runningQueues;
@@ -118,7 +118,7 @@
                 return;
             }
             
-            [self.runningQueues setValue:nil forKey:selected];
+            self.runningQueues[selected] = @0;
             
             // Subtract the amount of time to notify the user
             NSDate* workingDate = [eventDate dateByAddingTimeInterval:-currentValue * 60];
