@@ -36,8 +36,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 void sendProtocol(unsigned char protocolBuffer[2])
 {
   // Write everything over bluetooth
-  
-  ble_write(protocolBuffer, sizeof(char) * 2); 
+  if (ble_connected())
+  {  
+    ble_write_bytes(protocolBuffer, sizeof(char) * 2); 
+  }
 }
 
 void setup()

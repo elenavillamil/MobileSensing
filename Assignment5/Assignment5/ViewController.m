@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic)NSArray* timesForPicker;
 @property (strong, nonatomic) NSDictionary* runningQueues;
+@property (strong, nonatomic) EKEventStore * eventStore;
 @property int currentWarningTime;
 
 @end
@@ -26,6 +27,18 @@
     }
     
     return _runningQueues;
+}
+
+
+
+- (EKEventStore*) eventStore
+{
+    if (!_eventStore)
+    {
+        _eventStore = [[EKEventStore alloc] init];
+    }
+    
+    return _eventStore;
 }
 
 
@@ -62,8 +75,8 @@
 
 - (void) startCountdownToNextEvent
 {
+    EKEventStore* eventStore = self.eventStore;
     
-    EKEventStore * eventStore = [[EKEventStore alloc] init];
     NSArray * calendars = [eventStore calendarsForEntityType:EKEntityTypeEvent];
     
     static dispatch_once_t sToken;
