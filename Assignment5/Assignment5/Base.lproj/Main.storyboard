@@ -79,7 +79,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Warning time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NHh-vj-ddg">
-                                <rect key="frame" x="110" y="41" width="101" height="21"/>
+                                <rect key="frame" x="110" y="33" width="101" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -92,9 +92,9 @@
                             <constraint firstItem="M6y-ap-WnT" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="26" id="BDf-N7-1Ag"/>
                             <constraint firstAttribute="trailingMargin" secondItem="qF2-yL-H0N" secondAttribute="trailing" constant="23" id="Ecl-pL-4aK"/>
                             <constraint firstItem="a33-Ne-pZE" firstAttribute="leading" secondItem="kIe-rH-zvV" secondAttribute="leading" id="FEG-a6-vNZ"/>
-                            <constraint firstItem="M6y-ap-WnT" firstAttribute="top" secondItem="NHh-vj-ddg" secondAttribute="bottom" id="GaY-rH-kX0"/>
+                            <constraint firstItem="M6y-ap-WnT" firstAttribute="top" secondItem="NHh-vj-ddg" secondAttribute="bottom" constant="8" id="GaY-rH-kX0"/>
                             <constraint firstItem="NHh-vj-ddg" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="IY0-7D-e6b"/>
-                            <constraint firstItem="NHh-vj-ddg" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="21" id="OAk-SL-2Nn"/>
+                            <constraint firstItem="NHh-vj-ddg" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="13" id="OAk-SL-2Nn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="a33-Ne-pZE" secondAttribute="trailing" constant="7" id="OEh-Qf-4Qp"/>
                             <constraint firstItem="Glq-ss-PDU" firstAttribute="top" secondItem="a33-Ne-pZE" secondAttribute="bottom" constant="8" symbolic="YES" id="OFz-bf-32k"/>
                             <constraint firstItem="a33-Ne-pZE" firstAttribute="leading" secondItem="lpF-pz-5w6" secondAttribute="trailing" constant="28" id="QCX-rQ-08c"/>
@@ -110,7 +110,7 @@
                             <constraint firstItem="BNG-j7-G3b" firstAttribute="leading" secondItem="lpF-pz-5w6" secondAttribute="leading" id="h0g-Kd-q1W"/>
                             <constraint firstItem="kIe-rH-zvV" firstAttribute="top" secondItem="Glq-ss-PDU" secondAttribute="bottom" constant="46" id="nDM-zy-OQh"/>
                             <constraint firstItem="a33-Ne-pZE" firstAttribute="top" secondItem="qF2-yL-H0N" secondAttribute="bottom" constant="179" id="ved-tY-y46"/>
-                            <constraint firstItem="qF2-yL-H0N" firstAttribute="top" secondItem="NHh-vj-ddg" secondAttribute="bottom" constant="66" id="zhN-Tt-733"/>
+                            <constraint firstItem="qF2-yL-H0N" firstAttribute="top" secondItem="NHh-vj-ddg" secondAttribute="bottom" constant="74" id="zhN-Tt-733"/>
                             <constraint firstItem="lpF-pz-5w6" firstAttribute="centerX" secondItem="M6y-ap-WnT" secondAttribute="centerX" id="zxu-pJ-Naf"/>
                         </constraints>
                     </view>

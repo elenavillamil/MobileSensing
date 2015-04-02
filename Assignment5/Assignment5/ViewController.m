@@ -50,10 +50,24 @@
     return UIInterfaceOrientationMaskPortrait;
 }
 
+- (void) storeChanged
+{
+    [self startCountdownToNextEvent];
+}
+
 - (void) startCountdownToNextEvent
 {
     EKEventStore * eventStore = [[EKEventStore alloc] init];
     NSArray * calendars = [eventStore calendarsForEntityType:EKEntityTypeEvent];
+    
+    static dispatch_once_t sToken;
+    dispatch_once(&sToken, ^{
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(storeChanged)
+                                                    name:EKEventStoreChangedNotification
+                                                   object:eventStore];
+
+    });
     
     // 0 has the correct calendar
     // 86400 is time in seconds for 24 hours
@@ -177,6 +191,8 @@
                                                                   
                                                                   // Sending the new slider value to the Arduino
                                                                   [bleEndpoint write:dataToSend];
+                                                                  
+                                                                  [self startCountdownToNextEvent];
                                                                   
                                                               }];
         
