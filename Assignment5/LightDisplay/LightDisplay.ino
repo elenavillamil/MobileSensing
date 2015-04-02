@@ -45,17 +45,42 @@ int shouldPlayMelody;
 int leds_2_light;
 int intensity;
 int led_array[] = {LED_RED, LED_ORANGE, LED_YELLOW, LED_BLUE, LED_LTGRN, LED_DKGRN};
-int buttonState;
 void playMelody();
 void lightItUp();
+
+//DEBOUNCE -- MODIFIED FROM DEBOUNCE EXAMPLE
+int musicState;       // the current state of the output pin
+int buttonState;      // the current reading from the input pin
+int lastButtonState;  // the previous reading from the input pin
+
+// the following variables are long's because the time, measured in miliseconds,
+// will quickly become a bigger number than can be stored in an int.
+long lastDebounceTime;  // the last time the output pin was toggled
+long debounceDelay;    // the debounce time; increase if the output flickers
+
 
 void setup() {
   
     Serial.begin(9600);
     
+    // SETUP SPEAKER I/O PINS
     pinMode(SPEAKER_RED, OUTPUT);
     pinMode(SPEAKER_BLACK, OUTPUT);
+    pinMode(MUSIC_SIGNAL, INPUT_PULLUP);
+    analogWrite(SPEAKER_RED, 0);
+    analogWrite(SPEAKER_BLACK, 0);
+    pinMode(MUSIC_SIGNAL, HIGH);
     
+    // SETUP DEBOUNCE
+    musicState = HIGH;       // the current state of the output pin
+    buttonState = LOW;       // the current reading from the input pin
+    lastButtonState = LOW;
+    lastDebounceTime = 0; 
+    debounceDelay = 50; 
+    shouldPlayMelody = HIGH;
+    buttonState = HIGH;
+    
+    // LEDS
     pinMode(LED_DKGRN, OUTPUT);
     pinMode(LED_LTGRN, OUTPUT);
     pinMode(LED_BLUE, OUTPUT);
@@ -65,10 +90,6 @@ void setup() {
     
     pinMode(LEDS_2_LITE, INPUT);
     pinMode(INTENSITY, INPUT);
-    pinMode(MUSIC_SIGNAL, INPUT_PULLUP);
-    
-    analogWrite(SPEAKER_RED, 0);
-    analogWrite(SPEAKER_BLACK, 0);
     
     analogWrite(LED_DKGRN, 0);
     analogWrite(LED_LTGRN, 0);
@@ -79,49 +100,25 @@ void setup() {
     
     analogWrite(LEDS_2_LITE, 0);
     analogWrite(INTENSITY, 0);
-    pinMode(MUSIC_SIGNAL, HIGH);
     
-    shouldPlayMelody = HIGH;
-    buttonState = HIGH;
+
     leds_2_light = 0;
     intensity = 0;
+    attachInterrupt(0, silence, HIGH);
+    shouldPlayMelody = LOW;
 } 
 
 void loop() {
+  //shouldPlayMelody = digitalRead();
+  int buttonPressed = digitalRead(BUTTON_PIN);
+  
+
+  
+  
   
   if (shouldPlayMelody == LOW) {
       playMelody();
   }
-  
-  intensity = 200;
-  leds_2_light = analogRead(LEDS_2_LITE);
-  
-  //Serial.print(leds_2_light);
-  //leds_2_light = (sizeof(led_array))/(sizeof(int));
-  Serial.print("leds_2_light: ");
-  Serial.println(leds_2_light);
-  analogWrite(led_array[leds_2_light], intensity);
-  Serial.println(led_array[leds_2_light]);
-  
-
-
-  // read the state of the pushbutton value:
-  //buttonState = digitalRead(BUTTON_PIN);
-
-  // check if the pushbutton is pressed.
-  // if it is, the buttonState is HIGH:
-//  if (buttonState == HIGH) {     
-//    // turn LED on:    
-//    digitalWrite(ledPin, HIGH);  
-//  } 
-//  else {
-//    // turn LED off:
-//    digitalWrite(ledPin, LOW); 
-//  }
-  
-  //while(1); // Stop (so it doesn't repeat forever driving you crazy--you're welcome).
- // }
-
 }
 
 void playMelody() {
