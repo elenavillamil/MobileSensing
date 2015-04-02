@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UISlider* loudnessSlider;
 @property (weak, nonatomic) IBOutlet UILabel* brightnessLabel;
 @property (weak, nonatomic) IBOutlet UILabel* loudnessLabel;
+@property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 
 @end
 

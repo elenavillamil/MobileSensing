@@ -62,6 +62,7 @@
 
 - (void) startCountdownToNextEvent
 {
+    
     EKEventStore * eventStore = [[EKEventStore alloc] init];
     NSArray * calendars = [eventStore calendarsForEntityType:EKEntityTypeEvent];
     
@@ -82,15 +83,20 @@
     
     [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
         
-        EKEvent* event = [eventList objectAtIndex:0];
-        
-        // The date of the next calendar event.
-        NSDate* eventDate = event.startDate;
-        
+
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSString* selected = [self.timesForPicker objectAtIndex:[self.timesPicker selectedRowInComponent:0]];
-            int currentValue = selected.intValue;
             
+            int eventsIndexPosition = 0;
+
+            EKEvent* event = [eventList objectAtIndex:eventsIndexPosition];
+            
+            // The date of the next calendar event.
+            NSDate* eventDate = event.startDate;
+
+            int currentValue = self.currentWarningTime;
+            
+            NSString* selected = [NSString stringWithFormat:@"%d", currentValue];
+
             if ([self.runningQueues objectForKey:selected])
             {
                 // Found a key, we already have a block waiting.
@@ -106,16 +112,34 @@
             
             NSTimeInterval timeToEvent = [workingDate timeIntervalSinceDate:[NSDate new]];
             
+            while (timeToEvent < self.currentWarningTime)
+            {
+                eventsIndexPosition += 1;
+                event = [eventList objectAtIndex:eventsIndexPosition];
+                eventDate = event.startDate;
+                
+                if ([self.runningQueues objectForKey:selected])
+                {
+                    // Found a key, we already have a block waiting.
+                    // Therefore use that one without launching another.
+                    
+                    return;
+                }
+                
+                [self.runningQueues setValue:nil forKey:selected];
+
+                workingDate = [eventDate dateByAddingTimeInterval:-currentValue * 60];
+                timeToEvent = [workingDate timeIntervalSinceDate:[NSDate new]];
+            }
+            
             sleep(timeToEvent);
             
             // Check to see if the time interval has been changed, if so we waited x time for nothing.
             // Just fall through.
             
-            selected = [self.timesForPicker objectAtIndex:[self.timesPicker selectedRowInComponent:0]];
+            int checkValue = self.currentWarningTime;
             
-            int checkValue = selected.intValue;
-            
-            if (currentValue != checkValue)
+            if (currentValue == checkValue)
             {
                 // Send the signal to start counting down.
                 
@@ -135,11 +159,13 @@
 
 -(void) bleDidConnect
 {
-    
+    self.connectionLabel.text = @"Connected";
 }
 
 -(void) bleDidDisconnect
 {
+    self.connectionLabel.text = @"Disconnected";
+    
     // Functionality to reconnect
     [self bleConnect:nil];
 }
