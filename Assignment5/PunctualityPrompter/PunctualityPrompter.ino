@@ -18,7 +18,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <RBL_nRF8001.h>
 #include <toneAC.h>
 #include "Pitches.h"
-#include <CountDownTimer.h>
+#include "CountDownTimer.h"
 
 /*********************************/
 /*       PIN ASSIGNMENTS         */
@@ -45,24 +45,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define LED_ORANGE          45
 #define LED_RED             46
 
+// EVENTS
+#define EVENT_INTERRUPT     20
 
 /*********************************/
 /*           VARIABLES           */
 /*********************************/
 
-
-// COUNTDOWN TIMER
+// COUNTDOWN TIMER 
 int totalPromptSeconds;
 int secondsPerLED;
 int timerIterations;
 CountDownTimer timer;
 
-
-//DEBOUNCE -- MODIFIED FROM DEBOUNCE EXAMPLE
-int musicState;           // the current state of the output pin
-int buttonState;          // the current reading from the input pin
-int lastButtonState;      // the previous reading from the input pin
-int buttonPressed;
+//DEBOUNCE -- MODIFIED FROM DEBOUNCE EXAMPLE - DEBOUNCE WAS NOT AN ISSUE SO WE ARE NOT CALLING IT
+//int musicState;           // the current state of the output pin
+//int buttonState;          // the current reading from the input pin
+//int lastButtonState;      // the previous reading from the input pin
+//int buttonPressed;
 
 // the following variables are long's because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
@@ -99,8 +99,8 @@ boolean shouldLightLeds;
 int warningTime;
 int led_array[] = {LED_RED, LED_ORANGE, LED_YELLOW, LED_BLUE, LED_LTGRN, LED_DKGRN};
 
-// NOTIFICATION PROMPTS TO SEND TO IOS
-
+// EVENTS
+  boolean hasEvent;
   boolean changingLightIntensity;
   boolean changingBuzzerLoudness;
   int buzzerEvent = 0;
@@ -126,6 +126,10 @@ void setup()
     totalPromptSeconds = 0;
     secondsPerLED = 0;
     timerIterations = 0;
+    pinMode(EVENT_INTERRUPT, INPUT);
+    digitalWrite(EVENT_INTERRUPT, HIGH);
+    attachInterrupt(3, startEvent, CHANGE);  //interrupt 3 is on pin 20
+    
     
     // INITIALIZE SPEAKER I/O PINS & VARIABLES
     pinMode(VOLUME_POT_IN, INPUT);
@@ -137,7 +141,9 @@ void setup()
     volumeBle_Changed = false;
     
     shouldPlayMelody = HIGH;
-    attachInterrupt(2, silence, RISING); // FALLING for when the pin goes from high to low.
+    attachInterrupt(2, silence, RISING); // RISING for when the pin goes from LOW to HIGH.
+                                         // interrupt 3 is on pin 21
+    
     
     // SETUP DEBOUNCE VARIABLES FOR THE BUTTON - DEBOUNCE WAS NOT AN ISSUE SO WE ARE NOT CALLING IT            
 //    musicState = HIGH;                     // the current state of the output pin
@@ -167,8 +173,8 @@ void setup()
     ledKnobReading = 0;
     ledIntensity = 127;
     shouldLightLeds = HIGH;
-    warningTime = 1800;
     shouldPlayMelody = LOW;
+    hasEvent = false;
     
     // NOTIFICATIONS TO IOS
     changingBuzzerLoudness = false;
@@ -179,7 +185,8 @@ void setup()
     ble_set_pins(RB_BLE_REQN, RB_BLE_RDYN);      // DEFINED ABOVE 
     
     // Set your BLE Shield name here, max. length 10
-    ble_set_name("TeamE2");
+    char team[] = "TeamE2";
+    ble_set_name(team);
     
     // Init. and start BLE library.
     ble_begin();
@@ -206,19 +213,9 @@ void loop()
   //volumeKnobReading = analogRead(VOLUME_POT_IN);
 
  delay(1000);
- //playMelody();
-    
-
-
-
- // Serial.print("LEDs: ");
-//  Serial.print(analogRead(A12));
-//  Serial.print(",   ");
-//  Serial.println(analogRead(A12));
-
-//  static boolean analog_enabled = false;
-//  static byte old_state = LOW;
-//  
+ if (hasEvent) {
+  updateEvent();
+ }
 
   // Default to an unused protocol value
   unsigned char protocolBuffer[2] = { 255, 255 };
@@ -250,7 +247,8 @@ void loop()
     // WE HAVE AN EVENT TO START COUNTING DOWN
     else if (protocolBuffer[0] == 2)
     {
-      startEvent((int)protocolBuffer[1]);
+      totalPromptSeconds = (int)protocolBuffer[1] * 60; 
+      startEvent();
     }
     
     // TURN SOUND OFF - DONE
@@ -263,8 +261,8 @@ void loop()
     // CHANGE EVENT COUNT TIME
     else if (protocolBuffer[0] == 4)
     {
-     
-     Serial.println("Change the wait time.");
+     totalPromptSeconds = (int)protocolBuffer[1] * 60; 
+     digitalWrite(EVENT_INTERRUPT, !EVENT_INTERRUPT);
     }
   }  
   
@@ -371,7 +369,7 @@ void playMelody() {
     toneAC(); // Turn off toneAC, can also use noToneAC().
     delay(2000); // Wait a second.
     Serial.print ("I'm in the mood for a melody!");
-    for (int thisNote = 0; thisNote < (sizeof(noteDurations)/2); thisNote++) {
+    for (int thisNote = 0; thisNote < (int)(sizeof(noteDurations)/2); thisNote++) {
       if (shouldPlayMelody == LOW) {
         int noteDuration = 1000/noteDurations[thisNote];
         updateVolumeKnob255();
@@ -400,17 +398,30 @@ void sendProtocol(unsigned char protocolBuffer[2])
   }
 }
 
-void startEvent (int minutes) {
-  totalPromptSeconds = minutes * 60; 
-  secondsPerLED = totalPromptSeconds / led_array.length();
-  timerIterations = led_array.length(); 
+void startEvent () {
+  secondsPerLED = totalPromptSeconds / sizeof(led_array) / sizeof(int);
+  timerIterations = sizeof(led_array) / sizeof(int); 
+  timer.SetTimer(secondsPerLED);
   lightItUp(timerIterations);
   timer.StartTimer();
+  hasEvent = true;
 }
 
 void updateEvent () {
-  if (timer.TimeCheck(0, 0, 0)) {
-    timerIterations = timerIterations - 1;
+  if (timerIterations != 0) {
+    unsigned int cero = 0;
+    if (timer.TimeCheck(cero, cero, cero)) {
+       timerIterations = timerIterations - 1;
+       timer.SetTimer(secondsPerLED); 
+       lightItUp(timerIterations);
+       timer.StartTimer();
+     }
+  }
+  else {
+    if (timer.TimeCheck((unsigned int)0, (unsigned int)0, (unsigned int)0)) {
+      hasEvent = false;
+      playMelody();
+    }
   }
 }
 
