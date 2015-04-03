@@ -11,7 +11,7 @@
 @interface ViewController ()
 
 @property (strong, nonatomic)NSArray* timesForPicker;
-@property (strong, nonatomic) NSDictionary* runningQueues;
+@property (strong, nonatomic) NSMutableDictionary* runningQueues;
 @property (strong, nonatomic) EKEventStore * eventStore;
 @property int currentWarningTime;
 
@@ -19,11 +19,11 @@
 
 @implementation ViewController
 
-- (NSDictionary*) runningQueus
+- (NSMutableDictionary*) runningQueues
 {
     if (!_runningQueues)
     {
-        _runningQueues = [NSDictionary new];
+        _runningQueues = [NSMutableDictionary new];
     }
     
     return _runningQueues;
@@ -118,7 +118,7 @@
                 return;
             }
             
-            [self.runningQueues setValue:nil forKey:selected];
+            self.runningQueues[selected] = @0;
             
             // Subtract the amount of time to notify the user
             NSDate* workingDate = [eventDate dateByAddingTimeInterval:-currentValue * 60];
@@ -326,8 +326,6 @@
     unsigned char currentValue = (char)self.loudnessSlider.value;
     self.loudnessLabel.text = [[NSString alloc] initWithFormat:@"%d", currentValue];
     
-    // TODO -> Proper Protocol when creating the data to send
-    
     unsigned char protocolBuffer[2] = { 1, currentValue };
     
     NSData* dataToSend = [NSData dataWithBytes:&protocolBuffer length: sizeof(char) * 2];
@@ -345,7 +343,7 @@
     return self.timesForPicker.count;
 }
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+-(NSAttributedString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     return self.timesForPicker[row];
 }
