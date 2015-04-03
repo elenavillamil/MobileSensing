@@ -39,7 +39,7 @@
                                     <action selector="onSetTimeClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="do4-Yz-0QL"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="255" translatesAutoresizingMaskIntoConstraints="NO" id="a33-Ne-pZE">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="127" minValue="0.0" maxValue="255" translatesAutoresizingMaskIntoConstraints="NO" id="a33-Ne-pZE">
                                 <rect key="frame" x="181" y="337" width="118" height="31"/>
                                 <color key="minimumTrackTintColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -47,7 +47,7 @@
                                     <action selector="brightnessChangeOutside:" destination="vXZ-lx-hvc" eventType="touchUpOutside" id="sUp-Kz-6P0"/>
                                 </connections>
                             </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="255" translatesAutoresizingMaskIntoConstraints="NO" id="kIe-rH-zvV">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1023" translatesAutoresizingMaskIntoConstraints="NO" id="kIe-rH-zvV">
                                 <rect key="frame" x="181" y="442" width="118" height="31"/>
                                 <color key="minimumTrackTintColor" red="0.1048003525" green="0.16995279839999999" blue="0.36574731690000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
