@@ -146,7 +146,7 @@ void setup()
     volumeBle_Changed = false;
     
     shouldPlayMelody = HIGH;
-    attachInterrupt(2, silence, RISING); // RISING for when the pin goes from LOW to HIGH.
+    attachInterrupt(2, silence, CHANGE); // RISING for when the pin goes from LOW to HIGH.
                                          // interrupt 2 is on pin 21
     
     
@@ -197,7 +197,7 @@ void setup()
     ble_begin();
     
     // Thirty Minutes
-    totalPromptSeconds = 1 * 60;
+    totalPromptSeconds = 24; //1 * 60;
     
     // Enable serial debug
     Serial.begin(57600);
@@ -281,7 +281,6 @@ void loop()
      Serial.println("     CHANGE EVENT TIME");
      int minutes = (int)protocolBuffer[1];
      totalPromptSeconds = minutes * 60; 
-     
     }
   }  
   
@@ -297,8 +296,9 @@ void loop()
   // NOTIFY iOS THAT BUZZER IS SOUNDING (MELODY IS PLAYING) --- NEED TO TEST
   if (buzzerEvent)
   {
+    Serial.println("Alerting iOS of buzzer event.");
     outputBuffer[0] = 2;
-    outputBuffer[1] = 255;
+    outputBuffer[1] = 0;
     
     sendProtocol(outputBuffer);
     buzzerEvent = false;
@@ -367,7 +367,9 @@ void updateVolume10scale(){
 }
 
 void playMelody() {
-    if(melodyCount > 0) {
+  buzzerEvent = true;
+    shouldPlayMelody = LOW;
+    if(melodyCount > 1) {
       buzzerEvent = false;
     }
     toneAC(); // Turn off toneAC, can also use noToneAC().
@@ -376,7 +378,8 @@ void playMelody() {
     
     for (int thisNote = 0; thisNote < (int)(sizeof(noteDurations)/2); thisNote++) {
       if (shouldPlayMelody == LOW) {
-        int noteDuration = 1000/noteDurations[thisNote];
+        //int noteDuration = 1000/noteDurations[thisNote];
+        int noteDuration = 100/noteDurations[thisNote];
         updateVolumeKnob255();
         updateVolume10scale();
         //Serial.print("Knob255: "); Serial.print(volumeKnob255); Serial.print(",  Scale10: "); Serial.print(volume_10scale); Serial.print("\n");
@@ -443,7 +446,6 @@ void updateEvent () {
          hasEvent = false;
          shouldPlayMelody == LOW;
          playMelody();
-         
        }
      }
   }
