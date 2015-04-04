@@ -38,13 +38,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define BUTTON_PIN          21    // INT0 ON MEGA 2560
 
 // LIGHTS
-#define INTENSITY_POT_IN   A12
-#define LED_DKGRN            7
-#define LED_LTGRN            6
-#define LED_BLUE             5
-#define LED_YELLOW          44
-#define LED_ORANGE          45
-#define LED_RED             46
+#define INTENSITY_POT_IN   A12 
+#define LED_DKGRN           46
+#define LED_LTGRN           45
+#define LED_BLUE            44
+#define LED_YELLOW          5
+#define LED_ORANGE          6
+#define LED_RED             7
 
 // EVENTS
 #define EVENT_INTERRUPT     20
@@ -106,7 +106,7 @@ int led_array[] = {LED_RED, LED_ORANGE, LED_YELLOW, LED_BLUE, LED_LTGRN, LED_DKG
   boolean hasEvent;
   boolean changingLightIntensity;
   boolean changingBuzzerLoudness;
-  int buzzerEvent = 0;
+  boolean buzzerEvent;
   
   int currentLightIntensity = 0;
   int currentBuzzerLoudness = 0;
@@ -131,7 +131,7 @@ void setup()
     timerIterations = 0;
     pinMode(EVENT_INTERRUPT, INPUT);
     digitalWrite(EVENT_INTERRUPT, HIGH);
-    attachInterrupt(3, startEvent, CHANGE);  //interrupt 3 is on pin 20
+    //attachInterrupt(3, startEventCountdown, CHANGE);  //interrupt 3 is on pin 20
     
     
     // INITIALIZE SPEAKER I/O PINS & VARIABLES
@@ -145,7 +145,7 @@ void setup()
     
     shouldPlayMelody = HIGH;
     attachInterrupt(2, silence, RISING); // RISING for when the pin goes from LOW to HIGH.
-                                         // interrupt 3 is on pin 21
+                                         // interrupt 2 is on pin 21
     
     
     // SETUP DEBOUNCE VARIABLES FOR THE BUTTON - DEBOUNCE WAS NOT AN ISSUE SO WE ARE NOT CALLING IT            
@@ -176,11 +176,11 @@ void setup()
     int lightingKnob255 = 0;
     boolean lightingKnob_Changed = false;
     ledIntensity = 127;
-    shouldPlayMelody = LOW;
     hasEvent = false;
     
     // NOTIFICATIONS TO IOS
     changingBuzzerLoudness = false;
+    buzzerEvent = false;
     
     // INITALIZE BLE 
     // Default pins set to 9 and 8 for REQN and RDYN
@@ -195,14 +195,14 @@ void setup()
     ble_begin();
     
     // Thirty Minutes
-    totalPromptSeconds = 30 * 60;
+    totalPromptSeconds = 1 * 60;
     
     // Enable serial debug
     Serial.begin(57600);
     timer.SetTimer(totalPromptSeconds);
-    Serial.print("Timer Seconds: "); Serial.println(timer.ShowSeconds());
+    //Serial.print("Timer Seconds: "); Serial.println(timer.ShowSeconds());
     timer.StartTimer();
-    
+    startEventCountdown();
 }
 
 /*********************************/
@@ -212,15 +212,24 @@ void setup()
 void loop()
 {
   timer.Timer();
-  // TO DO - UPDATE PHONE WITH NEW LOUDNESS VALUE WHEN VOLUME CHANGED
-  
-  
   //shouldPlayMelody = digitalRead();
-  //buttonPressed = digitalRead(BUTTON_PIN);
+  
   //volumeKnobReading = analogRead(VOLUME_POT_IN);
+  
   if (hasEvent) {
     updateEvent();
   }
+  else {
+    updateVolumeKnob255();
+    updateLightingKnob255();
+  }
+  
+  if (shouldPlayMelody == LOW)
+  {
+   buzzerEvent = false;
+   playMelody(); 
+  }
+  
   // Default to an unused protocol value
   unsigned char protocolBuffer[2] = { 255, 255 };
   unsigned char outputBuffer[2] = { 0, 0 };
@@ -256,15 +265,17 @@ void loop()
     else if (protocolBuffer[0] == 2)
     {
       Serial.println("    NEW EVENT");
-      startEvent();
+      startEventCountdown();
     }
     
-    // TURN SOUND OFF - DONE
+    // TURN SOUND OFF & CANCEL EVENT- DONE
     else if (protocolBuffer[0] == 3)
     {
       Serial.println("    TURN OFF SOUND");
       volumeBle255 = 0;
-      volumeBle_Changed = true; 
+      volumeBle_Changed = true;
+      silence();
+       
     }
     
     // CHANGE EVENT COUNT TIME - DONE
@@ -273,6 +284,7 @@ void loop()
      Serial.println("     CHANGE EVENT TIME");
      int minutes = (int)protocolBuffer[1];
      totalPromptSeconds = minutes * 60; 
+     
     }
   }  
   // NOTIFY iOS OF LIGHTING CHANGE ----- NEED TO TEST
@@ -288,23 +300,20 @@ void loop()
   // NOTIFY iOS OF LIGHTING CHANGE ----- NEED TO TEST
   else if (volumeKnob_Changed)
   {
-    // Send a signal to change the loudness
-    
     outputBuffer[0] = 1;
     outputBuffer[1] = volumeKnob255;
     
     sendProtocol(outputBuffer);
     volumeKnob_Changed = false;
   }
-  
+  // NOTIFY iOS THAT BUZZER IS SOUNDING (MELODY IS PLAYING) --- NEED TO TEST
   else if (buzzerEvent)
   {
-    // Send a signal saying the buzzer is going off
-    
     outputBuffer[0] = 2;
     outputBuffer[1] = 255;
     
     sendProtocol(outputBuffer);
+    buzzerEvent = false;
   }
   
   if (!ble_connected())
@@ -327,7 +336,7 @@ void loop()
 void silence() {
     Serial.println("I'm supposed to shut up!");
     if (shouldPlayMelody == LOW) {
-      Serial.println("Getting in the if");
+      //Serial.println("Getting in the if");
       shouldPlayMelody = HIGH;
     }
 //    
@@ -352,7 +361,7 @@ void silence() {
 void updateLightingKnob255() {
   int lightingKnobReading1024 = analogRead(INTENSITY_POT_IN);
   
-  Serial.println(lightingKnobReading1024);
+  //Serial.println(lightingKnobReading1024);
   
   int lightingKnobReading = map(lightingKnobReading1024, 1023, 0, 0, 255);
   if (lightingKnob255 != lightingKnobReading) {
@@ -364,7 +373,7 @@ void updateLightingKnob255() {
 void updateVolumeKnob255() {
   int volumeKnobReading1024 = analogRead(VOLUME_POT_IN);
   
-  Serial.println(volumeKnobReading1024);
+  //Serial.println(volumeKnobReading1024);
   
   int volumeKnobReading = map(volumeKnobReading1024, 1023, 0, 0, 255);
   if (volumeKnob255 != volumeKnobReading) {
@@ -378,8 +387,8 @@ void updateVolume10scale(){
   if (volumeKnob_Changed) {
     volume_10scale = map(volumeKnob255, 0, 255, 0, 10);
     if (volumeBle_Changed) {
-      changingBuzzerLoudness = true;
       volumeBle255 = volumeKnob255;
+      changingBuzzerLoudness = true;
     }
   }
   else if (volumeBle_Changed){
@@ -388,16 +397,20 @@ void updateVolume10scale(){
 }
 
 void playMelody() {
-  
+    if(!buzzerEvent) {
+      buzzerEvent = true;
+      shouldPlayMelody = LOW;
+    }
     toneAC(); // Turn off toneAC, can also use noToneAC().
-    delay(2000); // Wait a second.
-    Serial.print ("I'm in the mood for a melody!");
+    delay(1000); // Wait a second.
+    Serial.print ("I'm in the mood for a melody!  "); Serial.print(shouldPlayMelody);
+    
     for (int thisNote = 0; thisNote < (int)(sizeof(noteDurations)/2); thisNote++) {
       if (shouldPlayMelody == LOW) {
         int noteDuration = 1000/noteDurations[thisNote];
         updateVolumeKnob255();
         updateVolume10scale();
-        Serial.print("Knob255: "); Serial.print(volumeKnob255); Serial.print(",  Scale10: "); Serial.print(volume_10scale); Serial.print("\n");
+        //Serial.print("Knob255: "); Serial.print(volumeKnob255); Serial.print(",  Scale10: "); Serial.print(volume_10scale); Serial.print("\n");
         toneAC(melody[thisNote], volume_10scale, noteDuration, true); // Play thisNote at full volume for noteDuration in the background.
         delay(noteDuration * 4 / 3); // Wait while the tone plays in the background, plus another 33% delay between notes.
       }
@@ -411,11 +424,6 @@ void updateBrightness() {
 }
 
 void lightItUp(int led_qty) {
-  Serial.print(" * I'm lighting up ");
-  Serial.print(led_qty);
-  Serial.print(" LEDs with intensity value: ");
-  Serial.print(ledIntensity);
-  Serial.println(".");
   for (int index = 0; index < 6; index++) 
   {
     analogWrite(led_array[index], 0);
@@ -435,7 +443,7 @@ void sendProtocol(unsigned char protocolBuffer[2])
   }
 }
 
-void startEvent () {
+void startEventCountdown () {
   //Serial.println(" * I'm starting a new event. ");
   secondsPerLED = totalPromptSeconds / 6;
   timerIterations = 6;
@@ -462,13 +470,16 @@ void updateEvent () {
        }
        else {
          hasEvent = false;
+         shouldPlayMelody == LOW;
          playMelody();
+         
        }
      }
   }
   else {
-    if (timer.TimeCheck((unsigned int)0, (unsigned int)0, (unsigned int)0)) {
+    if (timer.TimeCheck(0, 0, 0)) {
       hasEvent = false;
+      shouldPlayMelody = LOW;
       playMelody();
     }
   }
