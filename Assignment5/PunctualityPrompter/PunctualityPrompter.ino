@@ -16,6 +16,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <boards.h>
 #include <EEPROM.h>
 #include <RBL_nRF8001.h>
+#include <RBL_BLEShield.h>
 #include <toneAC.h>
 #include "Pitches.h"
 #include "CountDownTimer.h"
@@ -77,6 +78,8 @@ boolean volumeBle_Changed;
 int volume_10scale;
 volatile int shouldPlayMelody;
 
+int gAmountOfMinutesToCountdown;
+
 // Melody liberated from the toneMelody Arduino example sketch by Tom Igoe.
 int melody[] = { NOTE_C4, NOTE_F4, NOTE_C4, NOTE_F3, NOTE_C4, NOTE_F4, NOTE_C4,
   NOTE_C4, NOTE_F4, NOTE_C4, NOTE_F4,
@@ -93,9 +96,9 @@ int noteDurations[] = { 4, 4, 4, 4, 4, 4, 2,
   4, 4, 4 };
 
 // LIGHTS
-int ledKnobReading;
+int lightingKnob255;
+boolean lightingKnob_Changed;
 int ledIntensity;
-boolean shouldLightLeds;
 int warningTime;
 int led_array[] = {LED_RED, LED_ORANGE, LED_YELLOW, LED_BLUE, LED_LTGRN, LED_DKGRN};
 
@@ -170,9 +173,9 @@ void setup()
     analogWrite(LED_RED, 0);
     analogWrite(INTENSITY_POT_IN, HIGH);
     
-    ledKnobReading = 0;
+    int lightingKnob255 = 0;
+    boolean lightingKnob_Changed = false;
     ledIntensity = 127;
-    shouldLightLeds = HIGH;
     shouldPlayMelody = LOW;
     hasEvent = false;
     
@@ -191,12 +194,15 @@ void setup()
     // Init. and start BLE library.
     ble_begin();
     
+    // Thirty Minutes
+    totalPromptSeconds = 30 * 60;
+    
     // Enable serial debug
     Serial.begin(57600);
+    timer.SetTimer(totalPromptSeconds);
+    Serial.print("Timer Seconds: "); Serial.println(timer.ShowSeconds());
+    timer.StartTimer();
     
-    //DEBUGGING ONLY
-    //shouldPlayMelody = LOW;
-    shouldLightLeds = LOW;
 }
 
 /*********************************/
@@ -205,18 +211,16 @@ void setup()
 
 void loop()
 {
+  timer.Timer();
   // TO DO - UPDATE PHONE WITH NEW LOUDNESS VALUE WHEN VOLUME CHANGED
   
   
   //shouldPlayMelody = digitalRead();
   //buttonPressed = digitalRead(BUTTON_PIN);
   //volumeKnobReading = analogRead(VOLUME_POT_IN);
-
- delay(1000);
- if (hasEvent) {
-  updateEvent();
- }
-
+  if (hasEvent) {
+    updateEvent();
+  }
   // Default to an unused protocol value
   unsigned char protocolBuffer[2] = { 255, 255 };
   unsigned char outputBuffer[2] = { 0, 0 };
@@ -228,62 +232,69 @@ void loop()
     protocolBuffer[0] = ble_read();
     protocolBuffer[1] = ble_read();
     
-    Serial.println((int)protocolBuffer[0]);
-    Serial.println((int)protocolBuffer[1]);
+    Serial.print((int)protocolBuffer[0]);
+    Serial.print(",  ");
+    Serial.print((int)protocolBuffer[1]);
     
     // CHANGE LIGHT INTENSITY VALUE --- DONE UNLESS WE ADD BACK POTENTIOMETER
     if (protocolBuffer[0] == 0)
     {
+      Serial.println("    CHANGE LED INTENSITY");
       ledIntensity = (int)protocolBuffer[1];
+      updateBrightness();
     }
     
     // CHANGE SPEAKER VOLUME -- DONE UNLESS WE WANT TO TWEAK VOLUME VALUES (WRITE OUR OWN MAP FN)
     else if (protocolBuffer[0] == 1)
     {
+      Serial.println("    CHANGE SPEAKER VOLUME");
       volumeBle255 = (int)protocolBuffer[1];
       volumeBle_Changed = true;
     }
     
-    // WE HAVE AN EVENT TO START COUNTING DOWN
+    // WE HAVE AN EVENT TO START COUNTING DOWN - DONE
     else if (protocolBuffer[0] == 2)
     {
-      totalPromptSeconds = (int)protocolBuffer[1] * 60; 
+      Serial.println("    NEW EVENT");
       startEvent();
     }
     
     // TURN SOUND OFF - DONE
     else if (protocolBuffer[0] == 3)
     {
+      Serial.println("    TURN OFF SOUND");
       volumeBle255 = 0;
       volumeBle_Changed = true; 
     }
     
-    // CHANGE EVENT COUNT TIME
+    // CHANGE EVENT COUNT TIME - DONE
     else if (protocolBuffer[0] == 4)
     {
-     totalPromptSeconds = (int)protocolBuffer[1] * 60; 
-     digitalWrite(EVENT_INTERRUPT, !EVENT_INTERRUPT);
+     Serial.println("     CHANGE EVENT TIME");
+     int minutes = (int)protocolBuffer[1];
+     totalPromptSeconds = minutes * 60; 
     }
   }  
-  
-  if (changingLightIntensity)
-  {
-    // Send a signal to change the light intensity
-    
+  // NOTIFY iOS OF LIGHTING CHANGE ----- NEED TO TEST
+  if (lightingKnob_Changed)
+  {   
     outputBuffer[0] = 0;
-    outputBuffer[1] = currentLightIntensity;
-    
+    outputBuffer[1] = lightingKnob255;
+
     sendProtocol(outputBuffer);
+    lightingKnob_Changed = false;
   }
   
-  else if (changingBuzzerLoudness)
+  // NOTIFY iOS OF LIGHTING CHANGE ----- NEED TO TEST
+  else if (volumeKnob_Changed)
   {
     // Send a signal to change the loudness
     
     outputBuffer[0] = 1;
-    outputBuffer[1] = currentBuzzerLoudness;
+    outputBuffer[1] = volumeKnob255;
     
     sendProtocol(outputBuffer);
+    volumeKnob_Changed = false;
   }
   
   else if (buzzerEvent)
@@ -338,6 +349,18 @@ void silence() {
 //  }
 }
 
+void updateLightingKnob255() {
+  int lightingKnobReading1024 = analogRead(INTENSITY_POT_IN);
+  
+  Serial.println(lightingKnobReading1024);
+  
+  int lightingKnobReading = map(lightingKnobReading1024, 1023, 0, 0, 255);
+  if (lightingKnob255 != lightingKnobReading) {
+    lightingKnob255 = lightingKnobReading;
+    lightingKnob_Changed = true;
+  }
+}
+
 void updateVolumeKnob255() {
   int volumeKnobReading1024 = analogRead(VOLUME_POT_IN);
   
@@ -382,11 +405,25 @@ void playMelody() {
     noToneAC();
 }
 
+void updateBrightness() {
+  Serial.println(" * I'm updating LED brightness. ");
+  lightItUp(timerIterations);
+}
+
 void lightItUp(int led_qty) {
-  for (int index = 0; index < led_qty; index++) 
+  Serial.print(" * I'm lighting up ");
+  Serial.print(led_qty);
+  Serial.print(" LEDs with intensity value: ");
+  Serial.print(ledIntensity);
+  Serial.println(".");
+  for (int index = 0; index < 6; index++) 
   {
+    analogWrite(led_array[index], 0);
+  }
+  for (int index = 0; index < led_qty; index++)  { 
     analogWrite(led_array[index], ledIntensity);
   }
+  
 }
 
 void sendProtocol(unsigned char protocolBuffer[2])
@@ -399,22 +436,34 @@ void sendProtocol(unsigned char protocolBuffer[2])
 }
 
 void startEvent () {
-  secondsPerLED = totalPromptSeconds / sizeof(led_array) / sizeof(int);
-  timerIterations = sizeof(led_array) / sizeof(int); 
+  //Serial.println(" * I'm starting a new event. ");
+  secondsPerLED = totalPromptSeconds / 6;
+  timerIterations = 6;
+  
+  //Serial.print("Going to wait for "); Serial.println(secondsPerLED);
+  
   timer.SetTimer(secondsPerLED);
   lightItUp(timerIterations);
-  timer.StartTimer();
+
   hasEvent = true;
 }
 
 void updateEvent () {
   if (timerIterations != 0) {
     unsigned int cero = 0;
+    Serial.println(timer.ShowSeconds());
+    
     if (timer.TimeCheck(cero, cero, cero)) {
+      //Serial.println("Starting the next timer");
        timerIterations = timerIterations - 1;
        timer.SetTimer(secondsPerLED); 
-       lightItUp(timerIterations);
-       timer.StartTimer();
+       if(timerIterations != 0) {
+         lightItUp(timerIterations);
+       }
+       else {
+         hasEvent = false;
+         playMelody();
+       }
      }
   }
   else {
