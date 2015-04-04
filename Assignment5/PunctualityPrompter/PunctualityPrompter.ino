@@ -451,6 +451,7 @@ void updateEvent () {
     if (timer.TimeCheck(0, 0, 0)) {
       hasEvent = false;
       shouldPlayMelody = LOW;
+      buzzerEvent = true;
       playMelody();
     }
   }
