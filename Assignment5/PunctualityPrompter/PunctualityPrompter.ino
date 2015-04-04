@@ -80,6 +80,8 @@ volatile int shouldPlayMelody;
 
 int gAmountOfMinutesToCountdown;
 
+int melodyCount = 0;
+
 // Melody liberated from the toneMelody Arduino example sketch by Tom Igoe.
 int melody[] = { NOTE_C4, NOTE_F4, NOTE_C4, NOTE_F3, NOTE_C4, NOTE_F4, NOTE_C4,
   NOTE_C4, NOTE_F4, NOTE_C4, NOTE_F4,
@@ -211,22 +213,17 @@ void setup()
 
 void loop()
 {
-  timer.Timer();
-  //shouldPlayMelody = digitalRead();
-  
-  //volumeKnobReading = analogRead(VOLUME_POT_IN);
+  timer.Timer();  
   
   if (hasEvent) {
     updateEvent();
   }
   else {
     updateVolumeKnob255();
-    updateLightingKnob255();
   }
   
   if (shouldPlayMelody == LOW)
   {
-   buzzerEvent = false;
    playMelody(); 
   }
   
@@ -287,17 +284,8 @@ void loop()
      
     }
   }  
-  // NOTIFY iOS OF LIGHTING CHANGE ----- NEED TO TEST
-  if (lightingKnob_Changed)
-  {   
-    outputBuffer[0] = 0;
-    outputBuffer[1] = lightingKnob255;
-
-    sendProtocol(outputBuffer);
-    lightingKnob_Changed = false;
-  }
   
-  // NOTIFY iOS OF LIGHTING CHANGE ----- NEED TO TEST
+  // NOTIFY iOS OF VOLUME CHANGE ----- NEED TO TEST
   else if (volumeKnob_Changed)
   {
     outputBuffer[0] = 1;
@@ -316,13 +304,6 @@ void loop()
     buzzerEvent = false;
   }
   
-  if (!ble_connected())
-  {
-    //analog_enabled = false;
-    //digitalWrite(MUSIC_SIGNAL_OUT, LOW);
-    //analogWrite(VOLUME_SIGNAL_OUT, volume);
-  }
-  
   // Allow BLE Shield to send/receive data
   ble_do_events();
 
@@ -338,6 +319,7 @@ void silence() {
     if (shouldPlayMelody == LOW) {
       //Serial.println("Getting in the if");
       shouldPlayMelody = HIGH;
+      melodyCount = 0;
     }
 //    
 //    if (buttonPressed != lastButtonState) {
@@ -356,18 +338,6 @@ void silence() {
 //          }
 //      }
 //  }
-}
-
-void updateLightingKnob255() {
-  int lightingKnobReading1024 = analogRead(INTENSITY_POT_IN);
-  
-  //Serial.println(lightingKnobReading1024);
-  
-  int lightingKnobReading = map(lightingKnobReading1024, 1023, 0, 0, 255);
-  if (lightingKnob255 != lightingKnobReading) {
-    lightingKnob255 = lightingKnobReading;
-    lightingKnob_Changed = true;
-  }
 }
 
 void updateVolumeKnob255() {
@@ -397,9 +367,8 @@ void updateVolume10scale(){
 }
 
 void playMelody() {
-    if(!buzzerEvent) {
-      buzzerEvent = true;
-      shouldPlayMelody = LOW;
+    if(melodyCount > 0) {
+      buzzerEvent = false;
     }
     toneAC(); // Turn off toneAC, can also use noToneAC().
     delay(1000); // Wait a second.
@@ -416,6 +385,8 @@ void playMelody() {
       }
     }
     noToneAC();
+    
+    melodyCount++;
 }
 
 void updateBrightness() {

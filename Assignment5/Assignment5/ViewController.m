@@ -13,7 +13,8 @@
 @property (strong, nonatomic)NSArray* timesForPicker;
 @property (strong, nonatomic) NSMutableDictionary* runningQueues;
 @property (strong, nonatomic) EKEventStore * eventStore;
-@property int currentWarningTime;
+@property (nonatomic) int currentWarningTime;
+@property (nonatomic) bool storeChangedCheck;
 
 @end
 
@@ -45,6 +46,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.storeChangedCheck = false;
+    
     self.timesForPicker = @[@"5", @"10", @"15", @"20", @"25", @"30"];
     
     [self.timesPicker selectRow:5 inComponent:0 animated:false];
@@ -71,6 +74,8 @@
 - (void) storeChanged
 {
     [self startCountdownToNextEvent];
+    
+    self.storeChangedCheck = true;
 }
 
 - (void) startCountdownToNextEvent
@@ -110,6 +115,11 @@
             
             NSString* selected = [NSString stringWithFormat:@"%d", currentValue];
 
+            if (self.storeChangedCheck && [self.runningQueues objectForKey:selected])
+            {
+                [self.runningQueues removeObjectForKey:selected];
+            }
+            
             if ([self.runningQueues objectForKey:selected])
             {
                 // Found a key, we already have a block waiting.
@@ -130,6 +140,12 @@
             while (timeToEvent < self.currentWarningTime)
             {
                 eventsIndexPosition += 1;
+                
+                if (eventsIndexPosition == eventList.count)
+                {
+                    return;
+                }
+                
                 event = [eventList objectAtIndex:eventsIndexPosition];
                 eventDate = event.startDate;
                 
@@ -153,6 +169,13 @@
             // Just fall through.
             
             int checkValue = self.currentWarningTime;
+            
+            if (![self.runningQueues objectForKey:selected])
+            {
+                return;
+            }
+            
+            [self.runningQueues removeObjectForKey:selected];
             
             if (currentValue == checkValue)
             {
