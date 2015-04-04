@@ -286,7 +286,7 @@ void loop()
   }  
   
   // NOTIFY iOS OF VOLUME CHANGE ----- NEED TO TEST
-  else if (volumeKnob_Changed)
+  if (volumeKnob_Changed)
   {
     outputBuffer[0] = 1;
     outputBuffer[1] = volumeKnob255;
@@ -295,7 +295,7 @@ void loop()
     volumeKnob_Changed = false;
   }
   // NOTIFY iOS THAT BUZZER IS SOUNDING (MELODY IS PLAYING) --- NEED TO TEST
-  else if (buzzerEvent)
+  if (buzzerEvent)
   {
     outputBuffer[0] = 2;
     outputBuffer[1] = 255;
