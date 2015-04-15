@@ -9,6 +9,7 @@
 #import "PhotosCollectionViewController.h"
 #import "CameraViewController.h"
 #import "ImageCollectionViewCell.h"
+#import "LongCollectionViewCell.h"
 
 @interface PhotosCollectionViewController () <PictureDelegate, NSURLSessionTaskDelegate>
 
@@ -30,13 +31,13 @@ static NSString * const kURL = @"the url goes here";
     
     // Register cell classes
     [self.collectionView registerClass:[ImageCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [self.collectionView registerClass:[LongCollectionViewCell class] forCellWithReuseIdentifier:@"LongCollectionViewCell"];
     // Do any additional setup after loading the view.
     self.tabBarController.title = @"Target";
     
     
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonSystemItemCamera target:self action:@selector(showCamera:)];
-    self.tabBarController.navigationItem.rightBarButtonItem = anotherButton;
+    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(showCamera:)];
+    self.tabBarController.navigationItem.rightBarButtonItem = cameraButton;
     
     NSURLSessionConfiguration *sessionConfig =
     [NSURLSessionConfiguration ephemeralSessionConfiguration];
@@ -109,16 +110,16 @@ static NSString * const kURL = @"the url goes here";
 }
 
 - (UICollectionViewCell *)bottomSection: (UICollectionView *)collectionView cellForIndexPath:(NSIndexPath*) indexPath {
-    UICollectionViewCell *bottom = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    LongCollectionViewCell *bottom = (LongCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"LongCollectionViewCell" forIndexPath:indexPath];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [button addTarget:self
                action:@selector(sendRequest:)
      forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:@"Send Request" forState:UIControlStateNormal];
-    button.frame = CGRectMake(20.f, 20.f, 280.f, 30.f);
+    button.frame = CGRectMake(20.f, 20.f, 280.f, 40.f);
     [bottom addSubview:button];
-    
+    bottom.backgroundColor = [UIColor greenColor];
     return bottom;
 }
 
@@ -153,7 +154,7 @@ static NSString * const kURL = @"the url goes here";
 }
 */
 
-- (void)sendRequest:(id)sender {
+- (IBAction)sendRequest:(id)sender {
     
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
@@ -162,7 +163,7 @@ static NSString * const kURL = @"the url goes here";
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
         [request setHTTPMethod:@"POST"];
         NSData *imageData = UIImagePNGRepresentation(picture);
-        NSString *imageString =[[NSString alloc] initWithData:imageData encoding:NSUTF8StringEncoding];
+        NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 
         
 //        NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
@@ -180,6 +181,9 @@ static NSString * const kURL = @"the url goes here";
                                    fromData:postData
                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                               
+                              if (error) {
+                                  NSLog(@"Upload error: %@", error);
+                              }
                           }];
         [uploadTask resume];
                                  
