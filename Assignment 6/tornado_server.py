@@ -35,16 +35,22 @@ def json_str(value):
 
 
 class MainHandler(tornado.web.RequestHandler):
+   def get(self):
+      print("Hola")
+
    # Function that async handles Post request 
    @tornado.web.asynchronous 
    def post(self): 
+      print ("Post Received")
 
       ##################
       # Retriving Post Request Data
       ##################
       
-      arg1 = self.get_argument("arg1");
-      arg2 = self.get_argument("arg2");
+      data = json.loads(self.request.body)   
+
+      arg1 = data['arg1']
+      arg2 = data['arg2']
 
       # Converting the data received to bytes
       try:
@@ -54,16 +60,17 @@ class MainHandler(tornado.web.RequestHandler):
          e = "%s Problem parsing POST data" % value
          raise HTTPJSONError(1, e)
 
-
+      
+      print (arg2)
       ##################
       # Displays image for testing pruporses
       ##################
       root = tk.Tk()
       root.title("Testing Post Imaged Received")
       
-      imageFile = "IMG_0036.PNG"
-      image1 = ImageTk.PhotoImage(Image.open(imageFile))
-      #image1 = ImageTk.PhotoImage(Image.open(png_image))
+      #imageFile = "IMG_0036.PNG"
+      #image1 = ImageTk.PhotoImage(Image.open(imageFile))
+      image1 = ImageTk.PhotoImage(Image.open(png_image))
 
       # get the image size
       w = image1.width()
@@ -90,12 +97,12 @@ class MainHandler(tornado.web.RequestHandler):
       ####################
       # Insert Picture in DB
       ####################
-      client = MongoClient() # localhost, default port
-      collect = client.DroneRecognizer.ClassifierData
+      #client = MongoClient() # localhost, default port
+      #collect = client.DroneRecognizer.ClassifierData
 
-      collect.update({"name":name},
-                     { "$push": {"images":png_image} }, 
-                     upsert=True)      
+      #collect.update({"name":name},
+      #               { "$push": {"images":png_image} }, 
+      #               upsert=True)      
 
     
       ####################

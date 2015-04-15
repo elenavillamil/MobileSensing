@@ -20,7 +20,7 @@
 @implementation PhotosCollectionViewController
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
-static NSString * const kURL = @"the url goes here";
+static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -166,7 +166,11 @@ static NSString * const kURL = @"the url goes here";
 
         
 //        NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
+        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
+        
+        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"Hola", @"arg1", @"Testing", @"arg2", nil];
+        
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"arg1", @"Elena", @"arg2", nil];
         
         NSError *error;
         NSData *postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
