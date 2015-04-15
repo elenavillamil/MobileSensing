@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="H8Q-pP-xgc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="H8Q-pP-xgc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -54,7 +54,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="sK0-6o-ieH"/>
+                    <tabBarItem key="tabBarItem" title="Item 2" image="transport37" id="sK0-6o-ieH">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="image" keyPath="keyPath" value="transport37"/>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <navigationItem key="navigationItem" title="Drone Control" id="ue1-Qm-pMo"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="16L-4N-Hwl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -138,14 +142,32 @@
                                     <outlet property="pictureImageView" destination="b75-Vt-ubS" id="l8O-ld-88f"/>
                                 </connections>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="Wm2-X1-LsB">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LongCollectionViewCell" id="Wm2-X1-LsB">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="319.5" height="52"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LR6-Uv-FZb">
+                                            <rect key="frame" x="8" y="13" width="304" height="28"/>
+                                            <color key="backgroundColor" red="0.53132454039999999" green="1" blue="0.32020168240000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="303.5" id="Qn1-Is-4NT"/>
+                                            </constraints>
+                                            <state key="normal" title="Send Request"/>
+                                            <connections>
+                                                <action selector="sendRequest:" destination="hE0-Ll-8gJ" eventType="touchUpInside" id="VfG-1u-hKY"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="LR6-Uv-FZb" secondAttribute="centerX" id="cn9-f4-Kgc"/>
+                                    <constraint firstAttribute="centerY" secondItem="LR6-Uv-FZb" secondAttribute="centerY" constant="-1" id="kah-W7-uQ4"/>
+                                    <constraint firstItem="LR6-Uv-FZb" firstAttribute="top" secondItem="Wm2-X1-LsB" secondAttribute="topMargin" constant="5" id="yiT-69-Xhl"/>
+                                </constraints>
                                 <size key="customSize" width="319.5" height="52"/>
                             </collectionViewCell>
                         </cells>
@@ -154,7 +176,11 @@
                             <outlet property="delegate" destination="hE0-Ll-8gJ" id="hTu-gu-srF"/>
                         </connections>
                     </collectionView>
-                    <tabBarItem key="tabBarItem" title="Target Capture" id="8l8-tn-OdQ"/>
+                    <tabBarItem key="tabBarItem" title="Target Capture" image="Center Direction-64" selectedImage="Center Direction Filled-64" id="8l8-tn-OdQ">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="Center Direction Filled-64"/>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <navigationItem key="navigationItem" title="Target" id="U7Z-eI-LHT">
                         <barButtonItem key="rightBarButtonItem" systemItem="camera" id="kxK-7c-kvR"/>
                     </navigationItem>
@@ -181,15 +207,6 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f3C-KW-Lal">
                                 <rect key="frame" x="0.0" y="504" width="320" height="64"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wS7-9a-Scv">
-                                        <rect key="frame" x="133" y="17" width="55" height="30"/>
-                                        <state key="normal" title="Capture">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="takePhoto:" destination="Ewi-L4-6ol" eventType="touchUpInside" id="wRJ-Gu-SoV"/>
-                                        </connections>
-                                    </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ryj-VQ-cgn">
                                         <rect key="frame" x="251" y="8" width="61" height="48"/>
                                         <constraints>
@@ -206,23 +223,40 @@
                                             <action selector="dismissViewController:" destination="Ewi-L4-6ol" eventType="touchUpInside" id="eTW-8C-ifp"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wS7-9a-Scv">
+                                        <rect key="frame" x="136" y="8" width="48" height="48"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="48" id="2ND-9h-XIk"/>
+                                            <constraint firstAttribute="height" constant="48" id="7Of-Tm-pgL"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="record8">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="takePhoto:" destination="Ewi-L4-6ol" eventType="touchUpInside" id="wRJ-Gu-SoV"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="1" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="ryj-VQ-cgn" secondAttribute="centerX" constant="-121.5" id="1mJ-Zi-aXl"/>
                                     <constraint firstAttribute="centerY" secondItem="wS7-9a-Scv" secondAttribute="centerY" id="JJA-w8-8DD"/>
                                     <constraint firstAttribute="centerX" secondItem="wS7-9a-Scv" secondAttribute="centerX" constant="-0.5" id="Lvn-Oh-Xnp"/>
                                     <constraint firstAttribute="trailing" secondItem="ryj-VQ-cgn" secondAttribute="trailing" constant="8" id="V0A-0g-F1h"/>
-                                    <constraint firstAttribute="centerX" secondItem="ryj-VQ-cgn" secondAttribute="centerX" constant="-121.5" id="WIm-Pj-l4j"/>
-                                    <constraint firstItem="ryj-VQ-cgn" firstAttribute="top" secondItem="f3C-KW-Lal" secondAttribute="top" constant="8" id="Wbh-lL-O5n"/>
                                     <constraint firstAttribute="centerY" secondItem="Tt1-AC-GL2" secondAttribute="centerY" id="Zw7-Gn-tBr"/>
                                     <constraint firstAttribute="height" constant="64" id="hPm-7k-Q9r"/>
                                     <constraint firstAttribute="centerX" secondItem="Tt1-AC-GL2" secondAttribute="centerX" constant="133.5" id="i13-tb-oxe"/>
                                     <constraint firstItem="Tt1-AC-GL2" firstAttribute="leading" secondItem="f3C-KW-Lal" secondAttribute="leading" constant="8" id="ktx-yU-6um"/>
+                                    <constraint firstAttribute="centerY" secondItem="ryj-VQ-cgn" secondAttribute="centerY" id="mDC-8U-Xdl"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GQ4-VQ-g6E">
-                                <rect key="frame" x="258" y="20" width="46" height="30"/>
-                                <state key="normal" title="Button">
+                                <rect key="frame" x="258" y="20" width="50" height="43"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="7js-8L-qti"/>
+                                    <constraint firstAttribute="height" constant="43" id="OPy-Jg-4v0"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="rotate_camera">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -230,8 +264,12 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nUn-6f-ZGp">
-                                <rect key="frame" x="16" y="20" width="46" height="30"/>
-                                <state key="normal" title="Button">
+                                <rect key="frame" x="16" y="20" width="58" height="43"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="3bJ-IU-ngJ"/>
+                                    <constraint firstAttribute="width" constant="58" id="XeH-61-qUL"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="white-lightning-md">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -241,19 +279,23 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="nUn-6f-ZGp" firstAttribute="top" secondItem="5yB-9U-x4m" secondAttribute="bottom" id="2wY-Zd-pA8"/>
                             <constraint firstAttribute="centerX" secondItem="f3C-KW-Lal" secondAttribute="centerX" id="ASY-JE-iMb"/>
+                            <constraint firstItem="GQ4-VQ-g6E" firstAttribute="top" secondItem="5yB-9U-x4m" secondAttribute="bottom" id="Eyj-VC-RjP"/>
                             <constraint firstAttribute="centerY" secondItem="EZP-yZ-pH2" secondAttribute="centerY" id="Gtg-5c-MLC"/>
                             <constraint firstAttribute="width" secondItem="EZP-yZ-pH2" secondAttribute="width" id="H3t-R9-zIe"/>
-                            <constraint firstItem="EZP-yZ-pH2" firstAttribute="leading" secondItem="nUn-6f-ZGp" secondAttribute="trailing" constant="-62" id="Ieh-GI-azh"/>
+                            <constraint firstItem="EZP-yZ-pH2" firstAttribute="leading" secondItem="nUn-6f-ZGp" secondAttribute="trailing" constant="-74" id="Ieh-GI-azh"/>
                             <constraint firstItem="GQ4-VQ-g6E" firstAttribute="leading" secondItem="EZP-yZ-pH2" secondAttribute="trailing" constant="-62" id="L4b-cF-cEj"/>
-                            <constraint firstItem="EZP-yZ-pH2" firstAttribute="top" secondItem="GQ4-VQ-g6E" secondAttribute="bottom" constant="-50" id="N28-Li-2LA"/>
                             <constraint firstItem="Tx7-wS-gBt" firstAttribute="top" secondItem="f3C-KW-Lal" secondAttribute="bottom" id="UJf-Uj-AXr"/>
                             <constraint firstAttribute="centerX" secondItem="EZP-yZ-pH2" secondAttribute="centerX" id="Wtw-r7-7hh"/>
-                            <constraint firstItem="EZP-yZ-pH2" firstAttribute="top" secondItem="nUn-6f-ZGp" secondAttribute="bottom" constant="-50" id="dZE-9P-FRu"/>
+                            <constraint firstItem="EZP-yZ-pH2" firstAttribute="leading" secondItem="1j7-II-lCZ" secondAttribute="leadingMargin" constant="-16" id="dko-1g-E39"/>
                             <constraint firstAttribute="width" secondItem="f3C-KW-Lal" secondAttribute="width" id="nyM-tD-L8d"/>
                             <constraint firstAttribute="height" secondItem="EZP-yZ-pH2" secondAttribute="height" id="yGg-It-55Y"/>
+                            <constraint firstItem="EZP-yZ-pH2" firstAttribute="top" secondItem="5yB-9U-x4m" secondAttribute="bottom" constant="-20" id="ycD-DN-9ZS"/>
                         </constraints>
                     </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="imageView" destination="EZP-yZ-pH2" id="VEJ-cY-kJS"/>
                         <outlet property="lastPictureImageView" destination="ryj-VQ-cgn" id="f8V-RL-ijQ"/>
@@ -286,6 +328,14 @@
             <point key="canvasLocation" x="-273" y="340"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Center Direction Filled-64" width="32" height="32"/>
+        <image name="Center Direction-64" width="32" height="32"/>
+        <image name="record8" width="64" height="64"/>
+        <image name="rotate_camera" width="256" height="256"/>
+        <image name="transport37" width="32" height="32"/>
+        <image name="white-lightning-md" width="141" height="149"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

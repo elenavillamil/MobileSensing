@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIImageView *lastPictureImageView;
 @property (nonatomic, retain) AVCaptureSession *session;
+@property (nonatomic) BOOL isFlashOn;
+@property (nonatomic) BOOL isForward;
 @end
 
 @implementation CameraViewController
@@ -26,6 +28,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+
+    self.navigationController.navigationBar.hidden = YES;
     
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     session.sessionPreset = AVCaptureSessionPresetMedium;
