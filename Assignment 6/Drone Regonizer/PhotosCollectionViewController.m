@@ -21,6 +21,7 @@
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
 static NSString * const kURL = @"the url goes here";
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -29,7 +30,7 @@ static NSString * const kURL = @"the url goes here";
     
     // Register cell classes
     [self.collectionView registerClass:[ImageCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     // Do any additional setup after loading the view.
     self.tabBarController.title = @"Target";
     
@@ -114,7 +115,7 @@ static NSString * const kURL = @"the url goes here";
     [button addTarget:self
                action:@selector(sendRequest:)
      forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"Show View" forState:UIControlStateNormal];
+    [button setTitle:@"Send Request" forState:UIControlStateNormal];
     button.frame = CGRectMake(20.f, 20.f, 280.f, 30.f);
     [bottom addSubview:button];
     
@@ -154,15 +155,21 @@ static NSString * const kURL = @"the url goes here";
 
 - (void)sendRequest:(id)sender {
     
+    NSNumber *index = [NSNumber numberWithInteger:1];
+    NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
     for (UIImage *picture in self.photos) {
         NSURL *postURL = [NSURL URLWithString:kURL];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
         [request setHTTPMethod:@"POST"];
         NSData *imageData = UIImagePNGRepresentation(picture);
+        NSString *imageString =[[NSString alloc] initWithData:imageData encoding:NSUTF8StringEncoding];
+
         
-        NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[self.photos.count, [self.photos indexOfObject:picture], imageData, nil] forKeys:@[@"number", @"index", @"picture", nil]];
-        NSError *error = nil;
-        NSData *postData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:&error];
+//        NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
+        
+        NSError *error;
+        NSData *postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
         
         if (error) {
             break;
@@ -174,6 +181,10 @@ static NSString * const kURL = @"the url goes here";
                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                               
                           }];
+        [uploadTask resume];
+                                 
+        int value = [index intValue];
+        index = [NSNumber numberWithInt:value + 1];
     }
     
 }
