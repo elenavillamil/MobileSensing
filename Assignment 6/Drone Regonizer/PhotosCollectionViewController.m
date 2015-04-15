@@ -10,8 +10,9 @@
 #import "CameraViewController.h"
 #import "ImageCollectionViewCell.h"
 
-@interface PhotosCollectionViewController () <PictureDelegate>
+@interface PhotosCollectionViewController () <PictureDelegate, NSURLSessionTaskDelegate>
 
+@property (strong,nonatomic) NSURLSession *session;
 @property (nonatomic, retain) NSMutableArray *photos;
 
 @end
@@ -19,7 +20,7 @@
 @implementation PhotosCollectionViewController
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
-
+static NSString * const kURL = @"the url goes here";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -35,6 +36,15 @@ static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
     
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonSystemItemCamera target:self action:@selector(showCamera:)];
     self.tabBarController.navigationItem.rightBarButtonItem = anotherButton;
+    
+    NSURLSessionConfiguration *sessionConfig =
+    [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    
+    sessionConfig.timeoutIntervalForRequest = 5.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 1;
+    
+    self.session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -143,7 +153,20 @@ static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
 */
 
 - (void)sendRequest:(id)sender {
-    NSURLSession
+    
+    for (UIImage *picture in self.photos) {
+        NSURL *postURL = [NSURL URLWithString:kURL];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
+        [request setHTTPMethod:@"POST"];
+        NSData *imageData = UIImagePNGRepresentation(picture);
+        
+        NSURLSessionUploadTask *uploadTask =
+        [self.session uploadTaskWithRequest:request
+                                   fromData:imageData
+                          completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                              
+                          }];
+    }
     
 }
 
