@@ -14,6 +14,16 @@
 		EA67A3A91ADA90FC00664CDE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA67A3A81ADA90FC00664CDE /* Images.xcassets */; };
 		EA67A3AC1ADA90FC00664CDE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA67A3AA1ADA90FC00664CDE /* LaunchScreen.xib */; };
 		EA67A3B81ADA90FC00664CDE /* Drone_RegonizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA67A3B71ADA90FC00664CDE /* Drone_RegonizerTests.m */; };
+		EA67A3C31ADEB51300664CDE /* PhotosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA67A3C21ADEB51300664CDE /* PhotosCollectionViewController.m */; };
+		EA67A3C61ADEB53300664CDE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA67A3C51ADEB53300664CDE /* CameraViewController.m */; };
+		EA67A3C81ADEB7DB00664CDE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3C71ADEB7DB00664CDE /* AVFoundation.framework */; };
+		EA67A3CA1ADEB7E800664CDE /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3C91ADEB7E800664CDE /* CoreVideo.framework */; };
+		EA67A3CC1ADEB7F800664CDE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CB1ADEB7F800664CDE /* CoreMedia.framework */; };
+		EA67A3CE1ADEB80400664CDE /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CD1ADEB80400664CDE /* ImageIO.framework */; };
+		EA67A3D01ADEB81000664CDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */; };
+		EAEAFB6F1ADEBB4F007C6471 /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */; };
+		EAEAFB721ADEBB62007C6471 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */; };
+		EAEAFB751ADED03E007C6471 /* ImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB741ADED03E007C6471 /* ImageCollectionViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +50,21 @@
 		EA67A3B11ADA90FC00664CDE /* Drone RegonizerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Drone RegonizerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA67A3B61ADA90FC00664CDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EA67A3B71ADA90FC00664CDE /* Drone_RegonizerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Drone_RegonizerTests.m; sourceTree = "<group>"; };
+		EA67A3C11ADEB51300664CDE /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosCollectionViewController.h; sourceTree = "<group>"; };
+		EA67A3C21ADEB51300664CDE /* PhotosCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotosCollectionViewController.m; sourceTree = "<group>"; };
+		EA67A3C41ADEB53300664CDE /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		EA67A3C51ADEB53300664CDE /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		EA67A3C71ADEB7DB00664CDE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		EA67A3C91ADEB7E800664CDE /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		EA67A3CB1ADEB7F800664CDE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		EA67A3CD1ADEB80400664CDE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		EAEAFB6D1ADEBB4F007C6471 /* NavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationViewController.h; sourceTree = "<group>"; };
+		EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationViewController.m; sourceTree = "<group>"; };
+		EAEAFB701ADEBB62007C6471 /* TabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarViewController.h; sourceTree = "<group>"; };
+		EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarViewController.m; sourceTree = "<group>"; };
+		EAEAFB731ADED03E007C6471 /* ImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCollectionViewCell.h; sourceTree = "<group>"; };
+		EAEAFB741ADED03E007C6471 /* ImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCollectionViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +72,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA67A3D01ADEB81000664CDE /* QuartzCore.framework in Frameworks */,
+				EA67A3CE1ADEB80400664CDE /* ImageIO.framework in Frameworks */,
+				EA67A3CC1ADEB7F800664CDE /* CoreMedia.framework in Frameworks */,
+				EA67A3CA1ADEB7E800664CDE /* CoreVideo.framework in Frameworks */,
+				EA67A3C81ADEB7DB00664CDE /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +93,11 @@
 		EA67A38F1ADA90FC00664CDE = {
 			isa = PBXGroup;
 			children = (
+				EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */,
+				EA67A3CD1ADEB80400664CDE /* ImageIO.framework */,
+				EA67A3CB1ADEB7F800664CDE /* CoreMedia.framework */,
+				EA67A3C91ADEB7E800664CDE /* CoreVideo.framework */,
+				EA67A3C71ADEB7DB00664CDE /* AVFoundation.framework */,
 				EA67A39A1ADA90FC00664CDE /* Drone Regonizer */,
 				EA67A3B41ADA90FC00664CDE /* Drone RegonizerTests */,
 				EA67A3991ADA90FC00664CDE /* Products */,
@@ -85,6 +120,16 @@
 				EA67A3A01ADA90FC00664CDE /* AppDelegate.m */,
 				EA67A3A21ADA90FC00664CDE /* ViewController.h */,
 				EA67A3A31ADA90FC00664CDE /* ViewController.m */,
+				EA67A3C11ADEB51300664CDE /* PhotosCollectionViewController.h */,
+				EA67A3C21ADEB51300664CDE /* PhotosCollectionViewController.m */,
+				EA67A3C41ADEB53300664CDE /* CameraViewController.h */,
+				EA67A3C51ADEB53300664CDE /* CameraViewController.m */,
+				EAEAFB6D1ADEBB4F007C6471 /* NavigationViewController.h */,
+				EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */,
+				EAEAFB701ADEBB62007C6471 /* TabBarViewController.h */,
+				EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */,
+				EAEAFB731ADED03E007C6471 /* ImageCollectionViewCell.h */,
+				EAEAFB741ADED03E007C6471 /* ImageCollectionViewCell.m */,
 				EA67A3A51ADA90FC00664CDE /* Main.storyboard */,
 				EA67A3A81ADA90FC00664CDE /* Images.xcassets */,
 				EA67A3AA1ADA90FC00664CDE /* LaunchScreen.xib */,
@@ -219,8 +264,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA67A3C61ADEB53300664CDE /* CameraViewController.m in Sources */,
 				EA67A3A41ADA90FC00664CDE /* ViewController.m in Sources */,
+				EAEAFB721ADEBB62007C6471 /* TabBarViewController.m in Sources */,
+				EAEAFB6F1ADEBB4F007C6471 /* NavigationViewController.m in Sources */,
 				EA67A3A11ADA90FC00664CDE /* AppDelegate.m in Sources */,
+				EA67A3C31ADEB51300664CDE /* PhotosCollectionViewController.m in Sources */,
+				EAEAFB751ADED03E007C6471 /* ImageCollectionViewCell.m in Sources */,
 				EA67A39E1ADA90FC00664CDE /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,6 +462,7 @@
 				EA67A3BD1ADA90FC00664CDE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EA67A3BE1ADA90FC00664CDE /* Build configuration list for PBXNativeTarget "Drone RegonizerTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +471,7 @@
 				EA67A3C01ADA90FC00664CDE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
