@@ -160,9 +160,17 @@ static NSString * const kURL = @"the url goes here";
         [request setHTTPMethod:@"POST"];
         NSData *imageData = UIImagePNGRepresentation(picture);
         
+        NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[self.photos.count, [self.photos indexOfObject:picture], imageData, nil] forKeys:@[@"number", @"index", @"picture", nil]];
+        NSError *error = nil;
+        NSData *postData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:&error];
+        
+        if (error) {
+            break;
+        }
+        
         NSURLSessionUploadTask *uploadTask =
         [self.session uploadTaskWithRequest:request
-                                   fromData:imageData
+                                   fromData:postData
                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                               
                           }];
