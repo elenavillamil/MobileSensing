@@ -22,6 +22,7 @@
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
 static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
+static int FPS = 30;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,6 +47,8 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     
     self.session = [NSURLSession sessionWithConfiguration:sessionConfig];
     
+    self.collectionView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10.0);
+    self.collectionView.backgroundColor = [UIColor lightGrayColor];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,6 +89,9 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     NSInteger count = self.photos.count;
     NSLog(@"number of photos: %ld", (long)count);
+    if (count > 20) {
+        return 20;
+    }
     return count;
 }
 
@@ -93,10 +99,11 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
      ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
     UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
-    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(143, 115)];
+    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(128, 128)];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
+    [imageView setFrame:CGRectMake(8, 8, 128.f, 128.f)];
     [cell addSubview:imageView];
-    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
 
@@ -295,6 +302,26 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     
 }
 
+- (void)getAllImages {
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    generator.requestedTimeToleranceAfter =  kCMTimeZero;
+    generator.requestedTimeToleranceBefore =  kCMTimeZero;
+    for (Float64 i = 0; i < CMTimeGetSeconds(asset.duration) *  FPS ; i++){
+        @autoreleasepool {
+            CMTime time = CMTimeMake(i, FPS);
+            NSError *err;
+            CMTime actualTime;
+            CGImageRef image = [generator copyCGImageAtTime:time actualTime:&actualTime error:&err];
+            UIImage *generatedImage = [[UIImage alloc] initWithCGImage:image];
+            [self.photos addObject:generatedImage];
+            CGImageRelease(image);
+        }
+    }
+    
+    [self.collectionView reloadData];
+}
+
 - (void)addPhoto:(NSNotification *)notification {
     NSLog(@"%@", notification);
 }
@@ -315,7 +342,7 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.videoController.view removeFromSuperview];
-        [self generateImage];
+        [self getAllImages];
     });
     
 }

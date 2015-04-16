@@ -112,9 +112,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="uaw-SE-L7V">
-                            <size key="itemSize" width="143" height="115"/>
+                            <size key="itemSize" width="153" height="123"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="50" height="50"/>
+                            <size key="footerReferenceSize" width="50" height="70"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -122,11 +122,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="143" height="115"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="b75-Vt-ubS">
-                                            <rect key="frame" x="9" y="6" width="124" height="103"/>
+                                            <rect key="frame" x="6" y="6" width="128" height="128"/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -135,9 +135,9 @@
                                     <constraint firstItem="b75-Vt-ubS" firstAttribute="top" secondItem="LPs-N1-FAZ" secondAttribute="topMargin" constant="-2" id="3FT-KI-YF4"/>
                                     <constraint firstAttribute="centerY" secondItem="b75-Vt-ubS" secondAttribute="centerY" id="7SW-EK-CRc"/>
                                     <constraint firstAttribute="centerX" secondItem="b75-Vt-ubS" secondAttribute="centerX" id="9Os-Oj-cmr"/>
-                                    <constraint firstItem="b75-Vt-ubS" firstAttribute="leading" secondItem="LPs-N1-FAZ" secondAttribute="leadingMargin" constant="1" id="FWF-W1-JmU"/>
+                                    <constraint firstItem="b75-Vt-ubS" firstAttribute="leading" secondItem="LPs-N1-FAZ" secondAttribute="leadingMargin" constant="-2" id="FWF-W1-JmU"/>
                                 </constraints>
-                                <size key="customSize" width="143" height="115"/>
+                                <size key="customSize" width="140" height="140"/>
                                 <connections>
                                     <outlet property="pictureImageView" destination="b75-Vt-ubS" id="l8O-ld-88f"/>
                                 </connections>
