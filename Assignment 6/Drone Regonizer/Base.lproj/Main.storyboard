@@ -54,11 +54,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" image="transport37" id="sK0-6o-ieH">
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="image" keyPath="keyPath" value="transport37"/>
-                        </userDefinedRuntimeAttributes>
-                    </tabBarItem>
+                    <tabBarItem key="tabBarItem" title="Item 2" id="sK0-6o-ieH"/>
                     <navigationItem key="navigationItem" title="Drone Control" id="ue1-Qm-pMo"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="16L-4N-Hwl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -112,9 +108,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="uaw-SE-L7V">
-                            <size key="itemSize" width="108" height="101"/>
+                            <size key="itemSize" width="143" height="115"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="50" height="50"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -122,65 +118,48 @@
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="95" height="95"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="143" height="115"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="b75-Vt-ubS">
-                                            <rect key="frame" x="0.0" y="0.0" width="95" height="95"/>
+                                            <rect key="frame" x="9" y="6" width="124" height="103"/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
+                                    <constraint firstItem="b75-Vt-ubS" firstAttribute="top" secondItem="LPs-N1-FAZ" secondAttribute="topMargin" constant="-2" id="3FT-KI-YF4"/>
                                     <constraint firstAttribute="centerY" secondItem="b75-Vt-ubS" secondAttribute="centerY" id="7SW-EK-CRc"/>
                                     <constraint firstAttribute="centerX" secondItem="b75-Vt-ubS" secondAttribute="centerX" id="9Os-Oj-cmr"/>
-                                    <constraint firstItem="b75-Vt-ubS" firstAttribute="top" secondItem="LPs-N1-FAZ" secondAttribute="topMargin" constant="-8" id="Ftj-QL-Cb6"/>
-                                    <constraint firstItem="b75-Vt-ubS" firstAttribute="leading" secondItem="LPs-N1-FAZ" secondAttribute="leadingMargin" constant="-8" id="dkm-4t-L6v"/>
+                                    <constraint firstItem="b75-Vt-ubS" firstAttribute="leading" secondItem="LPs-N1-FAZ" secondAttribute="leadingMargin" constant="1" id="FWF-W1-JmU"/>
                                 </constraints>
-                                <size key="customSize" width="95" height="95"/>
+                                <size key="customSize" width="143" height="115"/>
                                 <connections>
                                     <outlet property="pictureImageView" destination="b75-Vt-ubS" id="l8O-ld-88f"/>
                                 </connections>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LongCollectionViewCell" id="Wm2-X1-LsB">
-                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="319.5" height="52"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LR6-Uv-FZb">
-                                            <rect key="frame" x="8" y="13" width="304" height="28"/>
-                                            <color key="backgroundColor" red="0.53132454039999999" green="1" blue="0.32020168240000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="303.5" id="Qn1-Is-4NT"/>
-                                            </constraints>
-                                            <state key="normal" title="Send Request"/>
-                                            <connections>
-                                                <action selector="sendRequest:" destination="hE0-Ll-8gJ" eventType="touchUpInside" id="VfG-1u-hKY"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </view>
-                                <constraints>
-                                    <constraint firstAttribute="centerX" secondItem="LR6-Uv-FZb" secondAttribute="centerX" id="cn9-f4-Kgc"/>
-                                    <constraint firstAttribute="centerY" secondItem="LR6-Uv-FZb" secondAttribute="centerY" constant="-1" id="kah-W7-uQ4"/>
-                                    <constraint firstItem="LR6-Uv-FZb" firstAttribute="top" secondItem="Wm2-X1-LsB" secondAttribute="topMargin" constant="5" id="yiT-69-Xhl"/>
-                                </constraints>
-                                <size key="customSize" width="319.5" height="52"/>
-                            </collectionViewCell>
                         </cells>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FooterView" id="UNZ-dM-Dhq" customClass="FooterCollectionReusableView">
+                            <rect key="frame" x="0.0" y="179" width="320" height="50"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4hx-Tc-zWM">
+                                    <rect key="frame" x="8" y="10" width="304" height="32"/>
+                                    <state key="normal" title="Send Request">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="sendRequest:" destination="hE0-Ll-8gJ" eventType="touchUpInside" id="cFZ-cp-ah5"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="hE0-Ll-8gJ" id="2H7-gU-UAn"/>
                             <outlet property="delegate" destination="hE0-Ll-8gJ" id="hTu-gu-srF"/>
                         </connections>
                     </collectionView>
-                    <tabBarItem key="tabBarItem" title="Target Capture" image="Center Direction-64" selectedImage="Center Direction Filled-64" id="8l8-tn-OdQ">
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="Center Direction Filled-64"/>
-                        </userDefinedRuntimeAttributes>
-                    </tabBarItem>
+                    <tabBarItem key="tabBarItem" title="Target Capture" id="8l8-tn-OdQ"/>
                     <navigationItem key="navigationItem" title="Target" id="U7Z-eI-LHT">
                         <barButtonItem key="rightBarButtonItem" systemItem="camera" id="kxK-7c-kvR"/>
                     </navigationItem>
@@ -214,15 +193,6 @@
                                             <constraint firstAttribute="width" constant="61" id="Gt2-DZ-klb"/>
                                         </constraints>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tt1-AC-GL2">
-                                        <rect key="frame" x="8" y="17" width="37" height="30"/>
-                                        <state key="normal" title="Done">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="dismissViewController:" destination="Ewi-L4-6ol" eventType="touchUpInside" id="eTW-8C-ifp"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wS7-9a-Scv">
                                         <rect key="frame" x="136" y="8" width="48" height="48"/>
                                         <constraints>
@@ -234,6 +204,15 @@
                                         </state>
                                         <connections>
                                             <action selector="takePhoto:" destination="Ewi-L4-6ol" eventType="touchUpInside" id="wRJ-Gu-SoV"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tt1-AC-GL2">
+                                        <rect key="frame" x="8" y="17" width="37" height="30"/>
+                                        <state key="normal" title="Done">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="dismissViewController:" destination="Ewi-L4-6ol" eventType="touchUpInside" id="eTW-8C-ifp"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -297,6 +276,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="doneButton" destination="Tt1-AC-GL2" id="ijP-ww-8dX"/>
                         <outlet property="imageView" destination="EZP-yZ-pH2" id="VEJ-cY-kJS"/>
                         <outlet property="lastPictureImageView" destination="ryj-VQ-cgn" id="f8V-RL-ijQ"/>
                     </connections>
@@ -329,11 +309,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Center Direction Filled-64" width="32" height="32"/>
-        <image name="Center Direction-64" width="32" height="32"/>
         <image name="record8" width="64" height="64"/>
         <image name="rotate_camera" width="256" height="256"/>
-        <image name="transport37" width="32" height="32"/>
         <image name="white-lightning-md" width="141" height="149"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

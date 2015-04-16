@@ -9,7 +9,6 @@
 #import "PhotosCollectionViewController.h"
 #import "CameraViewController.h"
 #import "ImageCollectionViewCell.h"
-#import "LongCollectionViewCell.h"
 
 @interface PhotosCollectionViewController () <PictureDelegate, NSURLSessionTaskDelegate>
 
@@ -31,7 +30,6 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     
     // Register cell classes
     [self.collectionView registerClass:[ImageCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    [self.collectionView registerClass:[LongCollectionViewCell class] forCellWithReuseIdentifier:@"LongCollectionViewCell"];
     // Do any additional setup after loading the view.
     self.tabBarController.title = @"Target";
     
@@ -49,13 +47,6 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.collectionView reloadData];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -66,6 +57,12 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
         _photos = [[NSMutableArray alloc] init];
     }
     return _photos;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self.collectionView reloadData];
 }
 
 /*
@@ -81,46 +78,47 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 2;
+    return 1;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (section == 0){
-        return self.photos.count; }
-    else return 1;
+    NSInteger count = self.photos.count;
+    NSLog(@"number of photos: %ld", (long)count);
+    return count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1) {
-        return [self bottomSection:collectionView cellForIndexPath:indexPath];
-    }
-    
      ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    UIImageView *test = [[UIImageView alloc] initWithFrame:cell.frame];
-    
     UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
-    [cell setImage:picture];
-    test.image = picture;
-    
-    [cell addSubview:test];
-//    cell.backgroundColor = [UIColor blackColor];
+    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(143, 115)];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
+    [cell addSubview:imageView];
+    cell.backgroundColor = [UIColor blackColor];
     return cell;
 }
 
-- (UICollectionViewCell *)bottomSection: (UICollectionView *)collectionView cellForIndexPath:(NSIndexPath*) indexPath {
-    LongCollectionViewCell *bottom = (LongCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"LongCollectionViewCell" forIndexPath:indexPath];
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+     UICollectionReusableView *reusableview = nil;
+    if (kind == UICollectionElementKindSectionFooter) {
+        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
+        
+        reusableview = footerview;
+    }
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button addTarget:self
-               action:@selector(sendRequest:)
-     forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"Send Request" forState:UIControlStateNormal];
-    button.frame = CGRectMake(20.f, 20.f, 280.f, 40.f);
-    [bottom addSubview:button];
-    bottom.backgroundColor = [UIColor greenColor];
-    return bottom;
+    return reusableview;
+}
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
+    // Pass 1.0 to force exact pixel size.
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -164,6 +162,7 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
         [request setHTTPMethod:@"POST"];
         NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
         
 //        NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
         //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
@@ -192,18 +191,34 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
                                  
         int value = [index intValue];
         index = [NSNumber numberWithInt:value + 1];
+        
+        
+        [self decodePost:postData];
     }
     
 }
 
+- (void)decodePost:(NSData *)postData {
+    NSError *error;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:postData options:NSJSONReadingMutableLeaves error:&error];
+    NSString *string = (NSString *)[json objectForKey:@"image"];
+    
+    NSData *dataImage = [[NSData alloc]
+                         initWithBase64EncodedString:string options:0];
+    UIImage *image = [UIImage imageWithData:dataImage];
+    NSLog(@"%@", image);
+}
 - (void)showCamera:(id)sender {
     CameraViewController *cameraVC = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"CameraViewController"];
     cameraVC.delegate = self;
     [self presentViewController:cameraVC animated:YES completion:nil];
 }
 
-- (void)addTargetPhoto:(UIImage *)photo {
+- (BOOL)addTargetPhoto:(UIImage *)photo {
     [self.photos addObject:photo];
+    NSLog(@"number of photos: %lu", (unsigned long)self.photos.count);
+    
+    return YES;
 }
 
 @end
