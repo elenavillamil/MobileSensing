@@ -156,12 +156,14 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
+    
     for (UIImage *picture in self.photos) {
         NSURL *postURL = [NSURL URLWithString:kURL];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
         [request setHTTPMethod:@"POST"];
-        NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+//        NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 
+        NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
         //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
         
         //NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
@@ -199,6 +201,7 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
 }
 
 - (void)decodePost:(NSData *)postData {
+    //was used for testing decoding image.
     NSError *error;
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:postData options:NSJSONReadingMutableLeaves error:&error];
     NSString *string = (NSString *)[json objectForKey:@"image"];
@@ -208,6 +211,7 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     UIImage *image = [UIImage imageWithData:dataImage];
     NSLog(@"%@", image);
 }
+
 - (void)showCamera:(id)sender {
     CameraViewController *cameraVC = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"CameraViewController"];
     cameraVC.delegate = self;
