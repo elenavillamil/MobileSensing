@@ -162,9 +162,9 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
         [request setHTTPMethod:@"POST"];
         NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
+        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
         
-//        NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
+        //NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
         //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
         
         //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"Hola", @"arg1", @"Testing", @"arg2", nil];
@@ -193,7 +193,7 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
         index = [NSNumber numberWithInt:value + 1];
         
         
-        [self decodePost:postData];
+        //[self decodePost:postData];
     }
     
 }
