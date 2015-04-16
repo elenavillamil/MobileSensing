@@ -6,23 +6,25 @@
 #                                                                              #
 ################################################################################
    
-
+import base64
+import json
 import tornado.ioloop
 import tornado.web
+
+from bson.binary import Binary
+from pymongo import MongoClient
 from tornado.escape import recursive_unicode
+
+####################
+# Just needed for debuggin
+####################
 import Tkinter as tk
-
-import json
 from PIL import Image, ImageTk
-
 import numpy as np
 import png
 from matplotlib import pyplot as plt
-import pdb
 import itertools
-import base64
-
-#from basehandler import BaseHandler
+import pdb
 
 # Code taken from Eric's example
 class CustomJSONEncoder(json.JSONEncoder):
@@ -63,63 +65,32 @@ class MainHandler(tornado.web.RequestHandler):
       try:
          #pdb.set_trace()
          png_image = bytes(base64.b64decode(str(arg1)))
-         png_image = png.Reader(bytes=png_image).asDirect()
-         #image_2d = np.vstack(png_image)
-         image_2d = np.vstack(itertools.imap(np.uint16, png_image[2]))
-         image_3d = np.reshape(image_2d, (png_image[1], png_image[0], 3))
-         plt.imshow(image_3d, plt.cm.gray)
-         plt.show()   
-         #png_image = np.array(png_image).resize
-         name = str(arg2);
-      except ValueError:
-         e = "Problem parsing POST data" + ValueError
-         print (e)
-         #raise HTTPJSONError(1, e)
-
-      
-      print (arg2)
-      ##################
-      # Displays image for testing pruporses
-      ##################
-      #root = tk.Tk()
-      #root.title("Testing Post Imaged Received")
-      
-      #imageFile = "IMG_0036.PNG"
-      
-      #image1 = ImageTk.PhotoImage(Image.open(imageFile))
-      #image1 = ImageTk.PhotoImage(Image.open(png_image))
-
-      # get the image size
-      #w = image1.width()
-      #h = image1.height()
+         name = str(arg2)
+         print(name)
+         ##################
+         # Displays image for testing pruporses
+         ##################
+         #png_image = png.Reader(bytes=png_image).asDirect()
+         #image_2d = np.vstack(itertools.imap(np.uint16, png_image[2]))
+         #image_3d = np.reshape(image_2d, (png_image[1], png_image[0], 3))
+         #plt.imshow(image_3d, plt.cm.gray)
+         #plt.show()
    
-      # position coordinates of root 'upper left corner'
-      #x = 0
-      #y = 0
-
-      # make the root window the size of the image
-      #root.geometry("%dx%d+%d+%d" % (w, h, x, y))
-
-      # root has no image argument, so use a label as a panel
-      #panel1 = tk.Label(root, image=image1)
-      #panel1.pack(side='top', fill='both', expand='yes')
-
-      # save the panel's image from 'garbage collection'
-      #panel1.image = image1
-
-      # start the event loop
-      #root.mainloop()
-
+      except ValueError:
+         print ("Problem Parsing Post")
+         #raise HTTPJSONError(1, e)
 
       ####################
       # Insert Picture in DB
       ####################
-      #client = MongoClient() # localhost, default port
-      #collect = client.DroneRecognizer.ClassifierData
+      client = MongoClient() # localhost, default port
+      collect = client.DroneRecognizer.ClassifierData
 
-      #collect.update({"name":name},
-      #               { "$push": {"images":png_image} }, 
-      #               upsert=True)      
+      #bson_image = BSON.encode({"image":png_image})
+      binary_image = Binary(png_image)
+      collect.update({"name":name},
+                     { "$push": {"images":binary_image} }, 
+                     upsert=True)      
 
     
       ####################

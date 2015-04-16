@@ -162,7 +162,6 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
         NSURL *postURL = [NSURL URLWithString:kURL];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
         [request setHTTPMethod:@"POST"];
-        NSData *imageData = UIImagePNGRepresentation(picture);
         NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 
         
