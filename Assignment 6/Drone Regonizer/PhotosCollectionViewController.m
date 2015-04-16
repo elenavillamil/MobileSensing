@@ -256,8 +256,8 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
 - (void)getPhotosFromVideo {
 
     NSNumber *time1 = [NSNumber numberWithInt:10];
-    NSNumber *time2 = [NSNumber numberWithInt:10];
-    NSNumber *time3 = [NSNumber numberWithInt:10];
+    NSNumber *time2 = [NSNumber numberWithInt:11];
+    NSNumber *time3 = [NSNumber numberWithInt:12];
     NSArray *times = [NSArray arrayWithObjects:time1,time2,time3,nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -279,14 +279,10 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
         if (result != AVAssetImageGeneratorSucceeded) {
             NSLog(@"couldn't generate thumbnail, error:%@", error);
         }
-//        [button setImage:[UIImage imageWithCGImage:im] forState:UIControlStateNormal];
-//        thumbImg=[[UIImage imageWithCGImage:im] retain];
-//        [generator release];
+
         UIImage *image = [UIImage imageWithCGImage:im];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.photos addObject:image];
-            
-            [self.videoController.view removeFromSuperview];
             [self.collectionView reloadData];
         });
     
@@ -299,8 +295,8 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     
 }
 
-- (void)addPhoto:(id)sender {
-    NSLog(@"%@", sender);
+- (void)addPhoto:(NSNotification *)notification {
+    NSLog(@"%@", notification);
 }
 
 - (BOOL)addTargetPhoto:(UIImage *)photo {
@@ -318,6 +314,7 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     [self.videoController stop];
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self.videoController.view removeFromSuperview];
         [self generateImage];
     });
     
