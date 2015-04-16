@@ -9,6 +9,7 @@
 #import "PhotosCollectionViewController.h"
 #import "CameraViewController.h"
 #import "ImageCollectionViewCell.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface PhotosCollectionViewController () <PictureDelegate, NSURLSessionTaskDelegate>
 
@@ -213,9 +214,93 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
 }
 
 - (void)showCamera:(id)sender {
-    CameraViewController *cameraVC = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"CameraViewController"];
-    cameraVC.delegate = self;
-    [self presentViewController:cameraVC animated:YES completion:nil];
+
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        picker.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeMovie, nil];
+        
+        [self presentViewController:picker animated:YES completion:NULL];
+    }
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    self.videoURL = info[UIImagePickerControllerMediaURL];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+    self.videoController = [[MPMoviePlayerController alloc] init];
+    
+    [self.videoController setContentURL:self.videoURL];
+    [self.videoController.view setFrame:CGRectMake (0, 0, self.view.frame.size.width, 460)];
+    [self.view addSubview:self.videoController.view];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(videoPlayBackDidFinish:)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:self.videoController];
+    
+    [self.videoController play];
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+}
+
+- (void)getPhotosFromVideo {
+
+    NSNumber *time1 = [NSNumber numberWithInt:10];
+    NSNumber *time2 = [NSNumber numberWithInt:10];
+    NSNumber *time3 = [NSNumber numberWithInt:10];
+    NSArray *times = [NSArray arrayWithObjects:time1,time2,time3,nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(addPhoto:)
+                                                 name:MPMoviePlayerThumbnailImageRequestDidFinishNotification
+                                               object:self.videoController];
+    
+    [self.videoController requestThumbnailImagesAtTimes:times timeOption:MPMovieTimeOptionExact];
+}
+
+-(void)generateImage
+{
+    AVURLAsset *asset=[[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    generator.appliesPreferredTrackTransform=TRUE;
+    CMTime thumbTime = CMTimeMakeWithSeconds(0,30);
+    
+    AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
+        if (result != AVAssetImageGeneratorSucceeded) {
+            NSLog(@"couldn't generate thumbnail, error:%@", error);
+        }
+//        [button setImage:[UIImage imageWithCGImage:im] forState:UIControlStateNormal];
+//        thumbImg=[[UIImage imageWithCGImage:im] retain];
+//        [generator release];
+        UIImage *image = [UIImage imageWithCGImage:im];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.photos addObject:image];
+            
+            [self.videoController.view removeFromSuperview];
+            [self.collectionView reloadData];
+        });
+    
+        
+    };
+    
+    CGSize maxSize = CGSizeMake(320, 180);
+    generator.maximumSize = maxSize;
+    [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
+    
+}
+
+- (void)addPhoto:(id)sender {
+    NSLog(@"%@", sender);
 }
 
 - (BOOL)addTargetPhoto:(UIImage *)photo {
@@ -223,6 +308,19 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     NSLog(@"number of photos: %lu", (unsigned long)self.photos.count);
     
     return YES;
+}
+
+- (void)videoPlayBackDidFinish:(NSNotification *)notification {
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    
+    // Stop the video player and remove it from view
+    [self.videoController stop];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateImage];
+    });
+    
 }
 
 @end
