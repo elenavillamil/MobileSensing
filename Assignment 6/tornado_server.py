@@ -15,6 +15,13 @@ import Tkinter as tk
 import json
 from PIL import Image, ImageTk
 
+import numpy as np
+import png
+from matplotlib import pyplot as plt
+import pdb
+import itertools
+import base64
+
 #from basehandler import BaseHandler
 
 # Code taken from Eric's example
@@ -39,7 +46,7 @@ class MainHandler(tornado.web.RequestHandler):
       print("Hola")
 
    # Function that async handles Post request 
-   @tornado.web.asynchronous 
+   #@tornado.web.asynchronous 
    def post(self): 
       print ("Post Received")
 
@@ -54,44 +61,54 @@ class MainHandler(tornado.web.RequestHandler):
 
       # Converting the data received to bytes
       try:
-         png_image = bytes(arg1);
+         #pdb.set_trace()
+         png_image = bytes(base64.b64decode(str(arg1)))
+         png_image = png.Reader(bytes=png_image).asDirect()
+         #image_2d = np.vstack(png_image)
+         image_2d = np.vstack(itertools.imap(np.uint16, png_image[2]))
+         image_3d = np.reshape(image_2d, (png_image[1], png_image[0], 3))
+         plt.imshow(image_3d, plt.cm.gray)
+         plt.show()   
+         #png_image = np.array(png_image).resize
          name = str(arg2);
       except ValueError:
-         e = "%s Problem parsing POST data" % value
-         raise HTTPJSONError(1, e)
+         e = "Problem parsing POST data" + ValueError
+         print (e)
+         #raise HTTPJSONError(1, e)
 
       
       print (arg2)
       ##################
       # Displays image for testing pruporses
       ##################
-      root = tk.Tk()
-      root.title("Testing Post Imaged Received")
+      #root = tk.Tk()
+      #root.title("Testing Post Imaged Received")
       
       #imageFile = "IMG_0036.PNG"
+      
       #image1 = ImageTk.PhotoImage(Image.open(imageFile))
-      image1 = ImageTk.PhotoImage(Image.open(png_image))
+      #image1 = ImageTk.PhotoImage(Image.open(png_image))
 
       # get the image size
-      w = image1.width()
-      h = image1.height()
+      #w = image1.width()
+      #h = image1.height()
    
       # position coordinates of root 'upper left corner'
-      x = 0
-      y = 0
+      #x = 0
+      #y = 0
 
       # make the root window the size of the image
-      root.geometry("%dx%d+%d+%d" % (w, h, x, y))
+      #root.geometry("%dx%d+%d+%d" % (w, h, x, y))
 
       # root has no image argument, so use a label as a panel
-      panel1 = tk.Label(root, image=image1)
-      panel1.pack(side='top', fill='both', expand='yes')
+      #panel1 = tk.Label(root, image=image1)
+      #panel1.pack(side='top', fill='both', expand='yes')
 
       # save the panel's image from 'garbage collection'
-      panel1.image = image1
+      #panel1.image = image1
 
       # start the event loop
-      root.mainloop()
+      #root.mainloop()
 
 
       ####################
@@ -109,7 +126,7 @@ class MainHandler(tornado.web.RequestHandler):
       # Sending response
       ####################
       self.set_header("Content-Type", "application/json")
-      self.write(json_str({'arg1':response}))
+      self.write(json_str({'arg1':"OK"}))
       
       # Finish the task
       self.finish()
