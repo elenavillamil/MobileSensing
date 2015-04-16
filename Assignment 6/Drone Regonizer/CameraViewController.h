@@ -10,7 +10,7 @@
 
 @protocol PictureDelegate <NSObject>
 
-- (void)addTargetPhoto:(UIImage *)photo;
+- (BOOL)addTargetPhoto:(UIImage *)photo;
 
 @end
 

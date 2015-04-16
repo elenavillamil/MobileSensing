@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *lastPictureImageView;
 @property (nonatomic, retain) AVCaptureSession *session;
 @property (nonatomic) BOOL isFlashOn;
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+
 @property (nonatomic) BOOL isForward;
 @end
 
@@ -84,6 +86,10 @@
 }
 
 - (IBAction)takePhoto:(id)sender {
+    self.doneButton.enabled = NO;
+    
+    
+    
     AVCaptureConnection *stillImageConnection = [stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
     [stillImageOutput captureStillImageAsynchronouslyFromConnection:stillImageConnection
                                                   completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
@@ -93,8 +99,14 @@
                                                       else {
                                                           // trivial simple JPEG case
                                                           NSData *jpegData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-                                                          [self.delegate addTargetPhoto:[UIImage imageWithData:jpegData]];
-                                                          [self.lastPictureImageView setImage:[UIImage imageWithData:jpegData]];
+                                                          dispatch_async (dispatch_get_main_queue(), ^{
+                                                              if ([self.delegate addTargetPhoto:[UIImage imageWithData:jpegData]]) {
+                                                                  // block until done
+                                                                  self.doneButton.enabled = YES;
+                                                              }
+                                                              [self.lastPictureImageView setImage:[UIImage imageWithData:jpegData]];
+                                                          });
+                                                          
                                                       }
                                                       }];
     
@@ -107,8 +119,9 @@
 - (IBAction)flipFlash:(id)sender {
 }
 
-- (void)addTargetPhoto:(UIImage *)photo {
+- (BOOL)addTargetPhoto:(UIImage *)photo {
     //shouldnt get here.
+    return NO;
 }
 
 @end

@@ -21,7 +21,7 @@
 		EA67A3CC1ADEB7F800664CDE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CB1ADEB7F800664CDE /* CoreMedia.framework */; };
 		EA67A3CE1ADEB80400664CDE /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CD1ADEB80400664CDE /* ImageIO.framework */; };
 		EA67A3D01ADEB81000664CDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */; };
-		EAC596FF1ADF190800CECA18 /* LongCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC596FE1ADF190800CECA18 /* LongCollectionViewCell.m */; };
+		EAC597021ADF1F8900CECA18 /* FooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC597011ADF1F8900CECA18 /* FooterCollectionReusableView.m */; };
 		EAEAFB6F1ADEBB4F007C6471 /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */; };
 		EAEAFB721ADEBB62007C6471 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */; };
 		EAEAFB751ADED03E007C6471 /* ImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB741ADED03E007C6471 /* ImageCollectionViewCell.m */; };
@@ -60,8 +60,8 @@
 		EA67A3CB1ADEB7F800664CDE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		EA67A3CD1ADEB80400664CDE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		EAC596FD1ADF190800CECA18 /* LongCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LongCollectionViewCell.h; sourceTree = "<group>"; };
-		EAC596FE1ADF190800CECA18 /* LongCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LongCollectionViewCell.m; sourceTree = "<group>"; };
+		EAC597001ADF1F8900CECA18 /* FooterCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FooterCollectionReusableView.h; sourceTree = "<group>"; };
+		EAC597011ADF1F8900CECA18 /* FooterCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FooterCollectionReusableView.m; sourceTree = "<group>"; };
 		EAEAFB6D1ADEBB4F007C6471 /* NavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationViewController.h; sourceTree = "<group>"; };
 		EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationViewController.m; sourceTree = "<group>"; };
 		EAEAFB701ADEBB62007C6471 /* TabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarViewController.h; sourceTree = "<group>"; };
@@ -133,8 +133,8 @@
 				EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */,
 				EAEAFB731ADED03E007C6471 /* ImageCollectionViewCell.h */,
 				EAEAFB741ADED03E007C6471 /* ImageCollectionViewCell.m */,
-				EAC596FD1ADF190800CECA18 /* LongCollectionViewCell.h */,
-				EAC596FE1ADF190800CECA18 /* LongCollectionViewCell.m */,
+				EAC597001ADF1F8900CECA18 /* FooterCollectionReusableView.h */,
+				EAC597011ADF1F8900CECA18 /* FooterCollectionReusableView.m */,
 				EA67A3A51ADA90FC00664CDE /* Main.storyboard */,
 				EA67A3A81ADA90FC00664CDE /* Images.xcassets */,
 				EA67A3AA1ADA90FC00664CDE /* LaunchScreen.xib */,
@@ -270,7 +270,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA67A3C61ADEB53300664CDE /* CameraViewController.m in Sources */,
-				EAC596FF1ADF190800CECA18 /* LongCollectionViewCell.m in Sources */,
 				EA67A3A41ADA90FC00664CDE /* ViewController.m in Sources */,
 				EAEAFB721ADEBB62007C6471 /* TabBarViewController.m in Sources */,
 				EAEAFB6F1ADEBB4F007C6471 /* NavigationViewController.m in Sources */,
@@ -278,6 +277,7 @@
 				EA67A3C31ADEB51300664CDE /* PhotosCollectionViewController.m in Sources */,
 				EAEAFB751ADED03E007C6471 /* ImageCollectionViewCell.m in Sources */,
 				EA67A39E1ADA90FC00664CDE /* main.m in Sources */,
+				EAC597021ADF1F8900CECA18 /* FooterCollectionReusableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
