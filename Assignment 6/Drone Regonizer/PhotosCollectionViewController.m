@@ -162,7 +162,7 @@ static int FPS = 30;
     
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
-    
+    int count = 1;
     
     
     for (UIImage *picture in self.photos) {
@@ -173,11 +173,36 @@ static int FPS = 30;
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
         [request setHTTPMethod:@"POST"];
         request.timeoutInterval = 40.0;
-
-        NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
         
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"arg1", @"Elena", @"arg2", nil];
+        UIImage *rotatedImage = nil;
         
+        if(!(picture.imageOrientation == UIImageOrientationUp ||
+             picture.imageOrientation == UIImageOrientationUpMirrored))
+        {
+            CGSize imgsize = picture.size;
+            UIGraphicsBeginImageContext(imgsize);
+            [picture drawInRect:CGRectMake(0.0, 0.0, imgsize.width, imgsize.height)];
+            rotatedImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+        }
+        
+        NSString *imageString;
+        if (rotatedImage != nil) {
+            imageString =[UIImagePNGRepresentation(rotatedImage) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        } else {
+            imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        }
+        
+        NSDictionary *dict;
+        
+        if (count < numberOfPhotos.intValue)
+        {
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", @"false", @"last", nil];
+        }
+        else
+        {
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", @"true", @"last", nil];
+        }
         NSError *error;
         NSData *postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
         
@@ -267,7 +292,6 @@ static int FPS = 30;
         }
     }
     
-    [self.collectionView reloadData];
 }
 
 - (void)addPhoto:(NSNotification *)notification {
