@@ -64,12 +64,6 @@ static int FPS = 60;
     return _photos;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self.collectionView reloadData];
-}
-
 /*
 #pragma mark - Navigation
 
@@ -244,6 +238,7 @@ static int FPS = 60;
         [self getAllImages];
     } completionBlock:^{
         [hud removeFromSuperview];
+        [self.collectionView reloadData];
     }];
     
 }
