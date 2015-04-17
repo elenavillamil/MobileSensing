@@ -69,8 +69,8 @@ class MainHandler(tornado.web.RequestHandler):
          fo.close()
    
       except ValueError, e:
-         print ("Problem Parsing Post" + str(e))
-     
+         print ("Problem Parsing Post " + str(e))
+        
       ####################
       # Insert picture path in DB
       ####################
