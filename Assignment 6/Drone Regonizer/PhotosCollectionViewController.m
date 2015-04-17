@@ -95,10 +95,8 @@ static int FPS = 30;
     
     UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
     UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(128, 128)];
-    UIImage * PortraitImage = [[UIImage alloc] initWithCGImage: resizedImage.CGImage
-                                                         scale: 1.0
-                                                   orientation: UIImageOrientationRight];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:PortraitImage];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
     [imageView setFrame:CGRectMake(8, 8, 128.f, 128.f)];
     [cell addSubview:imageView];
     cell.backgroundColor = [UIColor whiteColor];
@@ -291,7 +289,10 @@ static int FPS = 30;
             CMTime actualTime;
             CGImageRef image = [generator copyCGImageAtTime:time actualTime:&actualTime error:&err];
             UIImage *generatedImage = [[UIImage alloc] initWithCGImage:image];
-            [self.photos addObject:generatedImage];
+            UIImage * portraitImage = [[UIImage alloc] initWithCGImage: generatedImage.CGImage
+                                                                 scale: 1.0
+                                                           orientation: UIImageOrientationRight];
+            [self.photos addObject:portraitImage];
             CGImageRelease(image);
         }
     }
