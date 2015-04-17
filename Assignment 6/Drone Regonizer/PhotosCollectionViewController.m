@@ -170,9 +170,26 @@ static int FPS = 30;
 }
 */
 
+- (void)alertMessageForNoName {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No name entered"
+                                                                   message:@"Please enter a target's name to track"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - Camera and Image
 
 - (IBAction)sendRequest:(id)sender {
+    
+    if (self.targetName == nil) {
+        [self alertMessageForNoName];
+        return;
+    }
     
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
@@ -216,11 +233,11 @@ static int FPS = 30;
         
         if (count < numberOfPhotos.intValue)
         {
-            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"false", @"last", nil];
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", self.targetName, @"name", [[NSNumber alloc] initWithInt:count], @"count", @"false", @"last", nil];
         }
         else
         {
-            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"true", @"last", nil];
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", self.targetName, @"name", [[NSNumber alloc] initWithInt:count], @"count", @"true", @"last", nil];
         }
         NSError *error;
         NSData *postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
