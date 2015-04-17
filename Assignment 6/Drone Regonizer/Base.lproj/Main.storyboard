@@ -33,16 +33,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aqz-pB-Ao0">
-                                <rect key="frame" x="127" y="97" width="67" height="30"/>
-                                <state key="normal" title="Live Feed">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="KwC-Pt-mpR" kind="push" id="3fn-13-JaK"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ltP-hm-D5v">
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ltP-hm-D5v">
                                 <rect key="frame" x="135" y="269" width="51" height="30"/>
                                 <state key="normal" title="Control">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -53,17 +44,34 @@
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This part is to be done for the final project" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gb6-ta-U4m">
                                 <rect key="frame" x="57" y="196" width="207" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="207" id="8Ft-Rh-r9u"/>
+                                    <constraint firstAttribute="height" constant="41" id="Z47-0W-oIx"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aqz-pB-Ao0">
+                                <rect key="frame" x="127" y="128" width="67" height="30"/>
+                                <state key="normal" title="Live Feed">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="KwC-Pt-mpR" kind="push" id="3fn-13-JaK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="centerY" secondItem="gb6-ta-U4m" secondAttribute="centerY" constant="67.5" id="CRp-DI-cIa"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="gb6-ta-U4m" secondAttribute="trailing" constant="40" id="RMX-1Z-Vgh"/>
-                            <constraint firstItem="gb6-ta-U4m" firstAttribute="leading" secondItem="QhV-yE-34d" secondAttribute="leadingMargin" constant="41" id="ZyO-T4-S0d"/>
-                            <constraint firstAttribute="centerX" secondItem="gb6-ta-U4m" secondAttribute="centerX" constant="-0.5" id="tAA-XE-U50"/>
+                            <constraint firstItem="gb6-ta-U4m" firstAttribute="centerX" secondItem="Aqz-pB-Ao0" secondAttribute="centerX" id="DTq-aC-QnP"/>
+                            <constraint firstItem="ltP-hm-D5v" firstAttribute="top" secondItem="gb6-ta-U4m" secondAttribute="bottom" constant="32" id="LV8-C3-ssH"/>
+                            <constraint firstAttribute="centerX" secondItem="Aqz-pB-Ao0" secondAttribute="centerX" constant="-0.5" id="Wcl-EZ-THN"/>
+                            <constraint firstItem="Aqz-pB-Ao0" firstAttribute="top" secondItem="XkX-uf-75X" secondAttribute="bottom" constant="64" id="jPy-UL-6uh"/>
+                            <constraint firstAttribute="centerX" secondItem="ltP-hm-D5v" secondAttribute="centerX" constant="-0.5" id="mVm-Sa-FyL"/>
+                            <constraint firstItem="gb6-ta-U4m" firstAttribute="top" secondItem="Aqz-pB-Ao0" secondAttribute="bottom" constant="38" id="w9b-2S-tps"/>
+                            <constraint firstAttribute="centerY" secondItem="Aqz-pB-Ao0" secondAttribute="centerY" constant="141" id="y6O-o7-1wn"/>
+                            <constraint firstAttribute="centerY" secondItem="ltP-hm-D5v" secondAttribute="centerY" id="yEe-7p-bps"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item 2" image="transport37" id="sK0-6o-ieH">
@@ -309,9 +317,7 @@
         <scene sceneID="QF0-oM-CJe">
             <objects>
                 <tabBarController storyboardIdentifier="TabBarViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jzK-o4-eA2" customClass="TabBarViewController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="igz-yY-Hac">
-                        <barButtonItem key="rightBarButtonItem" systemItem="camera" id="juX-LN-pDT"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="igz-yY-Hac"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="OqO-qb-7hm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>

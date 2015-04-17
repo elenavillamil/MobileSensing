@@ -52,6 +52,13 @@ static int FPS = 30;
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(showCamera:)];
+    self.tabBarController.navigationItem.rightBarButtonItem = cameraButton;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -87,22 +94,22 @@ static int FPS = 30;
     if (count > 20) {
         return 20;
     }
-    return 20;
+    return self.photos.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
      ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-//    CGFloat height = cell.frame.size.height - 10;
-//    CGFloat width = cell.frame.size.width - 10;
-//    
-//    
-//    UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
-//    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(width, height)];
-//    
-//    UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
-//    [imageView setFrame:CGRectMake(5, 5, width, height)];
-//    [cell addSubview:imageView];
+    CGFloat height = cell.frame.size.height - 10;
+    CGFloat width = cell.frame.size.width - 10;
+    
+    
+    UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
+    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(width, height)];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
+    [imageView setFrame:CGRectMake(5, 5, width, height)];
+    [cell addSubview:imageView];
     cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
