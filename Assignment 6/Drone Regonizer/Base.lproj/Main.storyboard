@@ -167,8 +167,12 @@
                             <rect key="frame" x="0.0" y="179" width="320" height="50"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4hx-Tc-zWM">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4hx-Tc-zWM">
                                     <rect key="frame" x="8" y="10" width="304" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="304" id="V23-1l-isd"/>
+                                        <constraint firstAttribute="height" constant="32" id="fe6-eM-lam"/>
+                                    </constraints>
                                     <state key="normal" title="Send Request">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
@@ -177,6 +181,10 @@
                                     </connections>
                                 </button>
                             </subviews>
+                            <constraints>
+                                <constraint firstAttribute="centerX" secondItem="4hx-Tc-zWM" secondAttribute="centerX" id="Hiz-pT-KmA"/>
+                                <constraint firstItem="4hx-Tc-zWM" firstAttribute="top" secondItem="UNZ-dM-Dhq" secondAttribute="topMargin" constant="2" id="lDD-MR-uDd"/>
+                            </constraints>
                         </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="hE0-Ll-8gJ" id="2H7-gU-UAn"/>
