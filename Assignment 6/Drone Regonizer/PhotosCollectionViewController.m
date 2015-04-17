@@ -9,6 +9,7 @@
 #import "PhotosCollectionViewController.h"
 #import "CameraViewController.h"
 #import "ImageCollectionViewCell.h"
+#import "MBProgressHUD.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface PhotosCollectionViewController () <PictureDelegate, NSURLSessionTaskDelegate>
@@ -22,7 +23,7 @@
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
 static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
-static int FPS = 30;
+static int FPS = 60;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -100,7 +101,10 @@ static int FPS = 30;
     
     UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
     UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(128, 128)];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
+    UIImage * PortraitImage = [[UIImage alloc] initWithCGImage: resizedImage.CGImage
+                                                         scale: 1.0
+                                                   orientation: UIImageOrientationRight];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:PortraitImage];
     [imageView setFrame:CGRectMake(8, 8, 128.f, 128.f)];
     [cell addSubview:imageView];
     cell.backgroundColor = [UIColor whiteColor];
@@ -160,6 +164,8 @@ static int FPS = 30;
 }
 */
 
+#pragma mark - Camera and Image
+
 - (IBAction)sendRequest:(id)sender {
     
     NSNumber *index = [NSNumber numberWithInteger:1];
@@ -167,17 +173,12 @@ static int FPS = 30;
     
     for (UIImage *picture in self.photos) {
         NSURL *postURL = [NSURL URLWithString:kURL];
+        
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
         [request setHTTPMethod:@"POST"];
-//        NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        request.timeoutInterval = 40.0;
 
         NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
-        
-        //NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
-        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
-        
-        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"Hola", @"arg1", @"Testing", @"arg2", nil];
         
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"arg1", @"Elena", @"arg2", nil];
         
@@ -203,21 +204,8 @@ static int FPS = 30;
         index = [NSNumber numberWithInt:value + 1];
         
         
-        //[self decodePost:postData];
     }
     
-}
-
-- (void)decodePost:(NSData *)postData {
-    //was used for testing decoding image.
-    NSError *error;
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:postData options:NSJSONReadingMutableLeaves error:&error];
-    NSString *string = (NSString *)[json objectForKey:@"image"];
-    
-    NSData *dataImage = [[NSData alloc]
-                         initWithBase64EncodedString:string options:0];
-    UIImage *image = [UIImage imageWithData:dataImage];
-    NSLog(@"%@", image);
 }
 
 - (void)showCamera:(id)sender {
@@ -257,22 +245,7 @@ static int FPS = 30;
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
-    
-}
-
-- (void)getPhotosFromVideo {
-
-    NSNumber *time1 = [NSNumber numberWithInt:10];
-    NSNumber *time2 = [NSNumber numberWithInt:11];
-    NSNumber *time3 = [NSNumber numberWithInt:12];
-    NSArray *times = [NSArray arrayWithObjects:time1,time2,time3,nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(addPhoto:)
-                                                 name:MPMoviePlayerThumbnailImageRequestDidFinishNotification
-                                               object:self.videoController];
-    
-    [self.videoController requestThumbnailImagesAtTimes:times timeOption:MPMovieTimeOptionExact];
+    [self.collectionView reloadData];
 }
 
 -(void)generateImage
@@ -340,11 +313,17 @@ static int FPS = 30;
     // Stop the video player and remove it from view
     [self.videoController stop];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.videoController.view removeFromSuperview];
-        [self getAllImages];
-    });
+    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    [self.navigationController.view addSubview:hud];
+    hud.labelText = @"Converting to Images";
     
+    [hud showAnimated:YES whileExecutingBlock:^{
+        [self getAllImages];
+    } completionBlock:^{
+        [hud removeFromSuperview];
+    }];
+ 
+    //[self.videoController.view removeFromSuperview];
 }
 
 @end

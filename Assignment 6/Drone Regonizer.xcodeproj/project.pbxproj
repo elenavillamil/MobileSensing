@@ -23,6 +23,8 @@
 		EA67A3D01ADEB81000664CDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */; };
 		EAB3BBC91AE017BE004764A3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB3BBC81AE017BE004764A3 /* MediaPlayer.framework */; };
 		EAB3BBCB1AE01804004764A3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB3BBCA1AE01804004764A3 /* MobileCoreServices.framework */; };
+		EAB3BBCE1AE09417004764A3 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB3BBCD1AE09417004764A3 /* MBProgressHUD.m */; };
+		EAB3BBD01AE0942E004764A3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB3BBCF1AE0942E004764A3 /* CoreGraphics.framework */; };
 		EAC597021ADF1F8900CECA18 /* FooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC597011ADF1F8900CECA18 /* FooterCollectionReusableView.m */; };
 		EAEAFB6F1ADEBB4F007C6471 /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */; };
 		EAEAFB721ADEBB62007C6471 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */; };
@@ -64,6 +66,9 @@
 		EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		EAB3BBC81AE017BE004764A3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		EAB3BBCA1AE01804004764A3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		EAB3BBCC1AE09417004764A3 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		EAB3BBCD1AE09417004764A3 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		EAB3BBCF1AE0942E004764A3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		EAC597001ADF1F8900CECA18 /* FooterCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FooterCollectionReusableView.h; sourceTree = "<group>"; };
 		EAC597011ADF1F8900CECA18 /* FooterCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FooterCollectionReusableView.m; sourceTree = "<group>"; };
 		EAEAFB6D1ADEBB4F007C6471 /* NavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationViewController.h; sourceTree = "<group>"; };
@@ -79,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAB3BBD01AE0942E004764A3 /* CoreGraphics.framework in Frameworks */,
 				EAB3BBCB1AE01804004764A3 /* MobileCoreServices.framework in Frameworks */,
 				EAB3BBC91AE017BE004764A3 /* MediaPlayer.framework in Frameworks */,
 				EA67A3D01ADEB81000664CDE /* QuartzCore.framework in Frameworks */,
@@ -102,6 +108,7 @@
 		EA67A38F1ADA90FC00664CDE = {
 			isa = PBXGroup;
 			children = (
+				EAB3BBCF1AE0942E004764A3 /* CoreGraphics.framework */,
 				EAB3BBCA1AE01804004764A3 /* MobileCoreServices.framework */,
 				EAB3BBC81AE017BE004764A3 /* MediaPlayer.framework */,
 				EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */,
@@ -135,6 +142,8 @@
 				EA67A3C21ADEB51300664CDE /* PhotosCollectionViewController.m */,
 				EA67A3C41ADEB53300664CDE /* CameraViewController.h */,
 				EA67A3C51ADEB53300664CDE /* CameraViewController.m */,
+				EAB3BBCC1AE09417004764A3 /* MBProgressHUD.h */,
+				EAB3BBCD1AE09417004764A3 /* MBProgressHUD.m */,
 				EAEAFB6D1ADEBB4F007C6471 /* NavigationViewController.h */,
 				EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */,
 				EAEAFB701ADEBB62007C6471 /* TabBarViewController.h */,
@@ -284,6 +293,7 @@
 				EA67A3A11ADA90FC00664CDE /* AppDelegate.m in Sources */,
 				EA67A3C31ADEB51300664CDE /* PhotosCollectionViewController.m in Sources */,
 				EAEAFB751ADED03E007C6471 /* ImageCollectionViewCell.m in Sources */,
+				EAB3BBCE1AE09417004764A3 /* MBProgressHUD.m in Sources */,
 				EA67A39E1ADA90FC00664CDE /* main.m in Sources */,
 				EAC597021ADF1F8900CECA18 /* FooterCollectionReusableView.m in Sources */,
 			);
