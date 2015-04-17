@@ -24,7 +24,7 @@
 @implementation PhotosCollectionViewController
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
-static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
+static NSString * const kURL = @"http://www.ev7n.com:8888/";
 static int FPS = 30;
 
 - (void)viewDidLoad {
