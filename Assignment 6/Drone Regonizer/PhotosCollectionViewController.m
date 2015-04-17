@@ -48,7 +48,7 @@ static int FPS = 30;
     
     self.session = [NSURLSession sessionWithConfiguration:sessionConfig];
     
-    self.collectionView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10.0);
+    self.collectionView.contentInset = UIEdgeInsetsMake(20, 10, 50, 10);
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
 }
 
@@ -121,7 +121,7 @@ static int FPS = 30;
         
         reusableview = footerview;
     }
-    
+    reusableview.backgroundColor = [UIColor whiteColor];
     return reusableview;
 }
 
