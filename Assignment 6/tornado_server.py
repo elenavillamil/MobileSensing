@@ -67,13 +67,11 @@ class MainHandler(tornado.web.RequestHandler):
       ####################
       client = MongoClient() # localhost, default port
       collect = client.DroneRecognizer.ClassifierData
-
       collect.update({"name":name},
                      { "$push": {"images":"test.png"} }, 
                      upsert=True)      
-
-      
-      ####################
+    
+      #####################
       # Sending response
       ####################
       self.set_header("Content-Type", "application/json")
