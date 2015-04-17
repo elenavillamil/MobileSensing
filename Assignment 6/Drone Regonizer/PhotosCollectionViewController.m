@@ -23,7 +23,7 @@
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
 static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
-static int FPS = 60;
+static int FPS = 30;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -262,8 +262,11 @@ static int FPS = 60;
         }
 
         UIImage *image = [UIImage imageWithCGImage:im];
+        UIImage * portraitImage = [[UIImage alloc] initWithCGImage: image.CGImage
+                                                             scale: 1.0
+                                                       orientation: UIImageOrientationLeft];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.photos addObject:image];
+            [self.photos addObject:portraitImage];
             [self.collectionView reloadData];
         });
     
