@@ -171,7 +171,11 @@ static int FPS = 60;
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
     
+    
+    
     for (UIImage *picture in self.photos) {
+        
+        if ([index integerValue]> 2) return;
         NSURL *postURL = [NSURL URLWithString:kURL];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
@@ -230,15 +234,17 @@ static int FPS = 60;
     self.videoController = [[MPMoviePlayerController alloc] init];
     
     [self.videoController setContentURL:self.videoURL];
-    [self.videoController.view setFrame:CGRectMake (0, 0, self.view.frame.size.width, 460)];
-    [self.view addSubview:self.videoController.view];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(videoPlayBackDidFinish:)
-                                                 name:MPMoviePlayerPlaybackDidFinishNotification
-                                               object:self.videoController];
+    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    [self.navigationController.view addSubview:hud];
+    hud.labelText = @"Converting to Images";
     
-    [self.videoController play];
+    [hud showAnimated:YES whileExecutingBlock:^{
+        
+        [self getAllImages];
+    } completionBlock:^{
+        [hud removeFromSuperview];
+    }];
     
 }
 
@@ -304,26 +310,6 @@ static int FPS = 60;
     NSLog(@"number of photos: %lu", (unsigned long)self.photos.count);
     
     return YES;
-}
-
-- (void)videoPlayBackDidFinish:(NSNotification *)notification {
-    
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
-    
-    // Stop the video player and remove it from view
-    [self.videoController stop];
-    
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:hud];
-    hud.labelText = @"Converting to Images";
-    
-    [hud showAnimated:YES whileExecutingBlock:^{
-        [self getAllImages];
-    } completionBlock:^{
-        [hud removeFromSuperview];
-    }];
- 
-    //[self.videoController.view removeFromSuperview];
 }
 
 @end
