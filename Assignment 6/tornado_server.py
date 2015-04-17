@@ -96,6 +96,7 @@ class MainHandler(tornado.web.RequestHandler):
             sock = socket.socket()
             sock.connect((address, port))
             sock.send(base_path + 'database_contents.txt')
+            sock.close()
             
          except socket.error, (value,message):
             print ("Problem Opening the socket or seding the data.")
