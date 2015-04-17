@@ -10,12 +10,14 @@
 #import "CameraViewController.h"
 #import "ImageCollectionViewCell.h"
 #import "MBProgressHUD.h"
+#import "HeaderCollectionReusableView.h"
 #import <AVFoundation/AVFoundation.h>
 
-@interface PhotosCollectionViewController () <PictureDelegate, NSURLSessionTaskDelegate>
+@interface PhotosCollectionViewController () <PictureDelegate,TargetNameDelegate, NSURLSessionTaskDelegate>
 
 @property (strong,nonatomic) NSURLSession *session;
 @property (nonatomic, retain) NSMutableArray *photos;
+@property (nonatomic, retain) NSString *targetName;
 
 @end
 
@@ -115,13 +117,14 @@ static int FPS = 30;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-     UICollectionReusableView *reusableview = nil;
-    if (kind == UICollectionElementKindSectionFooter) {
-        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
+    HeaderCollectionReusableView *reusableview = nil;
+    if (kind == UICollectionElementKindSectionHeader) {
+        HeaderCollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderCollectionReusableView" forIndexPath:indexPath];
         
         reusableview = footerview;
     }
     reusableview.backgroundColor = [UIColor whiteColor];
+    reusableview.delegate = self;
     return reusableview;
 }
 
@@ -167,9 +170,26 @@ static int FPS = 30;
 }
 */
 
+- (void)alertMessageForNoName {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No name entered"
+                                                                   message:@"Please enter a target's name to track"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - Camera and Image
 
 - (IBAction)sendRequest:(id)sender {
+    
+    if (self.targetName == nil) {
+        [self alertMessageForNoName];
+        return;
+    }
     
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
@@ -215,12 +235,13 @@ static int FPS = 30;
         
         if (count >= numberOfPhotos.intValue || count >= max)
         {
-            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"true", @"last", nil];
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", self.targetName, @"name", [[NSNumber alloc] initWithInt:count], @"count", @"true", @"last", nil];
         }
         else
         {
-            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"false", @"last", nil];
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", self.targetName, @"name", [[NSNumber alloc] initWithInt:count], @"count", @"false", @"last", nil];
         }
+        
         NSError *error;
         NSData *postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
         
@@ -321,6 +342,12 @@ static int FPS = 30;
     NSLog(@"number of photos: %lu", (unsigned long)self.photos.count);
     
     return YES;
+}
+
+#pragma mark - TargetNameDelegate
+
+- (void)setName:(NSString *)name {
+    self.targetName = name;
 }
 
 @end
