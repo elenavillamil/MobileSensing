@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 client = MongoClient() # localhost, default port
-collect = client.DroneRecognizer.ClassifierData
+db = client.DroneRecognizer.ClassifierData
 
 # find all documents
 results = db.find()
@@ -9,6 +9,8 @@ results = db.find()
 #file to write to
 file = open('database_contents', 'w')
 
-#number of items
+#iterate through items
 for item in results:
+
+
      
