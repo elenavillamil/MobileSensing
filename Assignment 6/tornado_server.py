@@ -50,50 +50,33 @@ class MainHandler(tornado.web.RequestHandler):
    # Function that async handles Post request 
    #@tornado.web.asynchronous 
    def post(self): 
-      print ("Post Received")
 
-      ##################
-      # Retriving Post Request Data
-      ##################
-      
+      ###################
+      # Getting post data
+      ###################
       data = json.loads(self.request.body)   
 
-      # Converting the data received to bytes
       try:
          image = str(data['image'])
          name = str(data['name'])
-         order = data['last']
-         print (order) 
-         #pdb.set_trace()
-         fo = open("test.png", "wb")
+         count = int(data['count'])
+         order = str(data['last'])
+         
+         file_name = name + str(count) + ".png"
+         fo = open(file_name, "wb")
          png_image = bytes(base64.b64decode(image))
          fo.write(png_image)
          fo.close()
-         
-#png_image = png.Reader(bytes=png_image).asDirect()
-         #writer = png.Writer(width=png_image[0], height=png_image[1], size=(png_image[0], png_image[1]), greyscale=False, alpha=False, bitdepth=8, palette=None, transparent=None, background=None, gamma=None, compression=None, interlace=False, bytes_per_sample=None, planes=None, colormap=None, maxval=None, chunk_limit=1048576)
-         #writer.write(fo, png_image[2])
-        
-         ##################
-         # Displays image for testing pruporses
-         ##################
-         #image_2d = np.vstack(itertools.imap(np.uint16, png_image[2]))
-         #image_3d = np.reshape(image_2d, (png_image[1], png_image[0], 3))
-         #plt.imshow(image_3d, plt.cm.gray)
-         #dplt.show()
    
       except ValueError, e:
-         print ("Problem Parsing Post" + str(e))
-         #raise HTTPJSONError(1, e)
-
+         print ("Problem Parsing Post " + str(e))
+        
       ####################
-      # Insert Picture in DB
+      # Insert picture path in DB
       ####################
       client = MongoClient() # localhost, default port
       collect = client.DroneRecognizer.ClassifierData
 
-      #bson_image = BSON.encode({"image":png_image})
-      #binary_image = Binary(png_image)
       collect.update({"name":name},
                      { "$push": {"images":"test.png"} }, 
                      upsert=True)      

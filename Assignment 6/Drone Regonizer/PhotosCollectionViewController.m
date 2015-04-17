@@ -176,7 +176,7 @@ static int FPS = 30;
     
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
-    int count = 1;
+    int count = 0;
     
     
     for (UIImage *picture in self.photos) {
@@ -212,13 +212,15 @@ static int FPS = 30;
         
         NSDictionary *dict;
         
+        count += 1;
+        
         if (count < numberOfPhotos.intValue)
         {
-            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", @"false", @"last", nil];
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"false", @"last", nil];
         }
         else
         {
-            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", @"true", @"last", nil];
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"true", @"last", nil];
         }
         NSError *error;
         NSData *postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
