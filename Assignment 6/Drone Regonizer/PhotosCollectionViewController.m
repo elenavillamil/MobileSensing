@@ -87,18 +87,22 @@ static int FPS = 30;
     if (count > 20) {
         return 20;
     }
-    return count;
+    return 20;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
      ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
-    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(128, 128)];
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
-    [imageView setFrame:CGRectMake(8, 8, 128.f, 128.f)];
-    [cell addSubview:imageView];
+//    CGFloat height = cell.frame.size.height - 10;
+//    CGFloat width = cell.frame.size.width - 10;
+//    
+//    
+//    UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
+//    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(width, height)];
+//    
+//    UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
+//    [imageView setFrame:CGRectMake(5, 5, width, height)];
+//    [cell addSubview:imageView];
     cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
@@ -174,6 +178,8 @@ static int FPS = 30;
         [request setHTTPMethod:@"POST"];
         request.timeoutInterval = 40.0;
         
+        
+        //rotates image properly to allow png to be proper direction
         UIImage *rotatedImage = nil;
         
         if(!(picture.imageOrientation == UIImageOrientationUp ||
@@ -186,6 +192,7 @@ static int FPS = 30;
             UIGraphicsEndImageContext();
         }
         
+        //converts image to string value
         NSString *imageString;
         if (rotatedImage != nil) {
             imageString =[UIImagePNGRepresentation(rotatedImage) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
