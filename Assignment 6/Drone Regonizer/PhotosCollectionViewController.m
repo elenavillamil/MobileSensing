@@ -247,36 +247,6 @@ static int FPS = 30;
     [self.collectionView reloadData];
 }
 
--(void)generateImage
-{
-    AVURLAsset *asset=[[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
-    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    generator.appliesPreferredTrackTransform=TRUE;
-    CMTime thumbTime = CMTimeMakeWithSeconds(0,30);
-    
-    AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
-        if (result != AVAssetImageGeneratorSucceeded) {
-            NSLog(@"couldn't generate thumbnail, error:%@", error);
-        }
-
-        UIImage *image = [UIImage imageWithCGImage:im];
-        UIImage * portraitImage = [[UIImage alloc] initWithCGImage: image.CGImage
-                                                             scale: 1.0
-                                                       orientation: UIImageOrientationLeft];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.photos addObject:portraitImage];
-            [self.collectionView reloadData];
-        });
-    
-        
-    };
-    
-    CGSize maxSize = CGSizeMake(320, 180);
-    generator.maximumSize = maxSize;
-    [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
-    
-}
-
 - (void)getAllImages {
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
     AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
