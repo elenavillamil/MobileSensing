@@ -138,7 +138,7 @@ int main()
 {
    new std::thread([] ()
    {
-      new ev9::server<false>(8000, [](std::vector<char>& input, std::vector<char>& output)
+      auto thread = new ev9::server<false>(8000, [](std::vector<char>& input, std::vector<char>& output)
       {
          // Input should be a path to a list of
          // path to use to train.
@@ -170,7 +170,7 @@ int main()
 
             for (std::size_t index = 0; index < paths.size(); ++index)
             {
-               images.push_back(cv::imread(paths[index], 0));
+               images.push_back(cv::imread(paths[index].c_str(), 0));
                labels.push_back(0);
 
             }
@@ -188,6 +188,8 @@ int main()
          // End servicing the socket transmission.
 
       });
+
+      thread->start();
 
    });
 

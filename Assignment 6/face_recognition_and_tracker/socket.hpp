@@ -188,7 +188,7 @@ class socket
             #if _WIN32
                strcpy_s(_m_ip_address, std::strlen(loopback) + 1, loopback);
             #else
-               std::strcpy(_m_ip_address, ip);
+               std::strcpy(_m_ip_address, loopback);
             #endif
          }
 

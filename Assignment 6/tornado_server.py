@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 ################################################################################
 #                                                                              #
 #  04/13/2015                                                                  #
@@ -18,7 +20,7 @@ from tornado.escape import recursive_unicode
 
 address = "127.0.0.1"
 port = 8000
-base_path = "/home/ubuntu/msd"
+base_path = "/home/ubuntu/msd/"
 #base_path = "/Users/elena/"
 
 # Code taken from Eric's example
@@ -42,6 +44,8 @@ class MainHandler(tornado.web.RequestHandler):
    # Function that async handles Post request 
    @tornado.web.asynchronous 
    def post(self): 
+
+      print ("Inside POST")
 
       ###################
       # Getting post data
@@ -67,6 +71,7 @@ class MainHandler(tornado.web.RequestHandler):
       ####################
       # Insert picture path in DB
       ####################
+      print ("Inserting into Mongo")
       client = MongoClient() # localhost, default port
       collect = client.DroneRecognizer.ClassifierData
       collect.update({"name":name},
@@ -83,13 +88,15 @@ class MainHandler(tornado.web.RequestHandler):
       # Openning socket to let open cv the images are ready
       ####################
       if order == "true":
+         print ("Making txt file")
          db_to_file()
-      
+         collect.remove({})
+
          try:
             sock = socket.socket()
             sock.connect((address, port))
-            socket.send(base_path + 'database_contents.txt')
-
+            sock.send(base_path + 'database_contents.txt')
+            
          except socket.error, (value,message):
             print ("Problem Opening the socket or seding the data.")
             print (" ERROR " + str(message)) 
