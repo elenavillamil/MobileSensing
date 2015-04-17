@@ -177,8 +177,10 @@ static int FPS = 30;
     
     
     for (UIImage *picture in self.photos) {
+        int max = 2;
         
-        if ([index integerValue]> 2) return;
+        if ([index integerValue]> max) return;
+        
         NSURL *postURL = [NSURL URLWithString:kURL];
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
@@ -211,13 +213,13 @@ static int FPS = 30;
         
         count += 1;
         
-        if (count < numberOfPhotos.intValue)
+        if (count >= numberOfPhotos.intValue || count >= max)
         {
-            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"false", @"last", nil];
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"true", @"last", nil];
         }
         else
         {
-            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"true", @"last", nil];
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", @"Elena", @"name", [[NSNumber alloc] initWithInt:count], @"count", @"false", @"last", nil];
         }
         NSError *error;
         NSData *postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];

@@ -8,6 +8,7 @@
    
 import base64
 import json
+import socket
 import tornado.ioloop
 import tornado.web
 
@@ -15,16 +16,9 @@ from bson.binary import Binary
 from pymongo import MongoClient
 from tornado.escape import recursive_unicode
 
-####################
-# Just needed for debuggin
-####################
-import Tkinter as tk
-from PIL import Image, ImageTk
-import numpy as np
-import png
-from matplotlib import pyplot as plt
-import itertools
-import pdb
+address = "127.0.0.1"
+port = 8000
+base_path = "/home/ubuntu/msd"
 
 # Code taken from Eric's example
 class CustomJSONEncoder(json.JSONEncoder):
@@ -44,11 +38,8 @@ def json_str(value):
 
 
 class MainHandler(tornado.web.RequestHandler):
-   def get(self):
-      print("Hola")
-
    # Function that async handles Post request 
-   #@tornado.web.asynchronous 
+   @tornado.web.asynchronous 
    def post(self): 
 
       ###################
@@ -62,7 +53,7 @@ class MainHandler(tornado.web.RequestHandler):
          count = int(data['count'])
          order = str(data['last'])
          
-         file_name = name + str(count) + ".png"
+         file_name = base_path + name + str(count) + ".png"
          fo = open(file_name, "wb")
          png_image = bytes(base64.b64decode(image))
          fo.write(png_image)
@@ -81,14 +72,29 @@ class MainHandler(tornado.web.RequestHandler):
                      { "$push": {"images":"test.png"} }, 
                      upsert=True)      
 
-    
-      #####################
+      
+      ####################
       # Sending response
       ####################
       self.set_header("Content-Type", "application/json")
       self.write(json_str({'arg1':"OK"}))
       
-      # Finish the task
+      ####################
+      # Openning socket to let open cv the images are ready
+      ####################
+      if order == "true":
+         print ("socket")
+         try:
+            sock = socket.socket()
+            sock.connect((address, port))
+            socket.send("Ready")
+         except socket.error, (value,message):
+            print ("Problem Opening the socket or seding the data.")
+            print (" ERROR " + str(message)) 
+
+      ###################
+      # Finish the task asynch task
+      ###################
       self.finish()
 
 application = tornado.web.Application([(r"/", MainHandler),])
