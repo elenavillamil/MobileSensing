@@ -9,11 +9,15 @@
 #import "PhotosCollectionViewController.h"
 #import "CameraViewController.h"
 #import "ImageCollectionViewCell.h"
+#import "MBProgressHUD.h"
+#import "HeaderCollectionReusableView.h"
+#import <AVFoundation/AVFoundation.h>
 
-@interface PhotosCollectionViewController () <PictureDelegate, NSURLSessionTaskDelegate>
+@interface PhotosCollectionViewController () <PictureDelegate,TargetNameDelegate, NSURLSessionTaskDelegate>
 
 @property (strong,nonatomic) NSURLSession *session;
 @property (nonatomic, retain) NSMutableArray *photos;
+@property (nonatomic, retain) NSString *targetName;
 
 @end
 
@@ -21,6 +25,7 @@
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
 static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
+static int FPS = 30;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,6 +50,15 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     
     self.session = [NSURLSession sessionWithConfiguration:sessionConfig];
     
+    self.collectionView.contentInset = UIEdgeInsetsMake(20, 10, 50, 10);
+    self.collectionView.backgroundColor = [UIColor lightGrayColor];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(showCamera:)];
+    self.tabBarController.navigationItem.rightBarButtonItem = cameraButton;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,12 +71,6 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
         _photos = [[NSMutableArray alloc] init];
     }
     return _photos;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self.collectionView reloadData];
 }
 
 /*
@@ -85,28 +93,38 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     NSInteger count = self.photos.count;
     NSLog(@"number of photos: %ld", (long)count);
-    return count;
+    if (count > 20) {
+        return 20;
+    }
+    return self.photos.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
      ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
+    CGFloat height = cell.frame.size.height - 10;
+    CGFloat width = cell.frame.size.width - 10;
+    
+    
     UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
-    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(143, 115)];
+    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(width, height)];
+    
     UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
+    [imageView setFrame:CGRectMake(5, 5, width, height)];
     [cell addSubview:imageView];
-    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundColor = [UIColor whiteColor];
     return cell;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-     UICollectionReusableView *reusableview = nil;
-    if (kind == UICollectionElementKindSectionFooter) {
-        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
+    HeaderCollectionReusableView *reusableview = nil;
+    if (kind == UICollectionElementKindSectionHeader) {
+        HeaderCollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderCollectionReusableView" forIndexPath:indexPath];
         
         reusableview = footerview;
     }
-    
+    reusableview.backgroundColor = [UIColor whiteColor];
+    reusableview.delegate = self;
     return reusableview;
 }
 
@@ -152,26 +170,77 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
 }
 */
 
+- (void)alertMessageForNoName {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No name entered"
+                                                                   message:@"Please enter a target's name to track"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - Camera and Image
+
 - (IBAction)sendRequest:(id)sender {
+    
+    if (self.targetName == nil) {
+        [self alertMessageForNoName];
+        return;
+    }
     
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
+    int count = 0;
+    
     
     for (UIImage *picture in self.photos) {
+        int max = 2;
+        
+        if ([index integerValue]> max) return;
+        
         NSURL *postURL = [NSURL URLWithString:kURL];
+        
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
         [request setHTTPMethod:@"POST"];
-//        NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-
-        NSString *imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
+        request.timeoutInterval = 40.0;
         
-        //NSDictionary *jsonDic = [NSDictionary dictionaryWithObjects:@[numberOfPhotos,index,imageString] forKeys:@[@"number", @"index", @"picture"]];
-        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:numberOfPhotos, @"number", index, @"index", imageString, @"image", nil];
         
-        //NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"Hola", @"arg1", @"Testing", @"arg2", nil];
+        //rotates image properly to allow png to be proper direction
+        UIImage *rotatedImage = nil;
         
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"arg1", @"Elena", @"arg2", nil];
+        if(!(picture.imageOrientation == UIImageOrientationUp ||
+             picture.imageOrientation == UIImageOrientationUpMirrored))
+        {
+            CGSize imgsize = picture.size;
+            UIGraphicsBeginImageContext(imgsize);
+            [picture drawInRect:CGRectMake(0.0, 0.0, imgsize.width, imgsize.height)];
+            rotatedImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+        }
+        
+        //converts image to string value
+        NSString *imageString;
+        if (rotatedImage != nil) {
+            imageString =[UIImagePNGRepresentation(rotatedImage) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        } else {
+            imageString =[UIImagePNGRepresentation(picture) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        }
+        
+        NSDictionary *dict;
+        
+        count += 1;
+        
+        if (count >= numberOfPhotos.intValue || count >= max)
+        {
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", self.targetName, @"name", [[NSNumber alloc] initWithInt:count], @"count", @"true", @"last", nil];
+        }
+        else
+        {
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:imageString, @"image", self.targetName, @"name", [[NSNumber alloc] initWithInt:count], @"count", @"false", @"last", nil];
+        }
         
         NSError *error;
         NSData *postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
@@ -195,27 +264,77 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
         index = [NSNumber numberWithInt:value + 1];
         
         
-        //[self decodePost:postData];
     }
     
 }
 
-- (void)decodePost:(NSData *)postData {
-    //was used for testing decoding image.
-    NSError *error;
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:postData options:NSJSONReadingMutableLeaves error:&error];
-    NSString *string = (NSString *)[json objectForKey:@"image"];
-    
-    NSData *dataImage = [[NSData alloc]
-                         initWithBase64EncodedString:string options:0];
-    UIImage *image = [UIImage imageWithData:dataImage];
-    NSLog(@"%@", image);
+- (void)showCamera:(id)sender {
+
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        picker.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeMovie, nil];
+        
+        [self presentViewController:picker animated:YES completion:NULL];
+    }
 }
 
-- (void)showCamera:(id)sender {
-    CameraViewController *cameraVC = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"CameraViewController"];
-    cameraVC.delegate = self;
-    [self presentViewController:cameraVC animated:YES completion:nil];
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    self.videoURL = info[UIImagePickerControllerMediaURL];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+    self.videoController = [[MPMoviePlayerController alloc] init];
+    
+    [self.videoController setContentURL:self.videoURL];
+    
+    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    [self.navigationController.view addSubview:hud];
+    hud.labelText = @"Converting to Images";
+    
+    [hud showAnimated:YES whileExecutingBlock:^{
+        
+        [self getAllImages];
+    } completionBlock:^{
+        [hud removeFromSuperview];
+        [self.collectionView reloadData];
+    }];
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    [self.collectionView reloadData];
+}
+
+- (void)getAllImages {
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    generator.requestedTimeToleranceAfter =  kCMTimeZero;
+    generator.requestedTimeToleranceBefore =  kCMTimeZero;
+    for (Float64 i = 0; i < CMTimeGetSeconds(asset.duration) *  FPS ; i++){
+        @autoreleasepool {
+            CMTime time = CMTimeMake(i, FPS);
+            NSError *err;
+            CMTime actualTime;
+            CGImageRef image = [generator copyCGImageAtTime:time actualTime:&actualTime error:&err];
+            UIImage *generatedImage = [[UIImage alloc] initWithCGImage:image];
+            UIImage * portraitImage = [[UIImage alloc] initWithCGImage: generatedImage.CGImage
+                                                                 scale: 1.0
+                                                           orientation: UIImageOrientationRight];
+            [self.photos addObject:portraitImage];
+            CGImageRelease(image);
+        }
+    }
+    
+}
+
+- (void)addPhoto:(NSNotification *)notification {
+    NSLog(@"%@", notification);
 }
 
 - (BOOL)addTargetPhoto:(UIImage *)photo {
@@ -223,6 +342,12 @@ static NSString * const kURL = @"http://Elenas-MacBook-Pro.local:8888/";
     NSLog(@"number of photos: %lu", (unsigned long)self.photos.count);
     
     return YES;
+}
+
+#pragma mark - TargetNameDelegate
+
+- (void)setName:(NSString *)name {
+    self.targetName = name;
 }
 
 @end

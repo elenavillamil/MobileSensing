@@ -33,16 +33,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aqz-pB-Ao0">
-                                <rect key="frame" x="127" y="97" width="67" height="30"/>
-                                <state key="normal" title="Live Feed">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="KwC-Pt-mpR" kind="push" id="3fn-13-JaK"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ltP-hm-D5v">
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ltP-hm-D5v">
                                 <rect key="frame" x="135" y="269" width="51" height="30"/>
                                 <state key="normal" title="Control">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -51,8 +42,37 @@
                                     <segue destination="1vi-BW-Hw8" kind="push" id="dZC-l1-ZrT"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This part is to be done for the final project" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gb6-ta-U4m">
+                                <rect key="frame" x="57" y="196" width="207" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="207" id="8Ft-Rh-r9u"/>
+                                    <constraint firstAttribute="height" constant="41" id="Z47-0W-oIx"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aqz-pB-Ao0">
+                                <rect key="frame" x="127" y="128" width="67" height="30"/>
+                                <state key="normal" title="Live Feed">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="KwC-Pt-mpR" kind="push" id="3fn-13-JaK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gb6-ta-U4m" firstAttribute="centerX" secondItem="Aqz-pB-Ao0" secondAttribute="centerX" id="DTq-aC-QnP"/>
+                            <constraint firstItem="ltP-hm-D5v" firstAttribute="top" secondItem="gb6-ta-U4m" secondAttribute="bottom" constant="32" id="LV8-C3-ssH"/>
+                            <constraint firstAttribute="centerX" secondItem="Aqz-pB-Ao0" secondAttribute="centerX" constant="-0.5" id="Wcl-EZ-THN"/>
+                            <constraint firstItem="Aqz-pB-Ao0" firstAttribute="top" secondItem="XkX-uf-75X" secondAttribute="bottom" constant="64" id="jPy-UL-6uh"/>
+                            <constraint firstAttribute="centerX" secondItem="ltP-hm-D5v" secondAttribute="centerX" constant="-0.5" id="mVm-Sa-FyL"/>
+                            <constraint firstItem="gb6-ta-U4m" firstAttribute="top" secondItem="Aqz-pB-Ao0" secondAttribute="bottom" constant="38" id="w9b-2S-tps"/>
+                            <constraint firstAttribute="centerY" secondItem="Aqz-pB-Ao0" secondAttribute="centerY" constant="141" id="y6O-o7-1wn"/>
+                            <constraint firstAttribute="centerY" secondItem="ltP-hm-D5v" secondAttribute="centerY" id="yEe-7p-bps"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item 2" image="transport37" id="sK0-6o-ieH">
                         <userDefinedRuntimeAttributes>
@@ -103,7 +123,7 @@
             </objects>
             <point key="canvasLocation" x="786" y="1134"/>
         </scene>
-        <!--Target-->
+        <!--Target Capture-->
         <scene sceneID="WMH-qL-jj8">
             <objects>
                 <collectionViewController id="hE0-Ll-8gJ" customClass="PhotosCollectionViewController" sceneMemberID="viewController">
@@ -112,9 +132,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="uaw-SE-L7V">
-                            <size key="itemSize" width="143" height="115"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="50" height="50"/>
+                            <size key="itemSize" width="140" height="139"/>
+                            <size key="headerReferenceSize" width="50" height="91"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -122,11 +142,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="143" height="115"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="b75-Vt-ubS">
-                                            <rect key="frame" x="9" y="6" width="124" height="103"/>
+                                            <rect key="frame" x="6" y="6" width="108" height="108"/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -135,20 +155,32 @@
                                     <constraint firstItem="b75-Vt-ubS" firstAttribute="top" secondItem="LPs-N1-FAZ" secondAttribute="topMargin" constant="-2" id="3FT-KI-YF4"/>
                                     <constraint firstAttribute="centerY" secondItem="b75-Vt-ubS" secondAttribute="centerY" id="7SW-EK-CRc"/>
                                     <constraint firstAttribute="centerX" secondItem="b75-Vt-ubS" secondAttribute="centerX" id="9Os-Oj-cmr"/>
-                                    <constraint firstItem="b75-Vt-ubS" firstAttribute="leading" secondItem="LPs-N1-FAZ" secondAttribute="leadingMargin" constant="1" id="FWF-W1-JmU"/>
+                                    <constraint firstItem="b75-Vt-ubS" firstAttribute="leading" secondItem="LPs-N1-FAZ" secondAttribute="leadingMargin" constant="-2" id="FWF-W1-JmU"/>
                                 </constraints>
-                                <size key="customSize" width="143" height="115"/>
+                                <size key="customSize" width="120" height="120"/>
                                 <connections>
                                     <outlet property="pictureImageView" destination="b75-Vt-ubS" id="l8O-ld-88f"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FooterView" id="UNZ-dM-Dhq" customClass="FooterCollectionReusableView">
-                            <rect key="frame" x="0.0" y="179" width="320" height="50"/>
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="HeaderCollectionReusableView" reuseIdentifier="HeaderCollectionReusableView" id="i0c-Mz-jf8" customClass="HeaderCollectionReusableView">
+                            <rect key="frame" x="0.0" y="64" width="320" height="50"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4hx-Tc-zWM">
-                                    <rect key="frame" x="8" y="10" width="304" height="32"/>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Target's Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="agr-HK-R88">
+                                    <rect key="frame" x="8" y="12" width="304" height="30"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="i0c-Mz-jf8" id="ro3-4R-pX7"/>
+                                    </connections>
+                                </textField>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4hx-Tc-zWM">
+                                    <rect key="frame" x="8" y="50" width="304" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="304" id="V23-1l-isd"/>
+                                        <constraint firstAttribute="height" constant="32" id="fe6-eM-lam"/>
+                                    </constraints>
                                     <state key="normal" title="Send Request">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
@@ -157,6 +189,18 @@
                                     </connections>
                                 </button>
                             </subviews>
+                            <constraints>
+                                <constraint firstItem="4hx-Tc-zWM" firstAttribute="top" secondItem="agr-HK-R88" secondAttribute="bottom" constant="8" id="8Pd-qh-7cy"/>
+                                <constraint firstItem="agr-HK-R88" firstAttribute="trailing" secondItem="i0c-Mz-jf8" secondAttribute="trailingMargin" id="8S3-C8-kMU"/>
+                                <constraint firstAttribute="centerX" secondItem="4hx-Tc-zWM" secondAttribute="centerX" id="MqC-BY-1BB"/>
+                                <constraint firstItem="4hx-Tc-zWM" firstAttribute="leading" secondItem="i0c-Mz-jf8" secondAttribute="leadingMargin" id="UO2-3x-YBf"/>
+                                <constraint firstItem="agr-HK-R88" firstAttribute="leading" secondItem="i0c-Mz-jf8" secondAttribute="leadingMargin" id="mpV-bb-99B"/>
+                                <constraint firstItem="4hx-Tc-zWM" firstAttribute="trailing" secondItem="i0c-Mz-jf8" secondAttribute="trailingMargin" id="uqR-lt-bkO"/>
+                                <constraint firstItem="agr-HK-R88" firstAttribute="top" secondItem="i0c-Mz-jf8" secondAttribute="topMargin" constant="4" id="zda-OH-BVi"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="nameTextField" destination="agr-HK-R88" id="OVi-bt-O44"/>
+                            </connections>
                         </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="hE0-Ll-8gJ" id="2H7-gU-UAn"/>
@@ -168,7 +212,8 @@
                             <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="target_filled"/>
                         </userDefinedRuntimeAttributes>
                     </tabBarItem>
-                    <navigationItem key="navigationItem" title="Target" id="U7Z-eI-LHT">
+                    <navigationItem key="navigationItem" id="U7Z-eI-LHT">
+                        <nil key="title"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="camera" id="kxK-7c-kvR"/>
                     </navigationItem>
                 </collectionViewController>
@@ -297,9 +342,7 @@
         <scene sceneID="QF0-oM-CJe">
             <objects>
                 <tabBarController storyboardIdentifier="TabBarViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jzK-o4-eA2" customClass="TabBarViewController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="igz-yY-Hac">
-                        <barButtonItem key="rightBarButtonItem" systemItem="camera" id="juX-LN-pDT"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="igz-yY-Hac"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="OqO-qb-7hm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
