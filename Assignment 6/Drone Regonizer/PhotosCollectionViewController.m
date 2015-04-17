@@ -10,12 +10,14 @@
 #import "CameraViewController.h"
 #import "ImageCollectionViewCell.h"
 #import "MBProgressHUD.h"
+#import "HeaderCollectionReusableView.h"
 #import <AVFoundation/AVFoundation.h>
 
-@interface PhotosCollectionViewController () <PictureDelegate, NSURLSessionTaskDelegate>
+@interface PhotosCollectionViewController () <PictureDelegate,TargetNameDelegate, NSURLSessionTaskDelegate>
 
 @property (strong,nonatomic) NSURLSession *session;
 @property (nonatomic, retain) NSMutableArray *photos;
+@property (nonatomic, retain) NSString *targetName;
 
 @end
 
@@ -115,13 +117,14 @@ static int FPS = 30;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-     UICollectionReusableView *reusableview = nil;
-    if (kind == UICollectionElementKindSectionFooter) {
-        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
+    HeaderCollectionReusableView *reusableview = nil;
+    if (kind == UICollectionElementKindSectionHeader) {
+        HeaderCollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderCollectionReusableView" forIndexPath:indexPath];
         
         reusableview = footerview;
     }
     reusableview.backgroundColor = [UIColor whiteColor];
+    reusableview.delegate = self;
     return reusableview;
 }
 
@@ -317,6 +320,12 @@ static int FPS = 30;
     NSLog(@"number of photos: %lu", (unsigned long)self.photos.count);
     
     return YES;
+}
+
+#pragma mark - TargetNameDelegate
+
+- (void)setName:(NSString *)name {
+    self.targetName = name;
 }
 
 @end
