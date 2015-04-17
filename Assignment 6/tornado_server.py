@@ -58,26 +58,32 @@ class MainHandler(tornado.web.RequestHandler):
       
       data = json.loads(self.request.body)   
 
-      arg1 = data['arg1']
-      arg2 = data['arg2']
-
       # Converting the data received to bytes
       try:
+         image = str(data['image'])
+         name = str(data['name'])
+         order = data['last']
+         print (order) 
          #pdb.set_trace()
-         png_image = bytes(base64.b64decode(str(arg1)))
-         name = str(arg2)
-         print(name)
+         fo = open("test.png", "wb")
+         png_image = bytes(base64.b64decode(image))
+         fo.write(png_image)
+         fo.close()
+         
+#png_image = png.Reader(bytes=png_image).asDirect()
+         #writer = png.Writer(width=png_image[0], height=png_image[1], size=(png_image[0], png_image[1]), greyscale=False, alpha=False, bitdepth=8, palette=None, transparent=None, background=None, gamma=None, compression=None, interlace=False, bytes_per_sample=None, planes=None, colormap=None, maxval=None, chunk_limit=1048576)
+         #writer.write(fo, png_image[2])
+        
          ##################
          # Displays image for testing pruporses
          ##################
-         #png_image = png.Reader(bytes=png_image).asDirect()
          #image_2d = np.vstack(itertools.imap(np.uint16, png_image[2]))
          #image_3d = np.reshape(image_2d, (png_image[1], png_image[0], 3))
          #plt.imshow(image_3d, plt.cm.gray)
-         #plt.show()
+         #dplt.show()
    
-      except ValueError:
-         print ("Problem Parsing Post")
+      except ValueError, e:
+         print ("Problem Parsing Post" + str(e))
          #raise HTTPJSONError(1, e)
 
       ####################
@@ -87,13 +93,13 @@ class MainHandler(tornado.web.RequestHandler):
       collect = client.DroneRecognizer.ClassifierData
 
       #bson_image = BSON.encode({"image":png_image})
-      binary_image = Binary(png_image)
+      #binary_image = Binary(png_image)
       collect.update({"name":name},
-                     { "$push": {"images":binary_image} }, 
+                     { "$push": {"images":"test.png"} }, 
                      upsert=True)      
 
     
-      ####################
+      #####################
       # Sending response
       ####################
       self.set_header("Content-Type", "application/json")
