@@ -8,6 +8,7 @@
    
 import base64
 import json
+import socket
 import tornado.ioloop
 import tornado.web
 
@@ -15,16 +16,9 @@ from bson.binary import Binary
 from pymongo import MongoClient
 from tornado.escape import recursive_unicode
 
-####################
-# Just needed for debuggin
-####################
-import Tkinter as tk
-from PIL import Image, ImageTk
-import numpy as np
-import png
-from matplotlib import pyplot as plt
-import itertools
-import pdb
+address = "127.0.0.1"
+port = 8000
+base_path = "/home/ubuntu/msd"
 
 # Code taken from Eric's example
 class CustomJSONEncoder(json.JSONEncoder):
@@ -44,62 +38,63 @@ def json_str(value):
 
 
 class MainHandler(tornado.web.RequestHandler):
-   def get(self):
-      print("Hola")
-
    # Function that async handles Post request 
-   #@tornado.web.asynchronous 
+   @tornado.web.asynchronous 
    def post(self): 
-      print ("Post Received")
 
-      ##################
-      # Retriving Post Request Data
-      ##################
-      
+      ###################
+      # Getting post data
+      ###################
       data = json.loads(self.request.body)   
 
-      arg1 = data['arg1']
-      arg2 = data['arg2']
-
-      # Converting the data received to bytes
       try:
-         #pdb.set_trace()
-         png_image = bytes(base64.b64decode(str(arg1)))
-         name = str(arg2)
-         print(name)
-         ##################
-         # Displays image for testing pruporses
-         ##################
-         #png_image = png.Reader(bytes=png_image).asDirect()
-         #image_2d = np.vstack(itertools.imap(np.uint16, png_image[2]))
-         #image_3d = np.reshape(image_2d, (png_image[1], png_image[0], 3))
-         #plt.imshow(image_3d, plt.cm.gray)
-         #plt.show()
+         image = str(data['image'])
+         name = str(data['name'])
+         count = int(data['count'])
+         order = str(data['last'])
+         
+         file_name = base_path + name + str(count) + ".png"
+         fo = open(file_name, "wb")
+         png_image = bytes(base64.b64decode(image))
+         fo.write(png_image)
+         fo.close()
    
-      except ValueError:
-         print ("Problem Parsing Post")
-         #raise HTTPJSONError(1, e)
-
+      except ValueError, e:
+         print ("Problem Parsing Post " + str(e))
+        
       ####################
-      # Insert Picture in DB
+      # Insert picture path in DB
       ####################
       client = MongoClient() # localhost, default port
       collect = client.DroneRecognizer.ClassifierData
 
-      #bson_image = BSON.encode({"image":png_image})
-      binary_image = Binary(png_image)
       collect.update({"name":name},
-                     { "$push": {"images":binary_image} }, 
+                     { "$push": {"images":"test.png"} }, 
                      upsert=True)      
 
-    
+      
       ####################
       # Sending response
       ####################
       self.set_header("Content-Type", "application/json")
       self.write(json_str({'arg1':"OK"}))
       
-      # Finish the task
+      ####################
+      # Openning socket to let open cv the images are ready
+      ####################
+      if order == "true":
+         print ("socket")
+         try:
+            sock = socket.socket()
+            sock.connect((address, port))
+            socket.send("Ready")
+         except socket.error, (value,message):
+            print ("Problem Opening the socket or seding the data.")
+            print (" ERROR " + str(message)) 
+
+      ###################
+      # Finish the task asynch task
+      ###################
       self.finish()
 
 application = tornado.web.Application([(r"/", MainHandler),])

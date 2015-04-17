@@ -1,28 +1,30 @@
 //
-//  NavigationViewController.m
+//  DroneViewController.m
 //  Drone Regonizer
 //
-//  Created by Tyler Hargett on 4/15/15.
+//  Created by Tyler Hargett on 4/16/15.
 //  Copyright (c) 2015 Tyler Hargett. All rights reserved.
 //
 
-#import "NavigationViewController.h"
+#import "DroneViewController.h"
 
-@interface NavigationViewController ()
+@interface DroneViewController ()
 
 @end
 
-@implementation NavigationViewController
+@implementation DroneViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationBar.barTintColor = [UIColor whiteColor];
+    self.tabBarController.navigationItem.rightBarButtonItem = nil;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.tabBarController.navigationItem.rightBarButtonItem = nil;
+
+    self.navigationItem.leftBarButtonItem.enabled = NO;
 }
 
 /*
