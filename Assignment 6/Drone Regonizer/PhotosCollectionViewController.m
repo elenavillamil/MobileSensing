@@ -48,8 +48,15 @@ static int FPS = 30;
     
     self.session = [NSURLSession sessionWithConfiguration:sessionConfig];
     
-    self.collectionView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10.0);
+    self.collectionView.contentInset = UIEdgeInsetsMake(20, 10, 50, 10);
     self.collectionView.backgroundColor = [UIColor lightGrayColor];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(showCamera:)];
+    self.tabBarController.navigationItem.rightBarButtonItem = cameraButton;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -87,17 +94,21 @@ static int FPS = 30;
     if (count > 20) {
         return 20;
     }
-    return count;
+    return self.photos.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
      ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
+    CGFloat height = cell.frame.size.height - 10;
+    CGFloat width = cell.frame.size.width - 10;
+    
+    
     UIImage *picture = (UIImage *)[self.photos objectAtIndex:indexPath.row];
-    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(128, 128)];
+    UIImage *resizedImage = [self imageWithImage:picture scaledToSize:CGSizeMake(width, height)];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:resizedImage];
-    [imageView setFrame:CGRectMake(8, 8, 128.f, 128.f)];
+    [imageView setFrame:CGRectMake(5, 5, width, height)];
     [cell addSubview:imageView];
     cell.backgroundColor = [UIColor whiteColor];
     return cell;
@@ -110,7 +121,7 @@ static int FPS = 30;
         
         reusableview = footerview;
     }
-    
+    reusableview.backgroundColor = [UIColor whiteColor];
     return reusableview;
 }
 
@@ -174,6 +185,8 @@ static int FPS = 30;
         [request setHTTPMethod:@"POST"];
         request.timeoutInterval = 40.0;
         
+        
+        //rotates image properly to allow png to be proper direction
         UIImage *rotatedImage = nil;
         
         if(!(picture.imageOrientation == UIImageOrientationUp ||
@@ -186,6 +199,7 @@ static int FPS = 30;
             UIGraphicsEndImageContext();
         }
         
+        //converts image to string value
         NSString *imageString;
         if (rotatedImage != nil) {
             imageString =[UIImagePNGRepresentation(rotatedImage) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
@@ -272,36 +286,6 @@ static int FPS = 30;
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
     [self.collectionView reloadData];
-}
-
--(void)generateImage
-{
-    AVURLAsset *asset=[[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
-    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    generator.appliesPreferredTrackTransform=TRUE;
-    CMTime thumbTime = CMTimeMakeWithSeconds(0,30);
-    
-    AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
-        if (result != AVAssetImageGeneratorSucceeded) {
-            NSLog(@"couldn't generate thumbnail, error:%@", error);
-        }
-
-        UIImage *image = [UIImage imageWithCGImage:im];
-        UIImage * portraitImage = [[UIImage alloc] initWithCGImage: image.CGImage
-                                                             scale: 1.0
-                                                       orientation: UIImageOrientationLeft];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.photos addObject:portraitImage];
-            [self.collectionView reloadData];
-        });
-    
-        
-    };
-    
-    CGSize maxSize = CGSizeMake(320, 180);
-    generator.maximumSize = maxSize;
-    [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:thumbTime]] completionHandler:handler];
-    
 }
 
 - (void)getAllImages {
