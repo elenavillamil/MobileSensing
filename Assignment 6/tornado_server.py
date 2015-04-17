@@ -19,6 +19,7 @@ from tornado.escape import recursive_unicode
 address = "127.0.0.1"
 port = 8000
 base_path = "/home/ubuntu/msd"
+#base_path = "/Users/elena/"
 
 # Code taken from Eric's example
 class CustomJSONEncoder(json.JSONEncoder):
@@ -47,6 +48,7 @@ class MainHandler(tornado.web.RequestHandler):
       ###################
       data = json.loads(self.request.body)   
 
+      file_name = ""
       try:
          image = str(data['image'])
          name = str(data['name'])
@@ -68,7 +70,7 @@ class MainHandler(tornado.web.RequestHandler):
       client = MongoClient() # localhost, default port
       collect = client.DroneRecognizer.ClassifierData
       collect.update({"name":name},
-                     { "$push": {"images":"test.png"} }, 
+                     { "$push": {"images":file_name} }, 
                      upsert=True)      
     
       #####################
@@ -81,11 +83,13 @@ class MainHandler(tornado.web.RequestHandler):
       # Openning socket to let open cv the images are ready
       ####################
       if order == "true":
-         print ("socket")
+         db_to_file()
+      
          try:
             sock = socket.socket()
             sock.connect((address, port))
-            socket.send("Ready")
+            socket.send(base_path + 'database_contents.txt')
+
          except socket.error, (value,message):
             print ("Problem Opening the socket or seding the data.")
             print (" ERROR " + str(message)) 
@@ -96,6 +100,23 @@ class MainHandler(tornado.web.RequestHandler):
       self.finish()
 
 application = tornado.web.Application([(r"/", MainHandler),])
+
+def db_to_file():
+   client = MongoClient() # localhost, default port
+   db = client.DroneRecognizer.ClassifierData
+
+   # find all documents
+   results = db.find()
+
+   #file to write to
+   fo = open(base_path + 'database_contents.txt', 'w')
+
+   #iterate through items
+   for item in results:
+      for path in item['images']:
+         fo.write(path + "\n")
+
+   fo.close()   
 
 if __name__ == "__main__":
    application.listen(8888)
