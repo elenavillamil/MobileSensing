@@ -54,7 +54,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="sK0-6o-ieH"/>
+                    <tabBarItem key="tabBarItem" title="Item 2" image="transport37" id="sK0-6o-ieH">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="transport37"/>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <navigationItem key="navigationItem" title="Drone Control" id="ue1-Qm-pMo"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="16L-4N-Hwl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -159,7 +163,11 @@
                             <outlet property="delegate" destination="hE0-Ll-8gJ" id="hTu-gu-srF"/>
                         </connections>
                     </collectionView>
-                    <tabBarItem key="tabBarItem" title="Target Capture" id="8l8-tn-OdQ"/>
+                    <tabBarItem key="tabBarItem" title="Target Capture" image="target" selectedImage="target_filled" id="8l8-tn-OdQ">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="target_filled"/>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <navigationItem key="navigationItem" title="Target" id="U7Z-eI-LHT">
                         <barButtonItem key="rightBarButtonItem" systemItem="camera" id="kxK-7c-kvR"/>
                     </navigationItem>
@@ -311,6 +319,9 @@
     <resources>
         <image name="record8" width="64" height="64"/>
         <image name="rotate_camera" width="256" height="256"/>
+        <image name="target" width="32" height="32"/>
+        <image name="target_filled" width="32" height="32"/>
+        <image name="transport37" width="32" height="32"/>
         <image name="white-lightning-md" width="141" height="149"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

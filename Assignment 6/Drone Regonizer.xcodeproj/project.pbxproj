@@ -21,6 +21,8 @@
 		EA67A3CC1ADEB7F800664CDE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CB1ADEB7F800664CDE /* CoreMedia.framework */; };
 		EA67A3CE1ADEB80400664CDE /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CD1ADEB80400664CDE /* ImageIO.framework */; };
 		EA67A3D01ADEB81000664CDE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */; };
+		EAB3BBC91AE017BE004764A3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB3BBC81AE017BE004764A3 /* MediaPlayer.framework */; };
+		EAB3BBCB1AE01804004764A3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB3BBCA1AE01804004764A3 /* MobileCoreServices.framework */; };
 		EAC597021ADF1F8900CECA18 /* FooterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC597011ADF1F8900CECA18 /* FooterCollectionReusableView.m */; };
 		EAEAFB6F1ADEBB4F007C6471 /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */; };
 		EAEAFB721ADEBB62007C6471 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */; };
@@ -60,6 +62,8 @@
 		EA67A3CB1ADEB7F800664CDE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		EA67A3CD1ADEB80400664CDE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		EAB3BBC81AE017BE004764A3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		EAB3BBCA1AE01804004764A3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		EAC597001ADF1F8900CECA18 /* FooterCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FooterCollectionReusableView.h; sourceTree = "<group>"; };
 		EAC597011ADF1F8900CECA18 /* FooterCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FooterCollectionReusableView.m; sourceTree = "<group>"; };
 		EAEAFB6D1ADEBB4F007C6471 /* NavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationViewController.h; sourceTree = "<group>"; };
@@ -75,6 +79,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAB3BBCB1AE01804004764A3 /* MobileCoreServices.framework in Frameworks */,
+				EAB3BBC91AE017BE004764A3 /* MediaPlayer.framework in Frameworks */,
 				EA67A3D01ADEB81000664CDE /* QuartzCore.framework in Frameworks */,
 				EA67A3CE1ADEB80400664CDE /* ImageIO.framework in Frameworks */,
 				EA67A3CC1ADEB7F800664CDE /* CoreMedia.framework in Frameworks */,
@@ -96,6 +102,8 @@
 		EA67A38F1ADA90FC00664CDE = {
 			isa = PBXGroup;
 			children = (
+				EAB3BBCA1AE01804004764A3 /* MobileCoreServices.framework */,
+				EAB3BBC81AE017BE004764A3 /* MediaPlayer.framework */,
 				EA67A3CF1ADEB81000664CDE /* QuartzCore.framework */,
 				EA67A3CD1ADEB80400664CDE /* ImageIO.framework */,
 				EA67A3CB1ADEB7F800664CDE /* CoreMedia.framework */,
