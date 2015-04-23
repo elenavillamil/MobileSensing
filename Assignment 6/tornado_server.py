@@ -21,6 +21,7 @@ from tornado.escape import recursive_unicode
 address = "127.0.0.1"
 port = 8000
 base_path = "/home/ubuntu/msd/"
+base_image_path = "/home/ubuntu/msd/pictures"
 #base_path = "/Users/elena/"
 
 # Code taken from Eric's example
@@ -59,7 +60,7 @@ class MainHandler(tornado.web.RequestHandler):
          count = int(data['count'])
          order = str(data['last'])
          
-         file_name = base_path + name + str(count) + ".png"
+         file_name = base_image_path + name + str(count) + ".png"
          fo = open(file_name, "wb")
          png_image = bytes(base64.b64decode(image))
          fo.write(png_image)
@@ -91,6 +92,7 @@ class MainHandler(tornado.web.RequestHandler):
          print ("Making txt file")
          db_to_file()
          collect.remove({})
+         remove_old_pictures()
 
          try:
             sock = socket.socket()
@@ -129,6 +131,20 @@ def db_to_file():
          fo.write(path + "\n")
 
    fo.close()   
+
+def remove_old_pictures():
+
+   for current_file in os.listdir(base_image_path):
+
+      file_path = os.path.join(base_image_path, current_file)
+
+      try:
+
+         if (os.path.isfile(file_path)):
+            os.unlink(file_path)
+
+      except Exception, e:
+         print e
 
 if __name__ == "__main__":
    application.listen(8888)

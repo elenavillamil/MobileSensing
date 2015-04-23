@@ -55,11 +55,80 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+#define CROP 100
+
+#define CENTER_WIDTH 340
+#define CENTER_HEIGHT 240
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 // Load Face cascade (.xml file)
 cv::CascadeClassifier face_cascade;
 cv::CascadeClassifier eye_cascade;
 
 std::mutex g_recognition_lock;
+
+inline void train_images(std::string& path)
+{
+   std::ifstream input_file(path);
+      
+   static std::string line;
+   std::vector<std::string> paths;
+
+   if (input_file.is_open())
+   {
+      std::stringstream lines;
+
+      lines << input_file.rdbuf();
+      input_file.close();
+
+      while (lines >> line)
+      {
+         paths.push_back(line);
+
+      }
+
+      std::vector<cv::Mat> images;
+      std::vector<int> labels;
+
+      cv::Mat first_image = cv::imread(paths[0].c_str(), 0);
+
+      std::size_t original_width = first_image.cols;
+      std::size_t original_height = first_image.rows;
+
+      auto push_and_crop = [original_width, original_height](std::vector<cv::Mat>& images, std::vector<int>& labels, const std::string& path, int label)
+      {
+         cv::Mat vanilla_image = cv::imread(path.c_str(), 0);
+         cv::Mat resized_image;
+         cv::resize(vanilla_image, resized_image, cv::Size(original_width, original_height), 1.0, 1.0, cv::INTER_CUBIC);
+
+         images.push_back(resized_image);
+
+         labels.push_back(label);
+
+      };
+
+      for (std::size_t index = 1; index < paths.size(); ++index)
+      {
+         push_and_crop(images, labels, paths[index], 0);
+
+      }
+
+      push_and_crop(images, labels, "/home/ubuntu/msd/un_speech_21.jpg", 1);
+
+      {
+         // Prevent race condition.
+         std::lock_guard<std::mutex> lock(g_recognition_lock);
+
+         ev10::face_recognition::get_instance()->set_image_size(original_width, original_height);
+         ev10::face_recognition::get_instance()->train(images, labels);
+
+      }
+
+   }
+
+}
 
 inline std::vector<cv::Rect>* get_faces(cv::Mat& current_image, int min_object_size)
 {
@@ -112,6 +181,42 @@ inline void face_detection(cv::Mat& image)
 
             std::cout << found << std::endl;
 
+            // Get the center of the rectangle
+            std::size_t center_found_face_width = face_roi_gray.cols / 2;
+            std::size_t center_found_face_height = face_roi_gray.rows / 2;
+
+            if (center_found_face_width < CENTER_WIDTH)
+            {
+               // The face is to the left of the center
+
+               std::cout << "<Left>";
+
+            }
+
+            else
+            {
+               // The face is to the right of the center
+
+               std::cout << "<Right>";
+
+            }
+            
+            if (center_found_face_height < CENTER_HEIGHT)
+            {
+               // The Face is below the center
+
+               std::cout << "<Below>";
+
+            }
+
+            else
+            {
+               // The Face is above the center
+
+               std::cout << "<Above>";
+
+            }
+
          }
       }
 
@@ -147,49 +252,14 @@ int main()
 
          std::string path(input.begin(), input.end());
 
-         std::ifstream input_file(path);
-      
-         static std::string line;
-         std::vector<std::string> paths;
-
-         if (input_file.is_open())
-         {
-            std::stringstream lines;
-
-            lines << input_file.rdbuf();
-            input_file.close();
-
-            while (lines >> line)
-            {
-               paths.push_back(line);
-
-            }
-
-            std::vector<cv::Mat> images;
-            std::vector<int> labels;
-
-            for (std::size_t index = 0; index < paths.size(); ++index)
-            {
-               images.push_back(cv::imread(paths[index].c_str(), 0));
-               labels.push_back(0);
-
-            }
-
-            {
-               // Prevent race condition.
-               std::lock_guard<std::mutex> lock(g_recognition_lock);
-
-               ev10::face_recognition::get_instance()->train(images, labels);
-
-            }
-
-         }
+         train_images(path);
 
          // End servicing the socket transmission.
 
       });
 
       thread->start();
+
 
    });
 
@@ -204,6 +274,10 @@ int main()
    #endif
 
    video_capture<process_frame, true> input;
+
+   std::string path = "/home/ubuntu/msd/database_contents.txt";
+
+   train_images(path);   
 
    input.capture_sync();
 

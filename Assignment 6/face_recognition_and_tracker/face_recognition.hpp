@@ -45,8 +45,9 @@ class face_recognition
    public:  // Private Member Functions
 
       int decision(cv::Mat& picture) { return _decision(picture); }
-      static face_recognition* get_instance() { return _get_instance(); }
+      static face_recognition* get_instance() { return *_get_instance(); }
       void reset() { _reset(); }
+      void set_image_size(std::size_t width, std::size_t height) { _set_image_size(width, height); }
       void train(std::vector<cv::Mat>& images, std::vector<int>& labels) { _train(images, labels); }
 
    private: // Private Member Functions
@@ -58,37 +59,54 @@ class face_recognition
 
       void _dtor()
       {
-         delete _m_model;
+
       }
 
       int _decision(cv::Mat& picture)
       {
-         return _m_model->predict(picture);
+         cv::Mat image;
+
+         cv::resize(picture, image, cv::Size(_m_width, _m_height), 1.0, cv::INTER_CUBIC);
+
+         return _m_model->predict(image);
       }
 
-      static face_recognition*& _get_instance()
+      static face_recognition** _get_instance()
       {
          static face_recognition* s_instance = nullptr;
 
-         return s_instance;
+         return &s_instance;
          
       }
 
       void _reset()
       {
-         _get_instance() = nullptr;
+         *_get_instance() = nullptr;
+      }
+
+      void _set_image_size(std::size_t width, std::size_t height)
+      {
+         face_recognition** instance = _get_instance();
+
+         *instance = new face_recognition();
+
+         (*instance)->_m_width = width;
+         (*instance)->_m_height = height;
       }
 
       void _train(std::vector<cv::Mat>& images, std::vector<int>& labels)
       {
-         auto instance = _get_instance() = new face_recognition();
+         face_recognition** instance = _get_instance();
 
-         instance->_m_model->train(images, labels);
+         (*instance)->_m_model->train(images, labels);
       }
 
    private: // Member Variables
 
-      cv::FaceRecognizer* _m_model;
+      std::size_t _m_height;
+      std::size_t _m_width;
+
+      cv::Ptr<cv::FaceRecognizer> _m_model;
    
 }; // End of class(face_recognition)
 
