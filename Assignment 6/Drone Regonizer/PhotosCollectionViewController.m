@@ -24,8 +24,10 @@
 @implementation PhotosCollectionViewController
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
-static NSString * const kURL = @"http://www.ev7n.com:8888/";
-static NSString *const kURLRemove = @"http://www.ev7n.com:8888/remove";
+static NSString * const kURL = @"http://104.150.120.136:8888/";
+//static NSString *const kURLRemove = @"http://www.ev7n.com:8888/remove";
+static NSString *const kURLRemove = @"http://104.150.120.136:8888/remove";
+
 static int FPS = 30;
 
 - (void)viewDidLoad {
@@ -203,7 +205,7 @@ static int FPS = 30;
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
     [request setHTTPMethod:@"POST"];
-    request.timeoutInterval = 3.0;
+    request.timeoutInterval = 30.0;
     
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"remove", @"all", nil];
     NSError *error;
@@ -225,19 +227,30 @@ static int FPS = 30;
                                                              [self alertMessageForConnectionFailure:error];
                                                              });
                                                          } else {
-                                                             NSError *jsonError;
-                                                             NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
                                                              
-                                                             
-                                                             if (jsonError) {
+                                                             if (data) {
+                                                                 
                                                                  dispatch_async (dispatch_get_main_queue(), ^{
-                                                                     [self alertMessageForConnectionFailure:jsonError];
+                                                                     NSLog(@"Response: %@ \n Data: %@", response, data);
+                                                                    [self sendPhotos];
                                                                  });
-                                                             } else {
-                                                                 if ([[response objectForKey:@"arg1"] isEqualToString:@"OK"]) {
-                                                                  [self sendPhotos];
-                                                                 }
                                                              }
+                                                             
+//                                                             NSError *jsonError;
+//                                                             NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data
+//                                                                                                                      options:0
+//                                                                                                                        error:&jsonError];
+//                                                             
+//                                                             
+//                                                             if (jsonError) {
+//                                                                 dispatch_async (dispatch_get_main_queue(), ^{
+//                                                                     [self alertMessageForConnectionFailure:jsonError];
+//                                                                 });
+//                                                             } else {
+//                                                                 if ([[response objectForKey:@"arg1"] isEqualToString:@"OK"]) {
+//                                                                  [self sendPhotos];
+//                                                                 }
+//                                                             }
                                                              
                                                              
                                                          }
@@ -311,7 +324,7 @@ static int FPS = 30;
                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                               
                               if (error) {
-                                  NSLog(@"Upload error: %@", error);
+                                  [self alertMessageForConnectionFailure:error];
                               }
                           }];
         [uploadTask resume];
@@ -378,6 +391,8 @@ static int FPS = 30;
 }
 
 - (void)getAllImages {
+    [self.photos removeAllObjects];
+    
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
     AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
     generator.requestedTimeToleranceAfter =  kCMTimeZero;
