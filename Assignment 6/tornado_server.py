@@ -135,12 +135,11 @@ def remove_old_pictures():
       file_path = os.path.join(base_image_path, current_file)
 
       try:
-
          if (os.path.isfile(file_path)):
             os.unlink(file_path)
 
-      except Exception, e:
-         print e
+      except Exception, exception:
+         print exception
 
 if __name__ == "__main__":
    application.listen(8888)
