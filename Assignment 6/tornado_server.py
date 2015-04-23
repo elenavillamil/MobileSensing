@@ -10,6 +10,7 @@
    
 import base64
 import json
+import os
 import socket
 import tornado.ioloop
 import tornado.web
@@ -20,10 +21,12 @@ from tornado.escape import recursive_unicode
 
 #address = "127.0.0.1"
 address = "104.150.120.136"
+
 port = 8000
-base_path = "/home/ubuntu/msd/"
-base_image_path = "/home/ubuntu/msd/pictures"
-#base_path = "/Users/elena/"
+#base_path = "/home/ubuntu/msd/"
+#base_image_path = "/home/ubuntu/msd/pictures"
+base_path = "/Users/elena/Desktop/"
+base_image_path = "/Users/elena/Desktop/pictures/"
 
 # Code taken from Eric's example
 class CustomJSONEncoder(json.JSONEncoder):
@@ -93,7 +96,6 @@ class MainHandler(tornado.web.RequestHandler):
          print ("Making txt file")
          db_to_file()
          collect.remove({})
-         remove_old_pictures()
 
          try:
             sock = socket.socket()
@@ -114,7 +116,7 @@ class DeleteHandler(tornado.web.RequestHandler):
    def post(self):
       print("Removing old pictures")
 
-      remove_old_pictures()
+      remove_old_pictures(base_image_path)
       
       #####################
       # Sending response
@@ -148,7 +150,6 @@ def db_to_file():
    fo.close()   
 
 
-
 ################################################################
 #
 # Function that removes all the pictures in the pictures folder
@@ -156,17 +157,17 @@ def db_to_file():
 # Return: void
 #
 ################################################################
-def remove_old_pictures():
+def remove_old_pictures(path):
 
-   for current_file in os.listdir(base_image_path):
-      file_path = os.path.join(base_image_path, current_file)
+   for current_file in os.listdir(path):
+      file_path = os.path.join(path, current_file)
 
       try:
          if (os.path.isfile(file_path)):
             os.unlink(file_path)
 
-      except Exception, e:
-         print e
+      except Exception, exception:
+         print exception
 
 
 #################################################
@@ -183,3 +184,4 @@ application = tornado.web.Application([(r"/", MainHandler),
 if __name__ == "__main__":
    application.listen(8888)
    tornado.ioloop.IOLoop.instance().start()
+

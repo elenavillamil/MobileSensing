@@ -25,6 +25,7 @@
 
 static NSString * const reuseIdentifier = @"ImageCollectionViewCell";
 static NSString * const kURL = @"http://www.ev7n.com:8888/";
+static NSString *const kURLRemove = @"http://www.ev7n.com:8888/remove";
 static int FPS = 30;
 
 - (void)viewDidLoad {
@@ -182,15 +183,70 @@ static int FPS = 30;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)alertMessageForConnectionFailure:(NSError *)error {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Connection Error"
+                                                                   message:[NSString stringWithFormat:@"%@", error]
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+    
+}
+
 #pragma mark - Camera and Image
 
-- (IBAction)sendRequest:(id)sender {
+- (void)sendDeleteRequest {
+    NSURL *postURL = [NSURL URLWithString:kURLRemove];
     
-    if (self.targetName == nil) {
-        [self alertMessageForNoName];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:postURL];
+    [request setHTTPMethod:@"POST"];
+    request.timeoutInterval = 3.0;
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"remove", @"all", nil];
+    NSError *error;
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:dict
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    
+    if (error) {
+        NSLog(@"Error: %@", error);
         return;
     }
     
+    NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:request
+                                                              fromData:postData
+                                                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                         
+                                                         if (error) {
+                                                             dispatch_async (dispatch_get_main_queue(), ^{
+                                                             [self alertMessageForConnectionFailure:error];
+                                                             });
+                                                         } else {
+                                                             NSError *jsonError;
+                                                             NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+                                                             
+                                                             
+                                                             if (jsonError) {
+                                                                 dispatch_async (dispatch_get_main_queue(), ^{
+                                                                     [self alertMessageForConnectionFailure:jsonError];
+                                                                 });
+                                                             } else {
+                                                                 if ([[response objectForKey:@"arg1"] isEqualToString:@"OK"]) {
+                                                                  [self sendPhotos];
+                                                                 }
+                                                             }
+                                                             
+                                                             
+                                                         }
+                                                     }];
+    [task resume];
+    
+}
+
+- (void)sendPhotos {
     NSNumber *index = [NSNumber numberWithInteger:1];
     NSNumber *numberOfPhotos = [NSNumber numberWithInteger:self.photos.count];
     int count = 0;
@@ -259,11 +315,21 @@ static int FPS = 30;
                               }
                           }];
         [uploadTask resume];
-                                 
+        
         int value = [index intValue];
         index = [NSNumber numberWithInt:value + 1];
         
         
+    }
+}
+
+- (IBAction)sendRequest:(id)sender {
+    
+    if (self.targetName == nil) {
+        [self alertMessageForNoName];
+        return;
+    } else {
+        [self sendDeleteRequest];
     }
     
 }
