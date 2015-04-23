@@ -103,9 +103,13 @@ class MainHandler(tornado.web.RequestHandler):
             print (" ERROR " + str(message)) 
 
       ###################
-      # Finish the task asynch task
+      # Finish the asynch task
       ###################
       self.finish()
+
+class DeleteHandler(tornado.web.RequestHandler):
+   def post(self):
+      
 
 application = tornado.web.Application([(r"/", MainHandler),])
 
