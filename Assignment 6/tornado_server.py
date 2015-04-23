@@ -18,6 +18,8 @@ from bson.binary import Binary
 from pymongo import MongoClient
 from tornado.escape import recursive_unicode
 
+import os
+
 address = "127.0.0.1"
 port = 8000
 base_path = "/home/ubuntu/msd/"
@@ -128,20 +130,20 @@ def db_to_file():
 
    fo.close()   
 
-def remove_old_pictures():
+def remove_old_pictures(path):
 
-   for current_file in os.listdir(base_image_path):
+   for current_file in os.listdir(path):
 
-      file_path = os.path.join(base_image_path, current_file)
+      file_path = os.path.join(path, current_file)
 
       try:
-
          if (os.path.isfile(file_path)):
             os.unlink(file_path)
 
-      except Exception, e:
-         print e
+      except Exception, exception:
+         print exception
 
 if __name__ == "__main__":
    application.listen(8888)
    tornado.ioloop.IOLoop.instance().start()
+

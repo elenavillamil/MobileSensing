@@ -253,7 +253,7 @@ static int FPS = 30;
     
     
     for (UIImage *picture in self.photos) {
-        int max = 2;
+        int max = 25;
         
         if ([index integerValue]> max) return;
         
