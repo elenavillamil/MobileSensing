@@ -10,6 +10,7 @@
    
 import base64
 import json
+import os
 import socket
 import tornado.ioloop
 import tornado.web
@@ -18,13 +19,14 @@ from bson.binary import Binary
 from pymongo import MongoClient
 from tornado.escape import recursive_unicode
 
-import os
+#address = "127.0.0.1"
+address = "104.150.120.136"
 
-address = "127.0.0.1"
 port = 8000
-base_path = "/home/ubuntu/msd/"
-base_image_path = "/home/ubuntu/msd/pictures"
-#base_path = "/Users/elena/"
+#base_path = "/home/ubuntu/msd/"
+#base_image_path = "/home/ubuntu/msd/pictures"
+base_path = "/Users/elena/Desktop/"
+base_image_path = "/Users/elena/Desktop/pictures/"
 
 # Code taken from Eric's example
 class CustomJSONEncoder(json.JSONEncoder):
@@ -44,15 +46,15 @@ def json_str(value):
 
 
 class MainHandler(tornado.web.RequestHandler):
-   # Function that async handles Post request 
+    
    @tornado.web.asynchronous 
    def post(self): 
 
       print ("Inside POST")
 
-      ###################
+      ####################
       # Getting post data
-      ###################
+      ####################
       data = json.loads(self.request.body)   
 
       file_name = ""
@@ -71,9 +73,9 @@ class MainHandler(tornado.web.RequestHandler):
       except ValueError, e:
          print ("Problem Parsing Post " + str(e))
         
-      ####################
+      ############################
       # Insert picture path in DB
-      ####################
+      ############################
       print ("Inserting into Mongo")
       client = MongoClient() # localhost, default port
       collect = client.DroneRecognizer.ClassifierData
@@ -81,20 +83,19 @@ class MainHandler(tornado.web.RequestHandler):
                      { "$push": {"images":file_name} }, 
                      upsert=True)      
     
-      #####################
+      ###################
       # Sending response
-      ####################
+      ###################
       self.set_header("Content-Type", "application/json")
       self.write(json_str({'arg1':"OK"}))
       
-      ####################
+      ######################################################
       # Openning socket to let open cv the images are ready
-      ####################
+      ######################################################
       if order == "true":
          print ("Making txt file")
          db_to_file()
          collect.remove({})
-         remove_old_pictures()
 
          try:
             sock = socket.socket()
@@ -106,13 +107,30 @@ class MainHandler(tornado.web.RequestHandler):
             print ("Problem Opening the socket or seding the data.")
             print (" ERROR " + str(message)) 
 
-      ###################
-      # Finish the task asynch task
-      ###################
+      #########################
+      # Finish the asynch task
+      #########################
       self.finish()
 
-application = tornado.web.Application([(r"/", MainHandler),])
+class DeleteHandler(tornado.web.RequestHandler):
+   def post(self):
+      print("Removing old pictures")
 
+      remove_old_pictures(base_image_path)
+      
+      #####################
+      # Sending response
+      ####################
+      self.set_header("Content-Type", "application/json")
+      self.write(json_str({'arg1':"OK"}))
+       
+
+#########################################################
+#
+# Function that writes all the pictures' path to a file.
+# The output file is called database_contents.txt
+#
+#########################################################
 def db_to_file():
    client = MongoClient() # localhost, default port
    db = client.DroneRecognizer.ClassifierData
@@ -120,20 +138,28 @@ def db_to_file():
    # find all documents
    results = db.find()
 
-   #file to write to
    fo = open(base_path + 'database_contents.txt', 'w')
 
-   #iterate through items
+   ###########################################################################
+   # Iterate through the documents and writing their paths in the output file
+   ###########################################################################
    for item in results:
       for path in item['images']:
          fo.write(path + "\n")
 
    fo.close()   
 
+
+################################################################
+#
+# Function that removes all the pictures in the pictures folder
+# 
+# Return: void
+#
+################################################################
 def remove_old_pictures(path):
 
    for current_file in os.listdir(path):
-
       file_path = os.path.join(path, current_file)
 
       try:
@@ -143,6 +169,18 @@ def remove_old_pictures(path):
       except Exception, exception:
          print exception
 
+
+#################################################
+# Linking the different handelers to their paths
+#################################################
+application = tornado.web.Application([(r"/", MainHandler),
+                                       (r"/remove", DeleteHandler),])
+
+###############
+#
+#  Main Driver
+#
+###############
 if __name__ == "__main__":
    application.listen(8888)
    tornado.ioloop.IOLoop.instance().start()
