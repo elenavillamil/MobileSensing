@@ -16,6 +16,12 @@
     return YES;
 }
 
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    [self.delegate setName:self.nameTextField.text];
+    [textField resignFirstResponder];
+    return YES;
+}
+
 - (void)setName:(NSString *)name {
     //shouldnt get here.
 }
