@@ -59,6 +59,9 @@
 
 #define TEST 1
 
+#define CENTER_WIDTH 340
+#define CENTER_HEIGHT 240
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -179,6 +182,42 @@ inline void face_detection(cv::Mat& image)
             auto found = instance->decision(face_roi_gray);
 
             std::cout << "Label: " << found.first << " Confidence: " << found.second << ". " << std::endl;
+
+            // Get the center of the rectangle
+            std::size_t center_found_face_width = face_roi_gray.cols / 2;
+            std::size_t center_found_face_height = face_roi_gray.rows / 2;
+
+            if (center_found_face_width < CENTER_WIDTH)
+            {
+               // The face is to the left of the center
+
+               std::cout << "<Left>";
+
+            }
+
+            else
+            {
+               // The face is to the right of the center
+
+               std::cout << "<Right>";
+
+            }
+            
+            if (center_found_face_height < CENTER_HEIGHT)
+            {
+               // The Face is below the center
+
+               std::cout << "<Below>";
+
+            }
+
+            else
+            {
+               // The Face is above the center
+
+               std::cout << "<Above>";
+
+            }
 
          }
       }
