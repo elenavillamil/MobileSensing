@@ -115,7 +115,28 @@ inline void train_images(std::string& path)
 
       }
 
-      push_and_crop(images, labels, "/home/ubuntu/msd/un_speech_21.jpg", 1);
+      std::vector<std::string*> picture_names;
+
+      std::ifstream picture_names_stream("cropped_faces/picture_names.txt");
+
+      std::stringstream picture_lines;
+
+      picture_lines << picture_names_stream.rdbuf();
+
+      picture_names_stream.close();
+
+      std::string picture_line;
+      
+      while (picture_lines >> picture_line)
+      {
+         picture_names.push_back(new std::string(picture_line));
+      }
+
+      for (std::string* picture : picture_names)
+      {
+         push_and_crop(images, labels, picture->c_str(), 1);
+
+      }
 
       {
          // Prevent race condition.
@@ -229,12 +250,6 @@ inline void face_detection(cv::Mat& image)
 inline bool process_frame(cv::Mat& frame)
 {
    double time = ev10::eIIe::timing_helper<ev10::eIIe::SECOND>::time(face_detection, frame);
-
-   #ifdef FPS_TIMING
-      std::cout << "Operations/sec: " << 1 / time << "\t" << std::flush;
-   #else
-      std::cout << "Operations/sec: " << 1 / time << "\r" << std::flush;
-   #endif
 
    return false;
 }
