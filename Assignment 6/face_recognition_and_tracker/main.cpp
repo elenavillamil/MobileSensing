@@ -57,6 +57,8 @@
 
 #define CROP 100
 
+#define TEST 1
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -174,9 +176,9 @@ inline void face_detection(cv::Mat& image)
 
          if (instance)
          {
-            bool found = instance->decision(face_roi_gray);
+            auto found = instance->decision(face_roi_gray);
 
-            std::cout << found << std::endl;
+            std::cout << "Label: " << found.first << " Confidence: " << found.second << ". " << std::endl;
 
          }
       }
@@ -236,9 +238,13 @@ int main()
 
    video_capture<process_frame, true> input;
 
-   std::string path = "/home/ubuntu/msd/database_contents.txt";
+   #if TEST
 
-   train_images(path);   
+      std::string path = "/home/ubuntu/msd/database_contents.txt";
+
+      train_images(path);   
+
+   #endif
 
    input.capture_sync();
 

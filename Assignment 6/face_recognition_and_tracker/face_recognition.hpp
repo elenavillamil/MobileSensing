@@ -44,7 +44,7 @@ class face_recognition
 
    public:  // Private Member Functions
 
-      int decision(cv::Mat& picture) { return _decision(picture); }
+      std::pair<int, double> decision(cv::Mat& picture) { return _decision(picture); }
       static face_recognition* get_instance() { return *_get_instance(); }
       void reset() { _reset(); }
       void set_image_size(std::size_t width, std::size_t height) { _set_image_size(width, height); }
@@ -62,13 +62,20 @@ class face_recognition
 
       }
 
-      int _decision(cv::Mat& picture)
+      std::pair<int, double> _decision(cv::Mat& picture)
       {
          cv::Mat image;
 
          cv::resize(picture, image, cv::Size(_m_width, _m_height), 1.0, cv::INTER_CUBIC);
 
-         return _m_model->predict(image);
+         int predicted_label = -1;
+         double prediction_confidence = 0.0;
+
+         _m_model->predict(image, predicted_label, prediction_confidence);
+
+         std::pair<int, double> pair(predicted_label, prediction_confidence);
+
+         return pair;
       }
 
       static face_recognition** _get_instance()
