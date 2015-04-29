@@ -39,6 +39,7 @@
 
 #endif
 
+#include <cassert>
 #include <chrono>
 #include <cstdio>
 #include <fstream>
@@ -71,6 +72,24 @@ cv::CascadeClassifier eye_cascade;
 
 std::mutex g_recognition_lock;
 
+inline std::vector<cv::Rect>* get_faces(cv::Mat& current_image, int min_object_size)
+{
+   // Detect faces
+   std::vector<cv::Rect>* faces = new std::vector<cv::Rect>();
+
+   face_cascade.detectMultiScale(current_image, *faces, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE , cv::Size(min_object_size, min_object_size));
+
+   // Check to see that faces were found - if not, return
+   if (faces->size() < 1)
+   {
+      delete faces;
+
+      return nullptr;
+   }
+
+   return faces;
+}
+
 inline void train_images(std::string& path)
 {
    std::ifstream input_file(path);
@@ -94,32 +113,61 @@ inline void train_images(std::string& path)
       std::vector<cv::Mat> images;
       std::vector<int> labels;
 
-      cv::Mat first_image = cv::imread(paths[0].c_str(), 0);
+      cv::Mat first_image = cv::imread(paths[0].c_str(), CV_LOAD_IMAGE_GRAYSCALE);
 
-      std::size_t original_width = first_image.cols;
-      std::size_t original_height = first_image.rows;
+      std::size_t original_width = CROP;
+      std::size_t original_height = CROP;
 
-      auto push_and_crop = [original_width, original_height](std::vector<cv::Mat>& images, std::vector<int>& labels, const std::string& path, int label)
+      auto push_and_crop = [original_width, original_height](std::vector<cv::Mat>& images, std::vector<int>& labels, const std::string& path, int label, bool crop_face = false)
       {
-         cv::Mat vanilla_image = cv::imread(path.c_str(), 0);
-         cv::Mat resized_image;
-         cv::resize(vanilla_image, resized_image, cv::Size(original_width, original_height), 1.0, 1.0, cv::INTER_CUBIC);
+         cv::Mat vanilla_image = cv::imread(path.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
 
-         images.push_back(resized_image);
+         assert(vanilla_image.channels() == 1);
 
-         labels.push_back(label);
+         if (crop_face)
+         {
+            // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
+            int min_object_size = vanilla_image.cols / 4;
+
+            std::vector<cv::Rect>* faces = get_faces(vanilla_image, min_object_size);
+
+            if (faces->size() != 0)
+            {
+               cv::Mat face(vanilla_image, faces->at(0));
+
+               cv::Mat resized_image;
+               cv::resize(face, resized_image, cv::Size(original_width, original_height), 1.0, 1.0, cv::INTER_CUBIC);
+
+               images.push_back(face);
+
+               labels.push_back(label);
+
+            }
+
+         }
+
+         else
+         {
+            cv::Mat resized_image;
+            cv::resize(vanilla_image, resized_image, cv::Size(original_width, original_height), 1.0, 1.0, cv::INTER_CUBIC);
+
+            images.push_back(vanilla_image);
+
+            labels.push_back(label);
+
+         }
 
       };
 
       for (std::size_t index = 1; index < paths.size(); ++index)
       {
-         push_and_crop(images, labels, paths[index], 0);
+         push_and_crop(images, labels, paths[index], 0, true);
 
       }
 
       std::vector<std::string*> picture_names;
 
-      std::ifstream picture_names_stream("cropped_faces/picture_names.txt");
+      std::ifstream picture_names_stream("cropped_faces/pictures.txt");
 
       std::stringstream picture_lines;
 
@@ -131,14 +179,34 @@ inline void train_images(std::string& path)
       
       while (picture_lines >> picture_line)
       {
+         picture_line = "cropped_faces/" + picture_line;
+
          picture_names.push_back(new std::string(picture_line));
       }
 
+      int label_number = 1;
+      int count = 1;
+
       for (std::string* picture : picture_names)
       {
-         push_and_crop(images, labels, picture->c_str(), 1);
+         push_and_crop(images, labels, picture->c_str(), label_number);
+
+         if (count++ == 15)
+         {
+            ++label_number;
+         }
 
       }
+
+      #if TEST
+
+         for (std::size_t index = 0; index < images.size(); ++index)
+         {
+            assert(images[index].channels() == 1);
+
+         }
+
+      #endif
 
       {
          // Prevent race condition.
@@ -153,22 +221,18 @@ inline void train_images(std::string& path)
 
 }
 
-inline std::vector<cv::Rect>* get_faces(cv::Mat& current_image, int min_object_size)
+inline void save_face(cv::Mat& image)
 {
-   // Detect faces
-   std::vector<cv::Rect>* faces = new std::vector<cv::Rect>();
+   static int count = 0;
 
-   face_cascade.detectMultiScale(current_image, *faces, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE , cv::Size(min_object_size, min_object_size));
+   std::string filename = "jashook" + std::to_string(count++) + ".png";
 
-   // Check to see that faces were found - if not, return
-   if (faces->size() < 1)
-   {
-      delete faces;
+   std::vector<int> compression_params;
+   compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
+   compression_params.push_back(9);
 
-      return nullptr;
-   }
+   cv::imwrite(filename.c_str(), image, compression_params);
 
-   return faces;
 }
 
 inline void face_detection(cv::Mat& image)
@@ -197,6 +261,10 @@ inline void face_detection(cv::Mat& image)
 
          // Print all the objects detected
          cv::rectangle(image, faces->at(index), cv::Scalar(255, 0, 0));
+
+         cv::Mat resized_image;
+
+         cv::resize(face_roi_gray, resized_image, cv::Size(CROP, CROP), 1.0, 1.0, cv::INTER_CUBIC);
 
          if (instance)
          {
@@ -253,6 +321,8 @@ inline bool process_frame(cv::Mat& frame)
 {
    double time = ev10::eIIe::timing_helper<ev10::eIIe::SECOND>::time(face_detection, frame);
 
+   //save_face(frame);
+
    return false;
 }
 
@@ -294,11 +364,49 @@ int main()
 
    #if TEST
 
-      std::string path = "/home/ubuntu/msd/database_contents.txt";
+      std::string path = "/Users/jarret/msd/database_contents.txt";
 
       train_images(path);   
 
    #endif
+
+   auto predict_from_file = [](const std::string& path)
+      {
+         cv::Mat vanilla_image = cv::imread(path.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+
+         assert(vanilla_image.channels() == 1);
+
+            // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
+            int min_object_size = vanilla_image.cols / 4;
+
+            std::vector<cv::Rect>* faces = get_faces(vanilla_image, min_object_size);
+
+            if (faces->size() != 0)
+            {
+               cv::Mat face(vanilla_image, faces->at(0));
+
+               cv::Mat resized_image;
+               cv::resize(face, resized_image, cv::Size(CROP, CROP), 1.0, 1.0, cv::INTER_CUBIC);
+               auto instance = ev10::face_recognition::get_instance();
+
+               return instance->decision(resized_image);
+
+            }
+
+         std::pair<int, double> default_return(-1, 0.0);
+
+         return default_return;
+
+      };
+
+   
+   auto found = predict_from_file("/Users/jarret/msd/pictures/jashook1.png");
+
+   std::cout << "Label: " << found.first << " Confidence: " << found.second << ". " << std::endl;
+
+   found = predict_from_file("/Users/jarret/msd/pictures/jashook2.png");
+
+   std::cout << "Label: " << found.first << " Confidence: " << found.second << ". " << std::endl;
 
    input.capture_sync();
 

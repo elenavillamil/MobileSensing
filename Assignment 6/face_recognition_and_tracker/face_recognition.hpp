@@ -54,7 +54,7 @@ class face_recognition
 
       void _ctor()
       {
-         _m_model = cv::createFisherFaceRecognizer();
+         _m_model = cv::createLBPHFaceRecognizer();
       }
 
       void _dtor()
