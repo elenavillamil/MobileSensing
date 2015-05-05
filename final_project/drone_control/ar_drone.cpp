@@ -112,6 +112,9 @@ void ar_drone::control(int key_code)
 		
 	std::cout << "Speed: " << speed << std::endl;
 	std::cout << "Action: " << action << std::endl;
+    std::cout << "Command: " << at_cmd << std::endl;
+    
+    at_cmd += '\r';
 		
 	sock->write(at_cmd);
 }
