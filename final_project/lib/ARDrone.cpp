@@ -6,6 +6,18 @@ ar_drone::ar_drone(const std::string& ip)
 	sock = new ev9::socket<ev9::SOCKET_TYPE::UDP>(ip, 5556);
 	sock->write("AT*CONFIG=1,\"control:altitude_max\",\"2000\"");
 	
+    
+    std::thread droneReset ([](){
+        while (true) {
+            std::string at_cmd = "AT*COMWDG=1";
+            try {
+                soc.write(at_cmd);
+            } catch (exception& e) {
+                cout << e.what() << '\n';
+            }
+            std::this_thread::sleep_for(300);
+        }
+    });
 }
 
 void ar_drone::control(int key_code)
