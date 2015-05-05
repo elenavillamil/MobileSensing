@@ -89,6 +89,7 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
       void listen() { _listen(); }
       void read(std::vector<char>& buffer) { _read(buffer); }
       void read_back(std::vector<char>& buffer) { _read_back(buffer); }
+      template<typename __Type> void write(const __Type& data) { _write(data); }
       void write(const char* const message) { _write(message); }
       void write(const std::string& message) { _write(message); }
       void write_back(const char* const message) { _write_back(message); }
@@ -329,20 +330,64 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
          } while (_m_amount_read == BUFFER_SIZE - 1);
       }
    
-      void _write(const char* const message)
+      template<typename __Type> void _write(const __Type& data)
       {
-         #if _WIN32
-            auto error_code = ::send(_m_socket_fd, message, (std::size_t)strlen(message), 0);
-         #else
-            auto error_code = ::write(_m_socket_fd, message, (std::size_t)strlen(message));
-         #endif
+         int error_code;
+        
+         // Find the size
+         std::size_t datatype_size = sizeof(__Type);
+        
+         std::unique_ptr<char> serialized_data(new char[datatype_size]);
+         
+         char* data_unsafe = reinterpret_cast<char*>(data);
+         
+         // Copy over byte by byte the object.
+         std::memcpy(data_unsafe, serialized_data.get(), datatype_size * sizeof(char));
+         
+         if (__SocketType == TCP)
+         {
+             #if _WIN32
+               error_code = ::send(_m_socket_fd, serialized_data, datatype_size, 0);
+            #else
+               error_code = ::write(_m_socket_fd, serialized_data, datatype_size);
+            #endif
+         }
+         
+         else
+         {
+            error_code = sendto(_m_socket_fd, serialized_data, datatype_size, 0, (const struct sockaddr *) &_m_server_address, sizeof(struct sockaddr_in));
+         }
       
          if (error_code < 0)
          {
             throw std::runtime_error("Error writing to the connection");
          }
       }
-
+      
+      void _write(const char* const message)
+      {
+         int error_code;
+         
+         if (__SocketType == TCP)
+         {
+             #if _WIN32
+               error_code = ::send(_m_socket_fd, message, (std::size_t)strlen(message), 0);
+            #else
+               error_code = ::write(_m_socket_fd, message, (std::size_t)strlen(message));
+            #endif
+         }
+         
+         else
+         {
+            error_code = sendto(_m_socket_fd, message, strlen(message), 0, (const struct sockaddr *) &_m_server_address, sizeof(struct sockaddr_in));
+         }
+      
+         if (error_code < 0)
+         {
+            throw std::runtime_error("Error writing to the connection");
+         }
+      }
+      
       void _write(const std::string& message)
       {
          #if _WIN32
@@ -350,13 +395,13 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
          #else
             auto error_code = ::write(_m_socket_fd, message.c_str(), message.size());
          #endif
-
+      
          if (error_code < 0)
          {
             throw std::runtime_error("Error writing to the connection");
          }
       }
-
+      
       void _write_back(const char* const message)
       {
          #if _WIN32
