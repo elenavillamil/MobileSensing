@@ -60,7 +60,7 @@ template<bool __WriteBack = true> class server
 
       void _start()
       {
-         ev9::socket* socket = new ev9::socket(m_socket_number);
+         ev9::socket<ev9::SOCKET_TYPE::TCP>* socket = new ev9::socket<ev9::SOCKET_TYPE::TCP>(m_socket_number);
 
          socket->bind();
          socket->listen();
