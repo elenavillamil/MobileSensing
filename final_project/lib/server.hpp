@@ -4,13 +4,13 @@
 // Module: server.hpp
 //
 // Author: Jarret Shook
-// Modified by: Candie Solis, 15 April 2015
+// Modified by: Candie Solis
 //
 // Versions
 //
-// Jan 11, 2015: Version 1.0: Created
-// Jan 11, 2015: Version 1.0: Last Updated
-// 
+// 11-Jan-15: Version 1.0: Created
+// 11-Jan-15: Version 1.0: Last Updated
+// 15-Apr-15: Version 1.0: Modified
 //
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

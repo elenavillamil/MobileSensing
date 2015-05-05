@@ -7,14 +7,17 @@
 //
 // Time-period:
 //
-// Dec 11, 2014: Version 1.0: Created
-// Dec 11, 2014: Version 1.0: Last Updated
-// Apr 17, 2015: Version 1.1: Fixed small bug (reordered port number to be in
-//                                             reversed byte order)
+// 11-Dec-14: Version 1.0: Created
+// 11-Dec-14: Version 1.0: Last Updated
+// 17-Apr-15: Version 1.1: Fixed small bug (reordered port number to be in
+//                                          reversed byte order)
+// 5-May-15:  Version 2.0: Added UDP support
 //
 // Notes:
 //
-// Requirements: POSIX threads
+// Socket implementation on top of both Unix (BSD sockets) and Windows (WINSOCK)
+//
+// Currently UDP has only been tested to work on linux.
 //
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,10 +66,12 @@ namespace ev9 {
 
 #define BUFFER_SIZE 256
 
+enum SOCKET_TYPE { UDP, TCP };
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-class socket
+template<SOCKET_TYPE __SocketType = TCP> class socket
 {
    public:  // Constructor | Destructor
 
@@ -156,12 +161,13 @@ class socket
 
             int error = WSAStartup(0x0202, &w);
 
-            if (w.wVersion != 0x0202) //Wrong Winsock version?
+            if (w.wVersion != 0x0202)
             {
                WSACleanup();
 
                throw std::runtime_error("[ev9::socket.hpp::_ctor()::140] - Incorrect WSA Version");
             }
+            
          #endif
 
          _m_port_number = port;
@@ -195,8 +201,16 @@ class socket
          // AF_INET: Internet domain of the computer
          // SOCK_STREAM: TCP as opposed to UDP
          // 0: Choose TCP for the transfer protocol
-         _m_socket_fd = ::socket(AF_INET, SOCK_STREAM, 0);
-
+         if (__SocketType == TCP)
+         {
+            _m_socket_fd = ::socket(AF_INET, SOCK_STREAM, 0);  
+         }
+         
+         else
+         {
+            _m_socket_fd = ::socket(AF_INET, SOCK_DGRAM, 0);
+         }
+         
          // -1 if failed
          if (_m_socket_fd < 0)
          {
@@ -247,8 +261,6 @@ class socket
          
          if (return_value < 0)
          {
-            //std::cout << WSAGetLastError() << std::endl;
-
             throw std::runtime_error("Error cannot connect to the address");
          }
 
