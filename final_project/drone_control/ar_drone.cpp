@@ -1,23 +1,11 @@
 #include <iostream>
-#include "ARDrone.hpp"
+#include "ar_drone.hpp"
 
 ar_drone::ar_drone(const std::string& ip)
 {
 	sock = new ev9::socket<ev9::SOCKET_TYPE::UDP>(ip, 5556);
 	sock->write("AT*CONFIG=1,\"control:altitude_max\",\"2000\"");
 	
-    
-    std::thread droneReset ([](){
-        while (true) {
-            std::string at_cmd = "AT*COMWDG=1";
-            try {
-                soc.write(at_cmd);
-            } catch (exception& e) {
-                cout << e.what() << '\n';
-            }
-            std::this_thread::sleep_for(300);
-        }
-    });
 }
 
 void ar_drone::control(int key_code)
@@ -25,41 +13,41 @@ void ar_drone::control(int key_code)
 	std::string at_cmd = "";
 	std::string action = "";
 	
-	std::string start = std::string("AT*PCMD=");
+	std::string start("AT*PCMD=");
 	
 	switch(key_code)
 	{
-		case 49:	//1
+		case '1':
     	    speed = 0.05;
     	   	break;
-    	case 50:	//2
+    	case '2':
     	    speed = 0.1;
     	  	break;
-    	case 51:	//3
+    	case '3':
     	    speed = 0.15;
     	  	break;
-    	case 52:	//4
+    	case '4':
     	    speed = 0.25;
     	   	break;
-    	case 53:	//5
+    	case '5':
     	    speed = 0.35;
     	  	break;
-    	case 54:	//6
+    	case '6':
     	    speed = 0.45;
     	  	break;
-    	case 55:	//7
+    	case '7':	// 7
     	    speed = 0.6;
     	  	break;
-    	case 56:	//8
+    	case '8':
     	    speed = 0.8;
     	 	break;
-    	case 57:	//9
+    	case '9':
     	    speed = 0.99;
     	  	break;
-    	case 16:	//Shift
+    	case 16:	// Shift
     	    shift = true;
     	  	break;
-    	case 38:	//Up
+    	case 38:	// Up
             if (shift)
             {
     	  	    action = "Go Up (gaz+)";
@@ -71,7 +59,7 @@ void ar_drone::control(int key_code)
 				at_cmd = start + std::to_string(seq++) + ",1,0," + std::to_string(static_cast<int>(-speed)) + ",0,0";
     	    }
     	    break;
-    	case 40:	//Down
+    	case 40:	// Down
     	   	if (shift) {
     	   	    action = "Go Down (gaz-)";
     	   	    at_cmd = start + std::to_string(seq++) + ",1,0,0," + std::to_string(static_cast<int>(-speed)) + ",0";
@@ -81,7 +69,7 @@ void ar_drone::control(int key_code)
 				at_cmd = start + std::to_string(seq++) + ",1,0," + std::to_string(static_cast<int>(speed)) + ",0,0";
     	    }
        	   	break;
-    	case 37:	//Left 
+    	case 37:	// Left 
     	   if (shift) 
            {
     	       action = "Rotate Left (yaw-)";
@@ -92,7 +80,7 @@ void ar_drone::control(int key_code)
 			   at_cmd = start + std::to_string(seq++) + ",1," + std::to_string(static_cast<int>(-speed)) + ",0,0,0";
 		   }
     	   break;
-    	case 39:	//Right
+    	case 39:	// Right
             if (shift) {
                 action = "Rotate Right (yaw+)";
 			    at_cmd = start + std::to_string(seq++) + ",1,0,0,0," + std::to_string(static_cast<int>(speed));
@@ -102,19 +90,19 @@ void ar_drone::control(int key_code)
 				at_cmd = start + std::to_string(seq++) + ",1," + std::to_string(static_cast<int>(speed)) + ",0,0,0";
 			}
     	    break;
-        case 32:	//SpaceBar
+        case 32:	// SpaceBar
     	   	action = "Hovering";
     	   	at_cmd = start + std::to_string(seq++) + ",1,0,0,0,0";
     	   	break;
-    	case 33:	//PageUp
+    	case 'u':	
     	  	action = "Takeoff";
     	   	at_cmd = std::string("AT*REF=") + std::to_string(seq++) + ",290718208";
     	   	break;
-    	 case 34:	//PageDown
+    	 case 'd':
     	   	action = "Landing";
     	   	at_cmd = std::string("AT*REF=") + std::to_string(seq++) + ",290717696";
     	   	break;
-		case 82:	//R of reset
+		case 82:	// R of reset
     	   	action = "Reset";
     	   	at_cmd = "AT*REF=1,290717952";
     	   	break;
@@ -124,7 +112,6 @@ void ar_drone::control(int key_code)
 		
 	std::cout << "Speed: " << speed << std::endl;
 	std::cout << "Action: " << action << std::endl;
-    std::cout << "Command: " << at_cmd << std::endl;
 		
 	sock->write(at_cmd);
 }

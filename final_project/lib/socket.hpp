@@ -202,6 +202,7 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
          // AF_INET: Internet domain of the computer
          // SOCK_STREAM: TCP as opposed to UDP
          // 0: Choose TCP for the transfer protocol
+         // 1: Choose UDP for the transfer protocol
          if (__SocketType == TCP)
          {
             _m_socket_fd = ::socket(AF_INET, SOCK_STREAM, 0);  
@@ -227,6 +228,27 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
 
          _m_accepted_fd = 0;
          _m_amount_read = 0;
+         
+         if (__SocketType == UDP)
+         {
+            // IPv4
+            _m_server_address.sin_family = AF_INET;
+            _m_server_address.sin_port = htons(_m_port_number);
+            
+            if (_m_ip_address != nullptr)
+            {
+               #if _WIN32
+                  int status = _m_server_address.sin_addr.s_addr = ::inet_addr(_m_ip_address);
+               #else
+                  int status = ::inet_pton(AF_INET, _m_ip_address, &_m_server_address.sin_addr);
+               #endif
+   
+               if (status < 0)
+               {
+                  throw std::runtime_error("Error cannot convert the ip address");
+               }
+            }
+         }
       }
    
       void _close()
@@ -355,7 +377,7 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
          
          else
          {
-            error_code = sendto(_m_socket_fd, serialized_data, datatype_size, 0, (const struct sockaddr *) &_m_server_address, sizeof(struct sockaddr_in));
+            error_code = sendto(_m_socket_fd, serialized_data, datatype_size, 0, (const struct sockaddr *) &_m_server_address, sizeof(sockaddr_in));
          }
       
          if (error_code < 0)
@@ -379,7 +401,7 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
          
          else
          {
-            error_code = sendto(_m_socket_fd, message, strlen(message), 0, (const struct sockaddr *) &_m_server_address, sizeof(struct sockaddr_in));
+            error_code = ::sendto(_m_socket_fd, message, std::strlen(message), 0, (const struct sockaddr *) &_m_server_address, sizeof(sockaddr_in));
          }
       
          if (error_code < 0)
@@ -390,11 +412,20 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
       
       void _write(const std::string& message)
       {
-         #if _WIN32
-            auto error_code = ::send(_m_socket_fd, message.c_str(), message.size(), 0);
-         #else
-            auto error_code = ::write(_m_socket_fd, message.c_str(), message.size());
-         #endif
+         int error_code;
+         
+         if (__SocketType == TCP)
+         {
+            #if _WIN32
+               auto error_code = ::send(_m_socket_fd, message.c_str(), message.size(), 0);
+            #else
+               auto error_code = ::write(_m_socket_fd, message.c_str(), message.size());
+            #endif  
+         }
+         else
+         {
+            error_code = ::sendto(_m_socket_fd, message.c_str(), message.size(), 0, (const struct sockaddr *) &_m_server_address, sizeof(sockaddr_in));
+         }
       
          if (error_code < 0)
          {
