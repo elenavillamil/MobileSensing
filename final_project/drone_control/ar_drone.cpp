@@ -15,6 +15,8 @@ void ar_drone::control(int key_code)
 	
 	std::string start("AT*PCMD=");
 	
+    float current_speed = -speed;
+    
 	switch(key_code)
 	{
 		case '1':
@@ -46,51 +48,55 @@ void ar_drone::control(int key_code)
     	  	break;
     	case 16:	// Shift
     	    shift = true;
+            std::cout << "shifted" << std::endl;
     	  	break;
-    	case 38:	// Up
-            if (shift)
-            {
-    	  	    action = "Go Up (gaz+)";
-    	   	    at_cmd = start + std::to_string(seq++) + ",1,0,0," + std::to_string(static_cast<int>(speed)) + ",0";
-    	    } else 
-            {
-    	  	    action = "Go Forward (pitch+)";
-    	   	    //at_cmd = "AT*PCMD=" + (seq++) + ",1," + intOfFloat(speed) + ",0,0,0";
-				at_cmd = start + std::to_string(seq++) + ",1,0," + std::to_string(static_cast<int>(-speed)) + ",0,0";
-    	    }
+    	case 'o':	// o
+            action = "Go Up (gaz+)";
+    	    at_cmd = start + std::to_string(seq++) + ",1,0,0," + std::to_string(reinterpret_cast<int&>(speed)) + ",0";
+            break;
+        case 'w':   // w
+	  	    action = "Go Forward (pitch+)";
+	   	    //at_cmd = "AT*PCMD=" + (seq++) + ",1," + intOfFloat(speed) + ",0,0,0";
+            
+            current_speed = -speed;
+               
+			at_cmd = start + std::to_string(seq++) + ",1,0," + std::to_string(reinterpret_cast<int&>(current_speed)) + ",0,0";
     	    break;
-    	case 40:	// Down
-    	   	if (shift) {
-    	   	    action = "Go Down (gaz-)";
-    	   	    at_cmd = start + std::to_string(seq++) + ",1,0,0," + std::to_string(static_cast<int>(-speed)) + ",0";
-    	   	} else {
-    	   	    action = "Go Backward (pitch-)";
-    	   	    //at_cmd = "AT*PCMD=" + (seq++) + ",1," + intOfFloat(-speed) + ",0,0,0";
-				at_cmd = start + std::to_string(seq++) + ",1,0," + std::to_string(static_cast<int>(speed)) + ",0,0";
-    	    }
+    	case 'l':	// l
+       	    action = "Go Down (gaz-)";
+            
+            current_speed = -speed;
+               
+       	    at_cmd = start + std::to_string(seq++) + ",1,0,0," + std::to_string(reinterpret_cast<int&>(current_speed)) + ",0";
+       	    break;
+        case 's':  // s
+            action = "Go Backward (pitch-)";
+	   	    //at_cmd = "AT*PCMD=" + (seq++) + ",1," + intOfFloat(-speed) + ",0,0,0";
+			at_cmd = start + std::to_string(seq++) + ",1,0," + std::to_string(reinterpret_cast<int&>(speed)) + ",0,0";
        	   	break;
-    	case 37:	// Left 
-    	   if (shift) 
-           {
-    	       action = "Rotate Left (yaw-)";
-			   at_cmd = start + std::to_string(seq++) + ",1,0,0,0," + std::to_string(static_cast<int>(-speed));
-		   } else {
-		       action = "Go Left (roll-)";
-		       //at_cmd = "AT*PCMD=" + (seq++) + ",1,0," + intOfFloat(-speed) + ",0,0";
-			   at_cmd = start + std::to_string(seq++) + ",1," + std::to_string(static_cast<int>(-speed)) + ",0,0,0";
-		   }
+    	case 'k':	// n
+            action = "Rotate Left (yaw-)";
+            current_speed = -speed;
+            
+            at_cmd = start + std::to_string(seq++) + ",1,0,0,0," + std::to_string(reinterpret_cast<int&>(current_speed));
+            break;
+        case 'a':   // a
+            action = "Go Left (roll-)";
+	       //at_cmd = "AT*PCMD=" + (seq++) + ",1,0," + intOfFloat(-speed) + ",0,0";
+           current_speed = -speed;
+           
+		   at_cmd = start + std::to_string(seq++) + ",1," + std::to_string(reinterpret_cast<int&>(current_speed)) + ",0,0,0";
     	   break;
-    	case 39:	// Right
-            if (shift) {
-                action = "Rotate Right (yaw+)";
-			    at_cmd = start + std::to_string(seq++) + ",1,0,0,0," + std::to_string(static_cast<int>(speed));
-		    } else {
-			    action = "Go Right (roll+)";
-				//at_cmd = "AT*PCMD=" + (seq++) + ",1,0," + intOfFloat(speed) + ",0,0";
-				at_cmd = start + std::to_string(seq++) + ",1," + std::to_string(static_cast<int>(speed)) + ",0,0,0";
-			}
+    	case ';':	// m
+            action = "Rotate Right (yaw+)";
+		    at_cmd = start + std::to_string(seq++) + ",1,0,0,0," + std::to_string(reinterpret_cast<int&>(speed));
+		    break;
+        case 'd':   // d
+		    action = "Go Right (roll+)";
+			//at_cmd = "AT*PCMD=" + (seq++) + ",1,0," + intOfFloat(speed) + ",0,0";
+			at_cmd = start + std::to_string(seq++) + ",1," + std::to_string(reinterpret_cast<int&>(speed)) + ",0,0,0";
     	    break;
-        case 32:	// SpaceBar
+        case 'h':	// SpaceBar
     	   	action = "Hovering";
     	   	at_cmd = start + std::to_string(seq++) + ",1,0,0,0,0";
     	   	break;
@@ -98,7 +104,7 @@ void ar_drone::control(int key_code)
     	  	action = "Takeoff";
     	   	at_cmd = std::string("AT*REF=") + std::to_string(seq++) + ",290718208";
     	   	break;
-    	 case 'd':
+    	 case 'j':
     	   	action = "Landing";
     	   	at_cmd = std::string("AT*REF=") + std::to_string(seq++) + ",290717696";
     	   	break;
