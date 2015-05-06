@@ -282,7 +282,8 @@ class ARDrone extends Frame implements KeyListener {
     	}
 
     	System.out.println("Speed: " + speed);    	
-    	System.out.println("Action: " + action);    	
+    	System.out.println("Action: " + action);
+        System.out.println(at_cmd);	
 	send_at_cmd(at_cmd);
     }
 }
