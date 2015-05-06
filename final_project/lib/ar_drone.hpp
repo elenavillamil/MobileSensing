@@ -12,7 +12,11 @@
 #ifndef __ARDRONE_HPP__
 #define __ARDRONE_HPP__
 
+#include <chrono>
+#include <mutex>
 #include <string>
+#include <thread>
+
 #include "socket.hpp"
 
 class ar_drone 
@@ -27,6 +31,10 @@ class ar_drone
 		bool shift = false;
 		float float_buffer[4];
 		int int_buffer[4];
+        bool finished;
+        
+        std::thread* drone_thread;
+        std::mutex finished_lock;
         
         void send_command(int command_key);
 		
@@ -36,7 +44,8 @@ class ar_drone
 		///////////////////////////////////////////////////////////////////////
 		
 		ar_drone(const std::string& ip = "192.168.1.1");
-		
+        ~ar_drone();
+        
 		///////////////////////////////////////////////////////////////////////
 		//Public Member Functions
 		///////////////////////////////////////////////////////////////////////
