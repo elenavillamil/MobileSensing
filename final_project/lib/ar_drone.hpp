@@ -27,6 +27,8 @@ class ar_drone
 		bool shift = false;
 		float float_buffer[4];
 		int int_buffer[4];
+        
+        void send_command(int command_key);
 		
 	public:
 		///////////////////////////////////////////////////////////////////////
@@ -40,10 +42,23 @@ class ar_drone
 		///////////////////////////////////////////////////////////////////////
 		
 		///////////////////////////////////////////////////////////////////////
-		// Based on the key_code received it sends a command to the ARDrone
+		// val has to be a value from 1 to 9 (included). 
+        // 0 is the slowest speed setting
+        // 9 is the heighst speed setting
 		///////////////////////////////////////////////////////////////////////
-		void control(int key_code);
-	
+        void speed_change(int val);
+        void take_off();
+        void hover();
+        void land();
+        void reset();
+        void go_up();
+        void go_forward();
+        void go_down();
+        void go_backwards();
+        void rotate_left();
+        void go_left();
+        void rotate_right();
+        void go_right();	
 };
 
 #endif // __ARDRONE_HPP__
