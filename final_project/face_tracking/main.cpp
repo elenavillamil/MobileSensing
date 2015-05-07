@@ -64,6 +64,9 @@
 #define CENTER_WIDTH 340
 #define CENTER_HEIGHT 240
 
+#define MIN_OBJ_DIV_SIZE 8
+#define MIN_FACE_COLS 95
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -76,18 +79,16 @@ std::mutex g_recognition_lock;
 ar_drone drone;
 std::size_t height = 2000; // 2000 mm (2m)
 
-inline std::vector<cv::Rect>* get_faces(cv::Mat& current_image, int min_object_size)
+inline std::shared_ptr<std::vector<cv::Rect>> get_faces(cv::Mat& current_image, int min_object_size)
 {
    // Detect faces
-   std::vector<cv::Rect>* faces = new std::vector<cv::Rect>();
+   std::shared_ptr<std::vector<cv::Rect>> faces(new std::vector<cv::Rect>());
 
    face_cascade.detectMultiScale(current_image, *faces, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE , cv::Size(min_object_size, min_object_size));
 
    // Check to see that faces were found - if not, return
-   if (faces->size() < 1)
+   if (faces.get()->size() < 1)
    {
-      delete faces;
-
       return nullptr;
    }
 
@@ -131,9 +132,9 @@ inline void train_images(std::string& path)
          if (crop_face)
          {
             // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
-            int min_object_size = vanilla_image.cols / 4;
+            int min_object_size = vanilla_image.cols / MIN_OBJ_DIV_SIZE;
 
-            std::vector<cv::Rect>* faces = get_faces(vanilla_image, min_object_size);
+            std::shared_ptr<std::vector<cv::Rect>> faces = get_faces(vanilla_image, min_object_size);
 
             if (faces->size() != 0)
             {
@@ -199,6 +200,8 @@ inline void train_images(std::string& path)
          {
             ++label_number;
          }
+         
+         delete picture;
 
       }
 
@@ -207,7 +210,7 @@ inline void train_images(std::string& path)
          for (std::size_t index = 0; index < images.size(); ++index)
          {
             assert(images[index].channels() == 1);
-
+            
          }
 
       #endif
@@ -247,9 +250,9 @@ inline void face_detection(cv::Mat& image)
    cvtColor(image, mat_gray, CV_BGR2GRAY);
 
    // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
-   int min_object_size = image.cols / 4;
+   int min_object_size = image.cols / MIN_OBJ_DIV_SIZE;
 
-   std::vector<cv::Rect>* faces = get_faces(mat_gray, min_object_size);
+   std::shared_ptr<std::vector<cv::Rect>> faces = get_faces(mat_gray, min_object_size);
 
    if (!faces) return;
 
@@ -286,9 +289,16 @@ inline void face_detection(cv::Mat& image)
             std::size_t center_found_face_width = (face_roi_gray.cols / 2) + offset.x;
             std::size_t center_found_face_height = (face_roi_gray.rows / 2) + offset.y;
 
+            const std::size_t margen_width = 20;
+            const std::size_t margen_height = 15;
+            
             std::cout << center_found_face_width << " " << center_found_face_height << std::endl;
+            
+            std::cout << "Columns " << face_roi_gray.cols;
+            std::cout << "Rows" << face_roi_gray.rows << std::endl;
+            
    
-            if (center_found_face_width < CENTER_WIDTH)
+            if (center_found_face_width < CENTER_WIDTH - margen_width)
             {
                // The face is to the left of the center
 
@@ -306,7 +316,7 @@ inline void face_detection(cv::Mat& image)
 
             }
             
-            if (center_found_face_height < CENTER_HEIGHT)
+            if (center_found_face_height < CENTER_HEIGHT - margen_height)
             {
                // The Face is below the center
 
@@ -323,13 +333,31 @@ inline void face_detection(cv::Mat& image)
                drone.go_up();
 
             }
+            
+            // Check size of face
+            // ~150 is about the distance we want
+            
+            if (face_roi_gray.cols < MIN_FACE_COLS)
+            {
+               // The face is too far away
+               
+               std::cout << "<Forward>";
+               drone.go_forward();
+            }
+            
+            else
+            {
+               //The Face is too close
+               
+               std::cout << "<Backwards>";
+               drone.go_backwards();
+            }
+            
 
          }
       }
 
    }
-
-   delete faces;
 
 }
 
@@ -387,34 +415,33 @@ int main()
    #endif
 
    auto predict_from_file = [](const std::string& path)
-      {
-         cv::Mat vanilla_image = cv::imread(path.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+	{
+      cv::Mat vanilla_image = cv::imread(path.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
 
-         assert(vanilla_image.channels() == 1);
+      assert(vanilla_image.channels() == 1);
 
-            // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
-            int min_object_size = vanilla_image.cols / 4;
+         // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
+         int min_object_size = vanilla_image.cols / MIN_OBJ_DIV_SIZE;
 
-            std::vector<cv::Rect>* faces = get_faces(vanilla_image, min_object_size);
+         std::shared_ptr<std::vector<cv::Rect>> faces = get_faces(vanilla_image, min_object_size);
 
-            if (faces->size() != 0)
-            {
-               cv::Mat face(vanilla_image, faces->at(0));
+         if (faces->size() != 0)
+         {
+            cv::Mat face(vanilla_image, faces->at(0));
 
-               cv::Mat resized_image;
-               cv::resize(face, resized_image, cv::Size(CROP, CROP), 1.0, 1.0, cv::INTER_CUBIC);
-               auto instance = ev10::face_recognition::get_instance();
+            cv::Mat resized_image;
+            cv::resize(face, resized_image, cv::Size(CROP, CROP), 1.0, 1.0, cv::INTER_CUBIC);
+            auto instance = ev10::face_recognition::get_instance();
 
-               return instance->decision(resized_image);
+            return instance->decision(resized_image);
 
-            }
+         }
 
-         std::pair<int, double> default_return(-1, 0.0);
+      std::pair<int, double> default_return(-1, 0.0);
 
-         return default_return;
+      return default_return;
 
-      };
-
+   };
    
    /*auto found = predict_from_file("/Users/jarret/msd/pictures/jashook1.png");
 
