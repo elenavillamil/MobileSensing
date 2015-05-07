@@ -48,6 +48,7 @@
 #include <thread>
 #include <vector>
 
+#include "ar_drone.hpp"
 #include "face_recognition.hpp"
 #include "server.hpp"
 #include "timing_helper.hpp"
@@ -71,6 +72,9 @@ cv::CascadeClassifier face_cascade;
 cv::CascadeClassifier eye_cascade;
 
 std::mutex g_recognition_lock;
+
+ar_drone drone;
+std::size_t height = 2000; // 2000 mm (2m)
 
 inline std::vector<cv::Rect>* get_faces(cv::Mat& current_image, int min_object_size)
 {
@@ -289,6 +293,7 @@ inline void face_detection(cv::Mat& image)
                // The face is to the left of the center
 
                std::cout << "<Left>";
+               drone.rotate_left();
 
             }
 
@@ -297,6 +302,7 @@ inline void face_detection(cv::Mat& image)
                // The face is to the right of the center
 
                std::cout << "<Right>";
+               drone.rotate_right();
 
             }
             
@@ -305,6 +311,7 @@ inline void face_detection(cv::Mat& image)
                // The Face is below the center
 
                std::cout << "<Below>";
+               drone.go_down();
 
             }
 
@@ -313,6 +320,7 @@ inline void face_detection(cv::Mat& image)
                // The Face is above the center
 
                std::cout << "<Above>";
+               drone.go_up();
 
             }
 
