@@ -7,21 +7,21 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>0CCD3FEF-A3E9-47ED-859A-2DE513FD15CF</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>Assignment5</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>CFD397E377F52073DDB416F04A4571C4749680D2</key>
-		<string>https://github.com/elenavillamil/MobileSensing</string>
+		<string>https://github.com/elenavillamil/MobileSensing.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Assignment5/Assignment5.xcodeproj/project.xcworkspace</string>
+	<string>Assignment5/Assignment5.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>CFD397E377F52073DDB416F04A4571C4749680D2</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/elenavillamil/MobileSensing</string>
+	<string>https://github.com/elenavillamil/MobileSensing.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -34,7 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>CFD397E377F52073DDB416F04A4571C4749680D2</string>
 			<key>IDESourceControlWCCName</key>
-			<string>MobileSensing</string>
+			<string>Mobile%20Sensing</string>
 		</dict>
 	</array>
 </dict>

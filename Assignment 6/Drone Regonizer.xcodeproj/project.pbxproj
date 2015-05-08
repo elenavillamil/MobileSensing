@@ -31,6 +31,11 @@
 		EAEAFB6F1ADEBB4F007C6471 /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB6E1ADEBB4F007C6471 /* NavigationViewController.m */; };
 		EAEAFB721ADEBB62007C6471 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */; };
 		EAEAFB751ADED03E007C6471 /* ImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEAFB741ADED03E007C6471 /* ImageCollectionViewCell.m */; };
+		EAEB59DB1AFC161000AF0B11 /* dpad.png in Resources */ = {isa = PBXBuildFile; fileRef = EAEB59D91AFC161000AF0B11 /* dpad.png */; };
+		EAEB59DC1AFC161000AF0B11 /* joystick.png in Resources */ = {isa = PBXBuildFile; fileRef = EAEB59DA1AFC161000AF0B11 /* joystick.png */; };
+		EAEB59DF1AFC163B00AF0B11 /* MBJoystickView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB59DE1AFC163B00AF0B11 /* MBJoystickView.m */; };
+		EAFE7D911AFC246C00B0510D /* libARDroneEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAFE7D901AFC246C00B0510D /* libARDroneEngine.a */; };
+		EAFE7D931AFC257E00B0510D /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAFE7D921AFC257E00B0510D /* GLKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +88,12 @@
 		EAEAFB711ADEBB62007C6471 /* TabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarViewController.m; sourceTree = "<group>"; };
 		EAEAFB731ADED03E007C6471 /* ImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCollectionViewCell.h; sourceTree = "<group>"; };
 		EAEAFB741ADED03E007C6471 /* ImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCollectionViewCell.m; sourceTree = "<group>"; };
+		EAEB59D91AFC161000AF0B11 /* dpad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dpad.png; sourceTree = "<group>"; };
+		EAEB59DA1AFC161000AF0B11 /* joystick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = joystick.png; sourceTree = "<group>"; };
+		EAEB59DD1AFC163B00AF0B11 /* MBJoystickView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBJoystickView.h; sourceTree = "<group>"; };
+		EAEB59DE1AFC163B00AF0B11 /* MBJoystickView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBJoystickView.m; sourceTree = "<group>"; };
+		EAFE7D901AFC246C00B0510D /* libARDroneEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libARDroneEngine.a; sourceTree = "<group>"; };
+		EAFE7D921AFC257E00B0510D /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,11 +101,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAFE7D931AFC257E00B0510D /* GLKit.framework in Frameworks */,
 				EAB3BBD01AE0942E004764A3 /* CoreGraphics.framework in Frameworks */,
 				EAB3BBCB1AE01804004764A3 /* MobileCoreServices.framework in Frameworks */,
 				EAB3BBC91AE017BE004764A3 /* MediaPlayer.framework in Frameworks */,
 				EA67A3D01ADEB81000664CDE /* QuartzCore.framework in Frameworks */,
 				EA67A3CE1ADEB80400664CDE /* ImageIO.framework in Frameworks */,
+				EAFE7D911AFC246C00B0510D /* libARDroneEngine.a in Frameworks */,
 				EA67A3CC1ADEB7F800664CDE /* CoreMedia.framework in Frameworks */,
 				EA67A3CA1ADEB7E800664CDE /* CoreVideo.framework in Frameworks */,
 				EA67A3C81ADEB7DB00664CDE /* AVFoundation.framework in Frameworks */,
@@ -114,6 +127,8 @@
 		EA67A38F1ADA90FC00664CDE = {
 			isa = PBXGroup;
 			children = (
+				EAFE7D921AFC257E00B0510D /* GLKit.framework */,
+				EAFE7D901AFC246C00B0510D /* libARDroneEngine.a */,
 				EAB3BBCF1AE0942E004764A3 /* CoreGraphics.framework */,
 				EAB3BBCA1AE01804004764A3 /* MobileCoreServices.framework */,
 				EAB3BBC81AE017BE004764A3 /* MediaPlayer.framework */,
@@ -162,6 +177,10 @@
 				EAC597011ADF1F8900CECA18 /* FooterCollectionReusableView.m */,
 				EAB3BBD41AE0BE1A004764A3 /* HeaderCollectionReusableView.h */,
 				EAB3BBD51AE0BE1A004764A3 /* HeaderCollectionReusableView.m */,
+				EAEB59DD1AFC163B00AF0B11 /* MBJoystickView.h */,
+				EAEB59DE1AFC163B00AF0B11 /* MBJoystickView.m */,
+				EAEB59D91AFC161000AF0B11 /* dpad.png */,
+				EAEB59DA1AFC161000AF0B11 /* joystick.png */,
 				EA67A3A51ADA90FC00664CDE /* Main.storyboard */,
 				EA67A3A81ADA90FC00664CDE /* Images.xcassets */,
 				EA67A3AA1ADA90FC00664CDE /* LaunchScreen.xib */,
@@ -276,6 +295,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAEB59DC1AFC161000AF0B11 /* joystick.png in Resources */,
+				EAEB59DB1AFC161000AF0B11 /* dpad.png in Resources */,
 				EA67A3A71ADA90FC00664CDE /* Main.storyboard in Resources */,
 				EA67A3AC1ADA90FC00664CDE /* LaunchScreen.xib in Resources */,
 				EA67A3A91ADA90FC00664CDE /* Images.xcassets in Resources */,
@@ -296,6 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAEB59DF1AFC163B00AF0B11 /* MBJoystickView.m in Sources */,
 				EAB3BBD61AE0BE1A004764A3 /* HeaderCollectionReusableView.m in Sources */,
 				EA67A3C61ADEB53300664CDE /* CameraViewController.m in Sources */,
 				EA67A3A41ADA90FC00664CDE /* ViewController.m in Sources */,
@@ -431,6 +453,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Drone Regonizer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -441,6 +467,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Drone Regonizer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
