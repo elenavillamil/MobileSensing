@@ -19,8 +19,8 @@ from bson.binary import Binary
 from pymongo import MongoClient
 from tornado.escape import recursive_unicode
 
-#address = "127.0.0.1"
-address = "104.150.120.136"
+address = "127.0.0.1"
+#address = "104.150.120.136"
 
 port = 8000
 base_path = "/home/ubuntu/msd/"

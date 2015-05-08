@@ -128,7 +128,7 @@ template<bool(*__ProcessingFunction)(cv::Mat&), bool __Gui = false, size_t __Thr
 
                   if (__Gui)
                   {
-                     done = _show_default_gui(*frame);
+                     //done = _show_default_gui(*frame);
                   }
                }
             };
