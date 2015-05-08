@@ -24,14 +24,14 @@ ar_drone::ar_drone(const std::string& ip)
             
             try 
             {
-               std::cout << at_cmd << std::endl;
+               //std::cout << at_cmd << std::endl;
                 
                sock->write(at_cmd);
             } 
             
             catch (std::exception& e) 
             {
-               std::cout << e.what() << std::endl;
+               //std::cout << e.what() << std::endl;
             }
             
             std::this_thread::sleep_for(std::chrono::milliseconds(300));
@@ -227,9 +227,9 @@ void ar_drone::send_command(int command_key)
     	   	break;
     }
     
-    std::cout << "Speed: " << speed << std::endl;
-	std::cout << "Action: " << action << std::endl;
-    std::cout << "Command: " << at_cmd << std::endl;		
+    //std::cout << "Speed: " << speed << std::endl;
+    //std::cout << "Action: " << action << std::endl;
+    //std::cout << "Command: " << at_cmd << std::endl;		
 
     at_cmd += '\r';
 
