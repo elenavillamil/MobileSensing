@@ -394,6 +394,9 @@ int main()
 
    });
 
+   drone.take_off();
+   drone.hover();
+
    // Absolute Paths for now
 
    #ifdef _WIN32
@@ -442,7 +445,9 @@ int main()
       return default_return;
 
    };
-   
+ 
+   //train_images("/home/ubuntu/Documents/repos/mobile_sensing/final_project/face_tracking/pictures/");
+  
    /*auto found = predict_from_file("/Users/jarret/msd/pictures/jashook1.png");
 
    std::cout << "Label: " << found.first << " Confidence: " << found.second << ". " << std::endl;

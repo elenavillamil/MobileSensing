@@ -371,13 +371,13 @@ template<SOCKET_TYPE __SocketType = TCP> class socket
              #if _WIN32
                error_code = ::send(_m_socket_fd, serialized_data, datatype_size, 0);
             #else
-               error_code = ::write(_m_socket_fd, serialized_data, datatype_size);
+               error_code = ::write(_m_socket_fd, serialized_data.get(), datatype_size);
             #endif
          }
          
          else
          {
-            error_code = sendto(_m_socket_fd, serialized_data, datatype_size, 0, (const struct sockaddr *) &_m_server_address, sizeof(sockaddr_in));
+            error_code = sendto(_m_socket_fd, serialized_data.get(), datatype_size, 0, (const struct sockaddr *) &_m_server_address, sizeof(sockaddr_in));
          }
       
          if (error_code < 0)
