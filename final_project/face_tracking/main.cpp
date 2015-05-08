@@ -65,7 +65,7 @@
 #define CENTER_HEIGHT 240
 
 #define MIN_OBJ_DIV_SIZE 8
-#define MIN_FACE_COLS 95
+#define MIN_FACE_COLS 125
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -79,16 +79,18 @@ std::mutex g_recognition_lock;
 ar_drone drone;
 std::size_t height = 2000; // 2000 mm (2m)
 
-inline std::shared_ptr<std::vector<cv::Rect>> get_faces(cv::Mat& current_image, int min_object_size)
+inline std::vector<cv::Rect>* get_faces(cv::Mat& current_image, int min_object_size)
 {
    // Detect faces
-   std::shared_ptr<std::vector<cv::Rect>> faces(new std::vector<cv::Rect>());
+   std::vector<cv::Rect>* faces = new std::vector<cv::Rect>();
 
    face_cascade.detectMultiScale(current_image, *faces, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE , cv::Size(min_object_size, min_object_size));
 
    // Check to see that faces were found - if not, return
-   if (faces.get()->size() < 1)
+   if (faces->size() < 1)
    {
+      delete faces;
+
       return nullptr;
    }
 
@@ -134,9 +136,9 @@ inline void train_images(std::string& path)
             // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
             int min_object_size = vanilla_image.cols / MIN_OBJ_DIV_SIZE;
 
-            std::shared_ptr<std::vector<cv::Rect>> faces = get_faces(vanilla_image, min_object_size);
+            std::vector<cv::Rect>* faces = get_faces(vanilla_image, min_object_size);
 
-            if (faces->size() != 0)
+            if (faces != nullptr)
             {
                cv::Mat face(vanilla_image, faces->at(0));
 
@@ -148,6 +150,8 @@ inline void train_images(std::string& path)
                labels.push_back(label);
 
             }
+
+            delete faces;
 
          }
 
@@ -252,7 +256,7 @@ inline void face_detection(cv::Mat& image)
    // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
    int min_object_size = image.cols / MIN_OBJ_DIV_SIZE;
 
-   std::shared_ptr<std::vector<cv::Rect>> faces = get_faces(mat_gray, min_object_size);
+   std::vector<cv::Rect>* faces = get_faces(mat_gray, min_object_size);
 
    if (!faces) return;
 
@@ -289,15 +293,17 @@ inline void face_detection(cv::Mat& image)
             std::size_t center_found_face_width = (face_roi_gray.cols / 2) + offset.x;
             std::size_t center_found_face_height = (face_roi_gray.rows / 2) + offset.y;
 
-            const std::size_t margen_width = 20;
+            const std::size_t margen_width = 25;
             const std::size_t margen_height = 15;
+            const std::size_t margin_depth = 10;
             
             std::cout << center_found_face_width << " " << center_found_face_height << std::endl;
             
             std::cout << "Columns " << face_roi_gray.cols;
             std::cout << "Rows" << face_roi_gray.rows << std::endl;
             
-   
+            drone.speed_change(5);
+
             if (center_found_face_width < CENTER_WIDTH - margen_width)
             {
                // The face is to the left of the center
@@ -307,7 +313,7 @@ inline void face_detection(cv::Mat& image)
 
             }
 
-            else
+            else if (center_found_face_width > CENTER_WIDTH + margen_width)
             {
                // The face is to the right of the center
 
@@ -325,7 +331,7 @@ inline void face_detection(cv::Mat& image)
 
             }
 
-            else
+            else if (center_found_face_height > CENTER_HEIGHT + margen_height)
             {
                // The Face is above the center
 
@@ -334,18 +340,20 @@ inline void face_detection(cv::Mat& image)
 
             }
             
+            drone.speed_change(1);
+   
             // Check size of face
             // ~150 is about the distance we want
             
-            if (face_roi_gray.cols < MIN_FACE_COLS)
+            if (face_roi_gray.cols < MIN_FACE_COLS - margin_depth)
             {
                // The face is too far away
-               
+
                std::cout << "<Forward>";
                drone.go_forward();
             }
             
-            else
+            else if (face_roi_gray.cols > MIN_FACE_COLS + margin_depth)
             {
                //The Face is too close
                
@@ -356,6 +364,8 @@ inline void face_detection(cv::Mat& image)
 
          }
       }
+
+      delete faces;
 
    }
 
@@ -385,6 +395,11 @@ int main()
 
          train_images(path);
 
+         drone.take_off();
+         drone.hover();
+
+
+
          // End servicing the socket transmission.
 
       });
@@ -410,7 +425,16 @@ int main()
 
       std::string path = "/Users/jarret/msd/database_contents.txt";
 
+      std::cout << "Training Images" << std::endl;
+
+      drone.reset();
+
+      drone.speed_change(5);
+
       train_images(path);   
+
+      drone.take_off();
+      drone.hover();
 
    #endif
 
@@ -423,9 +447,9 @@ int main()
          // Dynamically scale min object size by the width of the image (hueristically determined to be img_width / 4)
          int min_object_size = vanilla_image.cols / MIN_OBJ_DIV_SIZE;
 
-         std::shared_ptr<std::vector<cv::Rect>> faces = get_faces(vanilla_image, min_object_size);
+         std::vector<cv::Rect>* faces = get_faces(vanilla_image, min_object_size);
 
-         if (faces->size() != 0)
+         if (faces)
          {
             cv::Mat face(vanilla_image, faces->at(0));
 
@@ -437,21 +461,25 @@ int main()
 
          }
 
+         delete faces;
+
       std::pair<int, double> default_return(-1, 0.0);
 
       return default_return;
 
    };
-   
-   /*auto found = predict_from_file("/Users/jarret/msd/pictures/jashook1.png");
+ 
+   //train_images("/home/ubuntu/Documents/repos/mobile_sensing/final_project/face_tracking/pictures/");
+  
+   /*auto found = predict_from_file("/home/ubuntu/msd/pictures/jashook10.png");
 
    std::cout << "Label: " << found.first << " Confidence: " << found.second << ". " << std::endl;
 
-   found = predict_from_file("/Users/jarret/msd/pictures/jashook2.png");
+   found = predict_from_file("/home/ubuntu/msd/pictures/jashook20.png");
 
    std::cout << "Label: " << found.first << " Confidence: " << found.second << ". " << std::endl;
-   */
-   
+   */   
+
    input.capture_sync();
 
    return 0;

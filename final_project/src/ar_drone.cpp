@@ -3,37 +3,50 @@
 
 ar_drone::ar_drone(const std::string& ip)
 {
-	sock = new ev9::socket<ev9::SOCKET_TYPE::UDP>(ip, 5556);
-	sock->write("AT*CONFIG=1,\"control:altitude_max\",\"2000\"");
+   try
+   {
+      sock = new ev9::socket<ev9::SOCKET_TYPE::UDP>(ip, 5556);
+      
+      sock->write("AT*CONFIG=1,\"control:altitude_max\",\"2000\"");
 	
-    finished = false;
+      finished = false;
     
-    drone_thread = new std::thread([this](){
-        while (true) 
-        {
+      drone_thread = new std::thread([this](){
+         while (true) 
+         {
             {
-                std::lock_guard<std::mutex> lock(finished_lock);
+               std::lock_guard<std::mutex> lock(finished_lock);
                 
-                if (finished) break;
+               if (finished) break;
             }
             
             std::string at_cmd = "AT*COMWDG=1\r";
             
             try 
             {
-                std::cout << at_cmd << std::endl;
+               //std::cout << at_cmd << std::endl;
                 
-                sock->write(at_cmd);
+               sock->write(at_cmd);
             } 
             
             catch (std::exception& e) 
             {
-                std::cout << e.what() << std::endl;
+               //std::cout << e.what() << std::endl;
             }
             
             std::this_thread::sleep_for(std::chrono::milliseconds(300));
-        }
-    });
+         }
+      });
+   }
+   
+   catch(std::exception& exception)
+   {
+      std::cout << "Socket could not connect, working without drone." << std::endl;
+
+      finished = true;
+
+   }
+
 }
 
 ar_drone::~ar_drone()
@@ -121,6 +134,8 @@ void ar_drone::go_right()
 
 void ar_drone::send_command(int command_key)
 {
+   if (finished) return;
+
     std::string action = "";
     std::string at_cmd = "";
     std::string start = std::string("AT*PCMD=");
@@ -212,9 +227,9 @@ void ar_drone::send_command(int command_key)
     	   	break;
     }
     
-    std::cout << "Speed: " << speed << std::endl;
-	std::cout << "Action: " << action << std::endl;
-    std::cout << "Command: " << at_cmd << std::endl;		
+    //std::cout << "Speed: " << speed << std::endl;
+    //std::cout << "Action: " << action << std::endl;
+    //std::cout << "Command: " << at_cmd << std::endl;		
 
     at_cmd += '\r';
 
