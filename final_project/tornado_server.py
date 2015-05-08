@@ -46,7 +46,19 @@ def json_str(value):
 
 
 class MainHandler(tornado.web.RequestHandler):
-    
+   
+   def get(self):
+      try:
+         sock = socket.socket()
+         sock.connect((address, port))
+         sock.send("land")
+         sock.close()
+            
+      except socket.error, (value,message):
+         print ("Problem Opening the socket or seding the data.")
+         print (" ERROR " + str(message)) 
+
+      
    @tornado.web.asynchronous 
    def post(self): 
 
@@ -90,7 +102,7 @@ class MainHandler(tornado.web.RequestHandler):
       self.write(json_str({'arg1':"OK"}))
       
       ######################################################
-      # Openning socket to let open cv the images are ready
+      # Openning socket to let open cv know that the images are ready
       ######################################################
       if order == "true":
          print ("Making txt file")
